@@ -42,9 +42,9 @@ public class Mesh {
         String [] sar = r.split("\\s+");
 
         /* Parse object properties */
-        int verts_nb = new Integer (sar[0]).intValue();
-        int faces_nb = new Integer (sar[1]).intValue();
-        int edges_nb = new Integer (sar[2]).intValue();
+        int verts_nb = Integer.parseInt(sar[0]);
+        int faces_nb = Integer.parseInt(sar[1]);
+        int edges_nb = Integer.parseInt(sar[2]);
 
         /* Parse vertices and attributes */
         vertices = new Vector[verts_nb];
@@ -56,20 +56,20 @@ public class Mesh {
             sar = r.split ("\\s+");
 
             vertices[i] = new Vector ("v" + i, 4);
-            vertices[i].set (0, new Double (sar[0]).doubleValue());
-            vertices[i].set (1, new Double (sar[1]).doubleValue());
-            vertices[i].set (2, new Double (sar[2]).doubleValue());
+            vertices[i].set (0, Double.parseDouble(sar[0]));
+            vertices[i].set (1, Double.parseDouble(sar[1]));
+            vertices[i].set (2, Double.parseDouble(sar[2]));
             vertices[i].set (3, 1.0);
-            colors[3 * i + 0] = new Double(sar[3]).doubleValue();
-            colors[3 * i + 1] = new Double(sar[4]).doubleValue();
-            colors[3 * i + 2] = new Double(sar[5]).doubleValue();
+            colors[3 * i + 0] = Double.parseDouble(sar[3]);
+            colors[3 * i + 1] = Double.parseDouble(sar[4]);
+            colors[3 * i + 2] = Double.parseDouble(sar[5]);
             /* optionnal texture coordinates */
             if (sar.length >= 8) {
                 if (texCoords == null) {
                     texCoords = new double[2*verts_nb];
                 }
-                texCoords[2*i]   = new Double(sar[6]).doubleValue();
-                texCoords[2*i+1] = new Double(sar[7]).doubleValue();
+                texCoords[2*i]   = Double.parseDouble(sar[6]);
+                texCoords[2*i+1] = Double.parseDouble(sar[7]);
             }
         }
         
@@ -79,13 +79,13 @@ public class Mesh {
             r = nextLine(in);
             sar = r.split("\\s+");
 
-            int en = new Integer(sar[0]).intValue();
+            int en = Integer.parseInt(sar[0]);
             if (en != 3) {
                 throw new IOException("Non-triangular meshes not supported.");
             }
-            faces[3 * i + 0] =  new Integer(sar[1]).intValue();
-            faces[3 * i + 1] =  new Integer(sar[2]).intValue();
-            faces[3 * i + 2] =  new Integer(sar[3]).intValue();
+            faces[3 * i + 0] =  Integer.parseInt(sar[1]);
+            faces[3 * i + 1] =  Integer.parseInt(sar[2]);
+            faces[3 * i + 2] =  Integer.parseInt(sar[3]);
 
         }
         in.close();

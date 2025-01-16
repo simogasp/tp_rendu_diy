@@ -43,44 +43,44 @@ public class Scene {
 
         String r = nextLine(in);
         String [] sar = r.split("\\s+");
-        cameraPosition.set (new Double(sar[0]).doubleValue(),
-                            new Double(sar[1]).doubleValue(),
-                            new Double(sar[2]).doubleValue());
+        cameraPosition.set (Double.parseDouble(sar[0]),
+                            Double.parseDouble(sar[1]),
+                            Double.parseDouble(sar[2]));
 
         r = nextLine(in);
         sar = r.split("\\s+");
-        cameraLookAt.set (new Double(sar[0]).doubleValue(),
-                          new Double(sar[1]).doubleValue(),
-                          new Double(sar[2]).doubleValue());
+        cameraLookAt.set (Double.parseDouble(sar[0]),
+                          Double.parseDouble(sar[1]),
+                          Double.parseDouble(sar[2]));
                         
         r = nextLine(in);
         sar = r.split("\\s+");
-        cameraUp.set (new Double(sar[0]).doubleValue(),
-                      new Double(sar[1]).doubleValue(),
-                      new Double(sar[2]).doubleValue());
+        cameraUp.set (Double.parseDouble(sar[0]),
+                      Double.parseDouble(sar[1]),
+                      Double.parseDouble(sar[2]));
                         
         r = nextLine(in);
-        cameraFocal = new Double(r).doubleValue();
+        cameraFocal = Double.parseDouble(r);
 
         r = nextLine(in);
         sar = r.split("\\s+");
-        screenW = new Integer(sar[0]).intValue();
-        screenH = new Integer(sar[1]).intValue();
+        screenW = Integer.parseInt(sar[0]);
+        screenH = Integer.parseInt(sar[1]);
  
         r = nextLine(in);
-        ambientI = new Double(r).doubleValue();
+        ambientI = Double.parseDouble(r);
 
         r = nextLine(in);
         sar = r.split ("\\s+");
         for (int i = 0; i < sourceCoord.length; i++) {
-    	    sourceCoord[i] = new Double(sar[i]).doubleValue();	
+            sourceCoord[i] = Double.parseDouble(sar[i]);	
         }
-        sourceI = new Double(sar[3]).doubleValue();
+        sourceI = Double.parseDouble(sar[3]);
  
         r = nextLine(in);
         sar = r.split ("\\s+");
         for (int i = 0; i < material.length; i++) {
-            material[i] = new Double(sar[i]).doubleValue();	
+            material[i] = Double.parseDouble(sar[i]);	
         }
     }
 
