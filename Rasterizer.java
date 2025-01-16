@@ -1,6 +1,5 @@
 
 import algebra.*;
-import java.lang.Math.*;
 
 /**
  * The Rasterizer class is responsible for the discretization of geometric primitives

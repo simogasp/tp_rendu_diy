@@ -5,8 +5,6 @@
 
 package algebra;
 
-import java.lang.Math;
-
 public class Matrix {
 
     protected Matrix () {}

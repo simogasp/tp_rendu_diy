@@ -1,6 +1,5 @@
 
 import algebra.*;
-import java.lang.Math.*;
 
 /**
  * The PerspectiveCorrectRasterizer class extends Rasterizer to perform Persepctive Correct interpolation
