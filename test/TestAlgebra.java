@@ -91,7 +91,7 @@ public class TestAlgebra {
         System.out.println (M2);
         System.out.println (M);
 
-        M1.transpose();
+        M1 = M1.transpose();
         M1.name = "M1'";
         System.out.println (M1);
 
