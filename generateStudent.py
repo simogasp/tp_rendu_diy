@@ -71,6 +71,7 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
                            "Lighting.java",
                            "Mesh.java",
                            "Rasterizer.java",
+                           "Renderer.java",
                            "Texture.java",
                            "TextureShader.java",
                            "Transformation.java"]
