@@ -1,7 +1,4 @@
-
-import java.util.*;
 import java.awt.*;
-import java.lang.Math.*;
 
 public class TestGraphicWrapper {
 
@@ -51,13 +48,13 @@ public class TestGraphicWrapper {
             for (int x = 0; x < width; x++) {
                 int c = countNeighbours (x, y);
                 Color pix = screen.getFrontPixel (x, y);
-                Color bpix = screen.getPixel (x, y);
+                // Color bpix = screen.getPixel (x, y);
                 if (pix.getRed () == 0)  {
                     //System.out.println (x + " " + y + " : dead (" + c + " nbrs) "
                     //                + ((bpix.getRed () == 0) ? "dead" : "alive")
                     //                );
                     if (c == 3) {
-                        /* born */
+                        // born
                         screen.setPixel (x, y, 255, 255, 255);
                     } else {
                         screen.setPixel (x, y, 0, 0, 0);
@@ -66,10 +63,10 @@ public class TestGraphicWrapper {
                     //System.out.println (x + " " + y + " : alive (" + c + " nbrs) "
                     //                + ((bpix.getRed() == 0) ? "dead" : "alive"));
                     if ((c >= 2) && (c <= 3)) {
-                        /* survive */
+                        // survive
                         screen.setPixel (x, y, 255, 255, 255);
                     } else {
-                        /* die */
+                        // die
                         screen.setPixel (x, y, 0, 0, 0);
                     }
                 }
