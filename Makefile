@@ -1,3 +1,4 @@
+# call make run SCENE=path/to/scene.scene to run the renderer
 JAVAC=javac
 JAVA=java
 SRC=$(wildcard **/*.java) $(wildcard *.java)
@@ -12,7 +13,7 @@ build/%.class: %.java
 	$(JAVAC) -d build $<
 
 run: all
-	$(JAVA) -cp build Renderer data/example0.scene
+	$(JAVA) -cp build Renderer $(SCENE)
 
 test: $(TEST_CLASSES)
 	for test in $(patsubst test/%.java,%,$(TESTS)); do \
