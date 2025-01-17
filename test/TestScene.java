@@ -9,7 +9,7 @@ public class TestScene {
 
     public static void test () throws Exception {
 
-        Scene scene = new Scene ("input_files/example1.in");
+        Scene scene = new Scene ("data/example1.scene");
         String    mesh_filename  = scene.getMeshFileName();
         Vector3 cameraPosition = scene.getCameraPosition ();
         Vector3 cameraLookAt   = scene.getCameraLookAt   ();
