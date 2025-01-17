@@ -7,7 +7,7 @@ import algebra.*;
  * interpolated attributes). Those Fragment are then passed to a Shader object,
  * which will produce the final color of the fragment.
  *
- * @author cdehais
+ * @author morin, chambon, cdehais
  */
 public class Rasterizer {
     
@@ -49,7 +49,9 @@ public class Rasterizer {
     }
 
 
-    /* Swaps x and y coordinates of the fragment. Used by the Bresenham algorithm. */
+    /**
+     *  Swaps x and y coordinates of the fragment. Used by the Bresenham algorithm. 
+     * */
     private static void swapXAndY (Fragment f) {
         f.setPosition (f.getY(), f.getX());
     }
@@ -59,7 +61,99 @@ public class Rasterizer {
      * Generates Fragment's and calls the Shader::shade() metho on each of them.
      */ 
     public void rasterizeEdge (Fragment v1, Fragment v2) {
-        /* This is basically Bresenham's algorithm */
+
+        // Coordinates of V1 and V2
+        int x1 = v1.getX();
+        int y1 = v1.getY();
+        int x2 = v2.getX();
+        int y2 = v2.getY();
+
+        // For now : just display the vertices
+        // Fragment f = new Fragment (0,0);
+        // int size = 2;
+        // for (int i = 0; i < v1.getNumAttributes (); i++) {
+        // f.setAttribute (i, v1.getAttribute (i));
+        // }
+        // for (int i = -size; i <= size ; i++) {
+        // for (int j = -size; j <= size; j++) {
+        // f.setPosition(x1+i,y1+j);
+        // shader.shade (f);
+        // }
+        // }
+
+        // draw a line with Bresenham's algorithm
+        int numAttributes = v1.getNumAttributes();
+        Fragment fragment = new Fragment(0, 0); // , numAttributes);
+
+        boolean sym = (Math.abs(y2 - y1) > Math.abs(x2 - x1));
+        if (sym) {
+            int temp;
+            temp = x1;
+            x1 = y1;
+            y1 = temp;
+            temp = x2;
+            x2 = y2;
+            y2 = temp;
+        }
+        if (x1 > x2) {
+            Fragment ftemp;
+            int temp;
+            temp = x1;
+            x1 = x2;
+            x2 = temp;
+            temp = y1;
+            y1 = y2;
+            y2 = temp;
+            ftemp = v1;
+            v1 = v2;
+            v2 = ftemp;
+        }
+
+        int ystep;
+        if (y1 < y2) {
+            ystep = 1;
+        } else {
+            ystep = -1;
+        }
+
+        int x = x1;
+        float y_courant = y1;
+        int y = y1;
+        float delta_y = y2 - y1;
+        float delta_x = x2 - x1;
+        float m = delta_y / delta_x;
+
+        for (int i = 1; i <= delta_x; i++) {
+            x = x + 1;
+            y_courant = y_courant + m;
+            if ((ystep == 1) && (y_courant < y + 0.5) || ((ystep == -1) && (y_courant > y - 0.5))) {
+                y = y;
+            } else {
+                y = y + ystep;
+            }
+
+            // send the fragment to the shader
+            fragment.setPosition(x, y);
+
+            if (!shader.isClipped(fragment)) {
+
+                // attributes interpolation
+                interpolate2(v1, v2, fragment);
+                if (sym) {
+                    swapXAndY(fragment);
+                }
+                shader.shade(fragment);
+            }
+        }
+
+    }
+
+    /**
+     * Rasterizes the edge between the projected vectors v1 and v2.
+     * Generates Fragment's and calls the Shader::shade() metho on each of them.
+     */ 
+    public void rasterizeEdge2 (Fragment v1, Fragment v2) {
+        // This is basically Bresenham's algorithm
         int x1 = v1.getX ();
         int y1 = v1.getY ();
         int x2 = v2.getX ();
@@ -131,7 +225,7 @@ public class Rasterizer {
         try {
             C = new Matrix (3, 3);
         } catch (InstantiationException e) {
-            /* unreached */
+            // unreached
         }
 
         double area = triangleArea (v1, v2, v3);
@@ -159,40 +253,41 @@ public class Rasterizer {
      */
     public void rasterizeFace (Fragment v1, Fragment v2, Fragment v3) {
 
-        Matrix C = makeBarycentricCoordsMatrix (v1, v2, v3);
+        Matrix C = makeBarycentricCoordsMatrix(v1, v2, v3);
 
-        /* iterate over the triangle's bounding box */
-        int xmin = Math.min (v1.getX (), Math.min (v2.getX (), v3.getX ()));
-        int ymin = Math.min (v1.getY (), Math.min (v2.getY (), v3.getY ()));
-        int xmax = Math.max (v1.getX (), Math.max (v2.getX (), v3.getX ()));
-        int ymax = Math.max (v1.getY (), Math.max (v2.getY (), v3.getY ()));
-        
-        Fragment fragment = new Fragment (0, 0);
-        int numAttributes = fragment.getNumAttributes ();
+        // iterate over the triangle's bounding box
+        //++ // TODO 
+        int xmin = Math.min(v1.getX(), Math.min(v2.getX(), v3.getX())); //<!!
+        int ymin = Math.min(v1.getY(), Math.min(v2.getY(), v3.getY()));
+        int xmax = Math.max(v1.getX(), Math.max(v2.getX(), v3.getX()));
+        int ymax = Math.max(v1.getY(), Math.max(v2.getY(), v3.getY()));
+
+        Fragment fragment = new Fragment(0, 0);
+        int numAttributes = fragment.getNumAttributes();
         try {
-        for (int x = xmin; x <= xmax; x++) {
-            for (int y = ymin; y <= ymax; y++) {
-                
-                /* setup position now to allow early clipping */
-                fragment.setPosition (x, y);
-                if (!shader.isClipped (fragment)) {
+            for (int x = xmin; x <= xmax; x++) {
+                for (int y = ymin; y <= ymax; y++) {
 
-                    Vector3 v = new Vector3 (1.0, (double)x, (double)y);
-                    Vector bar = C.multiply (v);
-                    if ((bar.get (0) >= 0.0) && (bar.get (1) >= 0.0) && (bar.get (2) >= 0.0)) {
-                        for (int i = 0; i < numAttributes; i++) {
-                            fragment.setAttribute (i, bar.get (0) * v1.getAttribute (i) 
-                                                    + bar.get (1) * v2.getAttribute (i)
-                                                    + bar.get (2) * v3.getAttribute (i));
+                    // setup position now to allow early clipping
+                    fragment.setPosition(x, y);
+                    if (!shader.isClipped(fragment)) {
+
+                        Vector3 v = new Vector3(1.0, (double) x, (double) y);
+                        Vector bar = C.multiply(v);
+                        if ((bar.get(0) >= 0.0) && (bar.get(1) >= 0.0) && (bar.get(2) >= 0.0)) {
+                            for (int i = 0; i < numAttributes; i++) {
+                                fragment.setAttribute(i, bar.get(0) * v1.getAttribute(i)
+                                        + bar.get(1) * v2.getAttribute(i)
+                                        + bar.get(2) * v3.getAttribute(i));
+                            }
+                            shader.shade(fragment);
                         }
-                        shader.shade (fragment);
                     }
                 }
             }
-        }
         } catch (SizeMismatchException e) {
-            /* should not reach */
-            e.printStackTrace ();
-        }
-    }  
+            // should not reach
+            e.printStackTrace();
+        } //>!!
+    }
 }

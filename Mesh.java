@@ -116,7 +116,9 @@ public class Mesh {
         // to the vertex.
         try {
             for (int i = 0; i < 3 * getNumFaces(); i += 3) {
-                Vector a = vertices[faces[i]];
+                //++ // TODO
+                //++ Vector3 n = new Vector3();
+                Vector a = vertices[faces[i]]; //<!!
                 Vector b = vertices[faces[i+1]];
                 Vector c = vertices[faces[i+2]];
                 
@@ -125,11 +127,11 @@ public class Mesh {
                 Vector3 v2 = new Vector3 (c);
                 v2.subtract (new Vector3 (b));
 
-                Vector3 n = v1.cross (v2);
-                n.normalize ();
+                Vector3 n = v1.cross (v2); 
+                n.normalize (); //>!!
                 
-		// ajoute la normale calculee a chq sommet de la face
-		for (int j = 0; j < 3; j++) { 
+                // add the calculated normal n to each vertex of the face
+                for (int j = 0; j < 3; j++) { 
                     Vector nj = normals[faces[i+j]];
 
                     if (nj == null) {
@@ -138,21 +140,22 @@ public class Mesh {
                     } else {
                         nj.add (n);
                     }
-		}
+		        }
             }
         } catch (InstantiationException e) { System.out.println ("Should not reach 1"); }
           catch (SizeMismatchException e) { System.out.println ("Should not reach 2"); }
 
         // final round of normalization 
-	for (int i = 0; i < normals.length; i++) {
-            if (normals[i] == null) { /* deals with orphans vertices */
+	    for (int i = 0; i < normals.length; i++) {
+            // deal with orphans vertices
+            if (normals[i] == null) { 
                 normals[i] = new Vector3 ("n_orphan");
             } else {
                 normals[i].normalize();
             }
         }
 	  
-	return normals;
+	    return normals;
     }
 
     /**
