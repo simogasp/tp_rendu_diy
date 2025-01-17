@@ -131,6 +131,7 @@ public class Renderer {
 
         if (args.length == 0) {
             System.out.println("usage: java Renderer <scene_file>");
+            System.exit (-1);
         } else {
             try {
                 init (args[0]); 
