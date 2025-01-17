@@ -13,7 +13,7 @@ public class Vector3 extends Vector {
         try {
             allocValues (3);
         } catch (java.lang.InstantiationException e) {
-            /* unreached */
+            // unreached
         }
         this.values[0] = x;
         this.values[1] = y;
@@ -37,7 +37,7 @@ public class Vector3 extends Vector {
         try {
             allocValues (4);
         } catch (java.lang.InstantiationException e) {
-            /* unreached */
+            // unreached
         }
 
         this.values[0] = x;
@@ -93,7 +93,6 @@ public class Vector3 extends Vector {
     }
 
     public double dot (Vector3 v) {
-        double r = 0.0;
         return (values[0] * v.values[0] + values[1] * v.values[1] + values[2] * v.values[2]);
     }
 
