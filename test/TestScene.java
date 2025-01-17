@@ -14,7 +14,7 @@ public class TestScene {
         Vector3 cameraPosition = scene.getCameraPosition ();
         Vector3 cameraLookAt   = scene.getCameraLookAt   ();
         Vector3 cameraUp       = scene.getCameraUp       ();
-        double    cameraXLimit   = scene.getCameraXLimit   ();
+        //double    cameraXLimit   = scene.getCameraXLimit   ();
         double    cameraFocal    = scene.getCameraFocal    ();
         int       screenW        = scene.getScreenW        ();
         int       screenH        = scene.getScreenH        ();
@@ -30,7 +30,7 @@ public class TestScene {
         System.out.println (cameraLookAt);
         System.out.println (cameraUp);
 
-        System.out.println ("Camera X Limit = " + cameraXLimit);
+        //System.out.println ("Camera X Limit = " + cameraXLimit);
         System.out.println ("Focal = " + cameraFocal);
 
         System.out.println ("Screen: " + screenW + " x " + screenH);
