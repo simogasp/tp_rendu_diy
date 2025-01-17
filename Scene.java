@@ -32,7 +32,7 @@ public class Scene {
     int screenH;
     double ambientI;
     double sourceI;
-    double[] sourceCoord  = new double[3] ;
+    double[] sourceCoord  = new double[4] ;
     double[] material     = new double[4] ;
 
     public Scene (String filename) throws Exception {
