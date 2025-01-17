@@ -65,20 +65,22 @@ public class Matrix {
     }
 
     /**
-     * Transposes the Matrix.
+     * Get the transposed matrix.
      */ 
-    public void transpose () {
+    public Matrix transpose() {
+        Matrix trans;
+        try {
+            trans = new Matrix(this.nCols, this.nRows);
+        } catch (java.lang.InstantiationException e) {
+            // unreached
+            return null;
+        }
         for (int i = 0; i < nRows; i++) {
-            for (int j = i+1; j < nCols; j++) {
-                double temp = values[i * nCols + j];
-                values[i * nCols + j] = values[i * nRows + j];
-                values[i * nCols + j] = temp;
+            for (int j = 0; j < nCols; j++) {
+                trans.values[j * nRows + i] = this.values[i * nCols + j];
             }
         }
-
-        int iTemp = nCols;
-        nCols = nRows;
-        nRows = iTemp;
+        return trans;
     }
 
     /**

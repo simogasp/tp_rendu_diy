@@ -22,5 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fixed language warnings
 - fixed a bug in matrix multiplication (it was only working for square matrices)
 - sourceCoord in Scene was of size 3 instead of 4
+- fixed a bug in the transposition, it was not copying the data correctly
 
 ### Removed
