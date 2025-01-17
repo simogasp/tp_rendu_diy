@@ -100,7 +100,7 @@ public class Matrix {
         for (int i = 0; i < R.nRows; i++) {
             for (int j = 0; j < R.nCols; j++) {
                 for (int k = 0; k < this.nCols; k++) {
-                    R.values[i * R.nCols + j] += this.values[i * nCols + k] * M.values[k * nRows + j];
+                    R.values[i * R.nCols + j] += this.values[i * nCols + k] * M.values[k * M.nCols + j];
                 }
             }
         }

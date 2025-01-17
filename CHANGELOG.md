@@ -19,6 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - fixed language warnings
+- fixed a bug in matrix multiplication (it was only working for square matrices)
 
 ### Removed
-
