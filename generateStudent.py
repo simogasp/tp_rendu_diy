@@ -130,7 +130,7 @@ if __name__ == "__main__":
         "--skip-packaging",
         action='store_true',
         dest="skip_packaging",
-        help="Skip the cleaning step leaving the code available.",
+        help="Skip the packaging step without generating the archive.",
     )
 
     args = parser.parse_args()
