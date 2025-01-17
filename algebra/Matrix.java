@@ -93,7 +93,7 @@ public class Matrix {
         try {
             R = new Matrix (this.nRows, M.nCols);
         } catch (java.lang.InstantiationException e) {
-            /* unreached */
+            // unreached
             return null;
         }
 
@@ -120,7 +120,7 @@ public class Matrix {
         try {
             u = new Vector (nRows);
         } catch (java.lang.InstantiationException e) {
-            /* unreached */
+            // unreached
         }
 
         for (int i = 0; i < u.size(); i++) {
