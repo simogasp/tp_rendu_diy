@@ -82,7 +82,7 @@ public class Rasterizer {
         // }
 
         // draw a line with Bresenham's algorithm
-        int numAttributes = v1.getNumAttributes();
+        // int numAttributes = v1.getNumAttributes();
         Fragment fragment = new Fragment(0, 0); // , numAttributes);
 
         boolean sym = (Math.abs(y2 - y1) > Math.abs(x2 - x1));
@@ -159,7 +159,7 @@ public class Rasterizer {
         int x2 = v2.getX ();
         int y2 = v2.getY ();
 
-        int numAttributes = v1.getNumAttributes ();
+        // int numAttributes = v1.getNumAttributes ();
         Fragment fragment = new Fragment (0, 0); //, numAttributes);
         
         boolean sym = (Math.abs (y2 - y1) > Math.abs (x2 - x1));
