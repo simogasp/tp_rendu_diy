@@ -1,6 +1,4 @@
 
-import algebra.*;
-
 /**
  * Test class for the Rasterizer class
  * @author: cdehais
