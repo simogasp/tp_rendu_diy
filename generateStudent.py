@@ -53,6 +53,7 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
         "TextureShader.java",
         "Transformation.java",
         "Makefile",
+        "README.md"
     ]
     logger.info("Copying files to %s", dest_name)
     for file in files_to_copy:

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - added makefile
 - add the calibration matrix
+- added README.md
 
 ### Changed
 
