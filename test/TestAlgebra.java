@@ -11,12 +11,12 @@ public class TestAlgebra {
         Vector v1 = new Vector (1);
         v1.setName ("up");
         try {
-            Vector v0 = new Vector (0);
+            new Vector (0);
         } catch (Exception e) {
              System.out.println ("Wrong size exception caught OK");
         }
         try {
-            Vector v0 = new Vector ("named", 0);
+            new Vector ("named", 0);
         } catch (Exception e) {
              System.out.println ("Wrong size exception caught OK");
         }
@@ -71,7 +71,7 @@ public class TestAlgebra {
         M1.set (1, 2, 5.0);
 
         try {
-            Matrix M2 = new Matrix ("M2", 0, 2);
+            new Matrix ("M2", 0, 2);
         } catch (Exception e) {
             System.out.println ("Wrong size exception caught OK");
         }
