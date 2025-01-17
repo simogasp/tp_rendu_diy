@@ -80,10 +80,10 @@ public class Renderer {
         }
         } catch (SizeMismatchException e) {
             e.printStackTrace ();
-            /* should not reach */
+            // should not reach
         } catch (InstantiationException e) {
             e.printStackTrace ();
-            /* should not reach */
+            // should not reach
         }
 
         return fragments;
@@ -123,7 +123,7 @@ public class Renderer {
         try {
             Thread.sleep (sec * 1000);
         } catch (Exception e) {
-            /* nothing */
+            // nothing
         }
     }
     public static void main (String[] args) {
@@ -140,12 +140,12 @@ public class Renderer {
             }
         }
 
-        /* wireframe rednering */
+        // wireframe rendering
         renderWireframe ();
         screen.swapBuffers ();
         wait (3);
 
-        /* solid rendering, no lighting */
+        // solid rendering, no lighting
         screen.clearBuffer ();
         shader.reset ();
         renderSolid ();

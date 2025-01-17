@@ -19,7 +19,7 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
     public void rasterizeFace (Fragment v1, Fragment v2, Fragment v3) {
         Matrix C = makeBarycentricCoordsMatrix (v1, v2, v3);
 
-        /* iterate over the triangle's bounding box */
+        // iterate over the triangle's bounding box
         int xmin = Math.min (v1.getX (), Math.min (v2.getX (), v3.getX ()));
         int ymin = Math.min (v1.getY (), Math.min (v2.getY (), v3.getY ()));
         int xmax = Math.max (v1.getX (), Math.max (v2.getX (), v3.getX ()));
@@ -31,7 +31,7 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
         for (int x = xmin; x <= xmax; x++) {
             for (int y = ymin; y <= ymax; y++) {
                 
-                /* setup position now to allow early clipping */
+                // setup position now to allow early clipping
                 fragment.setPosition (x, y);
                 if (!shader.isClipped (fragment)) {
 
@@ -54,7 +54,7 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
             }
         }
         } catch (SizeMismatchException e) {
-            /* should not reach */
+            // should not reach
             e.printStackTrace ();
         }
     }

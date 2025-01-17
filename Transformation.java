@@ -1,6 +1,9 @@
 
 import algebra.*;
 
+/**
+ * author: cdehais
+ */
 public class Transformation  {
 
     Matrix worldToCamera;
@@ -13,14 +16,14 @@ public class Transformation  {
             projection = Matrix.createIdentity (3);
             projection.setName ("P");
         } catch (InstantiationException e) {
-            /* should not reach */
+            // should not reach
         }
     }
 
     public void setLookAt (Vector3 eye, Vector3 interestPoint, Vector3 up) {
         try {
-        /* compute rotation */
         Vector3 z = new Vector3 (interestPoint);
+        // compute rotation
         z.subtract (eye);
 
         z.normalize ();
@@ -38,8 +41,8 @@ public class Transformation  {
         worldToCamera.set (2, 1, z.getY ());
         worldToCamera.set (2, 2, z.getZ ());
 
-        /* compute translation */
         Vector3 mEye = new Vector3 (eye);
+        // compute translation
         mEye.scale (-1.0);
         Matrix R = worldToCamera.getSubMatrix (0, 0, 3, 3);
 
@@ -85,7 +88,7 @@ public class Transformation  {
      */
     public Vector3 transformVector (Vector3 v)
         throws SizeMismatchException, InstantiationException {
-        /* Doing nothing special here because there is no scaling */
+        // Doing nothing special here because there is no scaling
         Matrix R = worldToCamera.getSubMatrix (0, 0, 3, 3);
         Vector tv = R.multiply (v);
         return new Vector3 (tv);

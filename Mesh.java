@@ -41,12 +41,12 @@ public class Mesh {
 
         String [] sar = r.split("\\s+");
 
-        /* Parse object properties */
+        // Parse object properties
         int verts_nb = Integer.parseInt(sar[0]);
         int faces_nb = Integer.parseInt(sar[1]);
         int edges_nb = Integer.parseInt(sar[2]);
 
-        /* Parse vertices and attributes */
+        // Parse vertices and attributes
         vertices = new Vector[verts_nb];
         faces = new int[3*faces_nb];
         colors = new double[3*verts_nb];
@@ -63,7 +63,7 @@ public class Mesh {
             colors[3 * i + 0] = Double.parseDouble(sar[3]);
             colors[3 * i + 1] = Double.parseDouble(sar[4]);
             colors[3 * i + 2] = Double.parseDouble(sar[5]);
-            /* optionnal texture coordinates */
+            // optional texture coordinates
             if (sar.length >= 8) {
                 if (texCoords == null) {
                     texCoords = new double[2*verts_nb];
@@ -73,7 +73,7 @@ public class Mesh {
             }
         }
         
-        /* Parse faces */
+        // Parse faces
         for (int i = 0; i < faces_nb; i++) {
 
             r = nextLine(in);
@@ -112,7 +112,7 @@ public class Mesh {
 	  
         normals = new Vector3[vertices.length];
 
-	// Compute per face normals and set the vertex normal to the average normals across faces
+	    // Compute per face normals and set the vertex normal to the average normals across faces
         // to the vertex.
         try {
             for (int i = 0; i < 3 * getNumFaces(); i += 3) {

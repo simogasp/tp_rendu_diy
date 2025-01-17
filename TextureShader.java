@@ -34,7 +34,7 @@ public class TextureShader extends Shader {
 
     public void shade (Fragment fragment) {
         if (depth.testFragment (fragment)) {
-            /* The Fragment may not have texture coordinates */
+            // The Fragment may not have texture coordinates
             try {
                 double uv[] = fragment.getAttribute (7, 2);
                 Color texColor;

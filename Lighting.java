@@ -66,7 +66,7 @@ public class Lighting {
     {
         double[] litColor = new double[3];
 
-        /* total light intensity */
+        // total light intensity
         double I = 0.0;
 
         Iterator<Light> it = lights.iterator ();
@@ -79,35 +79,35 @@ public class Lighting {
 
                 case POINT:
                     try {
-                    /* vector from point to camera center */
+                    // vector from point to camera center
                     Vector3 e = new Vector3 (cameraPosition);
                     e.subtract (position);
                     e.normalize ();
 
-                    /* vector from point to light*/
+                    // vector from point to light
                     Vector3 l = new Vector3 (light.params[0], light.params[1], light.params[2]);
                     l.subtract (position);
                     l.normalize ();
 
-                    /* half-vector between e and l*/
+                    // half-vector between e and l
                     Vector3 h = new Vector3 (e);
                     h.add (l);
                     h.normalize ();
 
-                    /* diffuse contribution */
                     double Id = kd * light.params[3] * normal.dot (l);
+                    // diffuse contribution
 
-                    /* specular contribution */
                     double Is = ks * light.params[3] * Math.pow (normal.dot (h), s);
 
                     I += Id + Is;
+                    // specular contribution
 
                     } catch (InstantiationException ex) { /* should not reach*/ }
                       catch (SizeMismatchException  ex) { /* should not reach*/ }
 
                     break;
                 default:
-                    /* ignore unknow lights */
+                    // ignore unknown lights
                     break;
             }
         } 
