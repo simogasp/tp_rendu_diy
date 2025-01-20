@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - replaced all `/* */` inline comments
+- reformated all files
+- moved attributes at the beginning of the class
 
 ### Fixed
 
@@ -23,5 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fixed a bug in matrix multiplication (it was only working for square matrices)
 - sourceCoord in Scene was of size 3 instead of 4
 - fixed a bug in the transposition, it was not copying the data correctly
+- proper initialization of the matrices calibration and worldToCamera as an identity matrix
 
 ### Removed
