@@ -7,6 +7,11 @@ package algebra;
 
 public class Matrix {
 
+    public String name = "M";
+    protected double values[];
+    private int nRows;
+    private int nCols;
+
     protected Matrix () {}
     
     protected Matrix (String name) {
@@ -52,6 +57,26 @@ public class Matrix {
             id.values[size*i + i] = 1.0;
         }
         return id;
+    }
+
+    /**
+     * Create a random matrix of size @nRows x @nCols
+     *
+     * @param offsetRow
+     * @param offsetCol
+     * @param nRows
+     * @param nCols
+     * @return
+     * @throws InstantiationException
+     */
+    public static Matrix createRandom (String name, int nRows, int nCols) throws InstantiationException {
+        Matrix M = new Matrix (name, nRows, nCols);
+        for (int i = 0; i < nRows; i++) {
+            for (int j = 0; j < nCols; j++) {
+                M.set (i, j, Math.random ());
+            }
+        }
+        return M;
     }
     
     /**
@@ -214,8 +239,5 @@ public class Matrix {
         return nCols;
     }
 
-    public String name = "M";
-    protected double values[];
-    private int nRows;
-    private int nCols;
+
 }
