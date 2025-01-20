@@ -1,10 +1,9 @@
 
-
 import java.lang.Double;
 
 /**
  * The DepthBuffer class implements a DepthBuffer and its pass test.
- */ 
+ */
 public class DepthBuffer {
     private double[] buffer;
     int width;
@@ -14,17 +13,17 @@ public class DepthBuffer {
      * Constructs a DepthBuffer of size width x height.
      * The buffer is initially cleared.
      */
-    public DepthBuffer (int width, int height) {
+    public DepthBuffer(int width, int height) {
         buffer = new double[width * height];
         this.width = width;
         this.height = height;
-        clear ();
+        clear();
     }
 
     /**
      * Clears the buffer to infinite depth for all fragments.
      */
-    public void clear () {
+    public void clear() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 buffer[i * width + j] = Double.POSITIVE_INFINITY;
@@ -37,26 +36,25 @@ public class DepthBuffer {
      * Test if a fragment passes the DepthBuffer test, i.e. is the fragment the
      * closest at its position.
      */
-    public boolean testFragment (Fragment fragment) {
-        if ((fragment.getX () >= 0) && (fragment.getX () < width) && (fragment.getY () >= 0) && (fragment.getY () < height)) {
-            //return false;
-            return (buffer[fragment.getY()  * width + fragment.getX ()] > fragment.getAttribute(0)); //++ // TODO
-            //++ return false;
+    public boolean testFragment(Fragment fragment) {
+        if ((fragment.getX() >= 0) && (fragment.getX() < width) && (fragment.getY() >= 0)
+                && (fragment.getY() < height)) {
+            // return false;
+            return (buffer[fragment.getY() * width + fragment.getX()] > fragment.getAttribute(0)); // ++ // TODO
+            // ++ return false;
         } else {
             return false;
         }
     }
 
     /**
-     * Writes the fragment depth to the buffer 
+     * Writes the fragment depth to the buffer
      */
-    public void writeFragment (Fragment fragment) {
-        if ((fragment.getX () >= 0) && (fragment.getX () < width) && (fragment.getY () >= 0) && (fragment.getY () < height)) {
-            buffer[fragment.getY () * width + fragment.getX ()] = fragment.getAttribute(0); //++ // TODO
+    public void writeFragment(Fragment fragment) {
+        if ((fragment.getX() >= 0) && (fragment.getX() < width) && (fragment.getY() >= 0)
+                && (fragment.getY() < height)) {
+            buffer[fragment.getY() * width + fragment.getX()] = fragment.getAttribute(0); // ++ // TODO
         }
     }
 
-    
 }
-	
-	
