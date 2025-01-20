@@ -30,15 +30,27 @@ public class Matrix {
     }
 
     /**
-     * Creates an identity matrix of size @size
+     * Creates an identity matrix of size @size and name I + size (e.g. I3 for a 3x3 identity matrix)
+     * @throws InstantiationException
+     * @param size the size of the identity matrix
      */
     public static Matrix createIdentity (int size) throws java.lang.InstantiationException {
-        Matrix id = new Matrix (size, size);
+        String name = "I" + size;
+        return createIdentity(name, size);
+    }
+
+    /**
+     * Creates an identity matrix of size @size
+     * @throws InstantiationException
+     * @param name the name of the matrix
+     * @param size the size of the identity matrix§
+     */
+    public static Matrix createIdentity (String name, int size) throws java.lang.InstantiationException {
+        Matrix id = new Matrix (name, size, size);
 
         for (int i = 0; i < size; i++) {
-            id.values[size*i+i] = 1.0;
+            id.values[size*i + i] = 1.0;
         }
-        id.name = "I" + size;
         return id;
     }
     
