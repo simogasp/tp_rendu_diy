@@ -35,7 +35,7 @@ public class Matrix {
     }
 
     /**
-     * Creates an identity matrix of size @size and name I + size (e.g. I3 for a 3x3 identity matrix)
+     * Creates an identity matrix of size @size and name "I"+size (e.g. I3 for a 3x3 identity matrix)
      * @throws InstantiationException
      * @param size the size of the identity matrix
      */
@@ -60,13 +60,12 @@ public class Matrix {
     }
 
     /**
-     * Create a random matrix of size @nRows x @nCols
+     * Create a random matrix of size nRows x nCols
      *
-     * @param offsetRow
-     * @param offsetCol
-     * @param nRows
-     * @param nCols
-     * @return
+     * @param name the name of the matrix
+     * @param nRows number of rows
+     * @param nCols number of columns
+     * @return the nRows x nCols matrix named @name
      * @throws InstantiationException
      */
     public static Matrix createRandom (String name, int nRows, int nCols) throws InstantiationException {
