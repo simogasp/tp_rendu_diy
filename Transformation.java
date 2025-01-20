@@ -12,10 +12,9 @@ public class Transformation  {
 
     public Transformation () {
         try {
-            worldToCamera = new Matrix ("W2C", 4, 4);
+            worldToCamera = Matrix.createIdentity("W2C", 4);
             projection = new Matrix ("P", 3, 4);
-            calibration = Matrix.createIdentity (3);
-            calibration.setName ("K");
+            calibration = Matrix.createIdentity ("K", 3);
         } catch (InstantiationException e) {
             // should not reach
         }
