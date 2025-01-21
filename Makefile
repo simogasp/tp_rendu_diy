@@ -25,13 +25,25 @@ compile: clean
 	javac -d $(BUILD_DIR) -cp $(CLASSPATH) $(SRC_FILES) $(ALL_TEST_FILES)
 
 # Run all tests
-test: compile
-	@echo "Running all unit and functional tests..."
-	@for test in $(UNIT_TEST_FILES:.java=) $(FUNCTIONAL_TEST_FILES:.java=); do \
-	    test_name=$$(basename $$test); \
-	    test_class=$$(echo $$test_name | sed 's/\.java//'); \
-	    echo "Running $$test_class..."; \
-	    java -cp $(CLASSPATH) $$test_class || exit 1; \
+tests: func-tests unit-tests
+
+unit-tests: compile
+	@echo "Running all unit tests..."
+	@for test in $(UNIT_TEST_FILES:.java=); do \
+		test_name=$$(basename $$test); \
+		test_class=$$(echo $$test | sed 's/test\///' | sed 's/\//./g'); \
+		echo "Running JUnit test $$test_name... $$test_class"; \
+		java -cp $(CLASSPATH):lib/junit-4.13.2.jar:lib/hamcrest-2.2.jar:. \
+			org.junit.runner.JUnitCore $$test_class || exit 1; \
+	done
+
+func-tests: compile
+	@echo "Running functional tests..."
+	@for test in $(FUNCTIONAL_TEST_FILES:.java=); do \
+		test_name=$$(basename $$test); \
+		test_class=$$(echo $$test_name | sed 's/\.java//'); \
+		echo "Running functional test $$test_class..."; \
+		java -cp $(CLASSPATH) $$test_class || exit 1; \
 	done
 	@echo "All tests completed."
 
