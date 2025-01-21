@@ -23,7 +23,7 @@ cleans the `build` folder.
 To run the tests use the following command:
 
 ```bash
-make test
+make tests
 ```
 
 ## Run
