@@ -37,21 +37,6 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
     os.mkdir(dest_name)
 
     files_to_copy = [
-        "DepthBuffer.java",
-        "Fragment.java",
-        "GraphicsWrapper.java",
-        "Lighting.java",
-        "Mesh.java",
-        "PainterShader.java",
-        "PerspectiveCorrectRasterizer.java",
-        "Rasterizer.java",
-        "Renderer.java",
-        "Scene.java",
-        "Shader.java",
-        "SimpleShader.java",
-        "Texture.java",
-        "TextureShader.java",
-        "Transformation.java",
         "Makefile",
         "README.md"
     ]
@@ -62,20 +47,20 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
     logger.info(f"Copying directories data {dest_name}")
     shutil.copytree("data", os.path.join(dest_name, "data"))
     shutil.copytree("test", os.path.join(dest_name, "test"))
-    shutil.copytree("algebra", os.path.join(dest_name, "algebra"))
+    shutil.copytree("src", os.path.join(dest_name, "src"))
 
     studentify_dir = os.path.join(tempfile.gettempdir(), "tpt")
     logger.info(f"Cloning studentify.py to {studentify_dir}")
     subprocess.check_call(["git", "clone", "https://github.com/simogasp/studentipy.git", studentify_dir])
 
-    files_to_studentify = ["DepthBuffer.java",
-                           "Lighting.java",
-                           "Mesh.java",
-                           "Rasterizer.java",
-                           "Renderer.java",
-                           "Texture.java",
-                           "TextureShader.java",
-                           "Transformation.java"]
+    files_to_studentify = ["src/DepthBuffer.java",
+                           "src/Lighting.java",
+                           "src/Mesh.java",
+                           "src/Rasterizer.java",
+                           "src/Renderer.java",
+                           "src/Texture.java",
+                           "src/TextureShader.java",
+                           "src/Transformation.java"]
     for file in files_to_studentify:
         file_cpp = os.path.join(dest_name, file)
         logger.info(f"Applying studentify to {file_cpp}")
