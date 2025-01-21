@@ -28,12 +28,12 @@ logger = logging.getLogger()
 def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_packaging: bool = False):
 
     if not os.path.exists(working_dir):
-        logger.info("Creating working directory %s", working_dir)
+        logger.info(f"Creating working directory {working_dir}")
         os.makedirs(working_dir)
 
     dest_name = os.path.join(working_dir, archive_name)
 
-    logger.info("Creating directory %s", dest_name)
+    logger.info(f"Creating directory {dest_name}")
     os.mkdir(dest_name)
 
     files_to_copy = [
@@ -55,17 +55,17 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
         "Makefile",
         "README.md"
     ]
-    logger.info("Copying files to %s", dest_name)
+    logger.info(f"Copying files to {dest_name}")
     for file in files_to_copy:
         shutil.copy(file, dest_name)
 
-    logger.info("Copying directories data %s", dest_name)
+    logger.info(f"Copying directories data {dest_name}")
     shutil.copytree("data", os.path.join(dest_name, "data"))
     shutil.copytree("test", os.path.join(dest_name, "test"))
     shutil.copytree("algebra", os.path.join(dest_name, "algebra"))
 
     studentify_dir = os.path.join(tempfile.gettempdir(), "tpt")
-    logger.info("Cloning studentify.py to %s", studentify_dir)
+    logger.info(f"Cloning studentify.py to {studentify_dir}")
     subprocess.check_call(["git", "clone", "https://github.com/simogasp/studentipy.git", studentify_dir])
 
     files_to_studentify = ["DepthBuffer.java",
@@ -78,7 +78,7 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
                            "Transformation.java"]
     for file in files_to_studentify:
         file_cpp = os.path.join(dest_name, file)
-        logger.info("Applying studentify to %s", file_cpp)
+        logger.info(f"Applying studentify to {file_cpp}")
         subprocess.check_call(
             ["python3", os.path.join(studentify_dir, "studentify.py"), file_cpp, "-o", file_cpp, "--force"])
 
@@ -86,7 +86,7 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
     shutil.rmtree(studentify_dir)
 
     if not skip_packaging:
-        logger.info("Generating archive %s.zip in %s", archive_name, working_dir)
+        logger.info(f"Generating archive {archive_name}.zip in {working_dir}")
         with zipfile.ZipFile(os.path.join(working_dir, f"{archive_name}.zip"), "w") as zip_file:
             for root, dirs, files in os.walk(dest_name):
                 for file in files:
@@ -94,7 +94,7 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
 
     if skip_cleaning:
         return
-    logger.info("Cleaning up %s", dest_name)
+    logger.info(f"Cleaning up {dest_name}")
     shutil.rmtree(dest_name)
 
 
