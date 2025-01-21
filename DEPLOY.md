@@ -7,15 +7,7 @@ To generate the code for the student, run the following command:
 ```
 
 This will generate a `dist` folder with the code for the student and inside you will find a zip file with the code named `tp_renderer_diy-vX-Y-Z.zip`.
-The version `X.Y` is the most recent tag in the git repository and `Z` is the number of commits since the last tag.
-
-So if you need to generate version without the hash of the last commit you need to create a tag in git, e.g.:
-
-```bash
-git tag v2025.1
-```
-
-and then run the command.
+The version `X.Y` is the most recent tag in the git repository and `Z` is the commit hash (this is added only if the most recent tag is not the current commit).
 
 The python script has some option (check the help with `./generateStudent.py -h`):
 
