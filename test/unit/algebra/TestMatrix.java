@@ -29,6 +29,19 @@ public class TestMatrix {
         new Matrix("invalidMatrix", 0, 3);
     }
 
+    @Test(expected = InstantiationException.class)
+    public void testInvalidNegativeSizesMatrixCreation() throws InstantiationException {
+        new Matrix("invalidMatrix", -5, -4);
+    }
+    @Test(expected = InstantiationException.class)
+    public void testInvalidSingleNegativeSizesMatrixCreation1() throws InstantiationException {
+        new Matrix("invalidMatrix", -5, 4);
+    }
+    @Test(expected = InstantiationException.class)
+    public void testInvalidSingleNegativeSizesMatrixCreation2() throws InstantiationException {
+        new Matrix("invalidMatrix", 5, -4);
+    }
+
     @Test
     public void testSetAndGets() throws InstantiationException {
         Matrix m = new Matrix("testMatrix", 2, 2);
