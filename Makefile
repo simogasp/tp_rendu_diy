@@ -11,7 +11,7 @@ FUNCTIONAL_TEST_FILES = $(shell find $(TEST_DIR)/functional -name "*.java")
 ALL_TEST_FILES = $(UNIT_TEST_FILES) $(FUNCTIONAL_TEST_FILES)
 
 # Targets
-.PHONY: all clean compile run-tests
+.PHONY: all clean compile test
 
 all: compile
 
@@ -25,7 +25,7 @@ compile: clean
 	javac -d $(BUILD_DIR) -cp $(CLASSPATH) $(SRC_FILES) $(ALL_TEST_FILES)
 
 # Run all tests
-run-tests: compile
+test: compile
 	@echo "Running all unit and functional tests..."
 	@for test in $(UNIT_TEST_FILES:.java=) $(FUNCTIONAL_TEST_FILES:.java=); do \
 	    test_name=$$(basename $$test); \
