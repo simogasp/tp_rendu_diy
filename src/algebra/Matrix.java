@@ -219,10 +219,11 @@ public class Matrix {
     }
 
     protected void allocValues(int nRows, int nCols) throws java.lang.InstantiationException {
-        int size = nRows * nCols;
-        if (size < 1) {
+
+        if (nRows < 1 || nCols < 1) {
             throw new java.lang.InstantiationException("Both matrix dimensions must be strictly positive");
         }
+        int size = nRows * nCols;
         this.values = new double[size];
         this.nRows = nRows;
         this.nCols = nCols;
