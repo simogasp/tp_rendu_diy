@@ -44,10 +44,11 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
     for file in files_to_copy:
         shutil.copy(file, dest_name)
 
-    logger.info(f"Copying directories data {dest_name}")
+    logger.info(f"Copying directories in {dest_name}")
     shutil.copytree("data", os.path.join(dest_name, "data"))
     shutil.copytree("test", os.path.join(dest_name, "test"))
     shutil.copytree("src", os.path.join(dest_name, "src"))
+    shutil.copytree("lib", os.path.join(dest_name, "lib"))
 
     studentify_dir = os.path.join(tempfile.gettempdir(), "tpt")
     logger.info(f"Cloning studentify.py to {studentify_dir}")
