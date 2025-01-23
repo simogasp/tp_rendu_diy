@@ -145,7 +145,7 @@ public class Rasterizer {
                 y += ystep;
                 err -= dx;
             }
-        } // >??
+        } //>??
     }
 
     static double triangleArea(Fragment v1, Fragment v2, Fragment v3) {
