@@ -93,13 +93,13 @@ public class Lighting {
                         h.normalize();
 
                         // diffuse contribution
-                        double Id = kd * light.params[3] * normal.dot(l);// ++ // TODO
-                        // ++ // double Id = ...;
+                        double I_diffuse = kd * light.params[3] * normal.dot(l);// ++ // TODO
+                        // ++ // double I_diffuse = ...;
 
                         // specular contribution
-                        double Is = ks * light.params[3] * Math.pow(normal.dot(h), s);// ++ // TODO
-                        // ++ // double Is = ...;
-                        I += Id + Is; // ++ // I += Id + Is;
+                        double I_specular = ks * light.params[3] * Math.pow(normal.dot(h), s);// ++ // TODO
+                        // ++ // double I_specular = ...;
+                        I += I_diffuse + I_specular; // ++ // I += I_diffuse + I_specular;
 
                     } catch (InstantiationException ex) {
                         /* should not reach */ } catch (SizeMismatchException ex) {
