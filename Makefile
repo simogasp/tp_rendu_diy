@@ -48,5 +48,5 @@ func-tests: compile
 	@echo "All tests completed."
 
 # run the renderer
-run:
+run: compile
 	java -cp $(CLASSPATH) Renderer ${SCENE}
