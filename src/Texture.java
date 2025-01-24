@@ -27,11 +27,11 @@ public class Texture {
      * u and v and wrapped around to [0,1].
      */
     public Color sample(double u, double v) {
-        // ++ // TODO
-        int x = ((int) Math.floor(u * width)) % width; // <!!
+        //++ // TODO
+        int x = ((int) Math.floor(u * width)) % width; //<!!
         int y = ((int) Math.floor(v * height)) % height;
 
-        return new Color(image.getRGB(x, y), false); // >!!
-        // ++ return new Color (0,0,0);
+        return new Color(image.getRGB(x, y), false); //>!!
+        //++ return new Color (0,0,0);
     }
 }

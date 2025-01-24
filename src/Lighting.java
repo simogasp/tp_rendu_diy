@@ -72,7 +72,7 @@ public class Lighting {
             switch (light.type) {
                 case AMBIENT:
                     // ambient light contribution
-                    I += ka * light.params[0]; // ++ // TODO
+                    I += ka * light.params[0]; //++ // TODO
                     break;
 
                 case POINT:
@@ -93,13 +93,13 @@ public class Lighting {
                         h.normalize();
 
                         // diffuse contribution
-                        double I_diffuse = kd * light.params[3] * normal.dot(l);// ++ // TODO
-                        // ++ // double I_diffuse = ...;
+                        double I_diffuse = kd * light.params[3] * normal.dot(l); //++ // TODO
+                        //++ // double I_diffuse = ...;
 
                         // specular contribution
-                        double I_specular = ks * light.params[3] * Math.pow(normal.dot(h), s);// ++ // TODO
-                        // ++ // double I_specular = ...;
-                        I += I_diffuse + I_specular; // ++ // I += I_diffuse + I_specular;
+                        double I_specular = ks * light.params[3] * Math.pow(normal.dot(h), s); //++ // TODO
+                        //++ // double I_specular = ...;
+                        I += I_diffuse + I_specular; //++ // I += I_diffuse + I_specular;
 
                     } catch (InstantiationException ex) {
                         /* should not reach */ } catch (SizeMismatchException ex) {

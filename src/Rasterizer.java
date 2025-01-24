@@ -190,8 +190,8 @@ public class Rasterizer {
         Matrix C = makeBarycentricCoordsMatrix(v1, v2, v3);
 
         // iterate over the triangle's bounding box
-        // ++ // TODO
-        int xmin = Math.min(v1.getX(), Math.min(v2.getX(), v3.getX())); // <!!
+        //++ // TODO
+        int xmin = Math.min(v1.getX(), Math.min(v2.getX(), v3.getX())); //<!!
         int ymin = Math.min(v1.getY(), Math.min(v2.getY(), v3.getY()));
         int xmax = Math.max(v1.getX(), Math.max(v2.getX(), v3.getX()));
         int ymax = Math.max(v1.getY(), Math.max(v2.getY(), v3.getY()));
@@ -222,6 +222,6 @@ public class Rasterizer {
         } catch (SizeMismatchException e) {
             // should not reach
             e.printStackTrace();
-        } // >!!
+        } //>!!
     }
 }

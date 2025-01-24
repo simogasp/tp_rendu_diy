@@ -37,8 +37,8 @@ public class TextureShader extends Shader {
         if (depth.testFragment(fragment)) {
             // The Fragment may not have texture coordinates
             try {
-                // ++ // TODO
-                double uv[] = fragment.getAttribute(7, 2); // <!!
+                //++ // TODO
+                double uv[] = fragment.getAttribute(7, 2); //<!!
                 Color texColor;
                 if (texture == null) {
                     texColor = Color.BLACK;
@@ -54,7 +54,7 @@ public class TextureShader extends Shader {
                 } else {
                     finalColor = texColor;
                 }
-                screen.setPixel(fragment.getX(), fragment.getY(), finalColor); // >!!
+                screen.setPixel(fragment.getX(), fragment.getY(), finalColor); //>!!
             } catch (ArrayIndexOutOfBoundsException e) {
                 screen.setPixel(fragment.getX(), fragment.getY(), fragment.getColor());
             }

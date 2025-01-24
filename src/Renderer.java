@@ -150,22 +150,22 @@ public class Renderer {
         wait(3);
 
         // solid rendering, no lighting
-        screen.clearBuffer(); // <??
+        screen.clearBuffer(); //<??
         shader.reset();
         renderSolid();
         screen.swapBuffers();
-        wait(3); // >??
+        wait(3); //>??
 
         // solid rendering, with lighting
-        screen.clearBuffer(); // <??
+        screen.clearBuffer(); //<??
         shader.reset();
         setLightingEnabled(true);
         renderSolid();
         screen.swapBuffers();
-        wait(3); // >??
+        wait(3); //>??
 
         // solid rendering, with texture
-        screen.clearBuffer(); // <??
+        screen.clearBuffer(); //<??
         TextureShader texShader = new TextureShader(screen);
         texShader.setTexture("data/brick.jpg");
         shader = texShader;
@@ -173,16 +173,16 @@ public class Renderer {
         setLightingEnabled(true);
         renderSolid();
         screen.swapBuffers();
-        wait(3); // >??
+        wait(3); //>??
 
         // solid rendering, with texture combined with base color
-        screen.clearBuffer(); // <??
+        screen.clearBuffer(); //<??
         texShader.reset();
         texShader.setCombineWithBaseColor(true);
         shader = texShader;
         renderSolid();
         screen.swapBuffers();
-        wait(3); // >??
+        wait(3); //>??
 
         screen.destroy();
         System.exit(0);

@@ -23,9 +23,10 @@ public class Transformation {
     public void setLookAt(Vector3 eye, Vector3 interestPoint, Vector3 up) {
         try {
             // compute rotation
-            // ++ // TODO
-            Vector3 z = new Vector3(interestPoint);// <!!
+            //++ // TODO
+            Vector3 z = new Vector3(interestPoint);//<!!
             z.subtract(eye);
+            System.out.println("z"+z);
 
             z.normalize();
             Vector3 x = up.cross(z);
@@ -40,11 +41,11 @@ public class Transformation {
             worldToCamera.set(1, 2, y.getZ());
             worldToCamera.set(2, 0, z.getX());
             worldToCamera.set(2, 1, z.getY());
-            worldToCamera.set(2, 2, z.getZ()); // >!!
+            worldToCamera.set(2, 2, z.getZ()); //>!!
 
             // compute translation
-            // ++ // TODO
-            Vector3 mEye = new Vector3(eye);// <!!
+            //++ // TODO
+            Vector3 mEye = new Vector3(eye);//<!!
             mEye.scale(-1.0);
             Matrix R = worldToCamera.getSubMatrix(0, 0, 3, 3);
 
@@ -55,7 +56,7 @@ public class Transformation {
 
             worldToCamera.set(0, 3, t.get(0));
             worldToCamera.set(1, 3, t.get(1));
-            worldToCamera.set(2, 3, t.get(2)); // >!!
+            worldToCamera.set(2, 3, t.get(2)); //>!!
 
         } catch (Exception e) {
             /* unreached */ }
@@ -65,21 +66,21 @@ public class Transformation {
     }
 
     public void setProjection() {
-        // ++ // TODO
-        projection.set(0, 0, 1.0); // <!!
+        //++ // TODO
+        projection.set(0, 0, 1.0); //<!!
         projection.set(1, 1, 1.0);
-        projection.set(2, 2, 1.0); // >!!
+        projection.set(2, 2, 1.0); //>!!
 
         System.out.println("Projection matrix:\n" + projection);
     }
 
     public void setCalibration(double focal, double width, double height) {
 
-        // ++ // TODO
-        calibration.set(0, 0, focal); // <!!
+        //++ // TODO
+        calibration.set(0, 0, focal); //<!!
         calibration.set(1, 1, focal);
         calibration.set(0, 2, width / 2.0);
-        calibration.set(1, 2, height / 2.0); // >!!
+        calibration.set(1, 2, height / 2.0); //>!!
 
         System.out.println("Calibration matrix:\n" + calibration);
     }
@@ -91,12 +92,12 @@ public class Transformation {
      */
     public Vector3 projectPoint(Vector p)
             throws SizeMismatchException, InstantiationException {
-        // ++ Vector ps = new Vector(3);
-        // ++ // TODO
-        Vector pe = worldToCamera.multiply(p);// <!!
+        //++ Vector ps = new Vector(3);
+        //++ // TODO
+        Vector pe = worldToCamera.multiply(p);//<!!
         Vector ps = calibration.multiply(projection.multiply(pe));
         ps.set(0, ps.get(0) / ps.get(2));
-        ps.set(1, ps.get(1) / ps.get(2));// >!!
+        ps.set(1, ps.get(1) / ps.get(2));//>!!
         return new Vector3(ps);
     }
 

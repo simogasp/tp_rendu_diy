@@ -118,9 +118,9 @@ public class Mesh {
         // to the vertex.
         try {
             for (int i = 0; i < 3 * getNumFaces(); i += 3) {
-                // ++ // TODO
-                // ++ Vector3 n = new Vector3();
-                Vector a = vertices[faces[i]]; // <!!
+                //++ // TODO
+                //++ Vector3 n = new Vector3();
+                Vector a = vertices[faces[i]]; //<!!
                 Vector b = vertices[faces[i + 1]];
                 Vector c = vertices[faces[i + 2]];
 
@@ -130,7 +130,7 @@ public class Mesh {
                 v2.subtract(new Vector3(b));
 
                 Vector3 n = v1.cross(v2);
-                n.normalize(); // >!!
+                n.normalize(); //>!!
 
                 // add the calculated normal n to each vertex of the face
                 for (int j = 0; j < 3; j++) {
