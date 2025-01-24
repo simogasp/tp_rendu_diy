@@ -24,7 +24,7 @@ public class Renderer {
         screen = new GraphicsWrapper(scene.getScreenW(), scene.getScreenH());
         screen.clearBuffer();
         //++ shader = new SimpleShader (screen);
-        shader = new PainterShader(screen); // ??
+        shader = new PainterShader(screen); //??
         rasterizer = new Rasterizer(shader);
         // rasterizer = new PerspectiveCorrectRasterizer (shader);
 
