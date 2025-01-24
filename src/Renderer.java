@@ -23,7 +23,7 @@ public class Renderer {
         mesh = new Mesh(scene.getMeshFileName());
         screen = new GraphicsWrapper(scene.getScreenW(), scene.getScreenH());
         screen.clearBuffer();
-        // ++ shader = new SimpleShader (screen);
+        //++ shader = new SimpleShader (screen);
         shader = new PainterShader(screen); // ??
         rasterizer = new Rasterizer(shader);
         // rasterizer = new PerspectiveCorrectRasterizer (shader);
