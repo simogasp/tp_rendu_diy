@@ -20,11 +20,11 @@ public class Transformation {
         }
     }
 
-    public void setLookAt(Vector3 eye, Vector3 interestPoint, Vector3 up) {
+    public void setLookAt(Vector3 eye, Vector3 lookAtPoint, Vector3 up) {
         try {
             // compute rotation
             //++ // TODO
-            Vector3 z = new Vector3(interestPoint);//<!!
+            Vector3 z = new Vector3(lookAtPoint);//<!!
             z.subtract(eye);
             System.out.println("z"+z);
 
