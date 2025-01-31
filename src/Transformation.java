@@ -10,6 +10,9 @@ public class Transformation {
     Matrix projection;
     Matrix calibration;
 
+    /**
+     * Creates a new Transformation object.
+     */
     public Transformation() {
         try {
             worldToCamera = Matrix.createIdentity("W2C", 4);
@@ -20,6 +23,12 @@ public class Transformation {
         }
     }
 
+    /**
+     * Sets the lookAt transformation.
+     * @param eye the eye position
+     * @param lookAtPoint the point to look at
+     * @param up the up vector
+     */
     public void setLookAt(Vector3 eye, Vector3 lookAtPoint, Vector3 up) {
         try {
             // compute rotation
@@ -65,6 +74,9 @@ public class Transformation {
         System.out.println("Modelview matrix:\n" + worldToCamera);
     }
 
+    /**
+     * Sets the projection matrix.
+     */
     public void setProjection() {
         //++ // TODO
         projection.set(0, 0, 1.0); //<!!
@@ -74,6 +86,12 @@ public class Transformation {
         System.out.println("Projection matrix:\n" + projection);
     }
 
+    /**
+     * Sets the calibration matrix.
+     * @param focal the focal length
+     * @param width the width of the image
+     * @param height the height of the image
+     */
     public void setCalibration(double focal, double width, double height) {
 
         //++ // TODO
@@ -89,6 +107,10 @@ public class Transformation {
      * Projects the given homogeneous, 4 dimensional point onto the screen.
      * The resulting Vector as its (x,y) coordinates in pixel, and its z coordinate
      * is the depth of the point in the camera coordinate system.
+     * @param p the point to project
+     * @return the projected point
+     * @throws SizeMismatchException if the size of the input vector is not 4
+     * @throws InstantiationException if the creation of the resulting vector fails
      */
     public Vector3 projectPoint(Vector p)
             throws SizeMismatchException, InstantiationException {
@@ -103,6 +125,10 @@ public class Transformation {
 
     /**
      * Transform a vector from world to camera coordinates.
+     * @param v the vector to transform
+     * @return the transformed vector
+     * @throws SizeMismatchException 
+     * @throws InstantiationException if the creation of the resulting vector fails
      */
     public Vector3 transformVector(Vector3 v)
             throws SizeMismatchException, InstantiationException {

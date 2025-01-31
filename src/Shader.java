@@ -11,6 +11,10 @@ public abstract class Shader {
 
     protected GraphicsWrapper screen;
 
+    /**
+     * Creates a Shader with the given screen.
+     * @param screen the screen to draw on
+     */
     public Shader(GraphicsWrapper screen) {
         this.screen = screen;
     }
@@ -23,11 +27,14 @@ public abstract class Shader {
 
     /**
      * Computes the fragment color and write the result to the screen.
+     * @param fragment the fragment to shade
      */
     public abstract void shade(Fragment fragment);
 
     /**
      * Test whether the fragment falls onto the screen.
+     * @param fragment the fragment to test
+     * @return true if the fragment is clipped, false otherwise
      */
     public boolean isClipped(Fragment fragment) {
         return ((fragment.getX() < 0) || (fragment.getX() >= screen.getWidth()) ||

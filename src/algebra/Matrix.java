@@ -4,22 +4,51 @@
 
 package algebra;
 
+/**
+ * Matrix class
+ */
 public class Matrix {
 
+    /**
+     * The name of the matrix
+     */
     public String name = "M";
+    
+    /**
+     * The matrix values
+     */
     protected double values[];
+
+    /**
+     * The number of rows
+     */
     private int nRows;
+
+    /**
+     * The number of columns
+     */
     private int nCols;
 
+    /**
+     * Default constructor
+     */
     protected Matrix() {
     }
 
+    /**
+     * Creates a named Matrix
+     * @param name the name of the matrix
+     */
     protected Matrix(String name) {
         this.name = name;
     }
 
     /**
      * Creates a named Matrix of size nRows x nCols.
+     * @param name the name of the matrix
+     * @param nRows number of rows
+     * @param nCols number of columns
+     * @throws InstantiationException if the matrix dimensions are invalid
      */
     public Matrix(String name, int nRows, int nCols) throws java.lang.InstantiationException {
         this(nRows, nCols);
@@ -28,6 +57,9 @@ public class Matrix {
 
     /**
      * Creates a Matrix of size nRows x nCols.
+     * @param nRows number of rows
+     * @param nCols number of columns
+     * @throws InstantiationException if the matrix dimensions are invalid
      */
     public Matrix(int nRows, int nCols) throws java.lang.InstantiationException {
         allocValues(nRows, nCols);
@@ -37,8 +69,9 @@ public class Matrix {
      * Creates an identity matrix of size @size and name "I"+size (e.g. I3 for a 3x3
      * identity matrix)
      * 
-     * @throws InstantiationException
      * @param size the size of the identity matrix
+     * @return the identity matrix of size @size
+     * @throws InstantiationException if the matrix dimensions are invalid
      */
     public static Matrix createIdentity(int size) throws java.lang.InstantiationException {
         String name = "I" + size;
@@ -48,9 +81,10 @@ public class Matrix {
     /**
      * Creates an identity matrix of size @size
      * 
-     * @throws InstantiationException
      * @param name the name of the matrix
-     * @param size the size of the identity matrix§
+     * @param size the size of the identity matrix
+     * @return the identity matrix of size @size and name @name
+     * @throws InstantiationException if the matrix dimensions are invalid
      */
     public static Matrix createIdentity(String name, int size) throws java.lang.InstantiationException {
         Matrix id = new Matrix(name, size, size);
@@ -68,7 +102,7 @@ public class Matrix {
      * @param nRows number of rows
      * @param nCols number of columns
      * @return the nRows x nCols matrix named @name
-     * @throws InstantiationException
+     * @throws InstantiationException if the matrix dimensions are invalid
      */
     public static Matrix createRandom(String name, int nRows, int nCols) throws InstantiationException {
         Matrix M = new Matrix(name, nRows, nCols);
@@ -83,6 +117,12 @@ public class Matrix {
     /**
      * Extracts a submatrix of size nRows x nCols with top left corner at
      * (offsetRow, offsetCol)
+     * @param offsetRow the row offset
+     * @param offsetCol the column offset
+     * @param nRows the number of rows to extract
+     * @param nCols the number of columns to extract
+     * @return the submatrix of size nRows x nCols
+     * @throws InstantiationException if the submatrix the dimensions are invalid
      */
     public Matrix getSubMatrix(int offsetRow, int offsetCol, int nRows, int nCols)
             throws InstantiationException {
@@ -104,6 +144,7 @@ public class Matrix {
 
     /**
      * Get the transposed matrix.
+     * @return the transposed matrix
      */
     public Matrix transpose() {
         Matrix trans;
@@ -123,6 +164,9 @@ public class Matrix {
 
     /**
      * Matrix/Matrix multiplication
+     * @param M the matrix to multiply with
+     * @return the resulting matrix
+     * @throws SizeMismatchException if the matrix sizes do not match for multiplication
      */
     public Matrix multiply(Matrix M) throws SizeMismatchException {
         if (nCols != M.nRows) {
@@ -150,6 +194,9 @@ public class Matrix {
 
     /**
      * Matrix/vector multiplication
+     * @param v the vector to multiply with
+     * @return the resulting vector
+     * @throws SizeMismatchException if the vector size does not match the matrix column size
      */
     public Vector multiply(Vector v) throws SizeMismatchException {
         if (nCols != v.size()) {
@@ -176,6 +223,9 @@ public class Matrix {
 
     /**
      * Sets the element on row @i and column @j to the given value @value.
+     * @param i the row index
+     * @param j the column index
+     * @param value the value to set
      */
     public void set(int i, int j, double value) {
         values[i * nCols + j] = value;
@@ -206,7 +256,7 @@ public class Matrix {
      * 
      * @param i the column
      * @return the vector
-     * @throws InstantiationException
+     * @throws InstantiationException if the vector cannot be created
      */
     public Vector getCol(int i) throws InstantiationException {
         // check if the column index is valid
@@ -245,6 +295,7 @@ public class Matrix {
      * Get the elements of the i-th row of the matrix as a vector.
      * @param i the row
      * @return the vector
+     * @throws InstantiationException if the vector cannot be created
      */
     public Vector getRow(int i) throws InstantiationException {
         // check if the row index is valid
@@ -260,7 +311,10 @@ public class Matrix {
     }
 
     /**
-     * Gets the element on row @i and column @j.
+     * Gets the element on row i and column j.
+     * @param i the row index
+     * @param j the column index
+     * @return the element at row i and column j
      */
     public double get(int i, int j) {
         return values[i * nCols + j];
@@ -268,6 +322,7 @@ public class Matrix {
 
     /**
      * Sets the matrix name
+     * @param name the name of the matrix
      */
     public void setName(String name) {
         this.name = name;
@@ -275,6 +330,7 @@ public class Matrix {
 
     /**
      * Returns a Matlab compatible representation of the Matrix.
+     * @return the string representation of the matrix
      */
     public String toString() {
         String repr = name + " = [";
@@ -296,6 +352,12 @@ public class Matrix {
         return repr;
     }
 
+    /**
+     * Allocates the matrix values
+     * @param nRows the number of rows
+     * @param nCols the number of columns
+     * @throws InstantiationException if the matrix dimensions are invalid
+     */
     protected void allocValues(int nRows, int nCols) throws java.lang.InstantiationException {
 
         if (nRows < 1 || nCols < 1) {
@@ -307,14 +369,26 @@ public class Matrix {
         this.nCols = nCols;
     }
 
+    /**
+     * Returns the name of the matrix
+     * @return the name of the matrix
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Returns the number of rows
+     * @return the number of rows
+     */
     public int nRows() {
         return nRows;
     }
 
+    /**
+     * Returns the number of columns
+     * @return the number of columns
+     */
     public int nCols() {
         return nCols;
     }

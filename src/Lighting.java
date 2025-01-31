@@ -4,7 +4,7 @@ import algebra.*;
 /**
  * The Lighting class describes a scene lighting environment
  * 
- * @author: gmorin, smondet
+ * @author gmorin, smondet
  */
 public class Lighting {
 
@@ -27,12 +27,16 @@ public class Lighting {
         }
     }
 
+    /**
+     * Creates a new Lighting environment
+     */
     public Lighting() {
         lights = new LinkedList<Light>();
     }
 
     /**
      * Adds a new ambient light source of intensity @ia to the environment.
+     * @param ia the intensity of the ambient light
      */
     public void addAmbientLight(double ia) {
         double[] v = new double[1];
@@ -41,7 +45,11 @@ public class Lighting {
     }
 
     /**
-     * Addsa
+     * Adds a new point light source of intensity @id at position (x, y, z) to the environment.
+     * @param x the x coordinate of the light source
+     * @param y the y coordinate of the light source
+     * @param z the z coordinate of the light source
+     * @param id the intensity of the light source
      */
     public void addPointLight(double x, double y, double z, double id) {
         double[] v = new double[5];
@@ -54,9 +62,16 @@ public class Lighting {
 
     /**
      * Computes the illuminated color of a 3D points of given position, normal and
-     * color,
-     * and given the camera position and material parameters.
-     * Returns an array of size 3.
+     * color, and given the camera position and material parameters.
+     * @param position the position of the point
+     * @param normal the normal at the point
+     * @param color the color of the point
+     * @param cameraPosition the position of the camera
+     * @param ka the ambient reflection coefficient
+     * @param kd the diffuse reflection coefficient
+     * @param ks the specular reflection coefficient
+     * @param s the shininess coefficient
+     * @return the illuminated color of the point
      */
     public double[] applyLights(Vector3 position, Vector3 normal, double[] color,
             Vector3 cameraPosition,

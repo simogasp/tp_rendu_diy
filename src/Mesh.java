@@ -29,7 +29,8 @@ public class Mesh {
      * Builds a Mesh object by reading in an OFF file.
      * Does not support non triangular meshes.
      * 
-     * @filename path to OFF file.
+     * @param filename path to OFF file.
+     * @throws Exception if the file is not a valid OFF file.
      */
     public Mesh(String filename) throws Exception {
         BufferedReader in = new BufferedReader(new FileReader(filename));
@@ -94,6 +95,7 @@ public class Mesh {
 
     /**
      * Gets the number of vertices in the mesh
+     * @return the number of vertices in the mesh
      */
     public int getNumVertices() {
         return vertices.length;
@@ -101,6 +103,7 @@ public class Mesh {
 
     /**
      * Gets the number of faces in the mesh
+     * @return the number of faces in the mesh
      */
     public int getNumFaces() {
         return faces.length / 3;
@@ -108,6 +111,8 @@ public class Mesh {
 
     /**
      * Constructs a normal for each vertex of the mesh
+     * by averaging the normals of the faces that share the vertex.
+     * @return an array of Vector3 containing the normals of each vertex.
      */
     private Vector3[] computeNormals() {
 
@@ -165,6 +170,7 @@ public class Mesh {
 
     /**
      * Returns the vertices of the mesh
+     * @return an array of Vector containing the vertices of the mesh
      */
     public Vector[] getVertices() {
         return vertices;
@@ -172,6 +178,8 @@ public class Mesh {
 
     /**
      * Return the normals associated to the vertices.
+     * If the normals have not been computed yet, they are computed.
+     * @return an array of Vector3 containing the normals of the mesh
      */
     public Vector3[] getNormals() {
         if (normals == null) {
@@ -185,6 +193,8 @@ public class Mesh {
      * Returns the faces of the mesh. The returned array contains 3*n integers, with
      * n the number of faces.
      * Each integer is an index into the array of Vector.
+     * The indices are grouped by 3, each group representing a face.
+     * @return an array of int containing the faces of the mesh
      */
     public int[] getFaces() {
         return faces;
@@ -192,6 +202,9 @@ public class Mesh {
 
     /**
      * Returns the colors of each vertex in the mesh.
+     * The returned array contains 3*n doubles, with n the number of vertices.
+     * Each group of 3 doubles represents the color of a vertex.
+     * @return an array of double containing the colors of the mesh
      */
     public double[] getColors() {
         return colors;
@@ -199,6 +212,9 @@ public class Mesh {
 
     /**
      * Returns the texture coordinates of each vertex in the mesh.
+     * The returned array contains 2*n doubles, with n the number of vertices.
+     * Each group of 2 doubles represents the texture coordinates of a vertex.
+     * @return an array of double containing the texture coordinates of the mesh
      */
     public double[] getTextureCoordinates() {
         return texCoords;

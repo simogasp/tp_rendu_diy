@@ -70,7 +70,6 @@ public class TestVector3 {
             assertEquals(3.0, v1.getY(), EPSILON);
             assertEquals(3.0, v1.getZ(), EPSILON);
         } catch (SizeMismatchException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             fail("Unexpected SizeMismatchException exception");
         }

@@ -75,6 +75,8 @@ public class GraphicsWrapper {
   /**
    * Build a virtual screen of size width x height
    * And set its window visible.
+   * @param width the width of the screen
+   * @param height the height of the screen
    */
   public GraphicsWrapper(int width, int height) {
     this.height = height;
@@ -88,6 +90,9 @@ public class GraphicsWrapper {
    * represented by
    * a pixelSize x pixelSize square.
    * And set its window visible.
+   * @param width the width of the screen
+   * @param height the height of the screen
+   * @param pixelSize the size of a virtual pixel
    */
   public GraphicsWrapper(int width, int height, int pixelSize) {
     this.height = height;
@@ -100,6 +105,11 @@ public class GraphicsWrapper {
    * Lights the pixel (x,y) with color (r, g, b) (values clamped to [0,1])
    * on the current draw buffer.
    * Does nothing for pixels out of the screen.
+   * @param x the x coordinate of the pixel
+   * @param y the y coordinate of the pixel
+   * @param r the red component of the color
+   * @param g the green component of the color
+   * @param b the blue component of the color
    */
   public void setPixel(int x, int y, double r, double g, double b) {
 
@@ -114,6 +124,11 @@ public class GraphicsWrapper {
    * Lights the pixel (x,y) with color (r, g, b) (values clamped to [0, 255])
    * on the current draw buffer.
    * Does nothing for pixels out of the screen.
+   * @param x the x coordinate of the pixel
+   * @param y the y coordinate of the pixel
+   * @param r the red component of the color (clamped to [0, 255])
+   * @param g the green component of the color (clamped to [0, 255])
+   * @param b the blue component of the color (clamped to [0, 255])
    */
   public void setPixel(int x, int y, char r, char g, char b) {
 
@@ -134,6 +149,9 @@ public class GraphicsWrapper {
   /**
    * Lights the pixel (x,y) with the given color.
    * Does nothing for pixels out of the screen.
+   * @param x the x coordinate of the pixel
+   * @param y the y coordinate of the pixel
+   * @param color the color of the pixel
    */
   public void setPixel(int x, int y, Color color) {
 
@@ -149,6 +167,9 @@ public class GraphicsWrapper {
 
   /**
    * Gets the pixel in the back buffer
+   * @param x the x coordinate of the pixel
+   * @param y the y coordinate of the pixel
+   * @return the color of the pixel
    */
   public Color getPixel(int x, int y) {
     Color color;
@@ -162,6 +183,12 @@ public class GraphicsWrapper {
     return color;
   }
 
+  /**
+   * Gets the pixel in the front buffer
+   * @param x the x coordinate of the pixel
+   * @param y the y coordinate of the pixel
+   * @return the color of the pixel
+   */
   public Color getFrontPixel(int x, int y) {
     Color color;
 
@@ -175,19 +202,23 @@ public class GraphicsWrapper {
   }
 
   /**
-   *
+   * Gets the width of the screen
+   * @return the width of the screen
    */
   int getWidth() {
     return width;
   }
 
+  /**
+   * Gets the height of the screen
+   * @return the height of the screen
+   */
   int getHeight() {
     return height;
   }
 
   /**
    * Clear current draw-buffer (ie Paint it black)
-   *
    */
   public void clearBuffer() {
     Graphics2D gd = backBuffer.createGraphics();

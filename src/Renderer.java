@@ -5,7 +5,7 @@ import algebra.*;
  * The Renderer class drives the rendering pipeline: read in a scene, projects
  * the vertices and rasterizes every faces / edges.
  * 
- * @author: cdehais
+ * @author cdehais
  */
 public class Renderer {
 
@@ -18,6 +18,12 @@ public class Renderer {
     static Lighting lighting;
     static boolean lightingEnabled;
 
+    /**
+     * Initialize the renderer with the given scene file.
+     * 
+     * @param sceneFilename the scene file to load
+     * @throws Exception if the scene file cannot be loaded
+     */
     static void init(String sceneFilename) throws Exception {
         scene = new Scene(sceneFilename);
         mesh = new Mesh(scene.getMeshFileName());
@@ -41,6 +47,10 @@ public class Renderer {
         lighting.addPointLight(lightCoord[0], lightCoord[1], lightCoord[2], scene.getSourceI());
     }
 
+    /**
+     * Projects the vertices of the mesh into the screen space.
+     * @return an array of fragments
+     */
     static Fragment[] projectVertices() {
         Vector[] vertices = mesh.getVertices();
         Vector3[] normals = mesh.getNormals();
@@ -91,6 +101,9 @@ public class Renderer {
         return fragments;
     }
 
+    /**
+     * Renders the wireframe of the mesh
+     */
     static void renderWireframe() {
         Fragment[] fragment = projectVertices();
         int[] faces = mesh.getFaces();
@@ -104,6 +117,9 @@ public class Renderer {
         }
     }
 
+    /**
+     * Renders the solid of the mesh
+     */
     static void renderSolid() {
         Fragment[] fragments = projectVertices();
         int[] faces = mesh.getFaces();
@@ -117,10 +133,18 @@ public class Renderer {
         }
     }
 
+    /**
+     * Enables or disables lighting
+     * @param enabled true to enable lighting, false to disable it
+     */
     public static void setLightingEnabled(boolean enabled) {
         lightingEnabled = enabled;
     }
 
+    /**
+     * Wait for a number of seconds
+     * @param sec the number of seconds to wait
+     */
     public static void wait(int sec) {
         try {
             Thread.sleep(sec * 1000);

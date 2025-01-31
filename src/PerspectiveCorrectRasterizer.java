@@ -10,12 +10,19 @@ import algebra.*;
  */
 public class PerspectiveCorrectRasterizer extends Rasterizer {
 
+    /**
+     * Creates a PerspectiveCorrectRasterizer with the given shader
+     * @param shader the shader to use
+     */
     public PerspectiveCorrectRasterizer(Shader shader) {
         super(shader);
     }
 
     /**
      * Rasterizes the triangular face made of the Fragment v1, v2 and v3
+     * @param v1 the first vertex of the face
+     * @param v2 the second vertex of the face
+     * @param v3 the third vertex of the face
      */
     public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3) {
         Matrix C = makeBarycentricCoordsMatrix(v1, v2, v3);

@@ -14,6 +14,8 @@ public class Texture {
 
     /**
      * Constructs a new Texture with the content of the image at @path.
+     * @param path the path to the image file
+     * @throws Exception if the image file is not found
      */
     public Texture(String path) throws Exception {
         image = ImageIO.read(new File(path));
@@ -25,6 +27,9 @@ public class Texture {
      * Samples the texture at texture coordinates (u,v), using nearest neighboor
      * interpolation
      * u and v and wrapped around to [0,1].
+     * @param u the u texture coordinate
+     * @param v the v texture coordinate
+     * @return the color of the texture at (u,v)
      */
     public Color sample(double u, double v) {
         //++ // TODO

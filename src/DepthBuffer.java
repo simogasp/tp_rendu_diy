@@ -12,6 +12,8 @@ public class DepthBuffer {
     /**
      * Constructs a DepthBuffer of size width x height.
      * The buffer is initially cleared.
+     * @param width the width of the buffer
+     * @param height the height of the buffer
      */
     public DepthBuffer(int width, int height) {
         buffer = new double[width * height];
@@ -35,6 +37,8 @@ public class DepthBuffer {
     /**
      * Test if a fragment passes the DepthBuffer test, i.e. is the fragment the
      * closest at its position.
+     * @param fragment the fragment to test
+     * @return true if the fragment passes the test, false otherwise
      */
     public boolean testFragment(Fragment fragment) {
         if ((fragment.getX() >= 0) && (fragment.getX() < width) && (fragment.getY() >= 0)
@@ -49,6 +53,7 @@ public class DepthBuffer {
 
     /**
      * Writes the fragment depth to the buffer
+     * @param fragment the fragment to write
      */
     public void writeFragment(Fragment fragment) {
         if ((fragment.getX() >= 0) && (fragment.getX() < width) && (fragment.getY() >= 0)

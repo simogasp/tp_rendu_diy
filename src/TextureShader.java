@@ -5,7 +5,7 @@ import java.awt.*;
  * Simple shader that just copy the interpolated color to the screen,
  * taking the depth of the fragment into acount.
  * 
- * @author: cdehais
+ * @author cdehais
  */
 public class TextureShader extends Shader {
 
@@ -13,12 +13,20 @@ public class TextureShader extends Shader {
     Texture texture;
     boolean combineWithBaseColor;
 
+    /**
+     * Creates a PainterShader with the given screen.
+     * @param screen the screen to draw on
+     */
     public TextureShader(GraphicsWrapper screen) {
         super(screen);
         depth = new DepthBuffer(screen.getWidth(), screen.getHeight());
         texture = null;
     }
 
+    /**
+     * Set the texture to use for shading.
+     * @param path the path to the texture image
+     */
     public void setTexture(String path) {
         try {
             texture = new Texture(path);
@@ -29,10 +37,18 @@ public class TextureShader extends Shader {
         }
     }
 
+    /**
+     * Set whether the texture should be combined with the base color.
+     * @param combineWithBaseColor true if the texture should be combined with the base color
+     */
     public void setCombineWithBaseColor(boolean combineWithBaseColor) {
         this.combineWithBaseColor = combineWithBaseColor;
     }
 
+    /**
+     * Shade the fragment, taking the depth of the fragment into account.
+     * @param fragment the fragment to shade
+     */
     public void shade(Fragment fragment) {
         if (depth.testFragment(fragment)) {
             // The Fragment may not have texture coordinates
@@ -62,6 +78,9 @@ public class TextureShader extends Shader {
         }
     }
 
+    /**
+     * Reset the shader.
+     */
     public void reset() {
         depth.clear();
     }
