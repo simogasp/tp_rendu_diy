@@ -182,6 +182,84 @@ public class Matrix {
     }
 
     /**
+     * Sets the i-th column of in the matrix to the given vector.
+     * @param i the column index
+     * @param v the vector to set
+     */
+    public void setCol(int i, Vector v) {
+        // check if the vector has the right size
+        if (v.size() != nRows) {
+            throw new IllegalArgumentException("Vector size does not match matrix size");
+        }
+        // check if the column index is valid
+        if (i < 0 || i >= nCols) {
+            throw new IllegalArgumentException("Invalid column index");
+        }
+        // set the column
+        for (int j = 0; j < nRows; j++) {
+            values[j * nCols + i] = v.get(j);
+        }
+    }
+
+    /**
+     * Get the elements of the i-th column of the matrix as a vector.
+     * 
+     * @param i the column
+     * @return the vector
+     * @throws InstantiationException
+     */
+    public Vector getCol(int i) throws InstantiationException {
+        // check if the column index is valid
+        if (i < 0 || i >= nCols) {
+            throw new IllegalArgumentException("Invalid column index");
+        }
+        // get the column
+        Vector v = new Vector(nRows);
+        for (int j = 0; j < nRows; j++) {
+            v.set(j, values[j * nCols + i]);
+        }
+        return v;
+    }
+
+    /**
+     * Sets the i-th row of in the matrix to the given vector.
+     * @param i the row index
+     * @param v the vector to set
+     */
+    public void setRow(int i, Vector v) {
+        // check if the vector has the right size
+        if (v.size() != nCols) {
+            throw new IllegalArgumentException("Vector size does not match matrix size");
+        }
+        // check if the row index is valid
+        if (i < 0 || i >= nRows) {
+            throw new IllegalArgumentException("Invalid row index");
+        }
+        // set the row
+        for (int j = 0; j < nCols; j++) {
+            values[i * nCols + j] = v.get(j);
+        }
+    }
+
+    /**
+     * Get the elements of the i-th row of the matrix as a vector.
+     * @param i the row
+     * @return the vector
+     */
+    public Vector getRow(int i) throws InstantiationException {
+        // check if the row index is valid
+        if (i < 0 || i >= nRows) {
+            throw new IllegalArgumentException("Invalid row index");
+        }
+        // get the row
+        Vector v = new Vector(nCols);
+        for (int j = 0; j < nCols; j++) {
+            v.set(j, values[i * nCols + j]);
+        }
+        return v;
+    }
+
+    /**
      * Gets the element on row @i and column @j.
      */
     public double get(int i, int j) {
