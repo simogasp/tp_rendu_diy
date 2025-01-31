@@ -2,6 +2,8 @@ package unit.algebra;
 
 import algebra.Matrix;
 import algebra.SizeMismatchException;
+import algebra.Vector;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -168,6 +170,248 @@ public class TestMatrix {
                     assertEquals(0.0, m.get(i, j), EPSILON);
                 }
             }
+        }
+    }
+
+     // test setCol
+
+    @Test
+    public void testSetColValid() throws InstantiationException {
+        final int sizeRow = 5;
+        final int colToSet = 1;
+        Matrix matrix = Matrix.createRandom("testMatrix", sizeRow, 3);
+        Vector vector = new Vector(sizeRow);
+        // Set vector values
+        for (int i = 0; i < sizeRow; i++) {
+            vector.set(i, i + 1);
+        }
+
+        matrix.setCol(colToSet, vector);
+
+        for (int i = 0; i < sizeRow; i++) {
+            assertEquals(i + 1, matrix.get(i, colToSet), EPSILON);
+        }
+    }
+
+    @Test
+    public void testSetColInvalidVectorSize() throws InstantiationException {
+        Matrix matrix = new Matrix(3, 3);
+        Vector vector = new Vector(2); // Invalid size
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            matrix.setCol(1, vector);
+        });
+
+        assertEquals("Vector size does not match matrix size", exception.getMessage());
+    }
+
+    // test getCol
+
+    @Test
+    public void testGetColValidIndex() {
+        final int numRows = 3;
+        final int numCols = 3;
+        Matrix matrix;
+        try {
+            matrix = new Matrix(numRows, numCols);
+            double value = 1.0;
+            for (int i = 0; i < numRows; i++) {
+                for (int j = 0; j < numCols; j++) {
+                    matrix.set(i, j, value++);
+                }
+            }
+
+            for (int j = 0; j < numCols; j++) {
+                Vector col = matrix.getCol(j);
+                for (int i = 0; i < numRows; i++) {
+                    assertEquals((i * numCols) + (j + 1), col.get(i), EPSILON);
+                }
+            }
+        } catch (InstantiationException e) {
+            // the test failed
+            e.printStackTrace();
+            fail("Unexpected InstantiationException exception");
+        }
+    }
+
+    @Test
+    public void testGetColInvalidIndexNegative() {
+        final int numRows = 3;
+        final int numCols = 3;
+        Matrix matrix;
+        try {
+            matrix = new Matrix(numRows, numCols);
+            assertThrows(IllegalArgumentException.class, () -> {
+                matrix.getCol(-1);
+            });
+        } catch (InstantiationException e) {
+            // the test failed
+            e.printStackTrace();
+            fail("Unexpected InstantiationException exception");
+        }
+    }
+
+    @Test
+    public void testGetColInvalidIndexTooLarge() {
+        Matrix matrix;
+        try {
+            matrix = new Matrix(3, 3);
+            assertThrows(IllegalArgumentException.class, () -> {
+                matrix.getCol(3);
+            });
+            assertThrows(IllegalArgumentException.class, () -> {
+                matrix.getCol(-3);
+            });
+        } catch (InstantiationException e) {
+            // the test failed
+            e.printStackTrace();
+            fail("Unexpected InstantiationException exception");
+        }
+    }
+
+    // test setRow
+
+    @Test
+    public void testSetColInvalidColumnIndex()  {
+        Matrix matrix;
+        try {
+            matrix = new Matrix(3, 3);
+
+            Vector vector = new Vector(3);
+
+            Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+                matrix.setCol(-1, vector);
+            });
+
+            assertEquals("Invalid column index", exception.getMessage());
+
+            exception = assertThrows(IllegalArgumentException.class, () -> {
+                matrix.setCol(3, vector);
+            });
+
+            assertEquals("Invalid column index", exception.getMessage());
+        } catch (InstantiationException e) {
+            // the test failed
+            e.printStackTrace();
+            fail("Unexpected InstantiationException exception");
+        }
+    }
+
+    @Test
+    public void testSetRowValid() throws InstantiationException {
+        final int sizeCol = 5;
+        final int rowToSet = 2;
+        Matrix matrix = Matrix.createRandom("test",3, sizeCol);
+        Vector vector = new Vector(sizeCol);
+        // set vector values
+        for(int i = 0; i < sizeCol; i++) {
+            vector.set(i, i + 1);
+        }
+
+        matrix.setRow(rowToSet, vector);
+
+        for (int i = 0; i < sizeCol; i++) {
+            assertEquals(i + 1, matrix.get(rowToSet, i), EPSILON);
+        }
+    }
+
+    @Test
+    public void testSetRowInvalidSize() throws InstantiationException {
+        Matrix matrix = new Matrix(3, 3);
+        Vector vector = new Vector(2); // Invalid size
+        vector.set(0, 1.0);
+        vector.set(1, 2.0);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            matrix.setRow(1, vector);
+        });
+
+        assertEquals("Vector size does not match matrix size", exception.getMessage());
+    }
+
+    @Test
+    public void testSetRowInvalidIndex() throws InstantiationException {
+        Matrix matrix = new Matrix(3, 3);
+        Vector vector = new Vector(3);
+        vector.set(0, 1.0);
+        vector.set(1, 2.0);
+        vector.set(2, 3.0);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            matrix.setRow(-1, vector); // Invalid row index
+        });
+
+        assertEquals("Invalid row index", exception.getMessage());
+
+        exception = assertThrows(IllegalArgumentException.class, () -> {
+            matrix.setRow(3, vector); // Invalid row index
+        });
+
+        assertEquals("Invalid row index", exception.getMessage());
+    }
+
+    // test getRow
+
+    @Test
+    public void testGetRowValidIndex() {
+        final int numRows = 3;
+        final int numCols = 3;
+        Matrix matrix;
+        try {
+            matrix = new Matrix(numRows, numCols);
+            double value = 1.0;
+            for (int i = 0; i < numRows; i++) {
+                for (int j = 0; j < numCols; j++) {
+                    matrix.set(i, j, value++);
+                }
+            }
+    
+            for (int i = 0; i < numRows; i++) {
+                Vector row = matrix.getRow(i);
+                for (int j = 0; j < numCols; j++) {
+                    assertEquals((i * 3) + (j + 1), row.get(j), EPSILON);
+                }
+            }
+        } catch (InstantiationException e) {
+            // the test failed
+            e.printStackTrace();
+            fail("Unexpected InstantiationException exception");
+        }
+    }
+
+    @Test
+    public void testGetRowInvalidIndexNegative() {
+        final int numRows = 3;
+        final int numCols = 3;
+        Matrix matrix;
+        try {
+            matrix = new Matrix(numRows, numCols);
+            assertThrows(IllegalArgumentException.class, () -> {
+                matrix.getRow(-1);
+            });
+        } catch (InstantiationException e) {
+            // the test failed
+            e.printStackTrace();
+            fail("Unexpected InstantiationException exception");
+        }
+
+    }
+
+    @Test
+    public void testGetRowInvalidIndexTooLarge() {
+        Matrix matrix;
+        try {
+            matrix = new Matrix(3, 3);
+            assertThrows(IllegalArgumentException.class, () -> {
+                matrix.getRow(3);
+            });
+            assertThrows(IllegalArgumentException.class, () -> {
+                matrix.getRow(-3);
+            });
+        } catch (InstantiationException e) {
+            // the test failed
+            e.printStackTrace();
+            fail("Unexpected InstantiationException exception");
         }
     }
 
