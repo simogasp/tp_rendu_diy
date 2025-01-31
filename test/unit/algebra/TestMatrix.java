@@ -71,36 +71,39 @@ public class TestMatrix {
 
     @Test
     public void testTransposeSquareMatrix() throws InstantiationException {
-        Matrix m = new Matrix("testMatrix", 4, 4);
+        final int numRows = 4;
+        final int numCols = 4;
+        Matrix m = new Matrix("testMatrix", numRows, numCols);
         double value = 1.0;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-            m.set(i, j, value++);
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                m.set(i, j, value++);
             }
         }
         Matrix transposed = m.transpose();
         value = 1.0;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-            assertEquals(value++, transposed.get(j, i), EPSILON);
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                assertEquals(value++, transposed.get(j, i), EPSILON);
             }
         }
     }
 
     @Test
     public void testTransposeRectangularMatrix() throws InstantiationException {
-        Matrix m = new Matrix("testMatrix", 3, 4);
+        final int numRows = 3;
+        final int numCols = 4;
+        Matrix m = new Matrix("testMatrix", numRows, numCols);
         double value = 1.0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
             m.set(i, j, value++);
             }
         }
         Matrix transposed = m.transpose();
-        value = 1.0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
-            assertEquals(value++, transposed.get(j, i), EPSILON);
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+            assertEquals(m.get(i, j), transposed.get(j, i), EPSILON);
             }
         }
     }
