@@ -2,6 +2,7 @@
 SRC_DIR = src
 TEST_DIR = test
 BUILD_DIR = build
+DOC_DIR = doc
 CLASSPATH = $(BUILD_DIR):lib/*
 
 # Find all source and test Java files
@@ -50,3 +51,12 @@ func-tests: compile
 # run the renderer
 run: compile
 	java -cp $(CLASSPATH) Renderer ${SCENE}
+
+# Generate Javadoc
+doc: clean-doc
+	mkdir -p ${DOC_DIR}
+	javadoc -d ${DOC_DIR} -sourcepath ${SRC_DIR} ${SRC_FILES}
+
+# clean the doc directory
+clean-doc:
+	rm -rf ${DOC_DIR}
