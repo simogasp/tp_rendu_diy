@@ -215,14 +215,17 @@ public class Rasterizer {
     }
 
     /**
-     * Rasterizes the triangular face made of the Fragment v1, v2 and v3
+     * Rasterizes the triangular face made of the Fragment v1, v2 and v3.
      * @param v1 the first vertex of the triangle
      * @param v2 the second vertex of the triangle
      * @param v3 the third vertex of the triangle
+     * @throws InstantiationException if the instantiation of the Fragment fails.
+     * @throws SizeMismatchException 
      */
-    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3) {
+    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3)
+        throws InstantiationException, SizeMismatchException {
 
-        Matrix C = makeBarycentricCoordsMatrix(v1, v2, v3);
+        Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 
         // iterate over the triangle's bounding box
         //++ // TODO
@@ -242,8 +245,10 @@ public class Rasterizer {
                     if (!shader.isClipped(fragment)) {
 
                         Vector3 v = new Vector3(1.0, (double) x, (double) y);
-                        Vector bar = C.multiply(v);
-                        if ((bar.get(0) >= 0.0) && (bar.get(1) >= 0.0) && (bar.get(2) >= 0.0)) {
+                        Vector bar = cMat.multiply(v);
+                        if ((bar.get(0) >= 0.0)
+                            && (bar.get(1) >= 0.0)
+                            && (bar.get(2) >= 0.0)) {
                             for (int i = 0; i < numAttributes; i++) {
                                 fragment.setAttribute(i, bar.get(0) * v1.getAttribute(i)
                                         + bar.get(1) * v2.getAttribute(i)

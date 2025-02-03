@@ -1,15 +1,17 @@
 /**
- * @author: cdehais 
+ * @author: cdehais
  */
 
 package algebra;
-
-import java.lang.Math;
 
 /**
  * The Vector3 class represents a 3D vector and provides methods to manipulate it.
  */
 public class Vector3 extends Vector {
+    /**
+     * The size of the vector.
+     */
+    private static final int VECTOR_SIZE = 3;
 
     /**
      * Creates a new 3D vector with coordinates (x, y, z).
@@ -20,7 +22,7 @@ public class Vector3 extends Vector {
     public Vector3(double x, double y, double z) {
         super();
         try {
-            allocValues(3);
+            allocValues(VECTOR_SIZE);
         } catch (java.lang.InstantiationException e) {
             // unreached
         }
@@ -51,6 +53,7 @@ public class Vector3 extends Vector {
      * @param x the x coordinate of the vector
      * @param y the y coordinate of the vector
      * @param z the z coordinate of the vector
+     * @fixme: this constructor is weird, why size 4?
      */
     public Vector3(String name, double x, double y, double z) {
         super();
@@ -73,11 +76,12 @@ public class Vector3 extends Vector {
      */
     public Vector3(Vector v) throws InstantiationException {
         this();
-        if ((v.size != 3) && (v.size != 4)) {
-            throw new InstantiationException("Can only build 3D vector from vector of size 3 or 4");
+        if ((v.size != VECTOR_SIZE) && (v.size != VECTOR_SIZE + 1)) {
+            throw new InstantiationException(
+                "Can only build 3D vector from vector of size 3 or 4");
         }
 
-        if (v.size == 3) {
+        if (v.size == VECTOR_SIZE) {
             set(v.get(0), v.get(1), v.get(2));
         } else {
             double w = v.get(3);
@@ -85,17 +89,17 @@ public class Vector3 extends Vector {
         }
     }
 
-    /**
-     * Makes the x, y, and z coordinates of the Vector3 cartesian, by dividing them
-     * by the homogeneous coordinate w.
-     * @throws java.lang.ArithmeticException if w is 0
-     */
-    public void makeCartesian() throws java.lang.ArithmeticException {
-        this.values[0] /= this.values[3];
-        this.values[1] /= this.values[3];
-        this.values[2] /= this.values[3];
-        this.values[3] = 1.0;
-    }
+    // /**
+    //  * Makes the x, y, and z coordinates of the Vector3 cartesian, by dividing them.
+    //  * by the homogeneous coordinate w.
+    //  * @throws java.lang.ArithmeticException if w is 0
+    //  */
+    // public void makeCartesian() throws java.lang.ArithmeticException {
+    //     this.values[0] /= this.values[3];
+    //     this.values[1] /= this.values[3];
+    //     this.values[2] /= this.values[3];
+    //     this.values[3] = 1.0;
+    // }
 
     /**
      * Sets the x, y, and z coordinates of the Vector3 to the given values.
@@ -128,20 +132,25 @@ public class Vector3 extends Vector {
      * @return the dot product of the two vectors
      */
     public double dot(Vector3 v) {
-        return (values[0] * v.values[0] + values[1] * v.values[1] + values[2] * v.values[2]);
+        return (values[0] * v.values[0]
+                + values[1] * v.values[1]
+                + values[2] * v.values[2]);
     }
 
     /**
-     * Computes the norm of the Vector3
+     * Computes the norm of the Vector3.
      * @return the norm of the Vector3
      */
+    @Override
     public double norm() {
-        double r = (values[0] * values[0] + values[1] * values[1] + values[2] * values[2]);
+        final double r = (Math.pow(values[0], 2)
+                        + Math.pow(values[1], 2)
+                        + Math.pow(values[2], 2));
         return Math.sqrt(r);
     }
 
     /**
-     * Gets the x coordinates of the Vector3
+     * Gets the x coordinates of the Vector3.
      * @return the x coordinates of the Vector3
      */
     public double getX() {
@@ -149,7 +158,7 @@ public class Vector3 extends Vector {
     }
 
     /**
-     * Gets the w coordinates of the Vector3
+     * Gets the w coordinates of the Vector3.
      * @return the y coordinates of the Vector3
      */
     public double getY() {
@@ -157,7 +166,7 @@ public class Vector3 extends Vector {
     }
 
     /**
-     * Gets the z coordinates of the Vector3
+     * Gets the z coordinates of the Vector3.
      * @return the z coordinates of the Vector3
      */
     public double getZ() {

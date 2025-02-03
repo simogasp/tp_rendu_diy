@@ -1,30 +1,41 @@
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
 import javax.imageio.ImageIO;
 
 /**
  * 2D Texture class.
  */
 public class Texture {
-    int width;
-    int height;
-    BufferedImage image;
+
+    /**
+     * The width of the texture.
+     */
+    private int width;
+    /**
+     * The height of the texture.
+     */
+    private int height;
+    /**
+     * The image of the texture.
+     */
+    private BufferedImage image;
 
     /**
      * Constructs a new Texture with the content of the image at @path.
      * @param path the path to the image file
-     * @throws Exception if the image file is not found
+     * @throws IOException if the image file is not found
      */
-    public Texture(String path) throws Exception {
+    public Texture(String path) throws IOException {
         image = ImageIO.read(new File(path));
         width = image.getWidth();
         height = image.getHeight();
     }
 
     /**
-     * Samples the texture at texture coordinates (u,v), using nearest neighboor
+     * Samples the texture at texture coordinates (u,v), using nearest neighbor
      * interpolation
      * u and v and wrapped around to [0,1].
      * @param u the u texture coordinate

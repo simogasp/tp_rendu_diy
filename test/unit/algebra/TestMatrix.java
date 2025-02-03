@@ -15,13 +15,13 @@ public class TestMatrix {
     public void testMatrixCreation() throws InstantiationException {
         Matrix m = new Matrix("testMatrix", 3, 3);
         assertNotNull(m);
-        assertEquals("testMatrix", m.name);
+        assertEquals("testMatrix", m.getName());
         assertEquals(3, m.nRows());
         assertEquals(3, m.nCols());
 
         Matrix m2 = new Matrix("rectMatrix", 2, 3);
         assertNotNull(m2);
-        assertEquals("rectMatrix", m2.name);
+        assertEquals("rectMatrix", m2.getName());
         assertEquals(2, m2.nRows());
         assertEquals(3, m2.nCols());
     }

@@ -1,7 +1,6 @@
 
 /**
  * Simple shader that just copy the interpolated color to the screen.
- * 
  * @author cdehais
  */
 public class SimpleShader extends Shader {

@@ -23,9 +23,13 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
      * @param v1 the first vertex of the face
      * @param v2 the second vertex of the face
      * @param v3 the third vertex of the face
+     * @throws SizeMismatchException if the size of the fragments do not match
+     * @throws InstantiationException if the fragment cannot be instantiated
      */
-    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3) {
-        Matrix C = makeBarycentricCoordsMatrix(v1, v2, v3);
+    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3)
+            throws SizeMismatchException, InstantiationException {
+
+        Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 
         // iterate over the triangle's bounding box
         int xmin = Math.min(v1.getX(), Math.min(v2.getX(), v3.getX()));
@@ -44,15 +48,17 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
                     if (!shader.isClipped(fragment)) {
 
                         Vector3 v = new Vector3(1.0, (double) x, (double) y);
-                        Vector bar = C.multiply(v);
-                        if ((bar.get(0) >= 0.0) && (bar.get(1) >= 0.0) && (bar.get(2) >= 0.0)) {
-                            double oneOverZ = bar.get(0) / v1.getDepth() +
-                                    bar.get(1) / v2.getDepth() +
-                                    bar.get(2) / v3.getDepth();
+                        Vector bar = cMat.multiply(v);
+                        if ((bar.get(0) >= 0.0)
+                                && (bar.get(1) >= 0.0)
+                                && (bar.get(2) >= 0.0)) {
+                            double oneOverZ = bar.get(0) / v1.getDepth()
+                                    + bar.get(1) / v2.getDepth()
+                                    + bar.get(2) / v3.getDepth();
                             for (int i = 0; i < numAttributes; i++) {
-                                double aOverZ = bar.get(0) * v1.getAttribute(i) / v1.getDepth() +
-                                        bar.get(1) * v2.getAttribute(i) / v2.getDepth() +
-                                        bar.get(2) * v3.getAttribute(i) / v3.getDepth();
+                                double aOverZ = bar.get(0) * v1.getAttribute(i) / v1.getDepth()
+                                        + bar.get(1) * v2.getAttribute(i) / v2.getDepth()
+                                        + bar.get(2) * v3.getAttribute(i) / v3.getDepth();
 
                                 fragment.setAttribute(i, aOverZ / oneOverZ);
                             }

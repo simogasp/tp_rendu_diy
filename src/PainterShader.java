@@ -1,12 +1,14 @@
 /**
  * Simple shader that just copy the interpolated color to the screen,
- * taking the depth of the fragment into acount.
- * 
+ * taking the depth of the fragment into account.
  * @author cdehais
  */
 public class PainterShader extends Shader {
 
-    DepthBuffer depth;
+    /**
+     * The depth buffer.
+     */
+    private DepthBuffer depth;
 
     /**
      * Creates a PainterShader with the given screen.
@@ -31,6 +33,7 @@ public class PainterShader extends Shader {
     /**
      * Reset the shader.
      */
+    @Override
     public void reset() {
         depth.clear();
     }

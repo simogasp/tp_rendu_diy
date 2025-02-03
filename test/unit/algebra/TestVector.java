@@ -2,27 +2,55 @@ package unit.algebra;
 
 import algebra.SizeMismatchException;
 import algebra.Vector;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
-import static org.junit.Assert.*;
+
 
 public class TestVector {
 
+    // Constants
+    /**
+     * The epsilon for double comparison.
+     */
     private static final double EPSILON = 0.001;
+    /**
+     * The name of the test vector.
+     */
+    private static final String VECTOR_NAME = "testVector";
 
+    /**
+     * Test the creation of a Vector.
+     * @throws InstantiationException
+     */
     @Test
     public void testVectorCreation() throws InstantiationException {
-        Vector v = new Vector("testVector", 3);
+        final int vectorSize = 5;
+        Vector v = new Vector(VECTOR_NAME, vectorSize);
         assertNotNull(v);
-        assertEquals("testVector", v.name);
-        assertEquals(3, v.size());
+        assertEquals(VECTOR_NAME, v.getName());
+        assertEquals(vectorSize, v.size());
     }
 
+    /**
+     * Test the creation of a Vector from an array of values.
+     * @throws InstantiationException
+     */
     @Test
     public void testDefaultName() throws InstantiationException {
-        Vector v = new Vector(5);
-        assertEquals("v", v.name);
+        final int vectorSize = 5;
+        Vector v = new Vector(vectorSize);
+        assertEquals(Vector.DEFAULT_NAME, v.getName());
+        assertEquals(vectorSize, v.size());
     }
 
+    /**
+     * Test the creation of a Vector from an array of values.
+     * @throws InstantiationException
+     */
     @Test
     public void testInvalidSize() {
         try {
@@ -33,85 +61,106 @@ public class TestVector {
         }
     }
 
+    /**
+     * Test the creation of a Vector from an array of values.
+     * @throws InstantiationException
+     */
     @Test
     public void testSetAndGetValues() throws InstantiationException {
-        Vector v = new Vector("testVector", 3);
-        v.set(0, 1.0);
-        v.set(1, 2.0);
-        v.set(2, 3.0);
-        assertEquals(1.0, v.get(0), EPSILON);
-        assertEquals(2.0, v.get(1), EPSILON);
-        assertEquals(3.0, v.get(2), EPSILON);
+        final int vectorSize = 5;
+        Vector v = new Vector(VECTOR_NAME, vectorSize);
+        for (int i = 0; i < vectorSize; i++) {
+            v.set(i, i + 1.0);
+        }
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals(i + 1.0, v.get(i), EPSILON);
+        }
     }
 
-    // tests for scale(), dot(), add() subtract() zeros() ones()
-
+    /**
+     * Test the scaling of a Vector.
+     * @throws InstantiationException
+     */
     @Test
     public void testScale() throws InstantiationException {
-        Vector v = new Vector("testVector", 3);
-        v.set(0, 1.0);
-        v.set(1, 2.0);
-        v.set(2, 3.0);
-        v.scale(2.0);
-        assertEquals(2.0, v.get(0), EPSILON);
-        assertEquals(4.0, v.get(1), EPSILON);
-        assertEquals(6.0, v.get(2), EPSILON);
+        final int vectorSize = 6;
+        final double scale = 2.0;
+        Vector v = new Vector(VECTOR_NAME, vectorSize);
+        for (int i = 0; i < vectorSize; i++) {
+            v.set(i, i + 1.0);
+        }
+        v.scale(scale);
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals((i + 1.0) * scale, v.get(i), EPSILON);
+        }
     }
 
+    /**
+     * Test the dot product of two Vectors.
+     * @throws InstantiationException
+     */
     @Test
     public void testDot() throws InstantiationException {
-        Vector v1 = new Vector("testVector1", 3);
-        v1.set(0, 1.0);
-        v1.set(1, 2.0);
-        v1.set(2, 3.0);
-        Vector v2 = new Vector("testVector2", 3);
-        v2.set(0, 4.0);
-        v2.set(1, 5.0);
-        v2.set(2, 6.0);
+        final int vectorSize = 4;
+        final double expected = 20.0;
+        Vector v1 = new Vector("v1", vectorSize);
+        Vector v2 = new Vector("v2", vectorSize);
+        for (int i = 0; i < vectorSize; i++) {
+            v1.set(i, i + 1.0);
+            v2.set(i, (double) vectorSize - i);
+        }
         try {
-            assertEquals(32.0, v1.dot(v2), EPSILON);
+            assertEquals(expected, v1.dot(v2), EPSILON);
         } catch (SizeMismatchException e) {
             e.printStackTrace();
             fail("Unexpected SizeMismatchException exception");
         }
     }
 
+    /**
+     * Test the addition of two Vectors.
+     * @throws InstantiationException
+     */
     @Test
     public void testAdd() throws InstantiationException {
-        Vector v1 = new Vector("testVector1", 3);
-        v1.set(0, 1.0);
-        v1.set(1, 2.0);
-        v1.set(2, 3.0);
-        Vector v2 = new Vector("testVector2", 3);
-        v2.set(0, 4.0);
-        v2.set(1, 5.0);
-        v2.set(2, 6.0);
+        final int vectorSize = 4;
+        final double expectedSum = 5;
+        Vector v1 = new Vector("v1", vectorSize);
+        Vector v2 = new Vector("v2", vectorSize);
+        for (int i = 0; i < vectorSize; i++) {
+            v1.set(i, i + 1.0);
+            v2.set(i, (double) vectorSize - i);
+        }
         try {
             v1.add(v2);
-            assertEquals(5.0, v1.get(0), EPSILON);
-            assertEquals(7.0, v1.get(1), EPSILON);
-            assertEquals(9.0, v1.get(2), EPSILON);
+            for (int i = 0; i < vectorSize; i++) {
+                assertEquals(expectedSum, v1.get(i), EPSILON);
+            }
         } catch (SizeMismatchException e) {
             e.printStackTrace();
             fail("Unexpected SizeMismatchException exception");
         }
     }
 
+    /**
+     * Test the subtraction of two Vectors.
+     * @throws InstantiationException
+     */
     @Test
     public void testSubtract() throws InstantiationException {
-        Vector v1 = new Vector("testVector1", 3);
-        v1.set(0, 1.0);
-        v1.set(1, 2.0);
-        v1.set(2, 3.0);
-        Vector v2 = new Vector("testVector2", 3);
-        v2.set(0, 4.0);
-        v2.set(1, 5.0);
-        v2.set(2, 6.0);
+        final int vectorSize = 4;
+        final double expectedRes = -vectorSize;
+        Vector v1 = new Vector("v1", vectorSize);
+        Vector v2 = new Vector("v2", vectorSize);
+        for (int i = 0; i < vectorSize; i++) {
+            v1.set(i, i + 1.0);
+            v2.set(i, vectorSize + 1.0 + i);
+        }
         try {
             v1.subtract(v2);
-            assertEquals(-3.0, v1.get(0), EPSILON);
-            assertEquals(-3.0, v1.get(1), EPSILON);
-            assertEquals(-3.0, v1.get(2), EPSILON);
+            for (int i = 0; i < vectorSize; i++) {
+                assertEquals(expectedRes, v1.get(i), EPSILON);
+            }
         } catch (SizeMismatchException e) {
             fail("Unexpected SizeMismatchException exception");
             e.printStackTrace();
@@ -122,26 +171,36 @@ public class TestVector {
             v1.subtract(v3);
             fail("Expected a SizeMismatchException to be thrown");
         } catch (SizeMismatchException e) {
-    
-        } 
+
+        }
 
     }
 
+    /**
+     * Test the normalization of a Vector.
+     * @throws InstantiationException
+     */
     @Test
     public void testZeros() throws InstantiationException {
-        Vector v = new Vector("testVector", 3);
+        final int vectorSize = 6;
+        Vector v = new Vector(VECTOR_NAME, vectorSize);
         v.zeros();
-        assertEquals(0.0, v.get(0), EPSILON);
-        assertEquals(0.0, v.get(1), EPSILON);
-        assertEquals(0.0, v.get(2), EPSILON);
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals(0.0, v.get(i), EPSILON);
+        }
     }
 
+    /**
+     * Test the normalization of a Vector.
+     * @throws InstantiationException
+     */
     @Test
     public void testOnes() throws InstantiationException {
-        Vector v = new Vector("testVector", 3);
+        final int vectorSize = 6;
+        Vector v = new Vector(VECTOR_NAME, vectorSize);
         v.ones();
-        assertEquals(1.0, v.get(0), EPSILON);
-        assertEquals(1.0, v.get(1), EPSILON);
-        assertEquals(1.0, v.get(2), EPSILON);
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals(1.0, v.get(i), EPSILON);
+        }
     }
 }

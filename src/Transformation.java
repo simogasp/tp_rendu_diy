@@ -1,14 +1,27 @@
 
-import algebra.*;
+import algebra.Matrix;
+import algebra.Vector3;
+import algebra.Vector;
+import algebra.SizeMismatchException;
 
 /**
+ * The Transformation class represents a transformation in 3D space.
  * author: cdehais
  */
 public class Transformation {
 
-    Matrix worldToCamera;
-    Matrix projection;
-    Matrix calibration;
+    /**
+     * The world to camera matrix.
+     */
+    private Matrix worldToCamera;
+    /**
+     * The projection matrix.
+     */
+    private Matrix projection;
+    /**
+     * The calibration matrix.
+     */
+    private Matrix calibration;
 
     /**
      * Creates a new Transformation object.
@@ -33,9 +46,9 @@ public class Transformation {
         try {
             // compute rotation
             //++ // TODO
-            Vector3 z = new Vector3(lookAtPoint);//<!!
+            Vector3 z = new Vector3(lookAtPoint); //<!!
             z.subtract(eye);
-            System.out.println("z"+z);
+            System.out.println("z" + z);
 
             z.normalize();
             Vector3 x = up.cross(z);
@@ -54,12 +67,12 @@ public class Transformation {
 
             // compute translation
             //++ // TODO
-            Vector3 mEye = new Vector3(eye);//<!!
+            Vector3 mEye = new Vector3(eye); //<!!
             mEye.scale(-1.0);
-            Matrix R = worldToCamera.getSubMatrix(0, 0, 3, 3);
+            Matrix m = worldToCamera.getSubMatrix(0, 0, 3, 3);
 
-            Vector t = R.multiply(mEye);
-            System.out.println(R);
+            Vector t = m.multiply(mEye);
+            System.out.println(m);
             System.out.println(mEye);
             System.out.println(t);
 
@@ -68,8 +81,8 @@ public class Transformation {
             worldToCamera.set(2, 3, t.get(2)); //>!!
 
         } catch (Exception e) {
-            /* unreached */ }
-        ;
+            e.printStackTrace();
+        }
 
         System.out.println("Modelview matrix:\n" + worldToCamera);
     }
@@ -116,10 +129,10 @@ public class Transformation {
             throws SizeMismatchException, InstantiationException {
         //++ Vector ps = new Vector(3);
         //++ // TODO
-        Vector pe = worldToCamera.multiply(p);//<!!
+        Vector pe = worldToCamera.multiply(p); //<!!
         Vector ps = calibration.multiply(projection.multiply(pe));
         ps.set(0, ps.get(0) / ps.get(2));
-        ps.set(1, ps.get(1) / ps.get(2));//>!!
+        ps.set(1, ps.get(1) / ps.get(2)); //>!!
         return new Vector3(ps);
     }
 
@@ -127,14 +140,14 @@ public class Transformation {
      * Transform a vector from world to camera coordinates.
      * @param v the vector to transform
      * @return the transformed vector
-     * @throws SizeMismatchException 
+     * @throws SizeMismatchException if the size of the input vector is not 3
      * @throws InstantiationException if the creation of the resulting vector fails
      */
     public Vector3 transformVector(Vector3 v)
             throws SizeMismatchException, InstantiationException {
         // Doing nothing special here because there is no scaling
-        Matrix R = worldToCamera.getSubMatrix(0, 0, 3, 3);
-        Vector tv = R.multiply(v);
+        Matrix m = worldToCamera.getSubMatrix(0, 0, 3, 3);
+        Vector tv = m.multiply(v);
         return new Vector3(tv);
     }
 

@@ -8,14 +8,14 @@ import algebra.*;
  * * the World-to-Camera transformation
  * * the Lights and their parameters
  * This description is meant to be read form a scene description file (.scene
- * extension)
+ * extension).
  *
  * @author cdehais based on smondet, gmorin
  */
 
 public class Scene {
 
-    private static String nextLine(BufferedReader in) throws Exception {
+    private static String nextLine(BufferedReader in) throws IOException {
         String r = in.readLine();
 
         while (r.matches("(\\s*#.*)|(\\s*$)")) {
@@ -42,7 +42,7 @@ public class Scene {
      * @param filename path to the scene description file.
      * @throws Exception if the file is not a valid scene description file.
      */
-    public Scene(String filename) throws Exception {
+    public Scene(String filename) throws IOException {
 
         BufferedReader in = new BufferedReader(new FileReader(filename));
 

@@ -1,25 +1,53 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
-import java.io.*;
-import algebra.*;
+import algebra.SizeMismatchException;
+import algebra.Vector;
+import algebra.Vector3;
 
 /**
  * Defines a triangle based mesh.
  * A mesh is constructed by interpreting the data given in an OFF file.
- * 
  * @author smondet gg cdehais
  */
 public class Mesh {
 
+    /**
+     * The number of vertices per face.
+     */
+    private static final int VERTICES_PER_FACE = 3;
+
+    /**
+     * The vertices of the mesh.
+     */
     private Vector[] vertices;
+    /**
+     * The faces of the mesh.
+     */
     private int[] faces;
+    /**
+     * The colors of the vertices of the mesh.
+     */
     private double[] colors;
+
+    /**
+     * The number of color components per vertex.
+     */
+    private static final int COLOR_COMPONENTS_PER_VERTEX = 3;
+    /**
+     * The normals of the vertices of the mesh.
+     */
     private Vector3[] normals;
+    /**
+     * The texture coordinates of the vertices of the mesh.
+     */
     private double[] texCoords;
 
-    private static String nextLine(BufferedReader in) throws Exception {
+    private static String nextLine(BufferedReader in) throws IOException {
         String r = in.readLine();
 
-        while (r.matches("\\s*#.*")) {
+        while (r.matches("\s*#.*")) {
             r = in.readLine();
         }
         return r;
@@ -28,11 +56,12 @@ public class Mesh {
     /**
      * Builds a Mesh object by reading in an OFF file.
      * Does not support non triangular meshes.
-     * 
      * @param filename path to OFF file.
+     * @throws IOException if the file cannot be read.
+     * @throws InstantiationException if vectors cannot be created.
      * @throws Exception if the file is not a valid OFF file.
      */
-    public Mesh(String filename) throws Exception {
+    public Mesh(String filename) throws IOException, InstantiationException  {
         BufferedReader in = new BufferedReader(new FileReader(filename));
 
         String r = nextLine(in);
@@ -45,14 +74,14 @@ public class Mesh {
         String[] sar = r.split("\\s+");
 
         // Parse object properties
-        int verts_nb = Integer.parseInt(sar[0]);
-        int faces_nb = Integer.parseInt(sar[1]);
+        int nbVert = Integer.parseInt(sar[0]);
+        int nbFaces = Integer.parseInt(sar[1]);
 
         // Parse vertices and attributes
-        vertices = new Vector[verts_nb];
-        faces = new int[3 * faces_nb];
-        colors = new double[3 * verts_nb];
-        for (int i = 0; i < verts_nb; i++) {
+        vertices = new Vector[nbVert];
+        faces = new int[VERTICES_PER_FACE * nbFaces];
+        colors = new double[COLOR_COMPONENTS_PER_VERTEX * nbVert];
+        for (int i = 0; i < nbVert; i++) {
 
             r = nextLine(in);
             sar = r.split("\\s+");
@@ -62,13 +91,13 @@ public class Mesh {
             vertices[i].set(1, Double.parseDouble(sar[1]));
             vertices[i].set(2, Double.parseDouble(sar[2]));
             vertices[i].set(3, 1.0);
-            colors[3 * i + 0] = Double.parseDouble(sar[3]);
-            colors[3 * i + 1] = Double.parseDouble(sar[4]);
-            colors[3 * i + 2] = Double.parseDouble(sar[5]);
+            colors[COLOR_COMPONENTS_PER_VERTEX * i + 0] = Double.parseDouble(sar[3]);
+            colors[COLOR_COMPONENTS_PER_VERTEX * i + 1] = Double.parseDouble(sar[4]);
+            colors[COLOR_COMPONENTS_PER_VERTEX * i + 2] = Double.parseDouble(sar[5]);
             // optional texture coordinates
             if (sar.length >= 8) {
                 if (texCoords == null) {
-                    texCoords = new double[2 * verts_nb];
+                    texCoords = new double[2 * nbVert];
                 }
                 texCoords[2 * i] = Double.parseDouble(sar[6]);
                 texCoords[2 * i + 1] = Double.parseDouble(sar[7]);
@@ -76,7 +105,7 @@ public class Mesh {
         }
 
         // Parse faces
-        for (int i = 0; i < faces_nb; i++) {
+        for (int i = 0; i < nbFaces; i++) {
 
             r = nextLine(in);
             sar = r.split("\\s+");
@@ -85,16 +114,16 @@ public class Mesh {
             if (en != 3) {
                 throw new IOException("Non-triangular meshes not supported.");
             }
-            faces[3 * i + 0] = Integer.parseInt(sar[1]);
-            faces[3 * i + 1] = Integer.parseInt(sar[2]);
-            faces[3 * i + 2] = Integer.parseInt(sar[3]);
+            faces[VERTICES_PER_FACE * i + 0] = Integer.parseInt(sar[1]);
+            faces[VERTICES_PER_FACE * i + 1] = Integer.parseInt(sar[2]);
+            faces[VERTICES_PER_FACE * i + 2] = Integer.parseInt(sar[3]);
 
         }
         in.close();
     }
 
     /**
-     * Gets the number of vertices in the mesh
+     * Gets the number of vertices in the mesh.
      * @return the number of vertices in the mesh
      */
     public int getNumVertices() {
@@ -102,11 +131,11 @@ public class Mesh {
     }
 
     /**
-     * Gets the number of faces in the mesh
+     * Gets the number of faces in the mesh.
      * @return the number of faces in the mesh
      */
     public int getNumFaces() {
-        return faces.length / 3;
+        return faces.length / VERTICES_PER_FACE;
     }
 
     /**
@@ -122,7 +151,8 @@ public class Mesh {
         // across faces
         // to the vertex.
         try {
-            for (int i = 0; i < 3 * getNumFaces(); i += 3) {
+            final int numFaceElements = VERTICES_PER_FACE * getNumFaces();
+            for (int i = 0; i < numFaceElements; i += VERTICES_PER_FACE) {
                 //++ // TODO
                 //++ Vector3 n = new Vector3();
                 Vector a = vertices[faces[i]]; //<!!
@@ -138,7 +168,7 @@ public class Mesh {
                 n.normalize(); //>!!
 
                 // add the calculated normal n to each vertex of the face
-                for (int j = 0; j < 3; j++) {
+                for (int j = 0; j < VERTICES_PER_FACE; j++) {
                     Vector nj = normals[faces[i + j]];
 
                     if (nj == null) {
@@ -169,7 +199,7 @@ public class Mesh {
     }
 
     /**
-     * Returns the vertices of the mesh
+     * Returns the vertices of the mesh.
      * @return an array of Vector containing the vertices of the mesh
      */
     public Vector[] getVertices() {

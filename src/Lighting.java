@@ -2,8 +2,7 @@ import java.util.*;
 import algebra.*;
 
 /**
- * The Lighting class describes a scene lighting environment
- * 
+ * The Lighting class describes a scene lighting environment.
  * @author gmorin, smondet
  */
 public class Lighting {
@@ -12,23 +11,31 @@ public class Lighting {
     static final int AMBIENT = 1;
     static final int POINT = 2;
 
-    List<Light> lights;
+    private List<Light> lights;
 
     /**
-     * Internal Class describing a light source
+     * Internal Class describing a light source.
      */
     private class Light {
+
+        /** type of light. */
         public int type = NONE;
+        /** parameters. */
         public double[] params;
 
-        public Light(int type, double[] params) {
-            this.type = type;
-            this.params = params;
+        /**
+         * Creates a new light source of given type and parameters.
+         * @param lightType the type of the light source
+         * @param parameters the parameters of the light source
+         */
+        Light(int lightType, double[] parameters) {
+            this.type = lightType;
+            this.params = parameters;
         }
     }
 
     /**
-     * Creates a new Lighting environment
+     * Creates a new Lighting environment.
      */
     public Lighting() {
         lights = new LinkedList<Light>();
@@ -45,7 +52,8 @@ public class Lighting {
     }
 
     /**
-     * Adds a new point light source of intensity @id at position (x, y, z) to the environment.
+     * Adds a new point light source of intensity @id at position (x, y, z)
+     * to the environment.
      * @param x the x coordinate of the light source
      * @param y the y coordinate of the light source
      * @param z the z coordinate of the light source
@@ -83,7 +91,7 @@ public class Lighting {
 
         Iterator<Light> it = lights.iterator();
         while (it.hasNext()) {
-            Light light = (Light) it.next();
+            Light light = it.next();
             switch (light.type) {
                 case AMBIENT:
                     // ambient light contribution
@@ -98,7 +106,9 @@ public class Lighting {
                         e.normalize();
 
                         // vector from point to light
-                        Vector3 l = new Vector3(light.params[0], light.params[1], light.params[2]);
+                        Vector3 l = new Vector3(light.params[0],
+                                                light.params[1],
+                                                light.params[2]);
                         l.subtract(position);
                         l.normalize();
 

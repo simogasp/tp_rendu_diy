@@ -1,12 +1,9 @@
 /**
- * @author: cdehais
- * 
  * Basic linear algebra methods
+ * @author: cdehais
  */
 
 package algebra;
-
-import java.lang.Math;
 
 /**
  * The Vector class represents a mathematical vector and provides methods to
@@ -15,26 +12,31 @@ import java.lang.Math;
 public class Vector implements Cloneable {
 
     /**
-     * The size of the vector
+     * The default name of the vector.
+     */
+    public static final String DEFAULT_NAME = "v";
+
+    /**
+     * The size of the vector.
      */
     protected int size;
     /**
-     * The values of the vector
+     * The values of the vector.
      */
     protected double values[];
     /**
-     * The name of the vector
+     * The name of the vector.
      */
-    public String name = "v";
+    private String name = DEFAULT_NAME;
 
     /**
-     * Default constructor
+     * Default constructor.
      */
     protected Vector() {
     }
 
     /**
-     * Creates a named vector of the given size
+     * Creates a named vector of the given size.
      * @param name the name of the vector
      * @param size the size of the vector
      * @throws java.lang.InstantiationException if the size is not strictly positive
@@ -45,7 +47,7 @@ public class Vector implements Cloneable {
     }
 
     /**
-     * Creates a vector of the given size
+     * Creates a vector of the given size.
      * @param size the size of the vector
      * @throws java.lang.InstantiationException if the size is not strictly positive
      */
@@ -54,7 +56,17 @@ public class Vector implements Cloneable {
     }
 
     /**
-     * Compute the norm of the vector
+     * Creates a vector from an array of values.
+     * @param values the array of values
+     * @throws java.lang.InstantiationException if the size is not strictly positive
+     */
+    public Vector(double[] values) throws java.lang.InstantiationException {
+        allocValues(values.length);
+        System.arraycopy(values, 0, this.values, 0, size);
+    }
+
+    /**
+     * Compute the norm of the vector.
      * @return the norm of the vector
      */
     public double norm() {
@@ -112,7 +124,7 @@ public class Vector implements Cloneable {
     }
 
     /**
-     * Adds the given Vector to the Vector
+     * Adds the given Vector to the Vector.
      * @param v the Vector to add
      * @throws SizeMismatchException if the two Vectors are not the same size
      */
@@ -127,7 +139,7 @@ public class Vector implements Cloneable {
     }
 
     /**
-     * Subtracts the given Vector to the Vector
+     * Subtracts the given Vector to the Vector.
      * @param v the Vector to subtract
      * @throws SizeMismatchException if the two Vectors are not the same size
      */
@@ -147,19 +159,19 @@ public class Vector implements Cloneable {
      * @return the string representation of the Vector
      */
     public String toString() {
-        String repr = name + " = [";
+        StringBuilder str = new StringBuilder(name + " = [");
 
         for (int i = 0; i < size - 1; i++) {
-            repr += values[i] + ", ";
+            str.append(values[i] + ", ");
         }
 
-        repr += values[size - 1] + "]';";
+        str.append(values[size - 1] + "]';");
 
-        return repr;
+        return str.toString();
     }
 
     /**
-     * Sets the name of the Vector
+     * Sets the name of the Vector.
      * @param name the name of the Vector
      */
     public void setName(String name) {
@@ -167,7 +179,7 @@ public class Vector implements Cloneable {
     }
 
     /**
-     * Gets the Vector's name
+     * Gets the Vector's name.
      * @return the Vector's name
      */
     public String getName() {
@@ -184,19 +196,20 @@ public class Vector implements Cloneable {
     }
 
     /**
-     * Sets the values of the vector to the values contained in the given array
-     * @param values the array of values to set the vector to
-     * @throws Exception if the size of the array is different from the size of the vector
+     * Sets the values of the vector to the values contained in the given array.
+     * @param valuesList the array of values to set the vector to
+     * @throws SizeMismatchException if the size of the array is different from
+     * the size of the vector
      */
-    public void set(double values[]) throws Exception {
-        if (values.length != this.size) {
-            throw new Exception("Bad size");
+    public void set(double[] valuesList) throws SizeMismatchException {
+        if (valuesList.length != this.size) {
+            throw new SizeMismatchException("Bad size");
         }
-        this.values = values;
+        this.values = valuesList;
     }
 
     /**
-     * Sets all elements of the vector to 0
+     * Sets all elements of the vector to 0.
      */
     public void zeros() {
         for (int i = 0; i < size; i++) {
@@ -205,7 +218,7 @@ public class Vector implements Cloneable {
     }
 
     /**
-     * Sets all elements of the vector to 1
+     * Sets all elements of the vector to 1.
      */
     public void ones() {
         for (int i = 0; i < size; i++) {
@@ -214,16 +227,16 @@ public class Vector implements Cloneable {
     }
 
     /**
-     * Gets the @i-th coordinate of the Vector.
+     * Gets the i-th coordinate of the Vector.
      * @param i the index of the coordinate to get
-     * @return the value of the @i-th coordinate
+     * @return the value of the i-th coordinate
      */
     public double get(int i) {
         return this.values[i];
     }
 
     /**
-     * Returns the Vector size
+     * Returns the Vector size.
      * @return the Vector size
      */
     public int size() {
@@ -231,15 +244,16 @@ public class Vector implements Cloneable {
     }
 
     /**
-     * Allocates the values array of the given size
-     * @param size the size of the values array
+     * Allocates the values array of the given size.
+     * @param length the size of the values array
      * @throws java.lang.InstantiationException if the size is not strictly greater than 0
      */
-    protected void allocValues(int size) throws java.lang.InstantiationException {
-        if (size < 1) {
-            throw new java.lang.InstantiationException("Vector size must be strictly positive");
+    protected void allocValues(int length) throws java.lang.InstantiationException {
+        if (length < 1) {
+            throw new java.lang.InstantiationException(
+                "Vector size must be strictly positive");
         }
-        this.values = new double[size];
-        this.size = size;
+        this.values = new double[length];
+        this.size = length;
     }
 }

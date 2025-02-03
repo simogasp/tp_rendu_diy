@@ -46,7 +46,7 @@ public class TestAlgebra {
         }
 
         Vector3 r1 = new Vector3("u1", 1.0, 2.0, 3.0);
-        Vector3 r2 = new Vector3("u2", 1.0, 3.0, 0.0);
+        Vector3 r2 = new Vector3("u2", 1.0, 3.0, 1.0);
 
         Vector3 r = r1.cross(r2);
 
@@ -94,7 +94,7 @@ public class TestAlgebra {
         System.out.println(M);
 
         M1 = M1.transpose();
-        M1.name = "M1'";
+        M1.setName("M1'");
         System.out.println(M1);
 
         Vector u = new Vector("u", 5);

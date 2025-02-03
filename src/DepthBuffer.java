@@ -1,13 +1,22 @@
 
-import java.lang.Double;
 
 /**
  * The DepthBuffer class implements a DepthBuffer and its pass test.
  */
 public class DepthBuffer {
+    /**
+     * The buffer of depth values.
+     */
     private double[] buffer;
-    int width;
-    int height;
+
+    /**
+     * The width the buffer.
+     */
+    private int width;
+    /**
+     * The height the buffer.
+     */
+    private int height;
 
     /**
      * Constructs a DepthBuffer of size width x height.
@@ -52,7 +61,7 @@ public class DepthBuffer {
     }
 
     /**
-     * Writes the fragment depth to the buffer
+     * Writes the fragment depth to the buffer.
      * @param fragment the fragment to write
      */
     public void writeFragment(Fragment fragment) {

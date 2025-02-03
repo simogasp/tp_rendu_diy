@@ -3,24 +3,26 @@
  * The Shader class is responsible for writing final pixel color
  * to the screen (GraphicWrapper), from a Fragment.
  * Subclass this base class and implement the ::shade() method.
- * 
  * @author cdehais
  */
 
 public abstract class Shader {
 
+    /**
+     * The screen to draw on.
+     */
     protected GraphicsWrapper screen;
 
     /**
      * Creates a Shader with the given screen.
      * @param screen the screen to draw on
      */
-    public Shader(GraphicsWrapper screen) {
+    protected Shader(GraphicsWrapper screen) {
         this.screen = screen;
     }
 
     /**
-     * Common entry point to ree-initialize the shader
+     * Common entry point to ree-initialize the shader.
      */
     public void reset() {
     }

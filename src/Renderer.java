@@ -4,7 +4,6 @@ import algebra.*;
 /**
  * The Renderer class drives the rendering pipeline: read in a scene, projects
  * the vertices and rasterizes every faces / edges.
- * 
  * @author cdehais
  */
 public class Renderer {
@@ -20,7 +19,6 @@ public class Renderer {
 
     /**
      * Initialize the renderer with the given scene file.
-     * 
      * @param sceneFilename the scene file to load
      * @throws Exception if the scene file cannot be loaded
      */
@@ -102,7 +100,7 @@ public class Renderer {
     }
 
     /**
-     * Renders the wireframe of the mesh
+     * Renders the wireframe of the mesh.
      */
     static void renderWireframe() {
         Fragment[] fragment = projectVertices();
@@ -118,9 +116,11 @@ public class Renderer {
     }
 
     /**
-     * Renders the solid of the mesh
+     * Renders the solid of the mesh.
+     * @throws SizeMismatchException if the size of the fragments do not match
+     * @throws InstantiationException if the fragment cannot be instantiated
      */
-    static void renderSolid() {
+    static void renderSolid() throws InstantiationException, SizeMismatchException {
         Fragment[] fragments = projectVertices();
         int[] faces = mesh.getFaces();
 
@@ -134,7 +134,7 @@ public class Renderer {
     }
 
     /**
-     * Enables or disables lighting
+     * Enables or disables lighting.
      * @param enabled true to enable lighting, false to disable it
      */
     public static void setLightingEnabled(boolean enabled) {
@@ -142,7 +142,7 @@ public class Renderer {
     }
 
     /**
-     * Wait for a number of seconds
+     * Wait for a number of seconds.
      * @param sec the number of seconds to wait
      */
     public static void wait(int sec) {
@@ -153,7 +153,16 @@ public class Renderer {
         }
     }
 
-    public static void main(String[] args) {
+    /**
+     * Main entry point of the renderer.
+     * @param args the command line arguments
+     * @throws InstantiationException if the fragment cannot be instantiated
+     * @throws SizeMismatchException if the size of the fragments do not match
+     */
+    public static void main(String[] args)
+        throws InstantiationException, SizeMismatchException {
+
+        final int timeout = 3;
 
         if (args.length == 0) {
             System.out.println("usage: java Renderer <scene_file>");
@@ -171,14 +180,14 @@ public class Renderer {
         // wireframe rendering
         renderWireframe();
         screen.swapBuffers();
-        wait(3);
+        wait(timeout);
 
         // solid rendering, no lighting
         screen.clearBuffer(); //<??
         shader.reset();
         renderSolid();
         screen.swapBuffers();
-        wait(3); //>??
+        wait(timeout); //>??
 
         // solid rendering, with lighting
         screen.clearBuffer(); //<??
@@ -186,7 +195,7 @@ public class Renderer {
         setLightingEnabled(true);
         renderSolid();
         screen.swapBuffers();
-        wait(3); //>??
+        wait(timeout); //>??
 
         // solid rendering, with texture
         screen.clearBuffer(); //<??
@@ -197,7 +206,7 @@ public class Renderer {
         setLightingEnabled(true);
         renderSolid();
         screen.swapBuffers();
-        wait(3); //>??
+        wait(timeout); //>??
 
         // solid rendering, with texture combined with base color
         screen.clearBuffer(); //<??
@@ -206,7 +215,7 @@ public class Renderer {
         shader = texShader;
         renderSolid();
         screen.swapBuffers();
-        wait(3); //>??
+        wait(timeout); //>??
 
         screen.destroy();
         System.exit(0);
