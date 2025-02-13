@@ -19,7 +19,7 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
     }
 
     /**
-     * Rasterizes the triangular face made of the Fragment v1, v2 and v3
+     * Rasterizes the triangular face made of the Fragment v1, v2 and v3.
      * @param v1 the first vertex of the face
      * @param v2 the second vertex of the face
      * @param v3 the third vertex of the face

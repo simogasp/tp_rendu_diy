@@ -7,10 +7,22 @@ import algebra.*;
  */
 public class Lighting {
 
+    // Constants for the type of light sources.
+
+    /**
+     * None.
+    */
     static final int NONE = 0;
+    /**
+     * Ambient light.
+    */
     static final int AMBIENT = 1;
+    /**
+     * Point light.
+     */
     static final int POINT = 2;
 
+    /** List of light sources. */
     private List<Light> lights;
 
     /**
@@ -38,7 +50,7 @@ public class Lighting {
      * Creates a new Lighting environment.
      */
     public Lighting() {
-        lights = new LinkedList<Light>();
+        lights = new LinkedList<>();
     }
 
     /**

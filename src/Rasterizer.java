@@ -1,5 +1,7 @@
-
-import algebra.*;
+import algebra.Matrix;
+import algebra.SizeMismatchException;
+import algebra.Vector3;
+import algebra.Vector;
 
 /**
  * The Rasterizer class is responsible for the discretization of geometric
@@ -13,7 +15,10 @@ import algebra.*;
  */
 public class Rasterizer {
 
-    Shader shader;
+    /**
+     * The shader used by the Rasterizer.
+     */
+    protected Shader shader;
 
     /**
      * Creates a Rasterizer with the given Shader.
@@ -33,7 +38,7 @@ public class Rasterizer {
 
     /**
      * Linear interpolation of a Fragment f on the edge defined by Fragment's v1 and
-     * v2
+     * v2.
      * @param v1 the first vertex of the edge
      * @param v2 the second vertex of the edge
      * @param f the fragment to interpolate
@@ -58,7 +63,9 @@ public class Rasterizer {
         }
         int numAttributes = f.getNumAttributes();
         for (int i = 0; i < numAttributes; i++) {
-            f.setAttribute(i, (1.0 - alpha) * v1.getAttribute(i) + alpha * v2.getAttribute(i));
+            f.setAttribute(i,
+                            (1.0 - alpha) * v1.getAttribute(i)
+                            + alpha * v2.getAttribute(i));
         }
     }
 
@@ -220,7 +227,7 @@ public class Rasterizer {
      * @param v2 the second vertex of the triangle
      * @param v3 the third vertex of the triangle
      * @throws InstantiationException if the instantiation of the Fragment fails.
-     * @throws SizeMismatchException 
+     * @throws SizeMismatchException if the size of the Fragment is not correct.
      */
     public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3)
         throws InstantiationException, SizeMismatchException {
