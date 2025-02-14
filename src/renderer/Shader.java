@@ -40,7 +40,7 @@ public abstract class Shader {
      * @return true if the fragment is clipped, false otherwise
      */
     public boolean isClipped(Fragment fragment) {
-        return ((fragment.getX() < 0) || (fragment.getX() >= screen.getWidth()) ||
-                (fragment.getY() < 0) || (fragment.getY() >= screen.getHeight()));
+        return ((fragment.getX() < 0) || (fragment.getX() >= screen.getWidth())
+               || (fragment.getY() < 0) || (fragment.getY() >= screen.getHeight()));
     }
 }
