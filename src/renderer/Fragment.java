@@ -130,13 +130,7 @@ public class Fragment {
      * @return the pixel coordinates (x, y) of the Fragment as a size 2 array
      */
     public int[] getPosition() {
-        int[] position = new int[2];
-
-        position[0] = x;
-        position[1] = y;
-
-        return position;
-        // return new int[]{x, y};
+        return new int[]{x, y};
     }
 
     /**
