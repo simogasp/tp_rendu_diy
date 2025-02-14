@@ -2,7 +2,7 @@
  * @author: cdehais
  */
 
-package algebra;
+package renderer.algebra;
 
 /**
  * Matrix class.
@@ -159,7 +159,7 @@ public class Matrix {
         }
         for (int i = 0; i < nRows; i++) {
             for (int j = 0; j < nCols; j++) {
-                trans.values[j * nRows + i] = this.values[i * nCols + j];
+                trans.set(j, i, this.get(i, j));
             }
         }
         return trans;

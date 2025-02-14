@@ -1,5 +1,6 @@
 
-import algebra.*;
+import renderer.Mesh;
+import renderer.algebra.*;
 
 /**
  * Test class for the Mesh class

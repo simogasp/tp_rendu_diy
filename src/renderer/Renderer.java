@@ -1,5 +1,6 @@
+package renderer;
 
-import algebra.*;
+import renderer.algebra.*;
 
 /**
  * The Renderer class drives the rendering pipeline: read in a scene, projects

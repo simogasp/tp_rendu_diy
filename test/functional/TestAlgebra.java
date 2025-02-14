@@ -1,5 +1,5 @@
 
-import algebra.*;
+import renderer.algebra.*;
 
 public class TestAlgebra {
 

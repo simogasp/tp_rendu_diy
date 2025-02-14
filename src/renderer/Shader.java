@@ -1,3 +1,4 @@
+package renderer;
 
 /**
  * The Shader class is responsible for writing final pixel color

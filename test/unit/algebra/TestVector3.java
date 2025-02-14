@@ -1,8 +1,8 @@
 package unit.algebra;
 
-import algebra.SizeMismatchException;
-import algebra.Vector;
-import algebra.Vector3;
+import renderer.algebra.SizeMismatchException;
+import renderer.algebra.Vector;
+import renderer.algebra.Vector3;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

@@ -1,3 +1,7 @@
+import renderer.Fragment;
+import renderer.GraphicsWrapper;
+import renderer.Rasterizer;
+import renderer.Shader;
 
 /**
  * Test class for the Rasterizer class

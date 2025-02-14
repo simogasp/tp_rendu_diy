@@ -1,5 +1,5 @@
 
-package algebra;
+package renderer.algebra;
 
 /**
  * Exception class for incorrect dimensions in arithmetic operations on Matrix

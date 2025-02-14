@@ -1,4 +1,6 @@
+package renderer;
 
+import renderer.algebra.Matrix;
 
 /**
  * The DepthBuffer class implements a DepthBuffer and its pass test.
@@ -7,7 +9,7 @@ public class DepthBuffer {
     /**
      * The buffer of depth values.
      */
-    private double[] buffer;
+    private Matrix buffer;
 
     /**
      * The width the buffer.
@@ -25,7 +27,12 @@ public class DepthBuffer {
      * @param height the height of the buffer
      */
     public DepthBuffer(int width, int height) {
-        buffer = new double[width * height];
+        try {
+            buffer = new Matrix(width, height);
+        } catch (InstantiationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         this.width = width;
         this.height = height;
         clear();
@@ -37,7 +44,7 @@ public class DepthBuffer {
     public void clear() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                buffer[i * width + j] = Double.POSITIVE_INFINITY;
+                buffer.set(i, j, Double.POSITIVE_INFINITY);
             }
         }
 
@@ -52,8 +59,7 @@ public class DepthBuffer {
     public boolean testFragment(Fragment fragment) {
         if ((fragment.getX() >= 0) && (fragment.getX() < width) && (fragment.getY() >= 0)
                 && (fragment.getY() < height)) {
-            // return false;
-            return (buffer[fragment.getY() * width + fragment.getX()] > fragment.getAttribute(0)); //++ // TODO
+            return (buffer.get(fragment.getY(), fragment.getX()) > fragment.getAttribute(0)); //++ // TODO
             //++ return false;
         } else {
             return false;
@@ -67,7 +73,7 @@ public class DepthBuffer {
     public void writeFragment(Fragment fragment) {
         if ((fragment.getX() >= 0) && (fragment.getX() < width) && (fragment.getY() >= 0)
                 && (fragment.getY() < height)) {
-            buffer[fragment.getY() * width + fragment.getX()] = fragment.getAttribute(0); //++ // TODO
+            buffer.set(fragment.getY(), fragment.getX(), fragment.getAttribute(0)); //++ // TODO
         }
     }
 

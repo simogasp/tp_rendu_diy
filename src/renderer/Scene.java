@@ -1,6 +1,7 @@
+package renderer;
 
 import java.io.*;
-import algebra.*;
+import renderer.algebra.*;
 
 /**
  * Class that describes a simple 3D Scene:

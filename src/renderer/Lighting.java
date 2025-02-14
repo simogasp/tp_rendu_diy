@@ -1,5 +1,7 @@
+package renderer;
+
 import java.util.*;
-import algebra.*;
+import renderer.algebra.*;
 
 /**
  * The Lighting class describes a scene lighting environment.

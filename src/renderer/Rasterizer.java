@@ -1,7 +1,9 @@
-import algebra.Matrix;
-import algebra.SizeMismatchException;
-import algebra.Vector3;
-import algebra.Vector;
+package renderer;
+
+import renderer.algebra.Matrix;
+import renderer.algebra.SizeMismatchException;
+import renderer.algebra.Vector3;
+import renderer.algebra.Vector;
 
 /**
  * The Rasterizer class is responsible for the discretization of geometric

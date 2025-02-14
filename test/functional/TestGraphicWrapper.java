@@ -1,5 +1,7 @@
 import java.awt.*;
 
+import renderer.GraphicsWrapper;
+
 public class TestGraphicWrapper {
 
     static int width = 128;

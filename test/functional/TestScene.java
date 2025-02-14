@@ -1,5 +1,6 @@
 
-import algebra.*;
+import renderer.Scene;
+import renderer.algebra.*;
 
 /**
  * Test class from the Scene class.

@@ -3,7 +3,7 @@
  * @author: cdehais
  */
 
-package algebra;
+package renderer.algebra;
 
 /**
  * The Vector class represents a mathematical vector and provides methods to

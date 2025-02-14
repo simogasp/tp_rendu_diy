@@ -1,8 +1,9 @@
+package renderer;
 
-import algebra.Matrix;
-import algebra.Vector3;
-import algebra.Vector;
-import algebra.SizeMismatchException;
+import renderer.algebra.Matrix;
+import renderer.algebra.Vector3;
+import renderer.algebra.Vector;
+import renderer.algebra.SizeMismatchException;
 
 /**
  * The Transformation class represents a transformation in 3D space.

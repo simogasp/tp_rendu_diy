@@ -50,7 +50,7 @@ func-tests: compile
 
 # run the renderer
 run: compile
-	java -cp $(CLASSPATH) Renderer ${SCENE}
+	java -cp $(CLASSPATH) renderer.Renderer ${SCENE}
 
 # Generate Javadoc
 doc: clean-doc

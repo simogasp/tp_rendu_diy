@@ -2,7 +2,7 @@
  * @author: cdehais
  */
 
-package algebra;
+package renderer.algebra;
 
 /**
  * The Vector3 class represents a 3D vector and provides methods to manipulate it.

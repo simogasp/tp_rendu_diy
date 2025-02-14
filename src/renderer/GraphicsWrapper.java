@@ -1,3 +1,4 @@
+package renderer;
 
 /**
  * A "virtual" screen, where only "setPixel" is available

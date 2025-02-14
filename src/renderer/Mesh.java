@@ -1,10 +1,12 @@
+package renderer;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import algebra.SizeMismatchException;
-import algebra.Vector;
-import algebra.Vector3;
+import renderer.algebra.SizeMismatchException;
+import renderer.algebra.Vector;
+import renderer.algebra.Vector3;
 
 /**
  * Defines a triangle based mesh.

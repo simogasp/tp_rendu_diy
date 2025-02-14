@@ -1,5 +1,6 @@
+package renderer;
 
-import algebra.*;
+import renderer.algebra.*;
 
 /**
  * The PerspectiveCorrectRasterizer class extends Rasterizer to perform
@@ -11,7 +12,7 @@ import algebra.*;
 public class PerspectiveCorrectRasterizer extends Rasterizer {
 
     /**
-     * Creates a PerspectiveCorrectRasterizer with the given shader
+     * Creates a PerspectiveCorrectRasterizer with the given shader.
      * @param shader the shader to use
      */
     public PerspectiveCorrectRasterizer(Shader shader) {

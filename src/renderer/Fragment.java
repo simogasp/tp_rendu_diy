@@ -1,8 +1,9 @@
+package renderer;
 
 import java.awt.Color;
 
-import algebra.Vector;
-import algebra.Vector3;
+import renderer.algebra.Vector;
+import renderer.algebra.Vector3;
 
 /**
  * The Fragment class represents an attributed 'pixel' as generated
@@ -37,24 +38,24 @@ public class Fragment {
     private double[] attributes;
 
     // Attribute indices
-    /** the depth. */
-    private static final int DEPTH = 0;
+    /** the index for the depth. */
+    public static final int DEPTH = 0;
     /** the red component of the color. */
-    private static final int COLOR_R = 1;
+    public static final int COLOR_R = 1;
     /** the green component of the color. */
-    private static final int COLOR_G = 2;
+    public static final int COLOR_G = 2;
     /** the blue component of the color. */
-    private static final int COLOR_B = 3;
+    public static final int COLOR_B = 3;
     /** the x component of the normal. */
-    private static final int NORMAL_X = 4;
+    public static final int NORMAL_X = 4;
     /** the y component of the normal. */
-    private static final int NORMAL_Y = 5;
+    public static final int NORMAL_Y = 5;
     /** the z component of the normal. */
-    private static final int NORMAL_Z = 6;
+    public static final int NORMAL_Z = 6;
     /** the u texture coordinate. */
-    private static final int TEXTURE_U = 7;
+    public static final int TEXTURE_U = 7;
     /** the v texture coordinate. */
-    private static final int TEXTURE_V = 8;
+    public static final int TEXTURE_V = 8;
 
     /**
      * Creates a Fragment at pixel coordinates (x, y).
