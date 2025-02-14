@@ -97,13 +97,7 @@ public class Fragment {
      * @return the attribute as a double array
      */
     public double[] getAttribute(int index, int dimension) {
-        double[] attr = new double[dimension];
-
-        for (int i = 0; i < dimension; i++) {
-            attr[i] = attributes[index + i];
-        }
-
-        return attr;
+        return java.util.Arrays.copyOfRange(attributes, index, index + dimension);
     }
 
     /**
