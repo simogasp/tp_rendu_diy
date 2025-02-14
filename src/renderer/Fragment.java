@@ -57,6 +57,9 @@ public class Fragment {
     /** the v texture coordinate. */
     public static final int TEXTURE_V = 8;
 
+    /** maximum value for the color. */
+    private static final double MAX_PIX_VAL = 255;
+
     /**
      * Creates a Fragment at pixel coordinates (x, y).
      * @param x the x pixel coordinate of the Fragment
@@ -205,10 +208,9 @@ public class Fragment {
      * @return the color of the Fragment
      */
     public Color getColor() {
-        final int maxVal = 255;
-        int r = (int) Math.min(maxVal, Math.max(maxVal * attributes[COLOR_R], 0));
-        int g = (int) Math.min(maxVal, Math.max(maxVal * attributes[COLOR_G], 0));
-        int b = (int) Math.min(maxVal, Math.max(maxVal * attributes[COLOR_B], 0));
+        int r = (int) Math.min(MAX_PIX_VAL, Math.max(MAX_PIX_VAL * attributes[COLOR_R], 0));
+        int g = (int) Math.min(MAX_PIX_VAL, Math.max(MAX_PIX_VAL * attributes[COLOR_G], 0));
+        int b = (int) Math.min(MAX_PIX_VAL, Math.max(MAX_PIX_VAL * attributes[COLOR_B], 0));
         return new Color(r, g, b);
     }
 
@@ -217,9 +219,9 @@ public class Fragment {
      * @param color the color of the Fragment
      */
     public void setColor(Color color) {
-        attributes[COLOR_R] = color.getRed();
-        attributes[COLOR_G] = color.getGreen();
-        attributes[COLOR_B] = color.getBlue();
+        attributes[COLOR_R] = color.getRed() / MAX_PIX_VAL;
+        attributes[COLOR_G] = color.getGreen() / MAX_PIX_VAL;
+        attributes[COLOR_B] = color.getBlue() / MAX_PIX_VAL;
     }
 
     /**
