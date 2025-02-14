@@ -65,7 +65,7 @@ public class Fragment {
      * @param x the x pixel coordinate of the Fragment
      * @param y the y pixel coordinate of the Fragment
      */
-    public Fragment(int x, int y) { // int numAdditionalAttributes) {
+    public Fragment(int x, int y) {
         this.x = x;
         this.y = y;
         numAttributes = NUM_ATTRIBUTES;
