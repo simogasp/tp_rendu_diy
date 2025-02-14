@@ -2,7 +2,7 @@ package renderer;
 
 /**
  * A "virtual" screen, where only "setPixel" is available
- * (It is a JFrame, and JFrame.EXIT_ON_CLOSE is set)
+ * (It is a JFrame, and JFrame.EXIT_ON_CLOSE is set).
  * @author smondet
  */
 
