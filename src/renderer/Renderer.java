@@ -1,22 +1,37 @@
 package renderer;
 
-import renderer.algebra.*;
+import renderer.algebra.SizeMismatchException;
+import renderer.algebra.Vector;
+import renderer.algebra.Vector3;
 
 /**
  * The Renderer class drives the rendering pipeline: read in a scene, projects
  * the vertices and rasterizes every faces / edges.
  * @author cdehais
  */
-public class Renderer {
+public final class Renderer {
 
-    static Scene scene;
-    static Mesh mesh;
-    static Rasterizer rasterizer;
-    static GraphicsWrapper screen;
-    static Shader shader;
-    static Transformation xform;
-    static Lighting lighting;
-    static boolean lightingEnabled;
+    /** The scene. */
+    private static Scene scene;
+    /** The mesh. */
+    private static Mesh mesh;
+    /** The rasterizer. */
+    private static Rasterizer rasterizer;
+    /** The screen. */
+    private static GraphicsWrapper screen;
+    /** The shader. */
+    private static Shader shader;
+    /** The transformation. */
+    private static Transformation xform;
+    /** The lighting. */
+    private static Lighting lighting;
+    /** Whether lighting is enabled.. */
+    private static boolean lightingEnabled;
+
+    // Private constructor to prevent instantiation
+    private Renderer() {
+        throw new UnsupportedOperationException("Utility class");
+    }
 
     /**
      * Initialize the renderer with the given scene file.
@@ -38,12 +53,17 @@ public class Renderer {
                 scene.getCameraLookAt(),
                 scene.getCameraUp());
         xform.setProjection();
-        xform.setCalibration(scene.getCameraFocal(), scene.getScreenW(), scene.getScreenH());
+        xform.setCalibration(scene.getCameraFocal(),
+                            scene.getScreenW(),
+                            scene.getScreenH());
 
         lighting = new Lighting();
         lighting.addAmbientLight(scene.getAmbientI());
         double[] lightCoord = scene.getSourceCoord();
-        lighting.addPointLight(lightCoord[0], lightCoord[1], lightCoord[2], scene.getSourceI());
+        lighting.addPointLight(lightCoord[0],
+                                lightCoord[1],
+                                lightCoord[2],
+                                scene.getSourceI());
     }
 
     /**
@@ -148,7 +168,8 @@ public class Renderer {
      */
     public static void wait(int sec) {
         try {
-            Thread.sleep(sec * 1000);
+            final long millis = 1000;
+            Thread.sleep(sec * millis);
         } catch (Exception e) {
             // nothing
         }
