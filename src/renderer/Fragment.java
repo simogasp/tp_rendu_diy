@@ -204,13 +204,37 @@ public class Fragment {
     }
 
     /**
+     * Converts a color value from a double in [0, 1] to an integer in [0, 255].
+     * @param c the color value to convert in [0, 1]
+     * @return the value of the color in [0, 255]
+     */
+    public static int colorToInt(double c) {
+        if  (!inRange(c, 0, 1)) {
+            throw new IllegalArgumentException("Color value must be between 0 and 1");
+        }
+        return (int) Math.min(MAX_PIX_VAL, Math.max(MAX_PIX_VAL * c, 0));
+    }
+
+    /**
+     * Converts a color value from an integer in [0, 255] to a double in [0, 1].
+     * @param c the color value to convert in [0, 255]
+     * @return the value of the color in [0, 1]
+     */
+    public static double colorToFloat(int c) {
+        if (!inRange(c, 0, MAX_PIX_VAL)) {
+            throw new IllegalArgumentException("Color value must be between 0 and 255");
+        }
+        return c / MAX_PIX_VAL;
+    }
+
+    /**
      * Gets the color of the Fragment.
      * @return the color of the Fragment
      */
     public Color getColor() {
-        int r = (int) Math.min(MAX_PIX_VAL, Math.max(MAX_PIX_VAL * attributes[COLOR_R], 0));
-        int g = (int) Math.min(MAX_PIX_VAL, Math.max(MAX_PIX_VAL * attributes[COLOR_G], 0));
-        int b = (int) Math.min(MAX_PIX_VAL, Math.max(MAX_PIX_VAL * attributes[COLOR_B], 0));
+        final int r = colorToInt(attributes[COLOR_R]);
+        final int g = colorToInt(attributes[COLOR_G]);
+        final int b = colorToInt(attributes[COLOR_B]);
         return new Color(r, g, b);
     }
 
@@ -219,21 +243,37 @@ public class Fragment {
      * @param color the color of the Fragment
      */
     public void setColor(Color color) {
-        attributes[COLOR_R] = color.getRed() / MAX_PIX_VAL;
-        attributes[COLOR_G] = color.getGreen() / MAX_PIX_VAL;
-        attributes[COLOR_B] = color.getBlue() / MAX_PIX_VAL;
+        attributes[COLOR_R] = colorToFloat(color.getRed());
+        attributes[COLOR_G] = colorToFloat(color.getGreen());
+        attributes[COLOR_B] = colorToFloat(color.getBlue());
     }
 
     /**
      * Sets the color of the Fragment.
-     * @param r the red component of the color
-     * @param g the green component of the color
-     * @param b the blue component of the color
+     * @param r the red component of the color in [0, 1]
+     * @param g the green component of the color in [0, 1]
+     * @param b the blue component of the color in [0, 1]
      */
     public void setColor(double r, double g, double b) {
+        if (!inRange(r, 0, 1)
+            || !inRange(g, 0, 1)
+            || !inRange(b, 0, 1)) {
+            throw new IllegalArgumentException("Color values must be between 0 and 1");
+        }
         attributes[COLOR_R] = r;
         attributes[COLOR_G] = g;
         attributes[COLOR_B] = b;
+    }
+
+    /**
+     * Checks if a value is in the given range [min, max].
+     * @param value the value to check
+     * @param min the minimum value of the range (included)
+     * @param max the maximum value of the range(included)
+     * @return true if the value is in the range [min, max], false otherwise
+     */
+    private static boolean inRange(double value, double min, double max) {
+        return value >= min && value <= max;
     }
 
     /**
