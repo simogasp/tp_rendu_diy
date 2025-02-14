@@ -41,7 +41,7 @@ public class Scene {
      * Creates a new Scene object by reading in a scene description file.
      *
      * @param filename path to the scene description file.
-     * @throws Exception if the file is not a valid scene description file.
+     * @throws IOException if the file is not a valid scene description file.
      */
     public Scene(String filename) throws IOException {
 
