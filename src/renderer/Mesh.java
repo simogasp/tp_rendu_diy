@@ -61,7 +61,6 @@ public class Mesh {
      * @param filename path to OFF file.
      * @throws IOException if the file cannot be read.
      * @throws InstantiationException if vectors cannot be created.
-     * @throws Exception if the file is not a valid OFF file.
      */
     public Mesh(String filename) throws IOException, InstantiationException  {
         BufferedReader in = new BufferedReader(new FileReader(filename));
