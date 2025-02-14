@@ -19,8 +19,6 @@ public class SimpleShader extends Shader {
      * @param fragment the fragment to shade
      */
     public void shade(Fragment fragment) {
-        // System.out.println (fragment.getX () + "," + fragment.getY ());
-        // System.out.println ("color " + fragment.getColor ());
         screen.setPixel(fragment.getX(), fragment.getY(), fragment.getColor());
     }
 }
