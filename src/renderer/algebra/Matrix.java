@@ -187,7 +187,8 @@ public class Matrix {
         for (int i = 0; i < res.nRows; i++) {
             for (int j = 0; j < res.nCols; j++) {
                 for (int k = 0; k < this.nCols; k++) {
-                    res.values[i * res.nCols + j] += this.values[i * nCols + k] * m.values[k * m.nCols + j];
+                    final double value = res.get(i, j) + this.get(i, k) * m.get(k, j);
+                    res.set(i, j, value);
                 }
             }
         }
@@ -214,7 +215,7 @@ public class Matrix {
         for (int i = 0; i < u.size(); i++) {
             double e = 0.0;
             for (int k = 0; k < this.nCols; k++) {
-                e += values[i * nCols + k] * v.get(k);
+                e += this.get(i, k) * v.get(k);
             }
             u.set(i, e);
         }
@@ -343,7 +344,7 @@ public class Matrix {
                 }
             }
             for (int j = 0; j < nCols; j++) {
-                str.append(values[nCols * i + j] + " ");
+                str.append(get(i, j) + " ");
             }
             str.append(";\n");
         }
