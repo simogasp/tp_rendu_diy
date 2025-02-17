@@ -37,9 +37,9 @@ public class Lighting {
     private class Light {
 
         /** type of light. */
-        public int type = NONE;
+        private int type = NONE;
         /** parameters. */
-        public double[] params;
+        private double[] params;
 
         /**
          * Creates a new light source of given type and parameters.
