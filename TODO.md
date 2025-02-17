@@ -22,3 +22,7 @@
 
 * [ ] numAttributes in Fragment can be a constant and the underlying array can be a fixed size array -> easier to check boundaries
 * [ ] attributes can be better represented as a struct instead of a array
+
+## Lighting
+
+* [ ] refactor the code creating a Light abstract class and then the others that extend it with a getLightContribution() method that actually computes the contribution of the specific type of light.
