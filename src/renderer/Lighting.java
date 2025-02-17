@@ -64,8 +64,7 @@ public class Lighting {
      * @param ia the intensity of the ambient light
      */
     public void addAmbientLight(double ia) {
-        double[] v = new double[1];
-        v[0] = ia;
+        double[] v = new double[]{ia};
         lights.add(new Light(AMBIENT, v));
     }
 
@@ -78,11 +77,7 @@ public class Lighting {
      * @param id the intensity of the light source
      */
     public void addPointLight(double x, double y, double z, double id) {
-        double[] v = new double[5];
-        v[0] = x;
-        v[1] = y;
-        v[2] = z;
-        v[3] = id;
+        double[] v = new double[]{x, y, z, id};
         lights.add(new Light(POINT, v));
     }
 
