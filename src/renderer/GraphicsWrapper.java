@@ -167,7 +167,7 @@ public class GraphicsWrapper {
   }
 
   /**
-   * Gets the pixel in the back buffer
+   * Gets the pixel in the back buffer.
    * @param x the x coordinate of the pixel
    * @param y the y coordinate of the pixel
    * @return the color of the pixel
@@ -185,7 +185,7 @@ public class GraphicsWrapper {
   }
 
   /**
-   * Gets the pixel in the front buffer
+   * Gets the pixel in the front buffer.
    * @param x the x coordinate of the pixel
    * @param y the y coordinate of the pixel
    * @return the color of the pixel
@@ -203,7 +203,7 @@ public class GraphicsWrapper {
   }
 
   /**
-   * Gets the width of the screen
+   * Gets the width of the screen.
    * @return the width of the screen
    */
   int getWidth() {
@@ -211,7 +211,7 @@ public class GraphicsWrapper {
   }
 
   /**
-   * Gets the height of the screen
+   * Gets the height of the screen.
    * @return the height of the screen
    */
   int getHeight() {
@@ -219,7 +219,7 @@ public class GraphicsWrapper {
   }
 
   /**
-   * Clear current draw-buffer (ie Paint it black)
+   * Clear current draw-buffer (ie Paint it black).
    */
   public void clearBuffer() {
     Graphics2D gd = backBuffer.createGraphics();
