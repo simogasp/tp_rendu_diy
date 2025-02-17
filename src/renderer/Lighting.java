@@ -140,9 +140,9 @@ public class Lighting {
                         //++ // double I_specular = ...;
                         I += I_diffuse + I_specular; //++ // I += I_diffuse + I_specular;
 
-                    } catch (InstantiationException ex) {
-                        /* should not reach */ } catch (SizeMismatchException ex) {
-                        /* should not reach */ }
+                    } catch (SizeMismatchException ex) {
+                        /* should not reach */
+                    }
 
                     break;
                 default:

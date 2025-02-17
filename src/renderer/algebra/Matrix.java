@@ -182,11 +182,10 @@ public class Matrix {
      * @param v the vector to multiply with
      * @return the resulting vector
      * @throws SizeMismatchException if the vector size does not match
-     * @throws InstantiationException if the vector cannot be created
      * the matrix column size
      */
     public Vector multiply(Vector v)
-        throws SizeMismatchException, InstantiationException {
+        throws SizeMismatchException {
         if (nCols != v.size()) {
             throw new SizeMismatchException(this, v);
         }
@@ -238,9 +237,9 @@ public class Matrix {
      * Get the elements of the i-th column of the matrix as a vector.
      * @param i the column
      * @return the vector
-     * @throws InstantiationException if the vector cannot be created
+     * @throws IllegalArgumentException if the vector cannot be created
      */
-    public Vector getCol(int i) throws InstantiationException {
+    public Vector getCol(int i) {
         // check if the column index is valid
         if (i < 0 || i >= nCols) {
             throw new IllegalArgumentException("Invalid column index");
@@ -277,9 +276,9 @@ public class Matrix {
      * Get the elements of the i-th row of the matrix as a vector.
      * @param i the row
      * @return the vector
-     * @throws InstantiationException if the vector cannot be created
+     * @throws IllegalArgumentException if the vector cannot be created
      */
-    public Vector getRow(int i) throws InstantiationException {
+    public Vector getRow(int i) {
         // check if the row index is valid
         if (i < 0 || i >= nRows) {
             throw new IllegalArgumentException("Invalid row index");

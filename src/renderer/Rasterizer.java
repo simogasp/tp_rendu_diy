@@ -226,11 +226,10 @@ public class Rasterizer {
      * @param v1 the first vertex of the triangle
      * @param v2 the second vertex of the triangle
      * @param v3 the third vertex of the triangle
-     * @throws InstantiationException if the instantiation of the Fragment fails.
      * @throws SizeMismatchException if the size of the Fragment is not correct.
      */
     public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3)
-        throws InstantiationException, SizeMismatchException {
+        throws SizeMismatchException {
 
         Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 

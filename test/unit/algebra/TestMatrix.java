@@ -31,10 +31,9 @@ public class TestMatrix {
 
     /**
      * Test the creation of a Matrix.
-     * @throws InstantiationException
      */
     @Test
-    public void testMatrixCreation() throws InstantiationException {
+    public void testMatrixCreation() {
         final int numRows = 3;
         final int numCols = 3;
         final int numCols2 = 2;
@@ -275,10 +274,9 @@ public class TestMatrix {
 
     /**
      * Test setting the column values.
-     * @throws InstantiationException
      */
     @Test
-    public void testSetColValid() throws InstantiationException {
+    public void testSetColValid() {
         final int sizeRow = 5;
         final int sizeCol = 3;
         final int colToSet = 1;
@@ -298,10 +296,10 @@ public class TestMatrix {
 
     /**
      * Test setting the column values with an invalid vector size.
-     * @throws InstantiationException
+     * @throws IllegalArgumentException
      */
     @Test
-    public void testSetColInvalidVectorSize() throws InstantiationException {
+    public void testSetColInvalidVectorSize() {
         final int sizeMat = 3;
         Matrix matrix = new Matrix(sizeMat, sizeMat);
         Vector vector = new Vector(2); // Invalid size
@@ -317,25 +315,19 @@ public class TestMatrix {
     public void testGetColValidIndex() {
         final int numRows = 3;
         final int numCols = 3;
-        Matrix matrix;
-        try {
-            matrix = new Matrix(numRows, numCols);
-            double value = 1.0;
-            for (int i = 0; i < numRows; i++) {
-                for (int j = 0; j < numCols; j++) {
-                    matrix.set(i, j, value++);
-                }
-            }
-
+        Matrix matrix = new Matrix(numRows, numCols);
+        double value = 1.0;
+        for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
-                Vector col = matrix.getCol(j);
-                for (int i = 0; i < numRows; i++) {
-                    assertEquals((i * numCols) + (j + 1), col.get(i), EPSILON);
-                }
+                matrix.set(i, j, value++);
             }
-        } catch (InstantiationException e) {
-            // the test failed
-            e.printStackTrace();
+        }
+
+        for (int j = 0; j < numCols; j++) {
+            Vector col = matrix.getCol(j);
+            for (int i = 0; i < numRows; i++) {
+                assertEquals((i * numCols) + (j + 1), col.get(i), EPSILON);
+            }
         }
     }
 
@@ -371,39 +363,32 @@ public class TestMatrix {
     @Test
     public void testSetColInvalidColumnIndex()  {
         Matrix matrix;
-        try {
-            final int numRows = 3;
-            final int numCols = 3;
-            final int invalidColNegative = -1;
-            final int invalidColPositive = 3;
-            matrix = new Matrix(numRows, numCols);
+        final int numRows = 3;
+        final int numCols = 3;
+        final int invalidColNegative = -1;
+        final int invalidColPositive = 3;
+        matrix = new Matrix(numRows, numCols);
 
-            Vector vector = new Vector(numRows);
+        Vector vector = new Vector(numRows);
 
-            Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-                matrix.setCol(invalidColNegative, vector);
-            });
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            matrix.setCol(invalidColNegative, vector);
+        });
 
-            assertEquals("Invalid column index", exception.getMessage());
+        assertEquals("Invalid column index", exception.getMessage());
 
-            exception = assertThrows(IllegalArgumentException.class, () -> {
-                matrix.setCol(invalidColPositive, vector);
-            });
+        exception = assertThrows(IllegalArgumentException.class, () -> {
+            matrix.setCol(invalidColPositive, vector);
+        });
 
-            assertEquals("Invalid column index", exception.getMessage());
-        } catch (InstantiationException e) {
-            // the test failed
-            e.printStackTrace();
-            fail("Unexpected InstantiationException exception");
-        }
+        assertEquals("Invalid column index", exception.getMessage());
     }
 
     /**
      * Test setting the row values.
-     * @throws InstantiationException
      */
     @Test
-    public void testSetRowValid() throws InstantiationException {
+    public void testSetRowValid() {
         final int numRows = 3;
         final int numCols = 5;
         final int rowToSet = 2;
@@ -423,10 +408,9 @@ public class TestMatrix {
 
     /**
      * Test setting the row values with an invalid vector size.
-     * @throws InstantiationException
      */
     @Test
-    public void testSetRowInvalidSize() throws InstantiationException {
+    public void testSetRowInvalidSize() {
         final int numRows = 3;
         final int numCols = 3;
         Matrix matrix = new Matrix(numRows, numCols);
@@ -443,10 +427,9 @@ public class TestMatrix {
 
     /**
      * Test setting the row values with an invalid index.
-     * @throws InstantiationException
      */
     @Test
-    public void testSetRowInvalidIndex() throws InstantiationException {
+    public void testSetRowInvalidIndex() {
         final int numRows = 3;
         final int numCols = 3;
         final int invalidRowNegative = -1;
@@ -473,27 +456,22 @@ public class TestMatrix {
     @Test
     public void testGetRowValidIndex() {
         final int numRows = 3;
-        final int numCols = 3;
+        final int numCols = 4;
         Matrix matrix;
-        try {
-            matrix = new Matrix(numRows, numCols);
-            double value = 1.0;
-            for (int i = 0; i < numRows; i++) {
-                for (int j = 0; j < numCols; j++) {
-                    matrix.set(i, j, value++);
-                }
+        matrix = new Matrix(numRows, numCols);
+        double value = 1.0;
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                matrix.set(i, j, value++);
             }
+        }
 
-            for (int i = 0; i < numRows; i++) {
-                Vector row = matrix.getRow(i);
-                for (int j = 0; j < numCols; j++) {
-                    assertEquals((i * 3) + (j + 1), row.get(j), EPSILON);
-                }
+        for (int i = 0; i < numRows; i++) {
+            Vector row = matrix.getRow(i);
+            assertEquals(numCols, row.size());
+            for (int j = 0; j < numCols; j++) {
+                assertEquals((double) (i * numCols) + (j + 1), row.get(j), EPSILON);
             }
-        } catch (InstantiationException e) {
-            // the test failed
-            e.printStackTrace();
-            fail("Unexpected InstantiationException exception");
         }
     }
 

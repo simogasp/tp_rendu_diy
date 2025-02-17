@@ -23,11 +23,11 @@ public class Vector implements Cloneable {
     /**
      * The values of the vector.
      */
-    protected double values[];
+    protected double[] values;
     /**
      * The name of the vector.
      */
-    private String name = DEFAULT_NAME;
+    protected String name = DEFAULT_NAME;
 
     /**
      * Default constructor.
@@ -37,31 +37,36 @@ public class Vector implements Cloneable {
 
     /**
      * Creates a named vector of the given size.
-     * @param name the name of the vector
-     * @param size the size of the vector
-     * @throws java.lang.InstantiationException if the size is not strictly positive
+     * @param vName the name of the vector
+     * @param length the size of the vector
+     * @throws IllegalArgumentException if the size is not strictly positive
      */
-    public Vector(String name, int size) throws java.lang.InstantiationException {
-        this(size);
-        this.name = name;
+    public Vector(String vName, int length) {
+        if (length < 1) {
+            throw new java.lang.IllegalArgumentException(
+                "Vector size must be strictly positive");
+        }
+        this.values = new double[length];
+        this.size = length;
+        this.name = vName;
     }
 
     /**
      * Creates a vector of the given size.
      * @param size the size of the vector
-     * @throws java.lang.InstantiationException if the size is not strictly positive
+     * @throws IllegalArgumentException if the size is not strictly positive
      */
-    public Vector(int size) throws java.lang.InstantiationException {
-        allocValues(size);
+    public Vector(int size) {
+        this(DEFAULT_NAME, size);
     }
 
     /**
      * Creates a vector from an array of values.
      * @param values the array of values
-     * @throws java.lang.InstantiationException if the size is not strictly positive
+     * @throws IllegalArgumentException if the size is not strictly positive
      */
-    public Vector(double[] values) throws java.lang.InstantiationException {
-        allocValues(values.length);
+    public Vector(double[] values) {
+        this(values.length);
         System.arraycopy(values, 0, this.values, 0, size);
     }
 
@@ -243,17 +248,4 @@ public class Vector implements Cloneable {
         return this.size;
     }
 
-    /**
-     * Allocates the values array of the given size.
-     * @param length the size of the values array
-     * @throws java.lang.InstantiationException if the size is not strictly greater than 0
-     */
-    protected void allocValues(int length) throws java.lang.InstantiationException {
-        if (length < 1) {
-            throw new java.lang.InstantiationException(
-                "Vector size must be strictly positive");
-        }
-        this.values = new double[length];
-        this.size = length;
-    }
 }

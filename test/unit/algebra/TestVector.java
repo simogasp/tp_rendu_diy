@@ -24,10 +24,9 @@ public class TestVector {
 
     /**
      * Test the creation of a Vector.
-     * @throws InstantiationException
      */
     @Test
-    public void testVectorCreation() throws InstantiationException {
+    public void testVectorCreation() {
         final int vectorSize = 5;
         Vector v = new Vector(VECTOR_NAME, vectorSize);
         assertNotNull(v);
@@ -37,10 +36,9 @@ public class TestVector {
 
     /**
      * Test the creation of a Vector from an array of values.
-     * @throws InstantiationException
      */
     @Test
-    public void testDefaultName() throws InstantiationException {
+    public void testDefaultName() {
         final int vectorSize = 5;
         Vector v = new Vector(vectorSize);
         assertEquals(Vector.DEFAULT_NAME, v.getName());
@@ -49,24 +47,18 @@ public class TestVector {
 
     /**
      * Test the creation of a Vector from an array of values.
-     * @throws InstantiationException
      */
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testInvalidSize() {
-        try {
-            new Vector("invalidVector", 0);
-            fail("Expected an InstantiationException to be thrown");
-        } catch (InstantiationException e) {
-            assertEquals("Vector size must be strictly positive", e.getMessage());
-        }
+        new Vector("invalidVector", 0);
+        fail("Expected an IllegalArgumentException to be thrown");
     }
 
     /**
      * Test the creation of a Vector from an array of values.
-     * @throws InstantiationException
      */
     @Test
-    public void testSetAndGetValues() throws InstantiationException {
+    public void testSetAndGetValues() {
         final int vectorSize = 5;
         Vector v = new Vector(VECTOR_NAME, vectorSize);
         for (int i = 0; i < vectorSize; i++) {
@@ -79,10 +71,9 @@ public class TestVector {
 
     /**
      * Test the scaling of a Vector.
-     * @throws InstantiationException
      */
     @Test
-    public void testScale() throws InstantiationException {
+    public void testScale() {
         final int vectorSize = 6;
         final double scale = 2.0;
         Vector v = new Vector(VECTOR_NAME, vectorSize);
@@ -97,10 +88,9 @@ public class TestVector {
 
     /**
      * Test the dot product of two Vectors.
-     * @throws InstantiationException
      */
     @Test
-    public void testDot() throws InstantiationException {
+    public void testDot() {
         final int vectorSize = 4;
         final double expected = 20.0;
         Vector v1 = new Vector("v1", vectorSize);
@@ -119,10 +109,9 @@ public class TestVector {
 
     /**
      * Test the addition of two Vectors.
-     * @throws InstantiationException
      */
     @Test
-    public void testAdd() throws InstantiationException {
+    public void testAdd() {
         final int vectorSize = 4;
         final double expectedSum = 5;
         Vector v1 = new Vector("v1", vectorSize);
@@ -144,10 +133,9 @@ public class TestVector {
 
     /**
      * Test the subtraction of two Vectors.
-     * @throws InstantiationException
      */
     @Test
-    public void testSubtract() throws InstantiationException {
+    public void testSubtract() {
         final int vectorSize = 4;
         final double expectedRes = -vectorSize;
         Vector v1 = new Vector("v1", vectorSize);
@@ -178,10 +166,9 @@ public class TestVector {
 
     /**
      * Test the normalization of a Vector.
-     * @throws InstantiationException
      */
     @Test
-    public void testZeros() throws InstantiationException {
+    public void testZeros() {
         final int vectorSize = 6;
         Vector v = new Vector(VECTOR_NAME, vectorSize);
         v.zeros();
@@ -192,10 +179,9 @@ public class TestVector {
 
     /**
      * Test the normalization of a Vector.
-     * @throws InstantiationException
      */
     @Test
-    public void testOnes() throws InstantiationException {
+    public void testOnes() {
         final int vectorSize = 6;
         Vector v = new Vector(VECTOR_NAME, vectorSize);
         v.ones();

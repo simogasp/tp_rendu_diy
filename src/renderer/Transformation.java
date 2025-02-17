@@ -120,10 +120,9 @@ public class Transformation {
      * @param p the point to project
      * @return the projected point
      * @throws SizeMismatchException if the size of the input vector is not 4
-     * @throws InstantiationException if the creation of the resulting vector fails
      */
     public Vector3 projectPoint(Vector p)
-            throws SizeMismatchException, InstantiationException {
+            throws SizeMismatchException {
         //++ Vector ps = new Vector(3);
         //++ // TODO
         Vector pe = worldToCamera.multiply(p); //<!!
@@ -138,10 +137,9 @@ public class Transformation {
      * @param v the vector to transform
      * @return the transformed vector
      * @throws SizeMismatchException if the size of the input vector is not 3
-     * @throws InstantiationException if the creation of the resulting vector fails
      */
     public Vector3 transformVector(Vector3 v)
-            throws SizeMismatchException, InstantiationException {
+            throws SizeMismatchException {
         // Doing nothing special here because there is no scaling
         Matrix m = worldToCamera.getSubMatrix(0, 0, 3, 3);
         Vector tv = m.multiply(v);

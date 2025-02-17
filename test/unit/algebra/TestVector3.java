@@ -31,7 +31,7 @@ public class TestVector3 {
         assertEquals(x, v.getX(), EPSILON);
         assertEquals(y, v.getY(), EPSILON);
         assertEquals(z, v.getZ(), EPSILON);
-        assertEquals(Vector.DEFAULT_NAME, v.getName());
+        assertEquals(Vector3.VECTOR3_DEFAULT_NAME, v.getName());
     }
 
     /**

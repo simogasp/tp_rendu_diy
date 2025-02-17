@@ -60,9 +60,8 @@ public class Mesh {
      * Does not support non triangular meshes.
      * @param filename path to OFF file.
      * @throws IOException if the file cannot be read.
-     * @throws InstantiationException if vectors cannot be created.
      */
-    public Mesh(String filename) throws IOException, InstantiationException  {
+    public Mesh(String filename) throws IOException  {
         BufferedReader in = new BufferedReader(new FileReader(filename));
 
         String r = nextLine(in);
@@ -180,8 +179,6 @@ public class Mesh {
                     }
                 }
             }
-        } catch (InstantiationException e) {
-            System.out.println("Should not reach 1");
         } catch (SizeMismatchException e) {
             System.out.println("Should not reach 2");
         }

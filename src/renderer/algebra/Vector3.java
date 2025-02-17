@@ -13,6 +13,8 @@ public class Vector3 extends Vector {
      */
     private static final int VECTOR_SIZE = 3;
 
+    public static final String VECTOR3_DEFAULT_NAME = "v3";
+
     /**
      * Creates a new 3D vector with coordinates (x, y, z).
      * @param x the x coordinate of the vector
@@ -20,15 +22,7 @@ public class Vector3 extends Vector {
      * @param z the z coordinate of the vector
      */
     public Vector3(double x, double y, double z) {
-        super();
-        try {
-            allocValues(VECTOR_SIZE);
-        } catch (java.lang.InstantiationException e) {
-            // unreached
-        }
-        this.values[0] = x;
-        this.values[1] = y;
-        this.values[2] = z;
+        this(VECTOR3_DEFAULT_NAME, x, y, z);
     }
 
     /**
@@ -43,41 +37,31 @@ public class Vector3 extends Vector {
      * @param name the name of the vector
      */
     public Vector3(String name) {
-        this(0.0, 0.0, 0.0);
-        this.setName(name);
+        this(name, 0.0, 0.0, 0.0);
     }
 
     /**
      * Creates a new named 3D vector with coordinates (x, y, z).
-     * @param name the name of the vector
+     * @param vName the name of the vector
      * @param x the x coordinate of the vector
      * @param y the y coordinate of the vector
      * @param z the z coordinate of the vector
-     * @fixme: this constructor is weird, why size 4?
      */
-    public Vector3(String name, double x, double y, double z) {
-        super();
-        try {
-            allocValues(4);
-        } catch (java.lang.InstantiationException e) {
-            // unreached
-        }
-
-        this.values[0] = x;
-        this.values[1] = y;
-        this.values[2] = z;
+    public Vector3(String vName, double x, double y, double z) {
+        super(new double[]{x, y, z});
+        setName(vName);
     }
 
     /**
      * Copy constructor from a Vector of size 3 or 4.
      * For a vector of size 4, divide the 3 first coordinates by the fourth.
      * @param v the vector to copy
-     * @throws InstantiationException if the size of the vector is not 3 or 4
+     * @throws IllegalArgumentException if the size of the vector is not 3 or 4
      */
-    public Vector3(Vector v) throws InstantiationException {
+    public Vector3(Vector v) {
         this();
         if ((v.size != VECTOR_SIZE) && (v.size != VECTOR_SIZE + 1)) {
-            throw new InstantiationException(
+            throw new IllegalArgumentException(
                 "Can only build 3D vector from vector of size 3 or 4");
         }
 
@@ -88,18 +72,6 @@ public class Vector3 extends Vector {
             set(v.get(0) / w, v.get(1) / w, v.get(2) / w);
         }
     }
-
-    // /**
-    //  * Makes the x, y, and z coordinates of the Vector3 cartesian, by dividing them.
-    //  * by the homogeneous coordinate w.
-    //  * @throws java.lang.ArithmeticException if w is 0
-    //  */
-    // public void makeCartesian() throws java.lang.ArithmeticException {
-    //     this.values[0] /= this.values[3];
-    //     this.values[1] /= this.values[3];
-    //     this.values[2] /= this.values[3];
-    //     this.values[3] = 1.0;
-    // }
 
     /**
      * Sets the x, y, and z coordinates of the Vector3 to the given values.

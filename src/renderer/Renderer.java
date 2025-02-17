@@ -112,9 +112,6 @@ public final class Renderer {
         } catch (SizeMismatchException e) {
             e.printStackTrace();
             // should not reach
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-            // should not reach
         }
 
         return fragments;
@@ -139,9 +136,8 @@ public final class Renderer {
     /**
      * Renders the solid of the mesh.
      * @throws SizeMismatchException if the size of the fragments do not match
-     * @throws InstantiationException if the fragment cannot be instantiated
      */
-    static void renderSolid() throws InstantiationException, SizeMismatchException {
+    static void renderSolid() throws SizeMismatchException {
         Fragment[] fragments = projectVertices();
         int[] faces = mesh.getFaces();
 
@@ -178,11 +174,10 @@ public final class Renderer {
     /**
      * Main entry point of the renderer.
      * @param args the command line arguments
-     * @throws InstantiationException if the fragment cannot be instantiated
      * @throws SizeMismatchException if the size of the fragments do not match
      */
     public static void main(String[] args)
-        throws InstantiationException, SizeMismatchException {
+        throws SizeMismatchException {
 
         final int timeout = 3;
 
