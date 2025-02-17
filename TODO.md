@@ -11,6 +11,8 @@
 * [x] add the package name, move everything inside `src/packagename` so that the classes are visible for the the unit tests.
 * [x] remove or better use exceptions / avoid using try/catch for simple things like creating a matrix/vertex, use `IllegalArgumentException` for checking the arguments
 * [ ] only matrix class, vector and vector3 can be matrices
+* [ ] add a `homogeneous()` method
+* [ ] make some methods return `this` to allow chaining (e.g. `normalize()`)
 
 ## Deploy student
 
