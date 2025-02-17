@@ -12,7 +12,7 @@ public class Matrix {
     /**
      * The name of the matrix.
      */
-    private String name = "M";
+    private String name;
 
     /**
      * The matrix values.
@@ -30,29 +30,26 @@ public class Matrix {
     private int nCols;
 
     /**
-     * Default constructor.
+     * The default name of the matrix.
      */
-    protected Matrix() {
-    }
-
-    /**
-     * Creates a named Matrix.
-     * @param name the name of the matrix
-     */
-    protected Matrix(String name) {
-        this.name = name;
-    }
+    public static final String DEFAULT_NAME = "M";
 
     /**
      * Creates a named Matrix of size nRows x nCols.
      * @param name the name of the matrix
-     * @param nRows number of rows
-     * @param nCols number of columns
-     * @throws InstantiationException if the matrix dimensions are invalid
+     * @param numRows number of rows
+     * @param numCols number of columns
+     * @throws IllegalArgumentException if the matrix dimensions are invalid
      */
-    public Matrix(String name, int nRows, int nCols)
-            throws java.lang.InstantiationException {
-        this(nRows, nCols);
+    public Matrix(String name, int numRows, int numCols) {
+        if (numRows < 1 || numCols < 1) {
+            throw new java.lang.IllegalArgumentException(
+                "Both matrix dimensions must be strictly positive");
+        }
+        final int size = numRows * numCols;
+        this.values = new double[size];
+        this.nRows = numRows;
+        this.nCols = numCols;
         this.name = name;
     }
 
@@ -60,10 +57,10 @@ public class Matrix {
      * Creates a Matrix of size nRows x nCols.
      * @param nRows number of rows
      * @param nCols number of columns
-     * @throws InstantiationException if the matrix dimensions are invalid
+     * @throws IllegalArgumentException if the matrix dimensions are invalid
      */
-    public Matrix(int nRows, int nCols) throws java.lang.InstantiationException {
-        allocValues(nRows, nCols);
+    public Matrix(int nRows, int nCols) {
+        this(DEFAULT_NAME, nRows, nCols);
     }
 
     /**
@@ -71,10 +68,9 @@ public class Matrix {
      * identity matrix)
      * @param size the size of the identity matrix
      * @return the identity matrix of size @size
-     * @throws InstantiationException if the matrix dimensions are invalid
+     * @throws IllegalArgumentException if the matrix dimensions are invalid
      */
-    public static Matrix createIdentity(int size)
-            throws java.lang.InstantiationException {
+    public static Matrix createIdentity(int size) {
         String name = "I" + size;
         return createIdentity(name, size);
     }
@@ -84,10 +80,9 @@ public class Matrix {
      * @param name the name of the matrix
      * @param size the size of the identity matrix
      * @return the identity matrix of size @size and name @name
-     * @throws InstantiationException if the matrix dimensions are invalid
+     * @throws IllegalArgumentException if the matrix dimensions are invalid
      */
-    public static Matrix createIdentity(String name, int size)
-            throws java.lang.InstantiationException {
+    public static Matrix createIdentity(String name, int size) {
         Matrix id = new Matrix(name, size, size);
 
         for (int i = 0; i < size; i++) {
@@ -102,11 +97,10 @@ public class Matrix {
      * @param name  the name of the matrix
      * @param nRows number of rows
      * @param nCols number of columns
-     * @return the nRows x nCols matrix named @name
-     * @throws InstantiationException if the matrix dimensions are invalid
+     * @return the nRows x nCols matrix named `name` filled with random values
+     * @throws IllegalArgumentException if the matrix dimensions are invalid
      */
-    public static Matrix createRandom(String name, int nRows, int nCols)
-            throws InstantiationException {
+    public static Matrix createRandom(String name, int nRows, int nCols) {
         Matrix m = new Matrix(name, nRows, nCols);
         for (int i = 0; i < nRows; i++) {
             for (int j = 0; j < nCols; j++) {
@@ -124,14 +118,13 @@ public class Matrix {
      * @param numRows the number of rows to extract
      * @param numCols the number of columns to extract
      * @return the submatrix of size nRows x nCols
-     * @throws InstantiationException if the submatrix the dimensions are invalid
+     * @throws IllegalArgumentException if the submatrix the dimensions are invalid
      */
-    public Matrix getSubMatrix(int offsetRow, int offsetCol, int numRows, int numCols)
-            throws InstantiationException {
+    public Matrix getSubMatrix(int offsetRow, int offsetCol, int numRows, int numCols) {
         if ((offsetRow < 0) || (offsetCol < 0) || (numRows < 1) || (numCols < 1)
                 || (offsetRow + numRows > this.nRows)
                 || (offsetCol + numCols > this.nCols)) {
-            throw new InstantiationException("Invalid submatrix");
+            throw new IllegalArgumentException("Invalid submatrix");
         }
 
         Matrix sub = new Matrix(numRows, numCols);
@@ -150,16 +143,10 @@ public class Matrix {
      * @return the transposed matrix
      */
     public Matrix transpose() {
-        Matrix trans;
-        try {
-            trans = new Matrix(this.nCols, this.nRows);
-        } catch (java.lang.InstantiationException e) {
-            // unreached
-            return null;
-        }
-        for (int i = 0; i < nRows; i++) {
-            for (int j = 0; j < nCols; j++) {
-                trans.set(j, i, this.get(i, j));
+        Matrix trans = new Matrix(this.nCols, this.nRows);
+        for (int r = 0; r < nRows; r++) {
+            for (int c = 0; c < nCols; c++) {
+            trans.set(c, r, this.get(r, c));
             }
         }
         return trans;
@@ -176,13 +163,7 @@ public class Matrix {
             throw new SizeMismatchException(this, m);
         }
 
-        Matrix res;
-        try {
-            res = new Matrix(this.nRows, m.nCols);
-        } catch (java.lang.InstantiationException e) {
-            // unreached
-            return null;
-        }
+        Matrix res = new Matrix(this.nRows, m.nCols);
 
         for (int i = 0; i < res.nRows; i++) {
             for (int j = 0; j < res.nCols; j++) {
@@ -352,25 +333,6 @@ public class Matrix {
         str.append("];");
 
         return str.toString();
-    }
-
-    /**
-     * Allocates the matrix values.
-     * @param numRows the number of rows
-     * @param numCols the number of columns
-     * @throws InstantiationException if the matrix dimensions are invalid
-     */
-    protected void allocValues(int numRows, int numCols)
-            throws java.lang.InstantiationException {
-
-        if (numRows < 1 || numCols < 1) {
-            throw new java.lang.InstantiationException(
-                "Both matrix dimensions must be strictly positive");
-        }
-        int size = numRows * numCols;
-        this.values = new double[size];
-        this.nRows = numRows;
-        this.nCols = numCols;
     }
 
     /**

@@ -195,13 +195,11 @@ public class Rasterizer {
      * @param v3 the third vertex of the triangle
      * @return the barycentric coordinates matrix of the triangle
      */
-    static protected Matrix makeBarycentricCoordsMatrix(Fragment v1, Fragment v2, Fragment v3) {
-        Matrix C = null;
-        try {
-            C = new Matrix(3, 3);
-        } catch (InstantiationException e) {
-            // unreached
-        }
+    protected static Matrix makeBarycentricCoordsMatrix(Fragment v1,
+                                                        Fragment v2,
+                                                        Fragment v3) {
+        final int squareSize = 3;
+        Matrix cMat = new Matrix(squareSize, squareSize);
 
         double area = triangleArea(v1, v2, v3);
         int x1 = v1.getX();
@@ -210,17 +208,17 @@ public class Rasterizer {
         int y2 = v2.getY();
         int x3 = v3.getX();
         int y3 = v3.getY();
-        C.set(0, 0, (x2 * y3 - x3 * y2) / area);
-        C.set(0, 1, (y2 - y3) / area);
-        C.set(0, 2, (x3 - x2) / area);
-        C.set(1, 0, (x3 * y1 - x1 * y3) / area);
-        C.set(1, 1, (y3 - y1) / area);
-        C.set(1, 2, (x1 - x3) / area);
-        C.set(2, 0, (x1 * y2 - x2 * y1) / area);
-        C.set(2, 1, (y1 - y2) / area);
-        C.set(2, 2, (x2 - x1) / area);
+        cMat.set(0, 0, (x2 * y3 - x3 * y2) / area);
+        cMat.set(0, 1, (y2 - y3) / area);
+        cMat.set(0, 2, (x3 - x2) / area);
+        cMat.set(1, 0, (x3 * y1 - x1 * y3) / area);
+        cMat.set(1, 1, (y3 - y1) / area);
+        cMat.set(1, 2, (x1 - x3) / area);
+        cMat.set(2, 0, (x1 * y2 - x2 * y1) / area);
+        cMat.set(2, 1, (y1 - y2) / area);
+        cMat.set(2, 2, (x2 - x1) / area);
 
-        return C;
+        return cMat;
     }
 
     /**

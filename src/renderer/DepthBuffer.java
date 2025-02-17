@@ -27,12 +27,7 @@ public class DepthBuffer {
      * @param height the height of the buffer
      */
     public DepthBuffer(int width, int height) {
-        try {
-            buffer = new Matrix(width, height);
-        } catch (InstantiationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        buffer = new Matrix(width, height);
         this.width = width;
         this.height = height;
         clear();

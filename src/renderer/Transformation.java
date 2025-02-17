@@ -28,13 +28,9 @@ public class Transformation {
      * Creates a new Transformation object.
      */
     public Transformation() {
-        try {
-            worldToCamera = Matrix.createIdentity("W2C", 4);
-            projection = new Matrix("P", 3, 4);
-            calibration = Matrix.createIdentity("K", 3);
-        } catch (InstantiationException e) {
-            // should not reach
-        }
+        worldToCamera = Matrix.createIdentity("W2C", 4);
+        projection = new Matrix("P", 3, 4);
+        calibration = Matrix.createIdentity("K", 3);
     }
 
     /**
