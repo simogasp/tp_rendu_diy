@@ -1,7 +1,11 @@
 package renderer;
 
-import java.util.*;
-import renderer.algebra.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import renderer.algebra.SizeMismatchException;
+import renderer.algebra.Vector3;
 
 /**
  * The Lighting class describes a scene lighting environment.
