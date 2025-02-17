@@ -71,7 +71,8 @@ public class Vector3 extends Vector {
         if (v.size() == VECTOR_SIZE) {
             set(v.get(0), v.get(1), v.get(2));
         } else {
-            double w = v.get(3);
+            final int lastCoord = 3;
+            final double w = v.get(lastCoord);
             set(v.get(0) / w, v.get(1) / w, v.get(2) / w);
         }
     }
