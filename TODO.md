@@ -9,7 +9,7 @@
 
 * [ ] add a LICENSE
 * [x] add the package name, move everything inside `src/packagename` so that the classes are visible for the the unit tests.
-* [ ] remove or better use exceptions / avoid using try/catch for simple things like creating a matrix/vertex, use `IllegalArgumentException` for checking the arguments
+* [x] remove or better use exceptions / avoid using try/catch for simple things like creating a matrix/vertex, use `IllegalArgumentException` for checking the arguments
 * [ ] only matrix class, vector and vector3 can be matrices
 
 ## Deploy student
