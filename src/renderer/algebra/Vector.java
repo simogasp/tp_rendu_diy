@@ -19,15 +19,15 @@ public class Vector implements Cloneable {
     /**
      * The size of the vector.
      */
-    protected int size;
+    private int size;
     /**
      * The values of the vector.
      */
-    protected double[] values;
+    private double[] values;
     /**
      * The name of the vector.
      */
-    protected String name = DEFAULT_NAME;
+    private String name;
 
     /**
      * Default constructor.

@@ -13,6 +13,9 @@ public class Vector3 extends Vector {
      */
     private static final int VECTOR_SIZE = 3;
 
+    /**
+     * The default name of the vector3.
+     */
     public static final String VECTOR3_DEFAULT_NAME = "v3";
 
     /**
@@ -60,12 +63,12 @@ public class Vector3 extends Vector {
      */
     public Vector3(Vector v) {
         this();
-        if ((v.size != VECTOR_SIZE) && (v.size != VECTOR_SIZE + 1)) {
+        if ((v.size() != VECTOR_SIZE) && (v.size() != VECTOR_SIZE + 1)) {
             throw new IllegalArgumentException(
                 "Can only build 3D vector from vector of size 3 or 4");
         }
 
-        if (v.size == VECTOR_SIZE) {
+        if (v.size() == VECTOR_SIZE) {
             set(v.get(0), v.get(1), v.get(2));
         } else {
             double w = v.get(3);
@@ -80,9 +83,9 @@ public class Vector3 extends Vector {
      * @param z the z coordinate of the vector
      */
     public void set(double x, double y, double z) {
-        this.values[0] = x;
-        this.values[1] = y;
-        this.values[2] = z;
+        this.set(0, x);
+        this.set(1, y);
+        this.set(2, z);
     }
 
     /**
@@ -104,9 +107,9 @@ public class Vector3 extends Vector {
      * @return the dot product of the two vectors
      */
     public double dot(Vector3 v) {
-        return (values[0] * v.values[0]
-                + values[1] * v.values[1]
-                + values[2] * v.values[2]);
+        return (this.getX() * v.getX()
+            + this.getY() * v.getY()
+            + this.getZ() * v.getZ());
     }
 
     /**
@@ -115,9 +118,9 @@ public class Vector3 extends Vector {
      */
     @Override
     public double norm() {
-        final double r = (Math.pow(values[0], 2)
-                        + Math.pow(values[1], 2)
-                        + Math.pow(values[2], 2));
+        final double r = (Math.pow(getX(), 2)
+            + Math.pow(getY(), 2)
+            + Math.pow(getZ(), 2));
         return Math.sqrt(r);
     }
 
@@ -126,7 +129,7 @@ public class Vector3 extends Vector {
      * @return the x coordinates of the Vector3
      */
     public double getX() {
-        return this.values[0];
+        return this.get(0);
     }
 
     /**
@@ -134,7 +137,7 @@ public class Vector3 extends Vector {
      * @return the y coordinates of the Vector3
      */
     public double getY() {
-        return this.values[1];
+        return this.get(1);
     }
 
     /**
@@ -142,6 +145,6 @@ public class Vector3 extends Vector {
      * @return the z coordinates of the Vector3
      */
     public double getZ() {
-        return this.values[2];
+        return this.get(2);
     }
 }
