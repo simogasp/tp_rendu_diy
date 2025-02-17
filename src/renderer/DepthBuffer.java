@@ -48,13 +48,13 @@ public class DepthBuffer {
     /**
      * Test if a fragment passes the DepthBuffer test, i.e. is the fragment the
      * closest at its position.
-     * @param fragment the fragment to test
+     * @param f the fragment to test
      * @return true if the fragment passes the test, false otherwise
      */
-    public boolean testFragment(Fragment fragment) {
-        if ((fragment.getX() >= 0) && (fragment.getX() < width) && (fragment.getY() >= 0)
-                && (fragment.getY() < height)) {
-            return (buffer.get(fragment.getY(), fragment.getX()) > fragment.getAttribute(0)); //++ // TODO
+    public boolean testFragment(Fragment f) {
+        if ((f.getX() >= 0) && (f.getX() < width) && (f.getY() >= 0)
+                && (f.getY() < height)) {
+            return (buffer.get(f.getY(), f.getX()) > f.getAttribute(0)); //++ // TODO
             //++ return false;
         } else {
             return false;
@@ -63,12 +63,12 @@ public class DepthBuffer {
 
     /**
      * Writes the fragment depth to the buffer.
-     * @param fragment the fragment to write
+     * @param f the fragment to write
      */
-    public void writeFragment(Fragment fragment) {
-        if ((fragment.getX() >= 0) && (fragment.getX() < width) && (fragment.getY() >= 0)
-                && (fragment.getY() < height)) {
-            buffer.set(fragment.getY(), fragment.getX(), fragment.getAttribute(0)); //++ // TODO
+    public void writeFragment(Fragment f) {
+        if ((f.getX() >= 0) && (f.getX() < width) && (f.getY() >= 0)
+                && (f.getY() < height)) {
+            buffer.set(f.getY(), f.getX(), f.getAttribute(0)); //++ // TODO
         }
     }
 
