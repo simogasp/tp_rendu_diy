@@ -1,5 +1,7 @@
 package renderer;
 
+import java.io.IOException;
+
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
 import renderer.algebra.Vector3;
@@ -36,9 +38,9 @@ public final class Renderer {
     /**
      * Initialize the renderer with the given scene file.
      * @param sceneFilename the scene file to load
-     * @throws Exception if the scene file cannot be loaded
+     * @throws IOException if the scene file cannot be loaded
      */
-    static void init(String sceneFilename) throws Exception {
+    static void init(String sceneFilename) throws IOException {
         scene = new Scene(sceneFilename);
         mesh = new Mesh(scene.getMeshFileName());
         screen = new GraphicsWrapper(scene.getScreenW(), scene.getScreenH());
