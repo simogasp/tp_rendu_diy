@@ -27,7 +27,7 @@ public class DepthBuffer {
      * @param height the height of the buffer
      */
     public DepthBuffer(int width, int height) {
-        buffer = new Matrix(width, height);
+        buffer = new Matrix(height, width);
         this.width = width;
         this.height = height;
         clear();
