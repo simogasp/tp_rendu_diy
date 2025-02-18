@@ -46,12 +46,12 @@ public class Rasterizer {
      * @param f the fragment to interpolate
      */
     private void interpolate2(Fragment v1, Fragment v2, Fragment f) {
-        int x1 = v1.getX();
-        int y1 = v1.getY();
-        int x2 = v2.getX();
-        int y2 = v2.getY();
-        int x = f.getX();
-        int y = f.getX();
+        final int x1 = v1.getX();
+        final int y1 = v1.getY();
+        final int x2 = v2.getX();
+        final int y2 = v2.getY();
+        final int x = f.getX();
+        final int y = f.getX();
 
         double alpha;
         if (Math.abs(x2 - x1) > Math.abs(y2 - y1)) {
@@ -63,7 +63,8 @@ public class Rasterizer {
                 alpha = 0.5;
             }
         }
-        int numAttributes = f.getNumAttributes();
+
+        final int numAttributes = f.getNumAttributes();
         for (int i = 0; i < numAttributes; i++) {
             f.setAttribute(i,
                             (1.0 - alpha) * v1.getAttribute(i)
@@ -96,7 +97,7 @@ public class Rasterizer {
 
         // For now : just display the vertices
         Fragment f = new Fragment(0, 0);
-        int size = 2;
+        final int size = 2;
         for (int i = 0; i < v1.getNumAttributes(); i++) {
             f.setAttribute(i, v1.getAttribute(i));
         }
@@ -109,7 +110,7 @@ public class Rasterizer {
 
         // Uncomment the following block of code for drawing the wireframe
         // int numAttributes = v1.getNumAttributes (); //<??
-        Fragment fragment = new Fragment(0, 0); // , numAttributes);
+        Fragment fragment = new Fragment(0, 0);
 
         boolean sym = (Math.abs(y2 - y1) > Math.abs(x2 - x1));
         if (sym) {
@@ -137,16 +138,11 @@ public class Rasterizer {
             v2 = ftemp;
         }
 
-        int ystep;
-        if (y1 < y2) {
-            ystep = 1;
-        } else {
-            ystep = -1;
-        }
+        final int ystep = (y1 < y2) ? 1 : -1;
 
         int err = (x1 - x2) / 2;
-        int dx = (x2 - x1);
-        int dy = Math.abs(y2 - y1);
+        final int dx = (x2 - x1);
+        final int dy = Math.abs(y2 - y1);
 
         int x = x1;
         int y = y1;
@@ -201,13 +197,13 @@ public class Rasterizer {
         final int squareSize = 3;
         Matrix cMat = new Matrix(squareSize, squareSize);
 
-        double area = triangleArea(v1, v2, v3);
-        int x1 = v1.getX();
-        int y1 = v1.getY();
-        int x2 = v2.getX();
-        int y2 = v2.getY();
-        int x3 = v3.getX();
-        int y3 = v3.getY();
+        final double area = triangleArea(v1, v2, v3);
+        final int x1 = v1.getX();
+        final int y1 = v1.getY();
+        final int x2 = v2.getX();
+        final int y2 = v2.getY();
+        final int x3 = v3.getX();
+        final int y3 = v3.getY();
         cMat.set(0, 0, (x2 * y3 - x3 * y2) / area);
         cMat.set(0, 1, (y2 - y3) / area);
         cMat.set(0, 2, (x3 - x2) / area);
@@ -231,17 +227,17 @@ public class Rasterizer {
     public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3)
         throws SizeMismatchException {
 
-        Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
+        final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 
         // iterate over the triangle's bounding box
         //++ // TODO
-        int xmin = Math.min(v1.getX(), Math.min(v2.getX(), v3.getX())); //<!!
-        int ymin = Math.min(v1.getY(), Math.min(v2.getY(), v3.getY()));
-        int xmax = Math.max(v1.getX(), Math.max(v2.getX(), v3.getX()));
-        int ymax = Math.max(v1.getY(), Math.max(v2.getY(), v3.getY()));
+        final int xmin = Math.min(v1.getX(), Math.min(v2.getX(), v3.getX())); //<!!
+        final int ymin = Math.min(v1.getY(), Math.min(v2.getY(), v3.getY()));
+        final int xmax = Math.max(v1.getX(), Math.max(v2.getX(), v3.getX()));
+        final int ymax = Math.max(v1.getY(), Math.max(v2.getY(), v3.getY()));
 
         Fragment fragment = new Fragment(0, 0);
-        int numAttributes = fragment.getNumAttributes();
+        final int numAttributes = fragment.getNumAttributes();
         try {
             for (int x = xmin; x <= xmax; x++) {
                 for (int y = ymin; y <= ymax; y++) {
@@ -250,8 +246,8 @@ public class Rasterizer {
                     fragment.setPosition(x, y);
                     if (!shader.isClipped(fragment)) {
 
-                        Vector3 v = new Vector3(1.0, (double) x, (double) y);
-                        Vector bar = cMat.multiply(v);
+                        final Vector3 v = new Vector3(1.0, (double) x, (double) y);
+                        final Vector bar = cMat.multiply(v);
                         if ((bar.get(0) >= 0.0)
                             && (bar.get(1) >= 0.0)
                             && (bar.get(2) >= 0.0)) {
