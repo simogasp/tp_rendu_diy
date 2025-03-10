@@ -1,6 +1,9 @@
 package renderer;
 
-import renderer.algebra.*;
+import renderer.algebra.Matrix;
+import renderer.algebra.SizeMismatchException;
+import renderer.algebra.Vector;
+import renderer.algebra.Vector3;
 
 /**
  * The PerspectiveCorrectRasterizer class extends Rasterizer to perform
