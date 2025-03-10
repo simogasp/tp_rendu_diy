@@ -29,6 +29,7 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
      * @param v3 the third vertex of the face
      * @throws SizeMismatchException if the size of the fragments do not match
      */
+    @Override
     public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3)
             throws SizeMismatchException {
 
