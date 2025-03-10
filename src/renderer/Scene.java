@@ -1,7 +1,10 @@
 package renderer;
 
-import java.io.*;
-import renderer.algebra.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+import renderer.algebra.Vector3;
 
 /**
  * Class that describes a simple 3D Scene:
