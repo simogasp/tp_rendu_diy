@@ -9,21 +9,27 @@
 
 * [ ] add a LICENSE
 * [x] add the package name, move everything inside `src/packagename` so that the classes are visible for the the unit tests.
+* [ ] maybe re-organize in other subpackages, shader, rasterizer, etc. for each hierarchy of classes
 * [x] remove or better use exceptions / avoid using try/catch for simple things like creating a matrix/vertex, use `IllegalArgumentException` for checking the arguments
 * [ ] keep only matrix class, vector and vector3 can be matrices
 * [ ] add a `homogeneous()` method
 * [ ] make some methods return `this` to allow chaining (e.g. `normalize()`)
+* [ ] add a DepthShader that render the object as depth map (useful for debugging)
 * [ ] add a NormalShader that render the normals of the object (useful for debugging)
+* [ ] make the UML class diagram and find a way to generate it automatically from the code (better if in plantUML format)
 
 ## Deploy student
 
 * [ ] write a test to check that the tags are always there
-* [ ] maybe remove projection matrix as it is never used
+
+## Transformation
+
+* [ ] maybe use a proper camera class so we can have a generic camera and different implementations (perspective, orthographic, etc.) 
 
 ## Fragment
 
 * [ ] numAttributes in Fragment can be a constant and the underlying array can be a fixed size array -> easier to check boundaries
-* [ ] attributes can be better represented as a struct instead of a array
+* [ ] attributes can be better represented as a struct instead of an array
 
 ## Rasterizer
 
