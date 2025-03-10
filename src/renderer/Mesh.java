@@ -94,6 +94,7 @@ public class Mesh {
             colors[COLOR_COMPONENTS_PER_VERTEX * i + 0] = Double.parseDouble(sar[3]);
             colors[COLOR_COMPONENTS_PER_VERTEX * i + 1] = Double.parseDouble(sar[4]);
             colors[COLOR_COMPONENTS_PER_VERTEX * i + 2] = Double.parseDouble(sar[5]);
+
             // optional texture coordinates
             if (sar.length >= 8) {
                 if (texCoords == null) {
@@ -155,13 +156,13 @@ public class Mesh {
             for (int i = 0; i < numFaceElements; i += VERTICES_PER_FACE) {
                 //++ // TODO
                 //++ Vector3 n = new Vector3();
-                Vector a = vertices[faces[i]]; //<!!
-                Vector b = vertices[faces[i + 1]];
-                Vector c = vertices[faces[i + 2]];
+                final Vector a = vertices[faces[i]]; //<!!
+                final Vector b = vertices[faces[i + 1]];
+                final Vector c = vertices[faces[i + 2]];
 
-                Vector3 v1 = new Vector3(c);
+                final Vector3 v1 = new Vector3(c);
                 v1.subtract(new Vector3(a));
-                Vector3 v2 = new Vector3(c);
+                final Vector3 v2 = new Vector3(c);
                 v2.subtract(new Vector3(b));
 
                 Vector3 n = v1.cross(v2);
