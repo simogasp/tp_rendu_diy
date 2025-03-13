@@ -53,14 +53,17 @@ public class Rasterizer {
         final int x = f.getX();
         final int y = f.getX();
 
-        double alpha;
-        if (Math.abs(x2 - x1) > Math.abs(y2 - y1)) {
-            alpha = (double) (x - x1) / (double) (x2 - x1);
+        // corner case in which the two vertices are the same
+        double alpha = .5;
+        // if we have more pixel on the horizontal axis
+        if (Math.abs(x2 - x1) >= Math.abs(y2 - y1)) {
+            if (x2 != x1) {
+                // compute alpha only if there are pixels to interpolate
+                alpha = (double) (x - x1) / (double) (x2 - x1);
+            }
         } else {
             if (y2 != y1) {
                 alpha = (double) (y - y1) / (double) (y2 - y1);
-            } else {
-                alpha = 0.5;
             }
         }
 
