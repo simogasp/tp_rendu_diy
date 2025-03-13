@@ -108,6 +108,17 @@ public class Vector implements Cloneable {
     }
 
     /**
+     * Returns the homogeneous representation of the Vector.
+     * @return the same vector with an additional 1.0 at the end.
+     */
+    public Vector homogeneous() {
+        double[] h = new double[size + 1];
+        System.arraycopy(values, 0, h, 0, size);
+        h[size] = 1.0;
+        return new Vector(h);
+    }
+
+    /**
      * Computes the vector dot product between the Vector and another Vector.
      * Both must be the same size.
      * @param v the Vector to compute the dot product with
