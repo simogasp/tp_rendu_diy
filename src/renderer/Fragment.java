@@ -2,6 +2,7 @@ package renderer;
 
 import java.awt.Color;
 
+import renderer.algebra.MathUtils;
 import renderer.algebra.Vector;
 import renderer.algebra.Vector3;
 
@@ -261,7 +262,7 @@ public class Fragment {
      * @return true if the value is in the range [min, max], false otherwise
      */
     private static boolean inRange(double value, double min, double max) {
-        return value >= min && value <= max;
+        return MathUtils.isInRange(value, min, max);
     }
 
     /**

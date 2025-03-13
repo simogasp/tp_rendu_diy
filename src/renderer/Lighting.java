@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import renderer.algebra.MathUtils;
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector3;
 
@@ -92,12 +93,11 @@ public class Lighting {
      * @param kd the diffuse reflection coefficient
      * @param ks the specular reflection coefficient
      * @param s the shininess coefficient
-     * @return the illuminated color of the point
+     * @return the illuminated color of the point as an array of 3 doubles
      */
     public double[] applyLights(Vector3 position, Vector3 normal, double[] color,
             Vector3 cameraPosition,
             double ka, double kd, double ks, double s) {
-        double[] litColor = new double[3];
 
         // total light intensity
         double I = 0.0;
@@ -150,10 +150,14 @@ public class Lighting {
             }
         }
 
-        litColor[0] = I * color[0];
-        litColor[1] = I * color[1];
-        litColor[2] = I * color[2];
+        return new double[]{clampColor(color[0] * I),
+                            clampColor(color[1] * I),
+                            clampColor(color[2] * I)};
+    }
 
-        return litColor;
+    private static double clampColor(double value) {
+        final double min = 0.0;
+        final double max = 1.0;
+        return MathUtils.clamp(value, min, max);
     }
 }
