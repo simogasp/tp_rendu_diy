@@ -248,4 +248,15 @@ public class Vector implements Cloneable {
         return this.size;
     }
 
+    /**
+     * Clamps the values of the Vector between the given minimum and maximum.
+     * @param min the minimum value
+     * @param max the maximum value
+     */
+    public void clamp(double min, double max) {
+        for (int i = 0; i < size; i++) {
+            values[i] = Math.min(max, Math.max(min, values[i]));
+        }
+    }
+
 }
