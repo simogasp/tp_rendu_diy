@@ -3,7 +3,7 @@
 ## Build
 
 * [ ] makefile should be enough but maybe Ant (more cross-platform, e.g. for windoze)?
-* [ ] add ci with github actions
+* [X] add ci with github actions
 
 ## General
 
@@ -12,8 +12,8 @@
 * [ ] maybe re-organize in other subpackages, shader, rasterizer, etc. for each hierarchy of classes
 * [x] remove or better use exceptions / avoid using try/catch for simple things like creating a matrix/vertex, use `IllegalArgumentException` for checking the arguments
 * [ ] keep only matrix class, vector and vector3 can be matrices
-* [ ] add a `homogeneous()` method
-* [ ] make some methods return `this` to allow chaining (e.g. `normalize()`)
+* [X] add a `homogeneous()` method
+* [ ] make some methods return `this` to allow chaining (e.g. `normalize()`) --> be careful with the semantic (sometimes returning the value means that the object is not affected by the method)
 * [ ] add a DepthShader that render the object as depth map (useful for debugging)
 * [ ] add a NormalShader that render the normals of the object (useful for debugging)
 * [ ] make the UML class diagram and find a way to generate it automatically from the code (better if in plantUML format)
@@ -51,4 +51,4 @@
 
 * [ ] in `Renderer.interpolate2()` fixed the choice of x or y and add the corner case when the two points are the same (it should never happen though)
 
-* [ ] the light contribution in `Lighting.applyLights()` should always be in the range [0,1] (clamp it)
+* [x] the light contribution in `Lighting.applyLights()` should always be in the range [0,1] (clamp it)
