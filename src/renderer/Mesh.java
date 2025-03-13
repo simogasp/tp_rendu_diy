@@ -49,7 +49,7 @@ public class Mesh {
     private static String nextLine(BufferedReader in) throws IOException {
         String r = in.readLine();
 
-        while (r.matches("\s*#.*")) {
+        while (r.matches("\\s*#.*")) {
             r = in.readLine();
         }
         return r;
