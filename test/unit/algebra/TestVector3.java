@@ -1,7 +1,6 @@
 package unit.algebra;
 
 import renderer.algebra.SizeMismatchException;
-import renderer.algebra.Vector;
 import renderer.algebra.Vector3;
 
 import static org.junit.Assert.assertEquals;
