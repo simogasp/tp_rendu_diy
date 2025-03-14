@@ -96,6 +96,26 @@ public class MathUtilsTest {
     }
 
     /**
+     * Test robustness of the clamp method with wrong min/max values.
+     */
+    @Test
+    public void testClampWrongMinMax() {
+        assertThrows(IllegalArgumentException.class,
+            () -> MathUtils.clamp(MID_INT, MAX_INT, MIN_INT));
+        assertThrows(IllegalArgumentException.class,
+            () -> MathUtils.clamp(MID_DOUBLE, MAX_DOUBLE, MIN_DOUBLE));
+    }
+
+    /**
+     * Test clamping a double value with zero interval.
+     */
+    @Test
+    public void testClampZeroInterval() {
+        double result = MathUtils.clamp(ABOVE_MAX_DOUBLE, MAX_DOUBLE, MAX_DOUBLE);
+        assertEquals(MAX_DOUBLE, result, EPSILON);
+    }
+
+    /**
      * Test checking if an integer value is within the range.
      */
     @Test
@@ -156,5 +176,16 @@ public class MathUtilsTest {
     public void testIsInRangeMixedTypes() {
         assertThrows(IllegalArgumentException.class,
             () -> MathUtils.isInRange(MID_INT, MIN_DOUBLE, MAX_DOUBLE));
+    }
+
+    /**
+     * Test robustness of the isInRange method with wrong min/max values.
+     */
+    @Test
+    public void testIsInRangeWrongMinMax() {
+        assertThrows(IllegalArgumentException.class,
+            () -> MathUtils.isInRange(MID_INT, MAX_INT, MIN_INT));
+        assertThrows(IllegalArgumentException.class,
+            () -> MathUtils.isInRange(MID_DOUBLE, MAX_DOUBLE, MIN_DOUBLE));
     }
 }

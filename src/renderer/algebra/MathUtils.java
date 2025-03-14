@@ -18,6 +18,9 @@ public final class MathUtils {
      * @return the clamped value (min if value < min, max if value > max, value otherwise)
      */
      public static <T extends Comparable<T>> T clamp(T value, T min, T max) {
+        if (min.compareTo(max) > 0) {
+            throw new IllegalArgumentException("min must be less than or equal to max");
+        }
         if (value.compareTo(min) < 0) {
             return min;
         } else if (value.compareTo(max) > 0) {
@@ -36,6 +39,9 @@ public final class MathUtils {
      * @return true if value is in the range [min, max], false otherwise
      */
     public static <E extends Number> boolean isInRange(E value, E min, E max) {
+        if (min.doubleValue() > max.doubleValue()) {
+            throw new IllegalArgumentException("min must be less than or equal to max");
+        }
         if (isIntegerType(min) && isIntegerType(max) && isIntegerType(value)) {
             final long minVal = min.longValue();
             final long maxVal = max.longValue();
