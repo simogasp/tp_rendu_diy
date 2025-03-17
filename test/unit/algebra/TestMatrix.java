@@ -183,8 +183,7 @@ public class TestMatrix {
      * @throws SizeMismatchException
      */
     @Test
-    public void testMultiplySquareMatrices()
-            throws SizeMismatchException {
+    public void testMultiplySquareMatrices() {
         Matrix m1 = new Matrix("m1", 2, 2);
         m1.set(0, 0, 1.0);
         m1.set(0, 1, 2.0);
@@ -209,8 +208,7 @@ public class TestMatrix {
      * @throws SizeMismatchException
      */
     @Test
-    public void testMultiplyRectangularMatrices()
-            throws SizeMismatchException {
+    public void testMultiplyRectangularMatrices() {
         Matrix m1 = new Matrix("m1", 2, 3);
         m1.set(0, 0, 1.0);
         m1.set(0, 1, 2.0);
@@ -245,8 +243,7 @@ public class TestMatrix {
      * @throws SizeMismatchException
      */
     @Test(expected = SizeMismatchException.class)
-    public void testMultiplyInvalidMatrices()
-            throws SizeMismatchException {
+    public void testMultiplyInvalidMatrices() {
         Matrix m1 = new Matrix("m1", 2, 2);
         Matrix m2 = new Matrix("m2", 3, 3);
         m1.multiply(m2);

@@ -5,6 +5,7 @@ import renderer.algebra.Vector;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
@@ -99,12 +100,9 @@ public class TestVector {
             v1.set(i, i + 1.0);
             v2.set(i, (double) vectorSize - i);
         }
-        try {
-            assertEquals(expected, v1.dot(v2), EPSILON);
-        } catch (SizeMismatchException e) {
-            e.printStackTrace();
-            fail("Unexpected SizeMismatchException exception");
-        }
+
+        assertEquals(expected, v1.dot(v2), EPSILON);
+
     }
 
     /**
@@ -120,14 +118,10 @@ public class TestVector {
             v1.set(i, i + 1.0);
             v2.set(i, (double) vectorSize - i);
         }
-        try {
-            v1.add(v2);
-            for (int i = 0; i < vectorSize; i++) {
-                assertEquals(expectedSum, v1.get(i), EPSILON);
-            }
-        } catch (SizeMismatchException e) {
-            e.printStackTrace();
-            fail("Unexpected SizeMismatchException exception");
+
+        v1.add(v2);
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals(expectedSum, v1.get(i), EPSILON);
         }
     }
 
@@ -144,23 +138,16 @@ public class TestVector {
             v1.set(i, i + 1.0);
             v2.set(i, vectorSize + 1.0 + i);
         }
-        try {
-            v1.subtract(v2);
-            for (int i = 0; i < vectorSize; i++) {
-                assertEquals(expectedRes, v1.get(i), EPSILON);
-            }
-        } catch (SizeMismatchException e) {
-            fail("Unexpected SizeMismatchException exception");
-            e.printStackTrace();
+
+        v1.subtract(v2);
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals(expectedRes, v1.get(i), EPSILON);
         }
 
-        try {
-            Vector v3 = new Vector("testVector3", 2);
+        Vector v3 = new Vector("testVector3", 2);
+        assertThrows(SizeMismatchException.class, () -> {
             v1.subtract(v3);
-            fail("Expected a SizeMismatchException to be thrown");
-        } catch (SizeMismatchException e) {
-
-        }
+        });
 
     }
 

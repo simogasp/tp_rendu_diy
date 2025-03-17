@@ -3,7 +3,7 @@ package renderer;
 import renderer.algebra.Matrix;
 import renderer.algebra.Vector3;
 import renderer.algebra.Vector;
-import renderer.algebra.SizeMismatchException;
+
 
 /**
  * The Transformation class represents a transformation in 3D space.
@@ -121,8 +121,7 @@ public class Transformation {
      * @return the projected point
      * @throws SizeMismatchException if the size of the input vector is not 4
      */
-    public Vector3 projectPoint(Vector p)
-            throws SizeMismatchException {
+    public Vector3 projectPoint(Vector p) {
         //++ Vector ps = new Vector(3);
         //++ // TODO
         Vector pe = worldToCamera.multiply(p); //<!!
@@ -138,8 +137,7 @@ public class Transformation {
      * @return the transformed vector
      * @throws SizeMismatchException if the size of the input vector is not 3
      */
-    public Vector3 transformVector(Vector3 v)
-            throws SizeMismatchException {
+    public Vector3 transformVector(Vector3 v) {
         // Doing nothing special here because there is no scaling
         Matrix m = worldToCamera.getSubMatrix(0, 0, 3, 3);
         Vector tv = m.multiply(v);

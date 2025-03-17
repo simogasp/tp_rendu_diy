@@ -2,9 +2,9 @@ package renderer;
 
 import java.io.IOException;
 
-import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
 import renderer.algebra.Vector3;
+
 
 /**
  * The Renderer class drives the rendering pipeline: read in a scene, projects
@@ -79,41 +79,36 @@ public final class Renderer {
 
         Fragment[] fragments = new Fragment[vertices.length];
 
-        try {
-            for (int i = 0; i < vertices.length; i++) {
-                Vector pVertex = xform.projectPoint(vertices[i]);
-                // Vector pNormal = xform.transformVector (normals[i]);
-                Vector3 pNormal = normals[i];
+        for (int i = 0; i < vertices.length; i++) {
+            Vector pVertex = xform.projectPoint(vertices[i]);
+            // Vector pNormal = xform.transformVector (normals[i]);
+            Vector3 pNormal = normals[i];
 
-                int x = (int) Math.round(pVertex.get(0));
-                int y = (int) Math.round(pVertex.get(1));
-                fragments[i] = new Fragment(x, y);
-                fragments[i].setDepth(pVertex.get(2));
-                fragments[i].setNormal(pNormal);
+            int x = (int) Math.round(pVertex.get(0));
+            int y = (int) Math.round(pVertex.get(1));
+            fragments[i] = new Fragment(x, y);
+            fragments[i].setDepth(pVertex.get(2));
+            fragments[i].setNormal(pNormal);
 
-                double[] texCoords = mesh.getTextureCoordinates();
-                if (texCoords != null) {
-                    fragments[i].setAttribute(7, texCoords[2 * i]);
-                    fragments[i].setAttribute(8, texCoords[2 * i + 1]);
-                }
-
-                if (!lightingEnabled) {
-                    fragments[i].setColor(colors[3 * i], colors[3 * i + 1], colors[3 * i + 2]);
-                } else {
-                    double[] color = new double[3];
-                    color[0] = colors[3 * i];
-                    color[1] = colors[3 * i + 1];
-                    color[2] = colors[3 * i + 2];
-                    double material[] = scene.getMaterial();
-                    double[] litColor = lighting.applyLights(new Vector3(vertices[i]), pNormal, color,
-                            scene.getCameraPosition(),
-                            material[0], material[1], material[2], material[3]);
-                    fragments[i].setColor(litColor[0], litColor[1], litColor[2]);
-                }
+            double[] texCoords = mesh.getTextureCoordinates();
+            if (texCoords != null) {
+                fragments[i].setAttribute(7, texCoords[2 * i]);
+                fragments[i].setAttribute(8, texCoords[2 * i + 1]);
             }
-        } catch (SizeMismatchException e) {
-            e.printStackTrace();
-            // should not reach
+
+            if (!lightingEnabled) {
+                fragments[i].setColor(colors[3 * i], colors[3 * i + 1], colors[3 * i + 2]);
+            } else {
+                double[] color = new double[3];
+                color[0] = colors[3 * i];
+                color[1] = colors[3 * i + 1];
+                color[2] = colors[3 * i + 2];
+                double material[] = scene.getMaterial();
+                double[] litColor = lighting.applyLights(new Vector3(vertices[i]), pNormal, color,
+                        scene.getCameraPosition(),
+                        material[0], material[1], material[2], material[3]);
+                fragments[i].setColor(litColor[0], litColor[1], litColor[2]);
+            }
         }
 
         return fragments;
@@ -139,7 +134,7 @@ public final class Renderer {
      * Renders the solid of the mesh.
      * @throws SizeMismatchException if the size of the fragments do not match
      */
-    static void renderSolid() throws SizeMismatchException {
+    static void renderSolid() {
         Fragment[] fragments = projectVertices();
         int[] faces = mesh.getFaces();
 
@@ -178,8 +173,7 @@ public final class Renderer {
      * @param args the command line arguments
      * @throws SizeMismatchException if the size of the fragments do not match
      */
-    public static void main(String[] args)
-        throws SizeMismatchException {
+    public static void main(String[] args) {
 
         final int timeout = 3;
 

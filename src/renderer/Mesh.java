@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
 import renderer.algebra.Vector3;
 
@@ -151,37 +150,33 @@ public class Mesh {
         // Compute per face normals and set the vertex normal to the average normals
         // across faces
         // to the vertex.
-        try {
-            final int numFaceElements = VERTICES_PER_FACE * getNumFaces();
-            for (int i = 0; i < numFaceElements; i += VERTICES_PER_FACE) {
-                //++ // TODO
-                //++ Vector3 n = new Vector3();
-                final Vector a = vertices[faces[i]]; //<!!
-                final Vector b = vertices[faces[i + 1]];
-                final Vector c = vertices[faces[i + 2]];
+        final int numFaceElements = VERTICES_PER_FACE * getNumFaces();
+        for (int i = 0; i < numFaceElements; i += VERTICES_PER_FACE) {
+            //++ // TODO
+            //++ Vector3 n = new Vector3();
+            final Vector a = vertices[faces[i]]; //<!!
+            final Vector b = vertices[faces[i + 1]];
+            final Vector c = vertices[faces[i + 2]];
 
-                final Vector3 v1 = new Vector3(c);
-                v1.subtract(new Vector3(a));
-                final Vector3 v2 = new Vector3(c);
-                v2.subtract(new Vector3(b));
+            final Vector3 v1 = new Vector3(c);
+            v1.subtract(new Vector3(a));
+            final Vector3 v2 = new Vector3(c);
+            v2.subtract(new Vector3(b));
 
-                Vector3 n = v1.cross(v2);
-                n.normalize(); //>!!
+            Vector3 n = v1.cross(v2);
+            n.normalize(); //>!!
 
-                // add the calculated normal n to each vertex of the face
-                for (int j = 0; j < VERTICES_PER_FACE; j++) {
-                    Vector nj = normals[faces[i + j]];
+            // add the calculated normal n to each vertex of the face
+            for (int j = 0; j < VERTICES_PER_FACE; j++) {
+                Vector nj = normals[faces[i + j]];
 
-                    if (nj == null) {
-                        normals[faces[i + j]] = new Vector3(n);
-                        normals[faces[i + j]].setName("n" + faces[i + j]);
-                    } else {
-                        nj.add(n);
-                    }
+                if (nj == null) {
+                    normals[faces[i + j]] = new Vector3(n);
+                    normals[faces[i + j]].setName("n" + faces[i + j]);
+                } else {
+                    nj.add(n);
                 }
             }
-        } catch (SizeMismatchException e) {
-            System.out.println("Should not reach 2");
         }
 
         // final round of normalization

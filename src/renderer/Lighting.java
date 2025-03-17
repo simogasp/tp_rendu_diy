@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import renderer.algebra.MathUtils;
-import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector3;
 
 /**
@@ -112,36 +111,31 @@ public class Lighting {
                     break;
 
                 case POINT:
-                    try {
-                        // vector from point to camera center
-                        Vector3 e = new Vector3(cameraPosition);
-                        e.subtract(position);
-                        e.normalize();
+                    // vector from point to camera center
+                    Vector3 e = new Vector3(cameraPosition);
+                    e.subtract(position);
+                    e.normalize();
 
-                        // vector from point to light
-                        Vector3 l = new Vector3(light.params[0],
-                                                light.params[1],
-                                                light.params[2]);
-                        l.subtract(position);
-                        l.normalize();
+                    // vector from point to light
+                    Vector3 l = new Vector3(light.params[0],
+                                            light.params[1],
+                                            light.params[2]);
+                    l.subtract(position);
+                    l.normalize();
 
-                        // half-vector between e and l
-                        Vector3 h = new Vector3(e);
-                        h.add(l);
-                        h.normalize();
+                    // half-vector between e and l
+                    Vector3 h = new Vector3(e);
+                    h.add(l);
+                    h.normalize();
 
-                        // diffuse contribution
-                        double I_diffuse = kd * light.params[3] * normal.dot(l); //++ // TODO
-                        //++ // double I_diffuse = ...;
+                    // diffuse contribution
+                    double I_diffuse = kd * light.params[3] * normal.dot(l); //++ // TODO
+                    //++ // double I_diffuse = ...;
 
-                        // specular contribution
-                        double I_specular = ks * light.params[3] * Math.pow(normal.dot(h), s); //++ // TODO
-                        //++ // double I_specular = ...;
-                        I += I_diffuse + I_specular; //++ // I += I_diffuse + I_specular;
-
-                    } catch (SizeMismatchException ex) {
-                        /* should not reach */
-                    }
+                    // specular contribution
+                    double I_specular = ks * light.params[3] * Math.pow(normal.dot(h), s); //++ // TODO
+                    //++ // double I_specular = ...;
+                    I += I_diffuse + I_specular; //++ // I += I_diffuse + I_specular;
 
                     break;
                 default:

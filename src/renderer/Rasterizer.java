@@ -1,7 +1,6 @@
 package renderer;
 
 import renderer.algebra.Matrix;
-import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector3;
 import renderer.algebra.Vector;
 
@@ -227,46 +226,43 @@ public class Rasterizer {
      * @param v3 the third vertex of the triangle
      * @throws SizeMismatchException if the size of the Fragment is not correct.
      */
-    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3)
-        throws SizeMismatchException {
+    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3) {
 
         final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 
         // iterate over the triangle's bounding box
         //++ // TODO
-        final int xmin = Math.min(v1.getX(), Math.min(v2.getX(), v3.getX())); //<!!
+        //<!!
+        final int xmin = Math.min(v1.getX(), Math.min(v2.getX(), v3.getX()));
         final int ymin = Math.min(v1.getY(), Math.min(v2.getY(), v3.getY()));
         final int xmax = Math.max(v1.getX(), Math.max(v2.getX(), v3.getX()));
         final int ymax = Math.max(v1.getY(), Math.max(v2.getY(), v3.getY()));
 
         Fragment fragment = new Fragment(0, 0);
         final int numAttributes = fragment.getNumAttributes();
-        try {
-            for (int x = xmin; x <= xmax; x++) {
-                for (int y = ymin; y <= ymax; y++) {
 
-                    // setup position now to allow early clipping
-                    fragment.setPosition(x, y);
-                    if (!shader.isClipped(fragment)) {
+        for (int x = xmin; x <= xmax; x++) {
+            for (int y = ymin; y <= ymax; y++) {
 
-                        final Vector3 v = new Vector3(1.0, (double) x, (double) y);
-                        final Vector bar = cMat.multiply(v);
-                        if ((bar.get(0) >= 0.0)
-                            && (bar.get(1) >= 0.0)
-                            && (bar.get(2) >= 0.0)) {
-                            for (int i = 0; i < numAttributes; i++) {
-                                fragment.setAttribute(i, bar.get(0) * v1.getAttribute(i)
-                                        + bar.get(1) * v2.getAttribute(i)
-                                        + bar.get(2) * v3.getAttribute(i));
-                            }
-                            shader.shade(fragment);
+                // setup position now to allow early clipping
+                fragment.setPosition(x, y);
+                if (!shader.isClipped(fragment)) {
+
+                    final Vector3 v = new Vector3(1.0, (double) x, (double) y);
+                    final Vector bar = cMat.multiply(v);
+                    if ((bar.get(0) >= 0.0)
+                        && (bar.get(1) >= 0.0)
+                        && (bar.get(2) >= 0.0)) {
+                        for (int i = 0; i < numAttributes; i++) {
+                            fragment.setAttribute(i, bar.get(0) * v1.getAttribute(i)
+                                    + bar.get(1) * v2.getAttribute(i)
+                                    + bar.get(2) * v3.getAttribute(i));
                         }
+                        shader.shade(fragment);
                     }
                 }
             }
-        } catch (SizeMismatchException e) {
-            // should not reach
-            e.printStackTrace();
-        } //>!!
+        }
+        //>!!
     }
 }

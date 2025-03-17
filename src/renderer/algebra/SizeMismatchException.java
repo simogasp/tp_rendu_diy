@@ -5,7 +5,7 @@ package renderer.algebra;
  * Exception class for incorrect dimensions in arithmetic operations on Matrix
  * and Vector.
  */
-public class SizeMismatchException extends Exception {
+public class SizeMismatchException extends RuntimeException {
 
     /**
      * Constructor for SizeMismatchException.

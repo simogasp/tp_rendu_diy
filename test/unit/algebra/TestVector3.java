@@ -1,11 +1,10 @@
 package unit.algebra;
 
-import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector3;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+
 
 import org.junit.Test;
 
@@ -88,15 +87,11 @@ public class TestVector3 {
         final double y2 = 5.0;
         final double z2 = 6.0;
         Vector3 v2 = new Vector3(x2, y2, z2);
-        try {
-            v1.add(v2);
-            assertEquals(x1 + x2, v1.getX(), EPSILON);
-            assertEquals(y1 + y2, v1.getY(), EPSILON);
-            assertEquals(z1 + z2, v1.getZ(), EPSILON);
-        } catch (SizeMismatchException e) {
-            e.printStackTrace();
-            fail("Unexpected SizeMismatchException exception");
-        }
+
+        v1.add(v2);
+        assertEquals(x1 + x2, v1.getX(), EPSILON);
+        assertEquals(y1 + y2, v1.getY(), EPSILON);
+        assertEquals(z1 + z2, v1.getZ(), EPSILON);
 
     }
 
@@ -114,15 +109,10 @@ public class TestVector3 {
         final double z2 = 3.0;
         Vector3 v1 = new Vector3(x1, y1, z1);
         Vector3 v2 = new Vector3(x2, y2, z2);
-        try {
-            v1.subtract(v2);
-            assertEquals(expected, v1.getX(), EPSILON);
-            assertEquals(expected, v1.getY(), EPSILON);
-            assertEquals(expected, v1.getZ(), EPSILON);
-        } catch (SizeMismatchException e) {
-            e.printStackTrace();
-            fail("Unexpected SizeMismatchException exception");
-        }
+        v1.subtract(v2);
+        assertEquals(expected, v1.getX(), EPSILON);
+        assertEquals(expected, v1.getY(), EPSILON);
+        assertEquals(expected, v1.getZ(), EPSILON);
 
     }
 

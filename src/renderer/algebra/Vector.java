@@ -125,7 +125,7 @@ public class Vector implements Cloneable {
      * @return the dot product of the two Vectors
      * @throws SizeMismatchException if the two Vectors are not the same size
      */
-    public double dot(Vector v) throws SizeMismatchException {
+    public double dot(Vector v) {
         if (size != v.size) {
             throw new SizeMismatchException(this, v);
         }
@@ -144,7 +144,7 @@ public class Vector implements Cloneable {
      * @param v the Vector to add
      * @throws SizeMismatchException if the two Vectors are not the same size
      */
-    public void add(Vector v) throws SizeMismatchException {
+    public void add(Vector v) {
         if (size != v.size) {
             throw new SizeMismatchException(this, v);
         }
@@ -159,7 +159,7 @@ public class Vector implements Cloneable {
      * @param v the Vector to subtract
      * @throws SizeMismatchException if the two Vectors are not the same size
      */
-    public void subtract(Vector v) throws SizeMismatchException {
+    public void subtract(Vector v) {
         if (size != v.size) {
             throw new SizeMismatchException(this, v);
         }
@@ -217,7 +217,7 @@ public class Vector implements Cloneable {
      * @throws SizeMismatchException if the size of the array is different from
      * the size of the vector
      */
-    public void set(double[] valuesList) throws SizeMismatchException {
+    public void set(double[] valuesList) {
         if (valuesList.length != this.size) {
             throw new SizeMismatchException("Bad size");
         }

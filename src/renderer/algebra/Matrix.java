@@ -158,7 +158,7 @@ public class Matrix {
      * @return the resulting matrix
      * @throws SizeMismatchException if the matrix sizes do not match for multiplication
      */
-    public Matrix multiply(Matrix m) throws SizeMismatchException {
+    public Matrix multiply(Matrix m) {
         if (nCols != m.nRows) {
             throw new SizeMismatchException(this, m);
         }
@@ -184,8 +184,7 @@ public class Matrix {
      * @throws SizeMismatchException if the vector size does not match
      * the matrix column size
      */
-    public Vector multiply(Vector v)
-        throws SizeMismatchException {
+    public Vector multiply(Vector v) {
         if (nCols != v.size()) {
             throw new SizeMismatchException(this, v);
         }
