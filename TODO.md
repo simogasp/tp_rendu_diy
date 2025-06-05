@@ -24,7 +24,7 @@
 
 ## Transformation
 
-* [ ] maybe use a proper camera class so we can have a generic camera and different implementations (perspective, orthographic, etc.) 
+* [ ] maybe use a proper camera class so we can have a generic camera and different implementations (perspective, orthographic, etc.)
 
 ## Fragment
 
@@ -52,3 +52,7 @@
 * [ ] in `Renderer.interpolate2()` fixed the choice of x or y and add the corner case when the two points are the same (it should never happen though)
 
 * [x] the light contribution in `Lighting.applyLights()` should always be in the range [0,1] (clamp it)
+
+## GUI
+
+* [ ] see what is possible to do with the GUI, adding scene navigation, buttons or toggles to enable/disable shaders etc. instead of doing it sequentially in the code
