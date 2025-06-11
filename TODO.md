@@ -17,9 +17,7 @@
 * [ ] add a DepthShader that render the object as depth map (useful for debugging)
 * [ ] add a NormalShader that render the normals of the object (useful for debugging)
 * [ ] make the UML class diagram and find a way to generate it automatically from the code (better if in plantUML format)
-
-## Deploy student
-
+* [ ] add instructions to the `README.md` on how to set up the project with visual studio code installing the pluging for java and the checkstyle
 * [ ] write a test to check that the tags are always there
 
 ## Transformation
