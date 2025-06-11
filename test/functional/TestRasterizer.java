@@ -1,3 +1,5 @@
+import org.junit.Test;
+
 import renderer.Fragment;
 import renderer.GraphicsWrapper;
 import renderer.Rasterizer;
@@ -22,7 +24,8 @@ public class TestRasterizer {
         }
     }
 
-    public static void test() throws Exception {
+    @Test
+    public void test() throws Exception {
 
         System.out.println("OFF\n# Test Start");
 
@@ -33,18 +36,9 @@ public class TestRasterizer {
         Fragment v1 = new Fragment(0, 20);
         v1.setColor(0, 0, 0);
         Fragment v2 = new Fragment(5, -35);
-        v2.setColor(50, 100, 0);
+        v2.setColor(50 / 255, 100 / 255, 0);
 
         rasterizer.rasterizeEdge(v1, v2);
-    }
-
-    public static void main(String[] args) {
-        try {
-            test();
-        } catch (Exception e) {
-            System.out.println("EXCEPTION: " + e);
-            e.printStackTrace();
-        }
     }
 
 }
