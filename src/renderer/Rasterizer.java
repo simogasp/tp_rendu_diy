@@ -1,6 +1,7 @@
 package renderer;
 
 import renderer.algebra.Matrix;
+import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector3;
 import renderer.algebra.Vector;
 

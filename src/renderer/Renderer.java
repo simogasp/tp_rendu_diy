@@ -2,6 +2,7 @@ package renderer;
 
 import java.io.IOException;
 
+import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
 import renderer.algebra.Vector3;
 
