@@ -40,7 +40,6 @@ unit-tests: compile
 
 func-tests: compile
 	@echo "Running functional tests..."
-	@echo "eeeeeeeeee = $(FUNCTIONAL_TEST_FILES:.java=)"
 	@for test in $(FUNCTIONAL_TEST_FILES:.java=); do \
 		test_name=$$(basename $$test); \
 		test_class=$$(echo $$test_name | sed 's/\.java//'); \
