@@ -1,5 +1,7 @@
 package renderer.rasterizer;
 
+import java.awt.Color;
+
 import renderer.Fragment;
 import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;
@@ -267,5 +269,79 @@ public class Rasterizer {
             }
         }
         //>!!
+    }
+
+
+    /**
+     * Rasterizes a normal vector
+     * @param vertex
+     * @param normalDest
+     */
+    public void rasterizeNormals(Fragment vertex, Fragment normalDest) {
+        // build the fragment to represent the end of the normal
+        // This is basically Bresenham's algorithm
+        int x1 = vertex.getX();
+        int y1 = vertex.getY();
+        int x2 = normalDest.getX();
+        int y2 = normalDest.getY();
+
+        Fragment fragment = new Fragment(0, 0);
+
+        boolean sym = (Math.abs(y2 - y1) > Math.abs(x2 - x1));
+        if (sym) {
+            int temp;
+            temp = x1;
+            x1 = y1;
+            y1 = temp;
+            temp = x2;
+            x2 = y2;
+            y2 = temp;
+            // swapXAndY (v1);
+            // swapXAndY (v2);
+        }
+        if (x1 > x2) {
+            Fragment ftemp;
+            int temp;
+            temp = x1;
+            x1 = x2;
+            x2 = temp;
+            temp = y1;
+            y1 = y2;
+            y2 = temp;
+            ftemp = vertex;
+            vertex = normalDest;
+            normalDest = ftemp;
+        }
+
+        final int ystep = (y1 < y2) ? 1 : -1;
+
+        int err = (x1 - x2) / 2;
+        final int dx = (x2 - x1);
+        final int dy = Math.abs(y2 - y1);
+
+        int x = x1;
+        int y = y1;
+
+        while (x <= x2) {
+
+            fragment.setPosition(x, y);
+
+            if (!shader.isClipped(fragment)) {
+                interpolate2(vertex, normalDest, fragment);
+                // set the color to red
+                fragment.setColor(Color.RED);
+                if (sym) {
+                    swapXAndY(fragment);
+                }
+                shader.shade(fragment);
+            }
+
+            x += 1;
+            err = err + dy;
+            if (err > 0) {
+                y += ystep;
+                err -= dx;
+            }
+        }
     }
 }

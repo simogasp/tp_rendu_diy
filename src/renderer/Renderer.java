@@ -37,6 +37,9 @@ public final class Renderer {
     /** Whether lighting is enabled.. */
     private static boolean lightingEnabled;
 
+    /** Wether the normals should be shown. */
+    public static boolean renderNormals;
+
     // Private constructor to prevent instantiation
     private Renderer() {
         throw new UnsupportedOperationException("Utility class");
@@ -82,7 +85,7 @@ public final class Renderer {
      * Projects the vertices of the mesh into the screen space.
      * @return an array of fragments
      */
-    static Fragment[] projectVertices() {
+    public static Fragment[] projectVertices() {
         Vector[] vertices = mesh.getVertices();
         Vector3[] normals = mesh.getNormals();
         double[] colors = mesh.getColors();
@@ -128,15 +131,29 @@ public final class Renderer {
      * Renders the wireframe of the mesh.
      */
     static void renderWireframe() {
-        Fragment[] fragment = projectVertices();
+        Fragment[] fragments = projectVertices();
+
         int[] faces = mesh.getFaces();
 
         for (int i = 0; i < 3 * mesh.getNumFaces(); i += 3) {
             for (int j = 0; j < 3; j++) {
-                Fragment v1 = fragment[faces[i + j]];
-                Fragment v2 = fragment[faces[i + ((j + 1) % 3)]];
+                Fragment v1 = fragments[faces[i + j]];
+                Fragment v2 = fragments[faces[i + ((j + 1) % 3)]];
                 rasterizer.rasterizeEdge(v1, v2);
             }
+        }
+
+        if (renderNormals) {
+            renderNormals(fragments);
+        }
+    }
+
+    public static void renderNormals(Fragment[] fragments) {
+        Fragment[] normals = projectNormalsDest();
+        for (int i = 0; i < mesh.getNumVertices(); i++) {
+            Fragment v1 = fragments[i];
+            Fragment v2 = normals[i];
+            rasterizer.rasterizeNormals(v1, v2);
         }
     }
 
@@ -155,6 +172,10 @@ public final class Renderer {
 
             rasterizer.rasterizeFace(v1, v2, v3);
         }
+
+        if (renderNormals) {
+            renderNormals(fragments);
+        }
     }
 
     /**
@@ -171,6 +192,65 @@ public final class Renderer {
             DepthShader.update(fragment.getDepth());
         }
     }
+
+    /**
+     * Enables or disables the normals render.
+     * @param enabled true to enable normals render, false to disable it
+     */
+    public static void setRenderNormals(boolean enabled) {
+        renderNormals = enabled;
+    }
+
+
+    public static Fragment[] projectNormalsDest() {
+        Vector[] vertices = mesh.getVertices();
+        Vector3[] normals = mesh.getNormals();
+
+        Fragment[] fragments = new Fragment[vertices.length];
+
+        double minX = vertices[0].get(0);
+        double maxX = vertices[0].get(0);
+        double minY = vertices[0].get(1);
+        double maxY = vertices[0].get(1);
+        double minZ = vertices[0].get(1);
+        double maxZ = vertices[0].get(1);
+
+        // get the smallest gap
+        for (int i = 0; i < vertices.length; i++) {
+            if (vertices[i].get(0) < minX) {
+                minX = vertices[i].get(0);
+            } else if (vertices[i].get(0) > maxX) {
+                maxX = vertices[i].get(0);
+            }
+            if (vertices[i].get(1) < minY) {
+                minY = vertices[i].get(1);
+            } else if (vertices[i].get(1) > maxY) {
+                maxY = vertices[i].get(1);
+            }
+            if (vertices[i].get(2) < minZ) {
+                minZ = vertices[i].get(2);
+            } else if (vertices[i].get(2) > maxZ) {
+                maxZ = vertices[i].get(2);
+            }
+        }
+        double alpha = Math.min(maxX - minX, Math.min(maxY - minY, maxZ - minZ)) / 10;
+
+        for (int i = 0; i < vertices.length; i++) {
+            // Vector pNormal = xform.transformVector (normals[i]);
+            // norm of normal vector drawn
+
+            double[] v = {vertices[i].get(0) + alpha * normals[i].get(0), vertices[i].get(1) + alpha * normals[i].get(1), vertices[i].get(2) + alpha * normals[i].get(2), 1};
+            Vector normalVectorDest = xform.projectPoint(new Vector(v));
+            int x = (int) Math.round(normalVectorDest.get(0));
+            int y = (int) Math.round(normalVectorDest.get(1));
+            fragments[i] = new Fragment(x, y);
+            fragments[i].setDepth(normalVectorDest.get(2));
+
+        }
+
+        return fragments;
+    }
+
 
     /**
      * Wait for a number of seconds.
@@ -209,6 +289,9 @@ public final class Renderer {
 
         // get the nearest and the farest point for depth Shader
         initShader();
+
+        // Uncomment to drawn normals
+        // setRenderNormals(true);
 
         // wireframe rendering
         renderWireframe();
