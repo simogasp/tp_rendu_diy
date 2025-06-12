@@ -1,6 +1,11 @@
-package renderer;
+package renderer.shader;
 
 import java.awt.*;
+
+import renderer.DepthBuffer;
+import renderer.Fragment;
+import renderer.GraphicsWrapper;
+import renderer.Texture;
 
 /**
  * Simple shader that just copy the interpolated color to the screen,

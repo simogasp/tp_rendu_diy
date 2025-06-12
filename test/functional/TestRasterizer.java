@@ -2,8 +2,8 @@ import org.junit.Test;
 
 import renderer.Fragment;
 import renderer.GraphicsWrapper;
-import renderer.Rasterizer;
-import renderer.Shader;
+import renderer.rasterizer.Rasterizer;
+import renderer.shader.Shader;
 
 /**
  * Test class for the Rasterizer class

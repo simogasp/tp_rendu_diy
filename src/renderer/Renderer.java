@@ -5,6 +5,11 @@ import java.io.IOException;
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
 import renderer.algebra.Vector3;
+import renderer.light.Lighting;
+import renderer.rasterizer.Rasterizer;
+import renderer.shader.PainterShader;
+import renderer.shader.Shader;
+import renderer.shader.TextureShader;
 
 
 /**
@@ -49,7 +54,7 @@ public final class Renderer {
         //++ shader = new SimpleShader (screen);
         shader = new PainterShader(screen); //??
         rasterizer = new Rasterizer(shader);
-        // rasterizer = new PerspectiveCorrectRasterizer (shader);
+        // rasterizer = new PerspectiveCorrectRasterizer(shader);
 
         xform = new Transformation();
         xform.setLookAt(scene.getCameraPosition(),
