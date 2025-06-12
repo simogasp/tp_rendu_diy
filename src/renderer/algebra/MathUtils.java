@@ -15,7 +15,7 @@ public final class MathUtils {
      * @param value the value to clamp
      * @param min the minimum value
      * @param max the maximum value
-     * @return the clamped value (min if value < min, max if value > max, value otherwise)
+     * @return the clamped value (min if value {@literal <} min, max if value {@literal >} max, value otherwise)
      */
      public static <T extends Comparable<T>> T clamp(T value, T min, T max) {
         if (min.compareTo(max) > 0) {
