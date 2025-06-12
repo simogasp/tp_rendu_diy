@@ -225,6 +225,13 @@ public class Rasterizer {
         rasterizeEdge(vertex, normalDest, true);
     }
 
+
+    /**
+     * Rasterizes a edge from v1 to v2, colored in red if normal.
+     * @param v1 the first point
+     * @param v2 the second point
+     * @param normal if we want it red
+     */
     private void rasterizeEdge(Fragment v1, Fragment v2, boolean normal) {
         // This is basically Bresenham's algorithm
         int x1 = v1.getX();
