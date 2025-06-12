@@ -202,20 +202,23 @@ public final class Renderer {
     }
 
 
+    /**
+     * Projects normals vectors into the screen space.
+     * @return an array of fragments
+     */
     public static Fragment[] projectNormalsDest() {
         Vector[] vertices = mesh.getVertices();
         Vector3[] normals = mesh.getNormals();
 
         Fragment[] fragments = new Fragment[vertices.length];
 
+        // get the smallest gap to determine the length of the normals
         double minX = vertices[0].get(0);
         double maxX = vertices[0].get(0);
         double minY = vertices[0].get(1);
         double maxY = vertices[0].get(1);
-        double minZ = vertices[0].get(1);
-        double maxZ = vertices[0].get(1);
-
-        // get the smallest gap
+        double minZ = vertices[0].get(2);
+        double maxZ = vertices[0].get(2);
         for (int i = 0; i < vertices.length; i++) {
             if (vertices[i].get(0) < minX) {
                 minX = vertices[i].get(0);
@@ -233,16 +236,21 @@ public final class Renderer {
                 maxZ = vertices[i].get(2);
             }
         }
-        double alpha = Math.min(maxX - minX, Math.min(maxY - minY, maxZ - minZ)) / 10;
+        // length is the minimum dimension of the bounding box divided by 10
+        double length = Math.min(maxX - minX, Math.min(maxY - minY, maxZ - minZ)) / 10;
 
+        // computes to every vertices
         for (int i = 0; i < vertices.length; i++) {
             // Vector pNormal = xform.transformVector (normals[i]);
-            // norm of normal vector drawn
 
-            double[] v = {vertices[i].get(0) + alpha * normals[i].get(0), vertices[i].get(1) + alpha * normals[i].get(1), vertices[i].get(2) + alpha * normals[i].get(2), 1};
+            // create the destination of the vector
+            double[] v = {vertices[i].get(0) + length * normals[i].get(0), vertices[i].get(1) + length * normals[i].get(1), vertices[i].get(2) + length * normals[i].get(2), 1};
             Vector normalVectorDest = xform.projectPoint(new Vector(v));
+
+            // coordinate in screen
             int x = (int) Math.round(normalVectorDest.get(0));
             int y = (int) Math.round(normalVectorDest.get(1));
+
             fragments[i] = new Fragment(x, y);
             fragments[i].setDepth(normalVectorDest.get(2));
 

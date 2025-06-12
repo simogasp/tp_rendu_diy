@@ -116,64 +116,7 @@ public class Rasterizer {
         }
 
         // Uncomment the following block of code for drawing the wireframe
-        // int numAttributes = v1.getNumAttributes (); //<??
-        Fragment fragment = new Fragment(0, 0);
-
-        boolean sym = (Math.abs(y2 - y1) > Math.abs(x2 - x1));
-        if (sym) {
-            int temp;
-            temp = x1;
-            x1 = y1;
-            y1 = temp;
-            temp = x2;
-            x2 = y2;
-            y2 = temp;
-            // swapXAndY (v1);
-            // swapXAndY (v2);
-        }
-        if (x1 > x2) {
-            Fragment ftemp;
-            int temp;
-            temp = x1;
-            x1 = x2;
-            x2 = temp;
-            temp = y1;
-            y1 = y2;
-            y2 = temp;
-            ftemp = v1;
-            v1 = v2;
-            v2 = ftemp;
-        }
-
-        final int ystep = (y1 < y2) ? 1 : -1;
-
-        int err = (x1 - x2) / 2;
-        final int dx = (x2 - x1);
-        final int dy = Math.abs(y2 - y1);
-
-        int x = x1;
-        int y = y1;
-
-        while (x <= x2) {
-
-            fragment.setPosition(x, y);
-
-            if (!shader.isClipped(fragment)) {
-
-                interpolate2(v1, v2, fragment);
-                if (sym) {
-                    swapXAndY(fragment);
-                }
-                shader.shade(fragment);
-            }
-
-            x += 1;
-            err = err + dy;
-            if (err > 0) {
-                y += ystep;
-                err -= dx;
-            }
-        } //>??
+        rasterizeEdge(v1, v2, false); //??
     }
 
     /**
@@ -273,17 +216,21 @@ public class Rasterizer {
 
 
     /**
-     * Rasterizes a normal vector
+     * Rasterizes a normal vector on the screen.
      * @param vertex
      * @param normalDest
      */
     public void rasterizeNormals(Fragment vertex, Fragment normalDest) {
         // build the fragment to represent the end of the normal
+        rasterizeEdge(vertex, normalDest, true);
+    }
+
+    private void rasterizeEdge(Fragment v1, Fragment v2, boolean normal) {
         // This is basically Bresenham's algorithm
-        int x1 = vertex.getX();
-        int y1 = vertex.getY();
-        int x2 = normalDest.getX();
-        int y2 = normalDest.getY();
+        int x1 = v1.getX();
+        int y1 = v1.getY();
+        int x2 = v2.getX();
+        int y2 = v2.getY();
 
         Fragment fragment = new Fragment(0, 0);
 
@@ -308,9 +255,9 @@ public class Rasterizer {
             temp = y1;
             y1 = y2;
             y2 = temp;
-            ftemp = vertex;
-            vertex = normalDest;
-            normalDest = ftemp;
+            ftemp = v1;
+            v1 = v2;
+            v2 = ftemp;
         }
 
         final int ystep = (y1 < y2) ? 1 : -1;
@@ -327,9 +274,10 @@ public class Rasterizer {
             fragment.setPosition(x, y);
 
             if (!shader.isClipped(fragment)) {
-                interpolate2(vertex, normalDest, fragment);
+                interpolate2(v1, v2, fragment);
                 // set the color to red
-                fragment.setColor(Color.RED);
+                if (normal)
+                    fragment.setColor(Color.RED);
                 if (sym) {
                     swapXAndY(fragment);
                 }
