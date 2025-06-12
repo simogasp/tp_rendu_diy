@@ -2,6 +2,7 @@ package renderer;
 
 import java.awt.Color;
 
+import renderer.algebra.MathUtils;
 import renderer.shader.Shader;
 
 /**
@@ -37,7 +38,13 @@ public class DepthShader extends Shader {
     @Override
     public void shade(Fragment fragment) {
         if (depth.testFragment(fragment)) {
-            screen.setPixel(fragment.getX(), fragment.getY(), getColorFor(fragment.getDepth()));
+            
+            if (fragment.isNormal()) {
+                screen.setPixel(fragment.getX(), fragment.getY(), Color.RED);
+                System.out.println("Part of Normal");
+            } else {
+                screen.setPixel(fragment.getX(), fragment.getY(), getColorFor(fragment.getDepth()));
+            }
             depth.writeFragment(fragment);
         }
     }
@@ -70,13 +77,19 @@ public class DepthShader extends Shader {
 
             // compute a color between red (near) and green (middle)
             final double alpha = (depth - nearest) / (middle - nearest);
-            return new Color(Math.round((float) (1 - alpha) * 255), Math.round((float) alpha * 255), 0);
+            return new Color(
+                MathUtils.clamp(Math.round((float) (1 - alpha) * 255), 0, 255),
+                MathUtils.clamp(Math.round((float) alpha * 255), 0, 255),
+                0);
 
         } else {
-
             // compute a color between green (middle) and blue (far)
             final double beta = (depth - middle) / (farest - middle);
-            return new Color(0, Math.round((float) (1 - beta) * 255), Math.round((float) beta * 255));
+            return new Color(
+                0,
+                MathUtils.clamp(Math.round((float) (1 - beta) * 255), 0, 255),
+                MathUtils.clamp(Math.round((float) beta * 255), 0, 255)
+                );
         
         }
     }

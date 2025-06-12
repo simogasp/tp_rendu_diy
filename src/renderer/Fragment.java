@@ -26,6 +26,11 @@ public class Fragment {
      */
     private int numAttributes;
 
+    /**
+     * Whether the frangment is a part of a normal.
+     */
+    private boolean normal;
+
     /** The number of attributes of the Fragment. */
     private static final int NUM_ATTRIBUTES = 9;
 
@@ -71,6 +76,18 @@ public class Fragment {
         this.y = y;
         numAttributes = NUM_ATTRIBUTES;
         attributes = new double[numAttributes];
+        normal = false;
+    }
+
+    /**
+     * Creates a Fragment at pixel coordinates (x, y).
+     * @param x the x pixel coordinate of the Fragment
+     * @param y the y pixel coordinate of the Fragment
+     */
+    public Fragment(int x, int y, boolean normal) {
+        this(x, y);
+        this.normal = normal;
+        System.out.println(toString());
     }
 
     /**
@@ -271,5 +288,16 @@ public class Fragment {
      */
     public String toString() {
         return "(" + x + "," + y + ")";
+    }
+
+    /**
+     * Wether the fragment is a part of a Normal.
+     * @return true if it is a part of a normal
+     */
+    public boolean isNormal() {
+        if (normal) {
+            System.out.println("RET = " + normal);
+        }
+        return normal;
     }
 }

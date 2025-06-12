@@ -99,8 +99,6 @@ public class Rasterizer {
         // This is basically Bresenham's algorithm
         int x1 = v1.getX();
         int y1 = v1.getY();
-        int x2 = v2.getX();
-        int y2 = v2.getY();
 
         // For now : just display the vertices
         Fragment f = new Fragment(0, 0);
@@ -239,7 +237,7 @@ public class Rasterizer {
         int x2 = v2.getX();
         int y2 = v2.getY();
 
-        Fragment fragment = new Fragment(0, 0);
+        Fragment fragment = new Fragment(0, 0, normal);
 
         boolean sym = (Math.abs(y2 - y1) > Math.abs(x2 - x1));
         if (sym) {
@@ -283,8 +281,9 @@ public class Rasterizer {
             if (!shader.isClipped(fragment)) {
                 interpolate2(v1, v2, fragment);
                 // set the color to red
-                if (normal)
+                if (normal) {
                     fragment.setColor(Color.RED);
+                }
                 if (sym) {
                     swapXAndY(fragment);
                 }

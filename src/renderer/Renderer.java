@@ -145,6 +145,7 @@ public final class Renderer {
 
         if (renderNormals) {
             renderNormals(fragments);
+
         }
     }
 
@@ -216,6 +217,8 @@ public final class Renderer {
 
         final Fragment[] fragments = new Fragment[vertices.length];
 
+        final boolean PART_OF_NORMAL = true;
+
         // get the smallest gap to determine the length of the normals
         double minX = vertices[0].get(0);
         double maxX = vertices[0].get(0);
@@ -260,7 +263,7 @@ public final class Renderer {
             final int x = (int) Math.round(normalVectorDest.get(0));
             final int y = (int) Math.round(normalVectorDest.get(1));
 
-            fragments[i] = new Fragment(x, y);
+            fragments[i] = new Fragment(x, y, PART_OF_NORMAL);
             fragments[i].setDepth(normalVectorDest.get(2));
 
         }
