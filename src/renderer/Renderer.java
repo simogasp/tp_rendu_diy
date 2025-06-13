@@ -86,24 +86,24 @@ public final class Renderer {
      * @return an array of fragments
      */
     public static Fragment[] projectVertices() {
-        Vector[] vertices = mesh.getVertices();
-        Vector3[] normals = mesh.getNormals();
-        double[] colors = mesh.getColors();
+        final Vector[] vertices = mesh.getVertices();
+        final Vector3[] normals = mesh.getNormals();
+        final double[] colors = mesh.getColors();
 
-        Fragment[] fragments = new Fragment[vertices.length];
+        final Fragment[] fragments = new Fragment[vertices.length];
 
         for (int i = 0; i < vertices.length; i++) {
-            Vector pVertex = xform.projectPoint(vertices[i]);
+            final Vector pVertex = xform.projectPoint(vertices[i]);
             // Vector pNormal = xform.transformVector (normals[i]);
-            Vector3 pNormal = normals[i];
+            final Vector3 pNormal = normals[i];
 
-            int x = (int) Math.round(pVertex.get(0));
-            int y = (int) Math.round(pVertex.get(1));
+            final int x = (int) Math.round(pVertex.get(0));
+            final int y = (int) Math.round(pVertex.get(1));
             fragments[i] = new Fragment(x, y);
             fragments[i].setDepth(pVertex.get(2));
             fragments[i].setNormal(pNormal);
 
-            double[] texCoords = mesh.getTextureCoordinates();
+            final double[] texCoords = mesh.getTextureCoordinates();
             if (texCoords != null) {
                 fragments[i].setAttribute(7, texCoords[2 * i]);
                 fragments[i].setAttribute(8, texCoords[2 * i + 1]);
@@ -112,11 +112,11 @@ public final class Renderer {
             if (!lightingEnabled) {
                 fragments[i].setColor(colors[3 * i], colors[3 * i + 1], colors[3 * i + 2]);
             } else {
-                double[] color = new double[3];
+                final double[] color = new double[3];
                 color[0] = colors[3 * i];
                 color[1] = colors[3 * i + 1];
                 color[2] = colors[3 * i + 2];
-                double material[] = scene.getMaterial();
+                final double material[] = scene.getMaterial();
                 double[] litColor = lighting.applyLights(new Vector3(vertices[i]), pNormal, color,
                         scene.getCameraPosition(),
                         material[0], material[1], material[2], material[3]);
@@ -131,14 +131,14 @@ public final class Renderer {
      * Renders the wireframe of the mesh.
      */
     static void renderWireframe() {
-        Fragment[] fragments = projectVertices();
+        final Fragment[] fragments = projectVertices();
 
-        int[] faces = mesh.getFaces();
+        final int[] faces = mesh.getFaces();
 
         for (int i = 0; i < 3 * mesh.getNumFaces(); i += 3) {
             for (int j = 0; j < 3; j++) {
-                Fragment v1 = fragments[faces[i + j]];
-                Fragment v2 = fragments[faces[i + ((j + 1) % 3)]];
+                final Fragment v1 = fragments[faces[i + j]];
+                final Fragment v2 = fragments[faces[i + ((j + 1) % 3)]];
                 rasterizer.rasterizeEdge(v1, v2);
             }
         }
@@ -148,11 +148,15 @@ public final class Renderer {
         }
     }
 
+    /**
+     * Render the normals over on each vertices of the object.
+     * @param fragments the fragment array of the vertices
+     */
     public static void renderNormals(Fragment[] fragments) {
-        Fragment[] normals = projectNormalsDest();
+        final Fragment[] normals = projectNormalsDest();
         for (int i = 0; i < mesh.getNumVertices(); i++) {
-            Fragment v1 = fragments[i];
-            Fragment v2 = normals[i];
+            final Fragment v1 = fragments[i];
+            final Fragment v2 = normals[i];
             rasterizer.rasterizeNormals(v1, v2);
         }
     }
@@ -162,13 +166,13 @@ public final class Renderer {
      * @throws SizeMismatchException if the size of the fragments do not match
      */
     static void renderSolid() {
-        Fragment[] fragments = projectVertices();
-        int[] faces = mesh.getFaces();
+        final Fragment[] fragments = projectVertices();
+        final int[] faces = mesh.getFaces();
 
         for (int i = 0; i < 3 * mesh.getNumFaces(); i += 3) {
-            Fragment v1 = fragments[faces[i]];
-            Fragment v2 = fragments[faces[i + 1]];
-            Fragment v3 = fragments[faces[i + 2]];
+            final Fragment v1 = fragments[faces[i]];
+            final Fragment v2 = fragments[faces[i + 1]];
+            final Fragment v3 = fragments[faces[i + 2]];
 
             rasterizer.rasterizeFace(v1, v2, v3);
         }
@@ -182,7 +186,7 @@ public final class Renderer {
      * Enables or disables lighting.
      * @param enabled true to enable lighting, false to disable it
      */
-    public static void setLightingEnabled(boolean enabled) {
+    public static void setLightingEnabled(final boolean enabled) {
         lightingEnabled = enabled;
     }
 
@@ -197,7 +201,7 @@ public final class Renderer {
      * Enables or disables the normals render.
      * @param enabled true to enable normals render, false to disable it
      */
-    public static void setRenderNormals(boolean enabled) {
+    public static void setRenderNormals(final boolean enabled) {
         renderNormals = enabled;
     }
 
@@ -207,10 +211,10 @@ public final class Renderer {
      * @return an array of fragments
      */
     public static Fragment[] projectNormalsDest() {
-        Vector[] vertices = mesh.getVertices();
-        Vector3[] normals = mesh.getNormals();
+        final Vector[] vertices = mesh.getVertices();
+        final Vector3[] normals = mesh.getNormals();
 
-        Fragment[] fragments = new Fragment[vertices.length];
+        final Fragment[] fragments = new Fragment[vertices.length];
 
         // get the smallest gap to determine the length of the normals
         double minX = vertices[0].get(0);
@@ -237,19 +241,24 @@ public final class Renderer {
             }
         }
         // length is the minimum dimension of the bounding box divided by 10
-        double length = Math.min(maxX - minX, Math.min(maxY - minY, maxZ - minZ)) / 10;
+        final double length = Math.min(maxX - minX, Math.min(maxY - minY, maxZ - minZ)) / 10;
 
         // computes to every vertices
         for (int i = 0; i < vertices.length; i++) {
             // Vector pNormal = xform.transformVector (normals[i]);
 
             // create the destination of the vector
-            double[] v = {vertices[i].get(0) + length * normals[i].get(0), vertices[i].get(1) + length * normals[i].get(1), vertices[i].get(2) + length * normals[i].get(2), 1};
-            Vector normalVectorDest = xform.projectPoint(new Vector(v));
+            final double[] v = {
+                vertices[i].get(0) + length * normals[i].get(0),
+                vertices[i].get(1) + length * normals[i].get(1),
+                vertices[i].get(2) + length * normals[i].get(2),
+                1
+            };
+            final Vector normalVectorDest = xform.projectPoint(new Vector(v));
 
             // coordinate in screen
-            int x = (int) Math.round(normalVectorDest.get(0));
-            int y = (int) Math.round(normalVectorDest.get(1));
+            final int x = (int) Math.round(normalVectorDest.get(0));
+            final int y = (int) Math.round(normalVectorDest.get(1));
 
             fragments[i] = new Fragment(x, y);
             fragments[i].setDepth(normalVectorDest.get(2));
@@ -264,7 +273,7 @@ public final class Renderer {
      * Wait for a number of seconds.
      * @param sec the number of seconds to wait
      */
-    public static void wait(int sec) {
+    public static void wait(final int sec) {
         try {
             final long millis = 1000;
             Thread.sleep(sec * millis);
@@ -278,7 +287,7 @@ public final class Renderer {
      * @param args the command line arguments
      * @throws SizeMismatchException if the size of the fragments do not match
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
         final int timeout = 3;
 
