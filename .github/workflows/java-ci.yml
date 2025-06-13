@@ -40,7 +40,7 @@ jobs:
         run: ant compile
 
       - name: Run unit tests with ant
-        run: ant test
+        run: ant compile-test && ant test
 
       - name: Checkstyle
         run: ant dl-checkstyle && ant checkstyle
