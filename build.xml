@@ -3,6 +3,7 @@
 	<property name="java" location="src" />
 	<property name="classes" location="bin/cls" />
 	<property name="result" location="bin/jar" />
+	<property name="bin" location="bin" />
 	<property name="test" location="test" />
 	<property name="testsoutput" location="bin/test" />
 	<property name="reports" location="test/reports" />
@@ -42,6 +43,8 @@
 	<target name="clean">
 		<delete dir="${classes}" />
 		<delete dir="${result}" />
+		<delete dir="${testsoutput}" />
+		<delete dir="${bin}" />
 	</target>
 
 	<target name="run" depends="compile">
