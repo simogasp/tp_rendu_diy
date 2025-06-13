@@ -1,6 +1,7 @@
 name: Java CI
 
 on:
+
   push:
     branches:
       - '**'
@@ -13,11 +14,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Install make
         run: sudo apt-get update && sudo apt-get install -y make
+
+      - name: Install ant
+        run: sudo snap install ant --stable --classic
 
       - name: Set up JDK
         uses: actions/setup-java@v2
@@ -30,6 +35,15 @@ jobs:
 
       - name: Run unit tests
         run: make unit-tests
+
+      - name: Build with ant
+        run: ant compile
+
+      - name: Run unit tests with ant
+        run: ant unit-tests
+
+      # - name: Checkstyle
+      #   run: ant dl-checkstyle && ant checkstyle
 
     #   - name: Run doc
     #     run: make doc

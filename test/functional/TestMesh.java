@@ -1,3 +1,4 @@
+import org.junit.Test;
 
 import renderer.Mesh;
 import renderer.algebra.*;
@@ -9,7 +10,8 @@ import renderer.algebra.*;
  */
 public class TestMesh {
 
-    public static void test() throws Exception {
+    @Test
+    public void test() throws Exception {
 
         System.out.println("OFF\n# Test Start");
 
@@ -51,15 +53,6 @@ public class TestMesh {
          * colors [ 3 * i + 2 ]);
          * }
          */
-    }
-
-    public static void main(String[] args) {
-        try {
-            test();
-        } catch (Exception e) {
-            System.out.println("EXCEPTION: " + e);
-            e.printStackTrace();
-        }
     }
 
 }

@@ -1,9 +1,13 @@
 
+import org.junit.Test;
+
 import renderer.algebra.*;
 
 public class TestAlgebra {
 
-    public static void test() throws Exception {
+
+    @Test
+    public void test() throws Exception {
 
         System.out.println("Algebra\n# Test Start");
 
@@ -118,15 +122,4 @@ public class TestAlgebra {
 
     }
 
-    public static void main(String[] args) {
-
-        try {
-            test();
-            System.out.println("SUCCESS.");
-        } catch (Exception e) {
-            System.out.println("FAIL: " + e);
-            e.printStackTrace();
-        }
-
-    }
 }

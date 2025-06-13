@@ -1,4 +1,4 @@
-package unit.algebra;
+package algebra;
 
 import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;

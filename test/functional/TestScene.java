@@ -1,3 +1,4 @@
+import org.junit.Test;
 
 import renderer.Scene;
 import renderer.algebra.*;
@@ -9,7 +10,8 @@ import renderer.algebra.*;
  */
 public class TestScene {
 
-    public static void test() throws Exception {
+    @Test
+    public void test() throws Exception {
 
         Scene scene = new Scene("data/example1.scene");
         String mesh_filename = scene.getMeshFileName();
@@ -50,14 +52,6 @@ public class TestScene {
                 material[2] + " " +
                 material[3]);
 
-    }
-
-    public static void main(String argv[]) {
-        try {
-            test();
-        } catch (Exception e) {
-            System.out.println("EXCEPTION: " + e);
-        }
     }
 
 }

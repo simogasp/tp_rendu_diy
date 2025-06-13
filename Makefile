@@ -32,7 +32,7 @@ unit-tests: compile
 	@echo "Running all unit tests..."
 	@for test in $(UNIT_TEST_FILES:.java=); do \
 		test_name=$$(basename $$test); \
-		test_class=$$(echo $$test | sed 's/test\///' | sed 's/\//./g'); \
+		test_class=$$(echo $$test | sed 's/test\/unit\///' | sed 's/\//./g'); \
 		echo "Running JUnit test $$test_name... $$test_class"; \
 		java -cp $(CLASSPATH):lib/junit-4.13.2.jar:lib/hamcrest-2.2.jar:. \
 			org.junit.runner.JUnitCore $$test_class || exit 1; \
@@ -44,7 +44,8 @@ func-tests: compile
 		test_name=$$(basename $$test); \
 		test_class=$$(echo $$test_name | sed 's/\.java//'); \
 		echo "Running functional test $$test_class..."; \
-		java -cp $(CLASSPATH) $$test_class || exit 1; \
+		java -cp $(CLASSPATH):lib/junit-4.13.2.jar:lib/hamcrest-2.2.jar:. \
+			org.junit.runner.JUnitCore $$test_class || exit 1; \
 	done
 	@echo "All tests completed."
 

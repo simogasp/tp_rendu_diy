@@ -1,5 +1,8 @@
 import java.awt.*;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import renderer.GraphicsWrapper;
 
 public class TestGraphicWrapper {
@@ -21,7 +24,8 @@ public class TestGraphicWrapper {
         }
     }
 
-    static void init() {
+    @Before
+    public void init() {
         screen = new GraphicsWrapper(width, height, 1);
     }
 
@@ -76,7 +80,8 @@ public class TestGraphicWrapper {
         }
     }
 
-    public static void testChecker() throws Exception {
+    @Test
+    public void testChecker() throws Exception {
 
         for (int k = 0; k < 10; k++) {
 
@@ -90,7 +95,8 @@ public class TestGraphicWrapper {
         }
     }
 
-    public static void testConway() throws Exception {
+    @Test
+    public void testConway() throws Exception {
 
         screen.clearBuffer();
         // screen.swapBuffers ();
@@ -121,19 +127,7 @@ public class TestGraphicWrapper {
         }
 
         screen.destroy();
-        System.exit(0);
-    }
-
-    public static void main(String[] args) {
-
-        try {
-            init();
-            // testChecker () ;
-            testConway();
-        } catch (Exception e) {
-            System.out.println("EXCEPTION: " + e);
-            e.printStackTrace();
-        }
+        // System.exit(0);
     }
 
 }
