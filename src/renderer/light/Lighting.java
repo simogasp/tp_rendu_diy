@@ -64,10 +64,8 @@ public class Lighting {
 
         // total light intensity
         double I = 0.0;
-
-        Iterator<Light> it = lights.iterator();
-        while (it.hasNext()) {
-            Light light = it.next();
+        
+        for (Light light : lights) {
             I += light.getContribution(position, normal, color, cameraPosition, ka, kd, ks, s);
         }
 
