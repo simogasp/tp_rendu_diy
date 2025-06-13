@@ -5,7 +5,7 @@ import renderer.algebra.Vector3;
 /**
  * This Class represents a ambiant light.
  */
-public class AmbiantLight extends Light {
+public class AmbientLight extends Light {
 
 
     
