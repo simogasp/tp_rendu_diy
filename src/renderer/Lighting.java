@@ -104,7 +104,7 @@ public class Lighting {
         double s = material[3];
 
         // total light intensity
-        double resI = 0.0;
+        double intensityTotal = 0.0;
 
         Iterator<Light> it = lights.iterator();
         while (it.hasNext()) {
@@ -112,7 +112,7 @@ public class Lighting {
             switch (light.type) {
                 case AMBIENT:
                     // ambient light contribution
-                    resI += ka * light.params[0]; //++ // TODO
+                    intensityTotal += ka * light.params[0]; //++ // TODO
                     break;
 
                 case POINT:
@@ -144,7 +144,7 @@ public class Lighting {
                     double specularIntensity = //!!
                         ks * light.params[3] * Math.pow(normal.dot(h), s); //!!
                     //++ // double specularIntensity = ...;
-                    resI += diffuseIntensity + specularIntensity; //??
+                    intensityTotal += diffuseIntensity + specularIntensity; //??
 
                     break;
                 default:
@@ -153,9 +153,9 @@ public class Lighting {
             }
         }
 
-        return new double[]{clampColor(color[0] * I),
-                            clampColor(color[1] * I),
-                            clampColor(color[2] * I)};
+        return new double[]{clampColor(color[0] * intensityTotal),
+                            clampColor(color[1] * intensityTotal),
+                            clampColor(color[2] * intensityTotal)};
     }
 
     private static double clampColor(double value) {
