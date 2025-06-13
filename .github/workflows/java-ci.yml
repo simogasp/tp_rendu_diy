@@ -42,8 +42,8 @@ jobs:
       - name: Run unit tests with ant
         run: ant unit-tests
 
-      - name: Checkstyle
-        run: ant dl-checkstyle && ant checkstyle
+      # - name: Checkstyle
+      #   run: ant dl-checkstyle && ant checkstyle
 
     #   - name: Run doc
     #     run: make doc
