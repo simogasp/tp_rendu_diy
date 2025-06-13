@@ -206,7 +206,7 @@ public class GraphicsWrapper {
    * Gets the width of the screen.
    * @return the width of the screen
    */
-  int getWidth() {
+  public int getWidth() {
     return width;
   }
 
@@ -214,7 +214,7 @@ public class GraphicsWrapper {
    * Gets the height of the screen.
    * @return the height of the screen
    */
-  int getHeight() {
+  public int getHeight() {
     return height;
   }
 

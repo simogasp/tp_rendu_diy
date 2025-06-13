@@ -1,8 +1,10 @@
-package renderer;
+package renderer.rasterizer;
 
+import renderer.Fragment;
 import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector3;
+import renderer.shader.Shader;
 import renderer.algebra.Vector;
 
 /**

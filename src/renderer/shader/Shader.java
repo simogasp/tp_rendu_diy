@@ -1,4 +1,7 @@
-package renderer;
+package renderer.shader;
+
+import renderer.Fragment;
+import renderer.GraphicsWrapper;
 
 /**
  * The Shader class is responsible for writing final pixel color
@@ -41,6 +44,6 @@ public abstract class Shader {
      */
     public boolean isClipped(Fragment fragment) {
         return ((fragment.getX() < 0) || (fragment.getX() >= screen.getWidth())
-               || (fragment.getY() < 0) || (fragment.getY() >= screen.getHeight()));
+                || (fragment.getY() < 0) || (fragment.getY() >= screen.getHeight()));
     }
 }

@@ -1,4 +1,8 @@
-package renderer;
+package renderer.shader;
+
+import renderer.DepthBuffer;
+import renderer.Fragment;
+import renderer.GraphicsWrapper;
 
 /**
  * Simple shader that just copy the interpolated color to the screen,

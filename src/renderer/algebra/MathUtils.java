@@ -17,7 +17,7 @@ public final class MathUtils {
      * @param max the maximum value
      * @return the clamped value (min if value {@literal <} min, max if value {@literal >} max, value otherwise)
      */
-     public static <T extends Comparable<T>> T clamp(T value, T min, T max) {
+    public static <T extends Comparable<T>> T clamp(T value, T min, T max) {
         if (min.compareTo(max) > 0) {
             throw new IllegalArgumentException("min must be less than or equal to max");
         }
