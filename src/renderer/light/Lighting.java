@@ -30,7 +30,7 @@ public class Lighting {
      * @param ia the intensity of the ambient light
      */
     public void addAmbientLight(double ia) {
-        lights.add(new AmbiantLight(ia));
+        lights.add(new AmbientLight(ia));
     }
 
     /**
@@ -64,7 +64,7 @@ public class Lighting {
 
         // total light intensity
         double I = 0.0;
-        
+
         for (Light light : lights) {
             I += light.getContribution(position, normal, color, cameraPosition, ka, kd, ks, s);
         }

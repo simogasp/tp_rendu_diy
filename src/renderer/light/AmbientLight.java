@@ -9,7 +9,7 @@ public class AmbientLight extends Light {
 
 
     
-    public AmbiantLight(double intensity) {
+    public AmbientLight(double intensity) {
         super(intensity);
     }
 
