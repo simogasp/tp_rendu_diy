@@ -122,7 +122,7 @@ public class Transformation {
      * @return the projected point
      * @throws SizeMismatchException if the size of the input vector is not 4
      */
-    public Vector3 projectPoint(Vector p) {
+    public Vector3 projectPoint(Vector p) throws SizeMismatchException {
         //++ Vector ps = new Vector(3);
         //++ // TODO
         Vector pe = worldToCamera.multiply(p); //<!!

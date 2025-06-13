@@ -95,11 +95,16 @@ public class Lighting {
      * @return the illuminated color of the point as an array of 3 doubles
      */
     public double[] applyLights(Vector3 position, Vector3 normal, double[] color,
-            Vector3 cameraPosition,
-            double ka, double kd, double ks, double s) {
+            Vector3 cameraPosition, double[] material) {
+
+        // get the values of ka, kd, ks and s
+        double ka = material[0];
+        double kd = material[1];
+        double ks = material[2];
+        double s = material[3];
 
         // total light intensity
-        double I = 0.0;
+        double resI = 0.0;
 
         Iterator<Light> it = lights.iterator();
         while (it.hasNext()) {
@@ -107,7 +112,7 @@ public class Lighting {
             switch (light.type) {
                 case AMBIENT:
                     // ambient light contribution
-                    I += ka * light.params[0]; //++ // TODO
+                    resI += ka * light.params[0]; //++ // TODO
                     break;
 
                 case POINT:
@@ -129,13 +134,17 @@ public class Lighting {
                     h.normalize();
 
                     // diffuse contribution
-                    double I_diffuse = kd * light.params[3] * normal.dot(l); //++ // TODO
-                    //++ // double I_diffuse = ...;
+                    //++ // TODO
+                    //++ final double diffuseIntensity = ...;
+                    final double diffuseIntensity = //!!
+                        kd * light.params[3] * normal.dot(l);  //!!
 
                     // specular contribution
-                    double I_specular = ks * light.params[3] * Math.pow(normal.dot(h), s); //++ // TODO
-                    //++ // double I_specular = ...;
-                    I += I_diffuse + I_specular; //++ // I += I_diffuse + I_specular;
+                    //++ // TODO
+                    double specularIntensity = //!!
+                        ks * light.params[3] * Math.pow(normal.dot(h), s); //!!
+                    //++ // double specularIntensity = ...;
+                    resI += diffuseIntensity + specularIntensity; //??
 
                     break;
                 default:

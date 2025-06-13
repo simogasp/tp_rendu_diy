@@ -28,17 +28,50 @@ public class Scene {
         return r;
     }
 
-    String meshFilename;
-    Vector3 cameraPosition = new Vector3("cam_pos");
-    Vector3 cameraLookAt = new Vector3("cam_lookat");
-    Vector3 cameraUp = new Vector3("cam_up");
-    double cameraFocal;
-    int screenW;
-    int screenH;
-    double ambientI;
-    double sourceI;
-    double[] sourceCoord = new double[4];
-    double[] material = new double[4];
+    /**
+     * The filename of the mesh.
+     */
+    private String meshFilename;
+    /**
+     * The camera position in the world.
+     */
+    private Vector3 cameraPosition = new Vector3("cam_pos");
+    /**
+     * The lookAt point in the world.
+     */
+    private Vector3 cameraLookAt = new Vector3("cam_lookat");
+    /**
+     * The up vector of the camera.
+     */
+    private Vector3 cameraUp = new Vector3("cam_up");
+    /**
+     * The focal settings of the camera.
+     */
+    private double cameraFocal;
+    /**
+     * The screen width.
+     */
+    private int screenW;
+    /**
+     * The screen height.
+     */
+    private int screenH;
+    /**
+     * The Ambient Light Intensity in the world.
+     */
+    private double ambientI;
+    /**
+     * The light intensity of the point light.
+     */
+    private double sourceI;
+    /**
+     * The coordinates of the point light.
+     */
+    private double[] sourceCoord = new double[4];
+    /**
+     * The material of the object.
+     */
+    private double[] material = new double[4];
 
     /**
      * Creates a new Scene object by reading in a scene description file.

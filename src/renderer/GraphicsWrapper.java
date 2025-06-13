@@ -1,22 +1,29 @@
 package renderer;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+
+import javax.swing.JFrame;
+
 /**
  * A "virtual" screen, where only "setPixel" is available
  * (It is a JFrame, and JFrame.EXIT_ON_CLOSE is set).
+ *
  * @author smondet
  */
-
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import javax.swing.*;
-import java.lang.Math;
-
 class ImageComponent extends Component {
 
-  BufferedImage renderedImage = null;
+  /**
+   * The image rendered on the screen.
+   */
+  private BufferedImage renderedImage = null;
 
-  public ImageComponent(BufferedImage init) {
+  ImageComponent(BufferedImage init) {
     renderedImage = init;
   }
 
@@ -29,29 +36,58 @@ class ImageComponent extends Component {
   public void paint(Graphics g) {
 
     if (renderedImage != null) {
-      ((Graphics2D) g).drawImage(renderedImage, new AffineTransform(1f, 0f, 0f, 1f, 0, 0), null);
+      ((Graphics2D) g).drawImage(renderedImage,
+          new AffineTransform(1f, 0f, 0f, 1f, 0, 0),
+          null);
     }
   }
-
 }
 
 public class GraphicsWrapper {
 
+  /**
+   * The Height of the screen.
+   */
   private int height = 0;
+  /**
+   * The witdth of the screen.
+   */
   private int width = 0;
+  /**
+   * The size of a pixel on the screen.
+   */
   private int pixelSize = 0;
 
+  /**
+   * The Frame for this Component.
+   */
   private JFrame myFrame;
 
+  /**
+   * The Image Component to draw.
+   */
   private ImageComponent drawComp = null;
 
+  /**
+   * The next image prepocessed to draw.
+   */
   private BufferedImage backBuffer = null;
+  /**
+   * The Current image drawn.
+   */
   private BufferedImage frontBuffer = null;
 
+  /**
+   * Assign real values to fields.
+   */
   private void init() {
-    backBuffer = new BufferedImage(width * pixelSize, height * pixelSize, BufferedImage.TYPE_INT_ARGB);
+    backBuffer = new BufferedImage(width * pixelSize,
+        height * pixelSize,
+        BufferedImage.TYPE_INT_ARGB);
 
-    frontBuffer = new BufferedImage(width * pixelSize, height * pixelSize, BufferedImage.TYPE_3BYTE_BGR);
+    frontBuffer = new BufferedImage(width * pixelSize,
+        height * pixelSize,
+        BufferedImage.TYPE_3BYTE_BGR);
 
     /*
      * Graphics2D gd = initial.createGraphics ();
@@ -76,7 +112,7 @@ public class GraphicsWrapper {
   /**
    * Build a virtual screen of size width x height
    * And set its window visible.
-   * @param width the width of the screen
+   * @param width  the width of the screen
    * @param height the height of the screen
    */
   public GraphicsWrapper(int width, int height) {
@@ -91,8 +127,8 @@ public class GraphicsWrapper {
    * represented by
    * a pixelSize x pixelSize square.
    * And set its window visible.
-   * @param width the width of the screen
-   * @param height the height of the screen
+   * @param width     the width of the screen
+   * @param height    the height of the screen
    * @param pixelSize the size of a virtual pixel
    */
   public GraphicsWrapper(int width, int height, int pixelSize) {
@@ -150,8 +186,8 @@ public class GraphicsWrapper {
   /**
    * Lights the pixel (x,y) with the given color.
    * Does nothing for pixels out of the screen.
-   * @param x the x coordinate of the pixel
-   * @param y the y coordinate of the pixel
+   * @param x     the x coordinate of the pixel
+   * @param y     the y coordinate of the pixel
    * @param color the color of the pixel
    */
   public void setPixel(int x, int y, Color color) {

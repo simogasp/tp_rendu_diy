@@ -22,15 +22,9 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
         super(shader);
     }
 
-    /**
-     * Rasterizes the triangular face made of the Fragment v1, v2 and v3.
-     * @param v1 the first vertex of the face
-     * @param v2 the second vertex of the face
-     * @param v3 the third vertex of the face
-     * @throws SizeMismatchException if the size of the fragments do not match
-     */
     @Override
-    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3) {
+    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3)
+            throws SizeMismatchException {
 
         final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 
@@ -61,7 +55,8 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
                             + bar.get(1) / v2.getDepth()
                             + bar.get(2) / v3.getDepth();
                     for (int i = 0; i < numAttributes; i++) {
-                        final double aOverZ = bar.get(0) * v1.getAttribute(i) / v1.getDepth()
+                        final double aOverZ =
+                            bar.get(0) * v1.getAttribute(i) / v1.getDepth()
                                 + bar.get(1) * v2.getAttribute(i) / v2.getDepth()
                                 + bar.get(2) * v3.getAttribute(i) / v3.getDepth();
 

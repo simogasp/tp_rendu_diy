@@ -1,18 +1,29 @@
 package renderer;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * Simple shader that just copy the interpolated color to the screen,
  * taking the depth of the fragment into acount.
- * 
  * @author cdehais
  */
 public class TextureShader extends Shader {
 
-    DepthBuffer depth;
-    Texture texture;
-    boolean combineWithBaseColor;
+    /**
+     * The depth buffer.
+     */
+    private DepthBuffer depth;
+
+    /**
+     * The texture to apply on the object.
+     */
+    private Texture texture;
+
+    /**
+     * Wether the color has to be a combination of the fragment's color
+     * and the texture's color.
+     */
+    private boolean combineWithBaseColor;
 
     /**
      * Creates a PainterShader with the given screen.
@@ -40,7 +51,8 @@ public class TextureShader extends Shader {
 
     /**
      * Set whether the texture should be combined with the base color.
-     * @param combineWithBaseColor true if the texture should be combined with the base color
+     * @param combineWithBaseColor true if the texture should be combined
+     * with the base color
      */
     public void setCombineWithBaseColor(boolean combineWithBaseColor) {
         this.combineWithBaseColor = combineWithBaseColor;
@@ -55,7 +67,7 @@ public class TextureShader extends Shader {
             // The Fragment may not have texture coordinates
             try {
                 //++ // TODO
-                double uv[] = fragment.getAttribute(7, 2); //<!!
+                double[] uv = fragment.getAttribute(7, 2); //<!!
                 Color texColor;
                 if (texture == null) {
                     texColor = Color.BLACK;
@@ -65,7 +77,8 @@ public class TextureShader extends Shader {
                 Color finalColor;
                 if (combineWithBaseColor) {
                     Color baseColor = fragment.getColor();
-                    finalColor = new Color(Math.min(255, baseColor.getRed() + texColor.getRed()),
+                    finalColor = new Color(
+                            Math.min(255, baseColor.getRed() + texColor.getRed()),
                             Math.min(255, baseColor.getGreen() + texColor.getGreen()),
                             Math.min(255, baseColor.getBlue() + texColor.getBlue()));
                 } else {

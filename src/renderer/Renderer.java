@@ -98,16 +98,19 @@ public final class Renderer {
             }
 
             if (!lightingEnabled) {
-                fragments[i].setColor(colors[3 * i], colors[3 * i + 1], colors[3 * i + 2]);
+                fragments[i].setColor(
+                    colors[3 * i],
+                    colors[3 * i + 1],
+                    colors[3 * i + 2]);
             } else {
                 double[] color = new double[3];
                 color[0] = colors[3 * i];
                 color[1] = colors[3 * i + 1];
                 color[2] = colors[3 * i + 2];
-                double material[] = scene.getMaterial();
-                double[] litColor = lighting.applyLights(new Vector3(vertices[i]), pNormal, color,
-                        scene.getCameraPosition(),
-                        material[0], material[1], material[2], material[3]);
+                double[] material = scene.getMaterial();
+                double[] litColor = lighting.applyLights(
+                        new Vector3(vertices[i]), pNormal, color,
+                        scene.getCameraPosition(), material);
                 fragments[i].setColor(litColor[0], litColor[1], litColor[2]);
             }
         }
@@ -135,7 +138,7 @@ public final class Renderer {
      * Renders the solid of the mesh.
      * @throws SizeMismatchException if the size of the fragments do not match
      */
-    static void renderSolid() {
+    static void renderSolid() throws SizeMismatchException {
         Fragment[] fragments = projectVertices();
         int[] faces = mesh.getFaces();
 
