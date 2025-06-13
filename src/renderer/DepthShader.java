@@ -63,16 +63,21 @@ public class DepthShader extends Shader {
      * @return the color in the color gradient
      */
     private static Color getColorFor(double depth) {
-        Color res;
-        double middle = (farest + nearest) / 2;
-        if (depth < middle) {
-            double alpha = (depth - nearest) / (middle - nearest);
-            res = new Color(Math.round((float) (1 - alpha) * 255), Math.round((float) alpha * 255), 0);
-        } else {
-            double beta = (depth - middle) / (farest - middle);
-            res = new Color(0, Math.round((float) (1 - beta) * 255), Math.round((float) beta * 255));
-        }
+        // get the center of the gap
+        final double middle = (farest + nearest) / 2;
 
-        return res;
+        if (depth < middle) {
+
+            // compute a color between red (near) and green (middle)
+            final double alpha = (depth - nearest) / (middle - nearest);
+            return new Color(Math.round((float) (1 - alpha) * 255), Math.round((float) alpha * 255), 0);
+
+        } else {
+
+            // compute a color between green (middle) and blue (far)
+            final double beta = (depth - middle) / (farest - middle);
+            return new Color(0, Math.round((float) (1 - beta) * 255), Math.round((float) beta * 255));
+        
+        }
     }
 }
