@@ -43,11 +43,11 @@ public class DepthShader extends Shader {
             return;
         }
 
-        // a normal vector 
+        // a normal vector has to be drawn in red whereas another 
+        // fragment is print according to his depth
 
         if (fragment.isNormal()) {
             screen.setPixel(fragment.getX(), fragment.getY(), Color.RED);
-            System.out.println("Part of Normal");
         } else {
             screen.setPixel(fragment.getX(), fragment.getY(), getColorFor(fragment.getDepth()));
         }
