@@ -87,7 +87,6 @@ public class Fragment {
     public Fragment(int x, int y, boolean normal) {
         this(x, y);
         this.normal = normal;
-        System.out.println(toString());
     }
 
     /**
