@@ -31,7 +31,7 @@ public final class Renderer {
     /** The shader. */
     private static Shader shader;
     /** The transformation. */
-    private static Transformation xform;
+    public static Transformation xform;
     /** The lighting. */
     private static Lighting lighting;
     /** Whether lighting is enabled.. */
@@ -89,8 +89,8 @@ public final class Renderer {
 
         for (int i = 0; i < vertices.length; i++) {
             Vector pVertex = xform.projectPoint(vertices[i]);
-            // Vector pNormal = xform.transformVector (normals[i]);
-            Vector3 pNormal = normals[i];
+            Vector pNormal = xform.transformVector (normals[i]);
+            // Vector3 pNormal = normals[i];
 
             int x = (int) Math.round(pVertex.get(0));
             int y = (int) Math.round(pVertex.get(1));

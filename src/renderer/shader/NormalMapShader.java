@@ -3,6 +3,8 @@ package renderer.shader;
 import renderer.DepthBuffer;
 import renderer.Fragment;
 import renderer.GraphicsWrapper;
+import renderer.Renderer;
+import renderer.Transformation;
 import renderer.algebra.Vector3;
 
 public class NormalMapShader extends Shader {
@@ -42,20 +44,18 @@ public class NormalMapShader extends Shader {
         if (!this.depthBuffer.testFragment(fragment)) {
             return;
         }
-        
-            
-        
+
         Vector3 n = fragment.getNormal();
-        
+
         // some vector has NaN value so we skip it
         if (Double.isNaN(n.getX()) || Double.isNaN(n.getY()) || Double.isNaN(n.getZ())) {
             return;
         }
-        
+
         // we normalize the vector to compute the color of the pixel.
         if (Math.abs(n.norm() - 1) > EPSILON);
         n.normalize();
-            
+
         // transform a 3D direction in a color.
         final double r = n.getX() / 2 + 0.5;
         final double g = n.getY() / 2 + 0.5;

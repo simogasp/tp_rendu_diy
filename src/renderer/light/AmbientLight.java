@@ -1,5 +1,6 @@
 package renderer.light;
 
+import renderer.algebra.Vector;
 import renderer.algebra.Vector3;
 
 /**
@@ -13,7 +14,7 @@ public class AmbientLight extends Light {
         super(intensity);
     }
 
-    public double getContribution(Vector3 position, Vector3 normal, double[] color, Vector3 cameraPosition, double ka,
+    public double getContribution(Vector3 position, Vector normal, double[] color, Vector3 cameraPosition, double ka,
             double kd, double ks, double s) {
         return intensity;
     }

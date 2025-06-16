@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import renderer.algebra.MathUtils;
+import renderer.algebra.Vector;
 import renderer.algebra.Vector3;
 
 /**
@@ -58,7 +59,7 @@ public class Lighting {
      * @param s the shininess coefficient
      * @return the illuminated color of the point as an array of 3 doubles
      */
-    public double[] applyLights(Vector3 position, Vector3 normal, double[] color,
+    public double[] applyLights(Vector3 position, Vector normal, double[] color,
             Vector3 cameraPosition,
             double ka, double kd, double ks, double s) {
 
