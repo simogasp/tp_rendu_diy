@@ -118,6 +118,8 @@ ant unit-tests
 
 ### Run
 
+#### Generic
+
 To run the project you can use the following command:
 
 ```bash
@@ -125,6 +127,29 @@ ant run -DSCENE=path/to/file.scene
 ```
 
 where `path/to/file.scene` is the path to the scene file, e.g. `data/example0.scene`.
+
+#### Run cube
+
+To run the script with the cube scene run :
+```bash
+ant cube
+```
+
+#### Run rabbit
+
+To run the script with the rabbit scene run :
+```bash
+ant rabbit
+```
+
+
+#### Run Suzanne (the Monkey)
+
+To run the script with the rabbit scene run :
+```bash
+ant run
+```
+
 
 ### Generate JavaDoc
 

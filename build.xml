@@ -13,6 +13,10 @@
 	<property name="doc" location="doc" />
 	<property name="functional" location="test/functional" />
 	<property name="unit" location="test/unit" />
+	<property name="cube" location="data/example0.scene" />
+	<property name="rabbit" location="data/example1.scene" />
+	<property name="SCENE" location="data/example2.scene" />
+
 
 	<target name="dl-checkstyle">
 		<get src="https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.25.0/checkstyle-10.25.0-all.jar" dest="${lib}/checkstyle-10.25.0-all.jar" />
@@ -57,6 +61,27 @@
 		</java>
 
 	</target>
+
+	<target name="cube" depends="compile">
+		<java classname="renderer.Renderer">
+			<classpath>
+				<pathelement path="${classes}" />
+			</classpath>
+			<arg value="${cube}" />
+			<arg value="-Djava.security.manager=allow" />
+		</java>
+	</target>
+
+	<target name="rabbit" depends="compile">
+		<java classname="renderer.Renderer">
+			<classpath>
+				<pathelement path="${classes}" />
+			</classpath>
+			<arg value="${rabbit}" />
+			<arg value="-Djava.security.manager=allow" />
+		</java>
+	</target>
+
 
 	<target
 		name="clean-doc">
