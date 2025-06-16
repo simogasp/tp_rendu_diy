@@ -8,6 +8,7 @@ import renderer.algebra.Vector3;
 import renderer.light.Lighting;
 import renderer.rasterizer.Rasterizer;
 import renderer.shader.NormalMapShader;
+import renderer.shader.DepthShader;
 import renderer.shader.PainterShader;
 import renderer.shader.Shader;
 import renderer.shader.TextureShader;

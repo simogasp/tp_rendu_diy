@@ -1,9 +1,11 @@
-package renderer;
+package renderer.shader;
 
 import java.awt.Color;
 
+import renderer.DepthBuffer;
+import renderer.Fragment;
+import renderer.GraphicsWrapper;
 import renderer.algebra.MathUtils;
-import renderer.shader.Shader;
 
 /**
  * Shader color the model in function of the depth of the surface.
@@ -30,23 +32,26 @@ public class DepthShader extends Shader {
      * Creates a DepthShader with the given screen.
      * @param screen the screen to draw on
      */
-    protected DepthShader(GraphicsWrapper screen) {
+    public DepthShader(GraphicsWrapper screen) {
         super(screen);
         this.depth = new DepthBuffer(screen.getWidth(), screen.getHeight());    
     }
 
     @Override
     public void shade(Fragment fragment) {
-        if (depth.testFragment(fragment)) {
-            
-            if (fragment.isNormal()) {
-                screen.setPixel(fragment.getX(), fragment.getY(), Color.RED);
-                System.out.println("Part of Normal");
-            } else {
-                screen.setPixel(fragment.getX(), fragment.getY(), getColorFor(fragment.getDepth()));
-            }
-            depth.writeFragment(fragment);
+        if (!depth.testFragment(fragment)) {
+            return;
         }
+
+        // a normal vector 
+
+        if (fragment.isNormal()) {
+            screen.setPixel(fragment.getX(), fragment.getY(), Color.RED);
+            System.out.println("Part of Normal");
+        } else {
+            screen.setPixel(fragment.getX(), fragment.getY(), getColorFor(fragment.getDepth()));
+        }
+        depth.writeFragment(fragment);
     }
 
     @Override
