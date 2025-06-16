@@ -53,6 +53,7 @@ public final class Renderer {
         screen.clearBuffer();
         //++ shader = new SimpleShader (screen);
         shader = new PainterShader(screen); //??
+        shader = new DepthShader(screen); //??
         rasterizer = new Rasterizer(shader);
         // rasterizer = new PerspectiveCorrectRasterizer(shader);
 
@@ -161,6 +162,13 @@ public final class Renderer {
         lightingEnabled = enabled;
     }
 
+    public static void initShader() {
+        Fragment[] fragments = projectVertices();
+        for (Fragment fragment : fragments) {
+            DepthShader.update(fragment.getDepth());
+        }
+    }
+
     /**
      * Wait for a number of seconds.
      * @param sec the number of seconds to wait
@@ -195,6 +203,9 @@ public final class Renderer {
                 return;
             }
         }
+
+        // get the nearest and the farest point for depth Shader
+        initShader();
 
         // wireframe rendering
         renderWireframe();

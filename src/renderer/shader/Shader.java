@@ -44,6 +44,6 @@ public abstract class Shader {
      */
     public boolean isClipped(Fragment fragment) {
         return ((fragment.getX() < 0) || (fragment.getX() >= screen.getWidth())
-                || (fragment.getY() < 0) || (fragment.getY() >= screen.getHeight()));
+            || (fragment.getY() < 0) || (fragment.getY() >= screen.getHeight()));
     }
 }
