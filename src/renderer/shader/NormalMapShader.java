@@ -1,5 +1,8 @@
-package renderer;
+package renderer.shader;
 
+import renderer.DepthBuffer;
+import renderer.Fragment;
+import renderer.GraphicsWrapper;
 import renderer.algebra.Vector3;
 
 public class NormalMapShader extends Shader {
@@ -14,7 +17,7 @@ public class NormalMapShader extends Shader {
      * Creates a NormalMapShader with the given screen.
      * @param screen the screen to draw on
      */
-    protected NormalMapShader(GraphicsWrapper screen) {
+    public NormalMapShader(GraphicsWrapper screen) {
         super(screen);
         this.depthBuffer = new DepthBuffer(screen.getWidth(), screen.getHeight());
     }
