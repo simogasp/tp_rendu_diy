@@ -18,9 +18,15 @@ public class TestRasterizer {
             super(screen);
         }
 
+        @Override
         public void shade(Fragment fragment) {
             System.out.println("  fragment: (" + fragment.getX() + ", " + fragment.getY() + ")"
                     + " - color = (" + fragment.getColor() + ")");
+        }
+
+        @Override
+        public void shadeNormal(Fragment fragment) {
+            shade(fragment);
         }
     }
 
