@@ -3,7 +3,6 @@ package renderer.shader;
 import renderer.DepthBuffer;
 import renderer.Fragment;
 import renderer.GraphicsWrapper;
-import renderer.Renderer;
 import renderer.Transformation;
 import renderer.algebra.Vector3;
 
@@ -18,15 +17,20 @@ public class NormalMapShader extends Shader {
      * The depth buffer.
      */
     private DepthBuffer depthBuffer;
+    /** 
+     * The transformation.
+     */
+    private Transformation xform;
 
     
     /**
      * Creates a NormalMapShader with the given screen.
      * @param screen the screen to draw on
      */
-    public NormalMapShader(GraphicsWrapper screen) {
+    public NormalMapShader(GraphicsWrapper screen, Transformation xform) {
         super(screen);
         this.depthBuffer = new DepthBuffer(screen.getWidth(), screen.getHeight());
+        this.xform = xform;
     }
 
 
@@ -45,7 +49,8 @@ public class NormalMapShader extends Shader {
             return;
         }
 
-        Vector3 n = fragment.getNormal();
+        Vector3 nn = fragment.getNormal();
+        Vector3 n = xform.transformVector(nn);
 
         // some vector has NaN value so we skip it
         if (Double.isNaN(n.getX()) || Double.isNaN(n.getY()) || Double.isNaN(n.getZ())) {
@@ -59,7 +64,7 @@ public class NormalMapShader extends Shader {
         // transform a 3D direction in a color.
         final double r = n.getX() / 2 + 0.5;
         final double g = n.getY() / 2 + 0.5;
-        final double b = n.getZ() / 2 + 0.5;
+        final double b = (- n.getZ()) / 2 + 0.5;
 
         fragment.setColor(r, g, b);
 

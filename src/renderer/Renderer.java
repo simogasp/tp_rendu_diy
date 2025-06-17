@@ -31,7 +31,7 @@ public final class Renderer {
     /** The shader. */
     private static Shader shader;
     /** The transformation. */
-    public static Transformation xform;
+    private static Transformation xform;
     /** The lighting. */
     private static Lighting lighting;
     /** Whether lighting is enabled.. */
@@ -50,13 +50,6 @@ public final class Renderer {
     static void init(String sceneFilename) throws IOException {
         scene = new Scene(sceneFilename);
         mesh = new Mesh(scene.getMeshFileName());
-        screen = new GraphicsWrapper(scene.getScreenW(), scene.getScreenH());
-        screen.clearBuffer();
-        //++ shader = new SimpleShader (screen);
-        shader = new PainterShader(screen); //??
-        shader = new NormalMapShader(screen); //??
-        rasterizer = new Rasterizer(shader);
-        // rasterizer = new PerspectiveCorrectRasterizer(shader);
 
         xform = new Transformation();
         xform.setLookAt(scene.getCameraPosition(),
@@ -66,6 +59,15 @@ public final class Renderer {
         xform.setCalibration(scene.getCameraFocal(),
                             scene.getScreenW(),
                             scene.getScreenH());
+
+        screen = new GraphicsWrapper(scene.getScreenW(), scene.getScreenH());
+        screen.clearBuffer();
+        //++ shader = new SimpleShader (screen);
+        shader = new PainterShader(screen); //??
+        shader = new NormalMapShader(screen, xform); //??
+        rasterizer = new Rasterizer(shader);
+        // rasterizer = new PerspectiveCorrectRasterizer(shader);
+
 
         lighting = new Lighting();
         lighting.addAmbientLight(scene.getAmbientI());
@@ -89,8 +91,8 @@ public final class Renderer {
 
         for (int i = 0; i < vertices.length; i++) {
             Vector pVertex = xform.projectPoint(vertices[i]);
-            Vector pNormal = xform.transformVector (normals[i]);
-            // Vector3 pNormal = normals[i];
+            // Vector pNormal = xform.transformVector (normals[i]);
+            Vector3 pNormal = normals[i];
 
             int x = (int) Math.round(pVertex.get(0));
             int y = (int) Math.round(pVertex.get(1));
