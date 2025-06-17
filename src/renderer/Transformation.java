@@ -2,7 +2,6 @@ package renderer;
 
 import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;
-import renderer.algebra.Vector3;
 import renderer.algebra.Vector;
 
 
@@ -40,18 +39,17 @@ public class Transformation {
      * @param lookAtPoint the point to look at
      * @param up the up vector
      */
-    public void setLookAt(Vector3 eye, Vector3 lookAtPoint, Vector3 up) {
+    public void setLookAt(Vector eye, Vector lookAtPoint, Vector up) {
         try {
             // compute rotation
             //++ // TODO
-            Vector3 z = new Vector3(lookAtPoint); //<!!
-            z.subtract(eye);
+            Vector z = lookAtPoint.subtract(eye); //<!!
             System.out.println("z" + z);
 
             z.normalize();
-            Vector3 x = up.cross(z);
+            Vector x = up.cross(z);
             x.normalize();
-            Vector3 y = z.cross(x);
+            Vector y = z.cross(x);
 
             worldToCamera.set(0, 0, x.getX());
             worldToCamera.set(0, 1, x.getY());
@@ -65,7 +63,7 @@ public class Transformation {
 
             // compute translation
             //++ // TODO
-            Vector3 mEye = new Vector3(eye); //<!!
+            Vector mEye = new Vector(eye); //<!!
             mEye.scale(-1.0);
             Matrix m = worldToCamera.getSubMatrix(0, 0, 3, 3);
 
@@ -122,14 +120,14 @@ public class Transformation {
      * @return the projected point
      * @throws SizeMismatchException if the size of the input vector is not 4
      */
-    public Vector3 projectPoint(Vector p) {
+    public Vector projectPoint(Vector p) {
         //++ Vector ps = new Vector(3);
         //++ // TODO
         Vector pe = worldToCamera.multiply(p); //<!!
         Vector ps = calibration.multiply(projection.multiply(pe));
         ps.set(0, ps.get(0) / ps.get(2));
         ps.set(1, ps.get(1) / ps.get(2)); //>!!
-        return new Vector3(ps);
+        return new Vector(ps);
     }
 
     /**
@@ -138,11 +136,11 @@ public class Transformation {
      * @return the transformed vector
      * @throws SizeMismatchException if the size of the input vector is not 3
      */
-    public Vector3 transformVector(Vector3 v) {
+    public Vector transformVector(Vector v) {
         // Doing nothing special here because there is no scaling
         Matrix m = worldToCamera.getSubMatrix(0, 0, 3, 3);
         Vector tv = m.multiply(v);
-        return new Vector3(tv);
+        return new Vector(tv);
     }
 
 }

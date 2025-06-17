@@ -4,7 +4,6 @@ import java.awt.Color;
 
 import renderer.algebra.MathUtils;
 import renderer.algebra.Vector;
-import renderer.algebra.Vector3;
 
 /**
  * The Fragment class represents an attributed 'pixel' as generated
@@ -164,8 +163,8 @@ public class Fragment {
      * Gets the normal of the Fragment.
      * @return the normal of the Fragment
      */
-    public Vector3 getNormal() {
-        return new Vector3(attributes[NORMAL_X],
+    public Vector getNormal() {
+        return new Vector(attributes[NORMAL_X],
                             attributes[NORMAL_Y],
                             attributes[NORMAL_Z]);
     }

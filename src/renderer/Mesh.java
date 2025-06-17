@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import renderer.algebra.Vector;
-import renderer.algebra.Vector3;
 
 /**
  * Defines a triangle based mesh.
@@ -39,7 +38,7 @@ public class Mesh {
     /**
      * The normals of the vertices of the mesh.
      */
-    private Vector3[] normals;
+    private Vector[] normals;
     /**
      * The texture coordinates of the vertices of the mesh.
      */
@@ -143,9 +142,9 @@ public class Mesh {
      * by averaging the normals of the faces that share the vertex.
      * @return an array of Vector3 containing the normals of each vertex.
      */
-    private Vector3[] computeNormals() {
+    private Vector[] computeNormals() {
 
-        normals = new Vector3[vertices.length];
+        normals = new Vector[vertices.length];
 
         // Compute per face normals and set the vertex normal to the average normals
         // across faces
@@ -153,17 +152,15 @@ public class Mesh {
         final int numFaceElements = VERTICES_PER_FACE * getNumFaces();
         for (int i = 0; i < numFaceElements; i += VERTICES_PER_FACE) {
             //++ // TODO
-            //++ Vector3 n = new Vector3();
+            //++ Vector n = new Vector();
             final Vector a = vertices[faces[i]]; //<!!
             final Vector b = vertices[faces[i + 1]];
             final Vector c = vertices[faces[i + 2]];
 
-            final Vector3 v1 = new Vector3(c);
-            v1.subtract(new Vector3(a));
-            final Vector3 v2 = new Vector3(c);
-            v2.subtract(new Vector3(b));
+            final Vector v1 = c.subtract(a);
+            final Vector v2 = c.subtract(b);
 
-            Vector3 n = v1.cross(v2);
+            Vector n = v1.cross(v2);
             n.normalize(); //>!!
 
             // add the calculated normal n to each vertex of the face
@@ -171,7 +168,7 @@ public class Mesh {
                 Vector nj = normals[faces[i + j]];
 
                 if (nj == null) {
-                    normals[faces[i + j]] = new Vector3(n);
+                    normals[faces[i + j]] = new Vector(n);
                     normals[faces[i + j]].setName("n" + faces[i + j]);
                 } else {
                     nj.add(n);
@@ -183,7 +180,7 @@ public class Mesh {
         for (int i = 0; i < normals.length; i++) {
             // deal with orphans vertices
             if (normals[i] == null) {
-                normals[i] = new Vector3("n_orphan");
+                normals[i] = new Vector("n_orphan", 3);
             } else {
                 normals[i].normalize();
             }
@@ -205,7 +202,7 @@ public class Mesh {
      * If the normals have not been computed yet, they are computed.
      * @return an array of Vector3 containing the normals of the mesh
      */
-    public Vector3[] getNormals() {
+    public Vector[] getNormals() {
         if (normals == null) {
             normals = computeNormals();
         }

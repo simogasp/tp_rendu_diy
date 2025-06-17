@@ -1,7 +1,6 @@
 package renderer.light;
 
 import renderer.algebra.Vector;
-import renderer.algebra.Vector3;
 
 /**
  * Interface describing a light source.
@@ -44,7 +43,12 @@ public abstract class Light {
      * @param s              the shininess coefficient
      * @return the intensity of the light of the point
      */
+<<<<<<< HEAD
     abstract public double getContribution(Vector3 position, Vector normal, double[] color,
             Vector3 cameraPosition, double ka, double kd, double ks, double s);
+=======
+    abstract public double getContribution(Vector position, Vector normal, double[] color,
+            Vector cameraPosition, double ka, double kd, double ks, double s);
+>>>>>>> a39e86c (chore: migrate from old algebra to a new one)
 
 }

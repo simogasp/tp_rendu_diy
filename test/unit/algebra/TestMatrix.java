@@ -36,38 +36,27 @@ public class TestMatrix {
         final int numRows = 3;
         final int numCols = 3;
         final int numCols2 = 2;
-        Matrix m = new Matrix(TEST_MATRIX_NAME, numRows, numCols);
+        final Matrix m = new Matrix(TEST_MATRIX_NAME, numRows, numCols);
         assertNotNull(m);
         assertEquals(TEST_MATRIX_NAME, m.getName());
-        assertEquals(numRows, m.nRows());
-        assertEquals(numCols, m.nCols());
+        assertEquals(numRows, m.getNRows());
+        assertEquals(numCols, m.getNCols());
 
-        Matrix m2 = new Matrix("rectMatrix", numRows, numCols2);
+        final Matrix m2 = new Matrix("rectMatrix", numRows, numCols2);
         assertNotNull(m2);
         assertEquals("rectMatrix", m2.getName());
-        assertEquals(numRows, m2.nRows());
-        assertEquals(numCols2, m2.nCols());
+        assertEquals(numRows, m2.getNRows());
+        assertEquals(numCols2, m2.getNCols());
     }
 
     /**
-     * Test the creation of an invalid Matrix.
+     * Test the creation of an invalid Matrix with 0 row.
      * @throws IllegalArgumentException
      */
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidMatrixCreation() throws IllegalArgumentException {
         final int numCols = 3;
         new Matrix(INVALID_MATRIX_NAME, 0, numCols);
-    }
-
-    /**
-     * Test the creation of an invalid Matrix.
-     * @throws IllegalArgumentException
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalidNegativeSizesMatrixCreation() throws IllegalArgumentException {
-        final int negativeRows = -5;
-        final int negativeCols = -4;
-        new Matrix(INVALID_MATRIX_NAME, negativeRows, negativeCols);
     }
 
     /**
@@ -95,6 +84,17 @@ public class TestMatrix {
     }
 
     /**
+     * Test the creation of an invalid Matrix with negative rows and cols.
+     * @throws IllegalArgumentException
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidNegativeSizesMatrixCreation() throws IllegalArgumentException {
+        final int negativeRows = -5;
+        final int negativeCols = -4;
+        new Matrix(INVALID_MATRIX_NAME, negativeRows, negativeCols);
+    }
+
+    /**
      * Test the set and get methods of a Matrix.
      * @throws IllegalArgumentException
      */
@@ -102,7 +102,7 @@ public class TestMatrix {
     public void testSetAndGets() throws IllegalArgumentException {
         final int numRows = 2;
         final int numCols = 3;
-        Matrix m = new Matrix(TEST_MATRIX_NAME, numRows, numCols);
+        final Matrix m = new Matrix(TEST_MATRIX_NAME, numRows, numCols);
         double value = 1.0;
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
@@ -119,7 +119,7 @@ public class TestMatrix {
      */
     @Test(expected = IndexOutOfBoundsException.class)
     public void testSetInvalidValue() {
-        Matrix m = new Matrix(TEST_MATRIX_NAME, 2, 2);
+        final Matrix m = new Matrix(TEST_MATRIX_NAME, 2, 2);
         m.set(2, 2, .0);
     }
 
@@ -129,7 +129,7 @@ public class TestMatrix {
      */
     @Test(expected = IndexOutOfBoundsException.class)
     public void testGetInvalidValue() {
-        Matrix m = new Matrix(TEST_MATRIX_NAME, 2, 2);
+        final Matrix m = new Matrix(TEST_MATRIX_NAME, 2, 2);
         m.get(2, 2);
     }
 
@@ -140,14 +140,14 @@ public class TestMatrix {
     public void testTransposeSquareMatrix() {
         final int numRows = 4;
         final int numCols = 4;
-        Matrix m = new Matrix(TEST_MATRIX_NAME, numRows, numCols);
+        final Matrix m = new Matrix(TEST_MATRIX_NAME, numRows, numCols);
         double value = 1.0;
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
                 m.set(i, j, value++);
             }
         }
-        Matrix transposed = m.transpose();
+        final Matrix transposed = m.transpose();
         value = 1.0;
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
@@ -163,14 +163,14 @@ public class TestMatrix {
     public void testTransposeRectangularMatrix() {
         final int numRows = 3;
         final int numCols = 4;
-        Matrix m = new Matrix(TEST_MATRIX_NAME, numRows, numCols);
+        final Matrix m = new Matrix(TEST_MATRIX_NAME, numRows, numCols);
         double value = 1.0;
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
             m.set(i, j, value++);
             }
         }
-        Matrix transposed = m.transpose();
+        final Matrix transposed = m.transpose();
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
             assertEquals(m.get(i, j), transposed.get(j, i), EPSILON);
@@ -184,19 +184,19 @@ public class TestMatrix {
      */
     @Test
     public void testMultiplySquareMatrices() {
-        Matrix m1 = new Matrix("m1", 2, 2);
+        final Matrix m1 = new Matrix("m1", 2, 2);
         m1.set(0, 0, 1.0);
         m1.set(0, 1, 2.0);
         m1.set(1, 0, 3.0);
         m1.set(1, 1, 4.0);
 
-        Matrix m2 = new Matrix("m2", 2, 2);
+        final Matrix m2 = new Matrix("m2", 2, 2);
         m2.set(0, 0, 2.0);
         m2.set(0, 1, 0.0);
         m2.set(1, 0, 1.0);
         m2.set(1, 1, 2.0);
 
-        Matrix result = m1.multiply(m2);
+        final Matrix result = m1.multiply(m2);
         assertEquals(4.0, result.get(0, 0), EPSILON);
         assertEquals(4.0, result.get(0, 1), EPSILON);
         assertEquals(10.0, result.get(1, 0), EPSILON);
@@ -209,7 +209,7 @@ public class TestMatrix {
      */
     @Test
     public void testMultiplyRectangularMatrices() {
-        Matrix m1 = new Matrix("m1", 2, 3);
+        final Matrix m1 = new Matrix("m1", 2, 3);
         m1.set(0, 0, 1.0);
         m1.set(0, 1, 2.0);
         m1.set(0, 2, 3.0);
@@ -217,7 +217,7 @@ public class TestMatrix {
         m1.set(1, 1, 5.0);
         m1.set(1, 2, 6.0);
 
-        Matrix m2 = new Matrix("m2", 3, 2);
+        final Matrix m2 = new Matrix("m2", 3, 2);
         m2.set(0, 0, 7.0);
         m2.set(0, 1, 8.0);
         m2.set(1, 0, 9.0);
@@ -225,7 +225,7 @@ public class TestMatrix {
         m2.set(2, 0, 11.0);
         m2.set(2, 1, 12.0);
 
-        Matrix result = m1.multiply(m2);
+        final Matrix result = m1.multiply(m2);
         final double[][] expectedValues = {
             {58.0, 64.0},
             {139.0, 154.0}
@@ -244,8 +244,8 @@ public class TestMatrix {
      */
     @Test(expected = SizeMismatchException.class)
     public void testMultiplyInvalidMatrices() {
-        Matrix m1 = new Matrix("m1", 2, 2);
-        Matrix m2 = new Matrix("m2", 3, 3);
+        final Matrix m1 = new Matrix("m1", 2, 2);
+        final Matrix m2 = new Matrix("m2", 3, 3);
         m1.multiply(m2);
     }
 
@@ -256,7 +256,7 @@ public class TestMatrix {
     @Test
     public void testIdentityMatrix() {
         final int identitySize = 3;
-        Matrix m = Matrix.createIdentity("identity", identitySize);
+        final Matrix m = Matrix.createIdentity("identity", identitySize);
         for (int i = 0; i < identitySize; i++) {
             for (int j = 0; j < identitySize; j++) {
                 if (i == j) {
@@ -276,8 +276,8 @@ public class TestMatrix {
         final int sizeRow = 5;
         final int sizeCol = 3;
         final int colToSet = 1;
-        Matrix matrix = Matrix.createRandom(TEST_MATRIX_NAME, sizeRow, sizeCol);
-        Vector vector = new Vector(sizeRow);
+        final Matrix matrix = Matrix.createRandom(TEST_MATRIX_NAME, sizeRow, sizeCol);
+        final Vector vector = new Vector(sizeRow);
         // Set vector values
         for (int i = 0; i < sizeRow; i++) {
             vector.set(i, i + 1.);
@@ -294,11 +294,10 @@ public class TestMatrix {
      * Test setting the column values with an invalid vector size.
      * @throws IllegalArgumentException
      */
-    @Test
     public void testSetColInvalidVectorSize() {
         final int sizeMat = 3;
-        Matrix matrix = new Matrix(sizeMat, sizeMat);
-        Vector vector = new Vector(2); // Invalid size
+        final Matrix matrix = new Matrix(sizeMat, sizeMat);
+        final Vector vector = new Vector(2); // Invalid size
 
         assertThrows(IllegalArgumentException.class, () ->
             matrix.setCol(1, vector));
@@ -311,7 +310,7 @@ public class TestMatrix {
     public void testGetColValidIndex() {
         final int numRows = 3;
         final int numCols = 3;
-        Matrix matrix = new Matrix(numRows, numCols);
+        final Matrix matrix = new Matrix(numRows, numCols);
         double value = 1.0;
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
@@ -320,23 +319,11 @@ public class TestMatrix {
         }
 
         for (int j = 0; j < numCols; j++) {
-            Vector col = matrix.getCol(j);
+            final Vector col = matrix.getCol(j);
             for (int i = 0; i < numRows; i++) {
                 assertEquals((i * numCols) + (j + 1), col.get(i), EPSILON);
             }
         }
-    }
-
-    /**
-     * Test getting the column values with an invalid index.
-     */
-    @Test
-    public void testGetColInvalidIndexNegative() {
-        final int numRows = 3;
-        final int numCols = 3;
-        Matrix matrix;
-        matrix = new Matrix(numRows, numCols);
-        assertThrows(IllegalArgumentException.class, () -> matrix.getCol(-1));
     }
 
     /**
@@ -388,8 +375,8 @@ public class TestMatrix {
         final int numRows = 3;
         final int numCols = 5;
         final int rowToSet = 2;
-        Matrix matrix = Matrix.createRandom("test", numRows, numCols);
-        Vector vector = new Vector(numCols);
+        final Matrix matrix = Matrix.createRandom("test", numRows, numCols);
+        final Vector vector = new Vector(numCols);
         // set vector values
         for (int i = 0; i < numCols; i++) {
             vector.set(i, i + 1.);
@@ -409,8 +396,8 @@ public class TestMatrix {
     public void testSetRowInvalidSize() {
         final int numRows = 3;
         final int numCols = 3;
-        Matrix matrix = new Matrix(numRows, numCols);
-        Vector vector = new Vector(2); // Invalid size
+        final Matrix matrix = new Matrix(numRows, numCols);
+        final Vector vector = new Vector(2); // Invalid size
         vector.set(0, 1.0);
         vector.set(1, 2.0);
 
@@ -430,8 +417,8 @@ public class TestMatrix {
         final int numCols = 3;
         final int invalidRowNegative = -1;
         final int invalidRowPositive = 3;
-        Matrix matrix = new Matrix(numRows, numCols);
-        Vector vector = new Vector(numCols);
+        final Matrix matrix = new Matrix(numRows, numCols);
+        final Vector vector = new Vector(numCols);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             matrix.setRow(invalidRowNegative, vector);
@@ -453,8 +440,7 @@ public class TestMatrix {
     public void testGetRowValidIndex() {
         final int numRows = 3;
         final int numCols = 4;
-        Matrix matrix;
-        matrix = new Matrix(numRows, numCols);
+        final Matrix matrix = new Matrix(numRows, numCols);
         double value = 1.0;
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
@@ -478,8 +464,7 @@ public class TestMatrix {
     public void testGetRowInvalidIndexNegative() {
         final int numRows = 3;
         final int numCols = 3;
-        Matrix matrix;
-        matrix = new Matrix(numRows, numCols);
+        final Matrix matrix = new Matrix(numRows, numCols);
         assertThrows(IllegalArgumentException.class, () -> matrix.getRow(-1));
 
     }
@@ -493,12 +478,123 @@ public class TestMatrix {
         final int numCols = 3;
         final int invalidRowNegative = -3;
         final int invalidRowPositive = 3;
-        Matrix matrix;
-        matrix = new Matrix(numRows, numCols);
+        final Matrix matrix = new Matrix(numRows, numCols);
         assertThrows(IllegalArgumentException.class, ()
             -> matrix.getRow(invalidRowPositive));
         assertThrows(IllegalArgumentException.class, ()
             -> matrix.getRow(invalidRowNegative));
     }
+
+    /**
+     * Test the addition of two squares Matrices.
+     */
+    @Test
+    public void testAddSquaredMatrix() {
+        final int matrixSize = 4;
+        final Matrix m1 = new Matrix("m1", matrixSize, matrixSize);
+        final Matrix m2 = new Matrix("m2", matrixSize, matrixSize);
+        double value = 1;
+        for (int i = 0; i < matrixSize; i++) {
+            for (int j = 0; j < matrixSize; j++) {
+                m1.set(i, j, value++ + i * m1.getNCols() + j);
+                m2.set(i, j, - i * m2.getNCols() - j);
+            }
+        }
+
+        final Matrix res = m1.add(m2);
+        // verify the size of the matrices
+        assertEquals(res.getNCols(), m1.getNCols());
+        assertEquals(res.getNRows(), m1.getNRows());
+        // verify the values of the matrix
+        value = 1;
+        for (int i = 0; i < matrixSize; i++) {
+            for (int j = 0; j < matrixSize; j++) {
+                assertEquals(value++, res.get(i, j), EPSILON);
+            }
+        }
+    }
+
+    /**
+     * Test the addition of two squares Matrices.
+     */
+    @Test
+    public void testAddRectangleMatrix() {
+        final int rows = 4;
+        final int cols = 2;
+        final Matrix m1 = new Matrix("m1", rows, cols);
+        final Matrix m2 = new Matrix("m2", rows, cols);
+        double value = 1;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                m1.set(i, j, value++ + i * m1.getNCols() + j);
+                m2.set(i, j, - i * m2.getNCols() - j);
+            }
+        }
+
+        final Matrix res = m1.add(m2);
+
+        // verify the size of the matrices
+        assertEquals(res.getNCols(), m1.getNCols());
+        assertEquals(res.getNRows(), m1.getNRows());
+        
+        // verify the values of the matrix
+        value = 1;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                assertEquals(value++, res.get(i, j), EPSILON);
+            }
+        }
+    }
+
+    /**
+     * Test the addition of two matrices with different size.
+     */
+    @Test
+    public void testAddInvalidSize() {
+        final Matrix m1 = new Matrix(1, 3);
+        final Matrix m2 = new Matrix(3,  4);
+        assertThrows(SizeMismatchException.class, ()
+            -> m1.add(m2));
+    }
+
+
+    /**
+     * Test the subtraction of two squares matrix.
+     */
+    @Test
+    public void testSubtractSquaresMatrix() {
+        final int matrixSize = 4;
+        final Matrix m1 = new Matrix("m1", matrixSize, matrixSize);
+        final Matrix m2 = new Matrix("m2", matrixSize, matrixSize);
+        double value = 1;
+
+        for (int i = 0; i < matrixSize; i++) {
+            for (int j = 0; j < matrixSize; j++) {
+                m1.set(i, j, value++ + i * m1.getNCols() + j);
+                m2.set(i, j, + i * m2.getNCols() + j);
+            }
+        }
+
+        final Matrix res = m1.subtract(m2);
+        // verify the size of the matrix
+        assertEquals(res.getNCols(), m1.getNCols());
+        assertEquals(res.getNRows(), m1.getNRows());
+        // verify the values of the matrix
+        value = 1;
+        for (int i = 0; i < matrixSize; i++) {
+            for (int j = 0; j < matrixSize; j++) {
+                assertEquals(value++, res.get(i, j), EPSILON);
+            }
+        }
+    }
+
+    @Test
+    public void testSubtractInvalidSize() {
+        final Matrix m1 = new Matrix(1, 3);
+        final Matrix m2 = new Matrix(3,  4);
+        assertThrows(SizeMismatchException.class, ()
+            -> m1.subtract(m2));
+    }
+
 
 }

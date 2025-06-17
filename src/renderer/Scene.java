@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import renderer.algebra.Vector3;
+import renderer.algebra.Vector;
 
 /**
  * Class that describes a simple 3D Scene:
@@ -29,9 +29,9 @@ public class Scene {
     }
 
     String meshFilename;
-    Vector3 cameraPosition = new Vector3("cam_pos");
-    Vector3 cameraLookAt = new Vector3("cam_lookat");
-    Vector3 cameraUp = new Vector3("cam_up");
+    Vector cameraPosition = new Vector("cam_pos", 3);
+    Vector cameraLookAt = new Vector("cam_lookat", 3);
+    Vector cameraUp = new Vector("cam_up", 3);
     double cameraFocal;
     int screenW;
     int screenH;
@@ -107,7 +107,7 @@ public class Scene {
      * Gets the camera position.
      * @return the camera position.
      */
-    public Vector3 getCameraPosition() {
+    public Vector getCameraPosition() {
         return cameraPosition;
     }
 
@@ -115,7 +115,7 @@ public class Scene {
      * Gets the camera look at point.
      * @return the camera look at point.
      */
-    public Vector3 getCameraLookAt() {
+    public Vector getCameraLookAt() {
         return cameraLookAt;
     }
 
@@ -123,7 +123,7 @@ public class Scene {
      * Gets the camera up vector.
      * @return the camera up vector.
      */
-    public Vector3 getCameraUp() {
+    public Vector getCameraUp() {
         return cameraUp;
     }
 

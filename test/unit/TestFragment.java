@@ -7,7 +7,7 @@ import static org.junit.Assert.assertThrows;
 import java.awt.Color;
 
 import renderer.Fragment;
-import renderer.algebra.Vector3;
+import renderer.algebra.Vector;
 
 /**
  * Unit tests for the Fragment class.
@@ -56,7 +56,7 @@ public class TestFragment {
      */
     @Test
     public void testFragmentCreation() {
-        Fragment fragment = new Fragment(X_COORD, Y_COORD);
+        final Fragment fragment = new Fragment(X_COORD, Y_COORD);
         assertNotNull(fragment);
         assertEquals(X_COORD, fragment.getX());
         assertEquals(Y_COORD, fragment.getY());
@@ -68,7 +68,7 @@ public class TestFragment {
      */
     @Test
     public void testSetAndGetAttributes() {
-        Fragment fragment = new Fragment(X_COORD, Y_COORD);
+        final Fragment fragment = new Fragment(X_COORD, Y_COORD);
         fragment.setAttribute(Fragment.DEPTH, DEPTH_VALUE);
         fragment.setAttribute(Fragment.COLOR_R, COLOR_R);
         fragment.setAttribute(Fragment.COLOR_G, COLOR_G);
@@ -92,12 +92,12 @@ public class TestFragment {
      */
     @Test
     public void testSetAndGetPosition() {
-        Fragment fragment = new Fragment(X_COORD, Y_COORD);
+        final Fragment fragment = new Fragment(X_COORD, Y_COORD);
         fragment.setPosition(NEW_X_COORD, NEW_Y_COORD);
         assertEquals(NEW_X_COORD, fragment.getX());
         assertEquals(NEW_Y_COORD, fragment.getY());
 
-        int[] position = fragment.getPosition();
+        final int[] position = fragment.getPosition();
         assertEquals(NEW_X_COORD, position[0]);
         assertEquals(NEW_Y_COORD, position[1]);
     }
@@ -107,7 +107,7 @@ public class TestFragment {
      */
     @Test
     public void testSetAndGetDepth() {
-        Fragment fragment = new Fragment(X_COORD, Y_COORD);
+        final Fragment fragment = new Fragment(X_COORD, Y_COORD);
         fragment.setDepth(DEPTH_VALUE);
         assertEquals(DEPTH_VALUE, fragment.getDepth(), EPSILON);
     }
@@ -117,10 +117,10 @@ public class TestFragment {
      */
     @Test
     public void testSetAndGetNormal() {
-        Fragment fragment = new Fragment(X_COORD, Y_COORD);
-        Vector3 normal = new Vector3(NORMAL_X, NORMAL_Y, NORMAL_Z);
+        final Fragment fragment = new Fragment(X_COORD, Y_COORD);
+        final Vector normal = new Vector(NORMAL_X, NORMAL_Y, NORMAL_Z);
         fragment.setNormal(normal);
-        Vector3 retrievedNormal = fragment.getNormal();
+        final Vector retrievedNormal = fragment.getNormal();
         assertEquals(NORMAL_X, retrievedNormal.getX(), EPSILON);
         assertEquals(NORMAL_Y, retrievedNormal.getY(), EPSILON);
         assertEquals(NORMAL_Z, retrievedNormal.getZ(), EPSILON);

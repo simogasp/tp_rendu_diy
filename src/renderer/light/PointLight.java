@@ -1,7 +1,6 @@
 package renderer.light;
 
 import renderer.algebra.Vector;
-import renderer.algebra.Vector3;
 
 public class PointLight extends Light {
 
@@ -36,23 +35,21 @@ public class PointLight extends Light {
         this.z = z;
     }
 
-    public double getContribution(Vector3 position, Vector normal, double[] color, Vector3 cameraPosition, double ka,
+    public double getContribution(Vector position, Vector normal, double[] color, Vector cameraPosition, double ka,
             double kd, double ks, double s) {
         double I = 0;
 
         // vector from point to camera center
-        Vector3 e = new Vector3(cameraPosition);
-        e.subtract(position);
+        Vector e = cameraPosition.subtract(position);
         e.normalize();
 
+
         // vector from point to light
-        Vector3 l = getPositionAsVector3();
-        l.subtract(position);
+        Vector l = getPositionAsVector().subtract(position);
         l.normalize();
 
         // half-vector between e and l
-        Vector3 h = new Vector3(e);
-        h.add(l);
+        Vector h = e.add(l);
         h.normalize();
 
         // diffuse contribution
@@ -67,8 +64,8 @@ public class PointLight extends Light {
         return I;
     }
 
-    private Vector3 getPositionAsVector3() {
-        return new Vector3(x, y, z);
+    private Vector getPositionAsVector() {
+        return new Vector(x, y, z);
     }
 
 }

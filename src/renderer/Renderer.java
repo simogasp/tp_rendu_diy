@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
-import renderer.algebra.Vector3;
 import renderer.light.Lighting;
 import renderer.rasterizer.Rasterizer;
 import renderer.shader.NormalMapShader;
@@ -84,7 +83,7 @@ public final class Renderer {
      */
     static Fragment[] projectVertices() {
         Vector[] vertices = mesh.getVertices();
-        Vector3[] normals = mesh.getNormals();
+        Vector[] normals = mesh.getNormals();
         double[] colors = mesh.getColors();
 
         Fragment[] fragments = new Fragment[vertices.length];
@@ -92,7 +91,7 @@ public final class Renderer {
         for (int i = 0; i < vertices.length; i++) {
             Vector pVertex = xform.projectPoint(vertices[i]);
             // Vector pNormal = xform.transformVector (normals[i]);
-            Vector3 pNormal = normals[i];
+            Vector pNormal = normals[i];
 
             int x = (int) Math.round(pVertex.get(0));
             int y = (int) Math.round(pVertex.get(1));
@@ -114,7 +113,8 @@ public final class Renderer {
                 color[1] = colors[3 * i + 1];
                 color[2] = colors[3 * i + 2];
                 double material[] = scene.getMaterial();
-                double[] litColor = lighting.applyLights(new Vector3(vertices[i]), pNormal, color,
+                final Vector v3d = new Vector(vertices[i].getSubVector(0, 3));
+                double[] litColor = lighting.applyLights(v3d, pNormal, color,
                         scene.getCameraPosition(),
                         material[0], material[1], material[2], material[3]);
                 fragments[i].setColor(litColor[0], litColor[1], litColor[2]);
