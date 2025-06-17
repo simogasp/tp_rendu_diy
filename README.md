@@ -83,17 +83,27 @@ ant compile
 ```bash
 ant compile-test
 ```
+It compiles all the sources and places them in the `bin/cls` folder.
 
 ### Clean
 
-it compiles all the sources and places them in the `bin/cls` folder.
 
 ```bash
 ant clean
 ```
 
-cleans the `bin` folder.
+cleans the repository.
 
+```bash
+ant clean-doc
+```
+
+cleans the javadoc generated.
+
+```bash
+ant clean-test
+```
+cleans the reports directory.
 
 ### Tests
 
