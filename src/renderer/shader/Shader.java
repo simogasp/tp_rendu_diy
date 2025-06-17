@@ -38,6 +38,12 @@ public abstract class Shader {
     public abstract void shade(Fragment fragment);
 
     /**
+     * Writes the fragment to the screen if it has to be.
+     * @param fragment the fragment to shade
+     */
+    public abstract void shadeNormal(Fragment fragment);
+
+    /**
      * Test whether the fragment falls onto the screen.
      * @param fragment the fragment to test
      * @return true if the fragment is clipped, false otherwise

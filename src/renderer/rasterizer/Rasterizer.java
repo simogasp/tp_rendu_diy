@@ -1,6 +1,5 @@
 package renderer.rasterizer;
 
-import java.awt.Color;
 
 import renderer.Fragment;
 import renderer.algebra.Matrix;
@@ -237,7 +236,7 @@ public class Rasterizer {
         int x2 = v2.getX();
         int y2 = v2.getY();
 
-        Fragment fragment = new Fragment(0, 0, normal);
+        Fragment fragment = new Fragment(0, 0);
 
         boolean sym = (Math.abs(y2 - y1) > Math.abs(x2 - x1));
         if (sym) {
@@ -281,13 +280,14 @@ public class Rasterizer {
             if (!shader.isClipped(fragment)) {
                 interpolate2(v1, v2, fragment);
                 // set the color to red
-                if (normal) {
-                    fragment.setColor(Color.RED);
-                }
                 if (sym) {
                     swapXAndY(fragment);
                 }
-                shader.shade(fragment);
+                if (normal) {
+                    shader.shadeNormal(fragment);
+                } else {
+                    shader.shade(fragment);
+                }
             }
 
             x += 1;

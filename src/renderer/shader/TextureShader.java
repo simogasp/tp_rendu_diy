@@ -84,6 +84,17 @@ public class TextureShader extends Shader {
         }
     }
 
+    
+
+    @Override
+    public void shadeNormal(Fragment fragment) {
+        if (!depth.testFragment(fragment)) {
+            return;
+        }
+        screen.setPixel(fragment.getX(), fragment.getY(), Color.RED);
+        depth.writeFragment(fragment);
+    }
+
     /**
      * Reset the shader.
      */

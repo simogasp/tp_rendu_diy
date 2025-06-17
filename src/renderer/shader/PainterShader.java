@@ -1,5 +1,7 @@
 package renderer.shader;
 
+import java.awt.Color;
+
 import renderer.DepthBuffer;
 import renderer.Fragment;
 import renderer.GraphicsWrapper;
@@ -30,10 +32,22 @@ public class PainterShader extends Shader {
      * @param fragment the fragment to shade
      */
     public void shade(Fragment fragment) {
-        if (depth.testFragment(fragment)) {
-            screen.setPixel(fragment.getX(), fragment.getY(), fragment.getColor());
-            depth.writeFragment(fragment);
+        if (!depth.testFragment(fragment)) {
+            return;
         }
+        screen.setPixel(fragment.getX(), fragment.getY(), fragment.getColor());
+        depth.writeFragment(fragment);
+    }
+
+    
+
+    @Override
+    public void shadeNormal(Fragment fragment) {
+        if (!depth.testFragment(fragment)) {
+            return;
+        }
+        screen.setPixel(fragment.getX(), fragment.getY(), Color.RED);
+        depth.writeFragment(fragment);
     }
 
     /**

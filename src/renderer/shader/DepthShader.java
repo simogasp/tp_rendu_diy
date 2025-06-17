@@ -42,15 +42,20 @@ public class DepthShader extends Shader {
         if (!depth.testFragment(fragment)) {
             return;
         }
-
+        screen.setPixel(fragment.getX(), fragment.getY(), getColorFor(fragment.getDepth()));
+        depth.writeFragment(fragment);
+    }
+    
+    
+    
+    @Override
+    public void shadeNormal(Fragment fragment) {
+        if (!depth.testFragment(fragment)) {
+            return;
+        }
         // a normal vector has to be drawn in red whereas another 
         // fragment is print according to his depth
-
-        if (fragment.isNormal()) {
-            screen.setPixel(fragment.getX(), fragment.getY(), Color.RED);
-        } else {
-            screen.setPixel(fragment.getX(), fragment.getY(), getColorFor(fragment.getDepth()));
-        }
+        screen.setPixel(fragment.getX(), fragment.getY(), Color.RED);
         depth.writeFragment(fragment);
     }
 
