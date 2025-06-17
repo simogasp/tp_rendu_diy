@@ -30,8 +30,8 @@ public class SizeMismatchException extends RuntimeException {
      * @param m2 second matrix
      */
     public SizeMismatchException(Matrix m1, Matrix m2) {
-        super(m1.getName() + "[*," + m1.nCols() + "] != "
-            + m2.getName() + "[" + m2.nRows() + ",*]");
+        super(m1.getName() + "[*," + m1.nCols + "] != "
+            + m2.getName() + "[" + m2.nRows + ",*]");
     }
 
     /**
@@ -40,7 +40,7 @@ public class SizeMismatchException extends RuntimeException {
      * @param v vector
      */
     public SizeMismatchException(Matrix m, Vector v) {
-        super(m.getName() + "[*," + m.nCols() + "] != "
+        super(m.getName() + "[*," + m.nCols + "] != "
             + v.getName() + "[" + v.size() + ",*]");
     }
 

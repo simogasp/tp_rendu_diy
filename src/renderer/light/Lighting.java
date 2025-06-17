@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import renderer.algebra.MathUtils;
-import renderer.algebra.Vector3;
+import renderer.algebra.Vector;
 
 /**
  * The Lighting class describes a scene lighting environment.
@@ -58,8 +58,8 @@ public class Lighting {
      * @param s the shininess coefficient
      * @return the illuminated color of the point as an array of 3 doubles
      */
-    public double[] applyLights(Vector3 position, Vector3 normal, double[] color,
-            Vector3 cameraPosition,
+    public double[] applyLights(Vector position, Vector normal, double[] color,
+            Vector cameraPosition,
             double ka, double kd, double ks, double s) {
 
         // total light intensity

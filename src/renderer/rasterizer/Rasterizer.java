@@ -3,7 +3,6 @@ package renderer.rasterizer;
 import renderer.Fragment;
 import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;
-import renderer.algebra.Vector3;
 import renderer.shader.Shader;
 import renderer.algebra.Vector;
 
@@ -251,7 +250,7 @@ public class Rasterizer {
                 fragment.setPosition(x, y);
                 if (!shader.isClipped(fragment)) {
 
-                    final Vector3 v = new Vector3(1.0, (double) x, (double) y);
+                    final Vector v = new Vector(1.0, (double) x, (double) y);
                     final Vector bar = cMat.multiply(v);
                     if ((bar.get(0) >= 0.0)
                         && (bar.get(1) >= 0.0)

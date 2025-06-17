@@ -1,7 +1,7 @@
 import org.junit.Test;
 
 import renderer.Scene;
-import renderer.algebra.*;
+import renderer.algebra.Vector;
 
 /**
  * Test class from the Scene class.
@@ -15,9 +15,9 @@ public class TestScene {
 
         Scene scene = new Scene("data/example1.scene");
         String mesh_filename = scene.getMeshFileName();
-        Vector3 cameraPosition = scene.getCameraPosition();
-        Vector3 cameraLookAt = scene.getCameraLookAt();
-        Vector3 cameraUp = scene.getCameraUp();
+        Vector cameraPosition = scene.getCameraPosition();
+        Vector cameraLookAt = scene.getCameraLookAt();
+        Vector cameraUp = scene.getCameraUp();
         // double cameraXLimit = scene.getCameraXLimit ();
         double cameraFocal = scene.getCameraFocal();
         int screenW = scene.getScreenW();

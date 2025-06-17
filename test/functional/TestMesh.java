@@ -1,7 +1,7 @@
 import org.junit.Test;
 
 import renderer.Mesh;
-import renderer.algebra.*;
+import renderer.algebra.Vector;
 
 /**
  * Test class for the Mesh class
