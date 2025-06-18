@@ -58,8 +58,9 @@ public class NormalMapShader extends Shader {
         }
 
         // we normalize the vector to compute the color of the pixel.
-        if (Math.abs(n.norm() - 1) > EPSILON);
-        n.normalize();
+        if (Math.abs(n.norm() - 1) > EPSILON){
+            n.normalize();
+        }
 
         // transform a 3D direction in a color.
         final double r = n.getX() / 2 + 0.5;
