@@ -60,12 +60,12 @@ public class NormalMapShader extends Shader {
         // we normalize the vector to compute the color of the pixel.
         if (Math.abs(n.norm() - 1) > EPSILON);
         n.normalize();
-        // we reverse it
-        n.scale(-1);
+
         // transform a 3D direction in a color.
         final double r = n.getX() / 2 + 0.5;
         final double g = n.getY() / 2 + 0.5;
-        final double b = n.getZ() / 2 + 0.5;
+        // need to invert to map negatives z values to "high" blue colors
+        final double b = -n.getZ() / 2 + 0.5;
 
         fragment.setColor(r, g, b);
 
