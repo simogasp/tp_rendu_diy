@@ -1,10 +1,11 @@
 package renderer.shader;
 
+
 import renderer.DepthBuffer;
 import renderer.Fragment;
 import renderer.GraphicsWrapper;
 import renderer.Transformation;
-import renderer.algebra.Vector3;
+import renderer.algebra.Vector;
 
 public class NormalMapShader extends Shader {
 
@@ -49,8 +50,8 @@ public class NormalMapShader extends Shader {
             return;
         }
 
-        Vector3 nn = fragment.getNormal();
-        Vector3 n = xform.transformVector(nn);
+        Vector nn = fragment.getNormal();
+        Vector n = xform.transformVector(nn);
 
         // some vector has NaN value so we skip it
         if (Double.isNaN(n.getX()) || Double.isNaN(n.getY()) || Double.isNaN(n.getZ())) {
