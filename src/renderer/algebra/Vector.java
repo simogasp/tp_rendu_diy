@@ -112,10 +112,18 @@ public class Vector extends Matrix implements Cloneable {
     public Vector normalize() {
         final double norm = norm();
         if (norm > 0) {
-            return scale(1. / norm);
+            return scaleI(1. / norm());
         } else {
             return zeros();
         }
+    }
+
+    private Vector scaleI(double d) {
+        final Matrix res = super.scale(d);
+        for (int i = 0; i < values.length; i++) {
+            values[i] = res.values[i];
+        }
+        return this;
     }
 
     /**
