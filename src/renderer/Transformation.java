@@ -63,8 +63,7 @@ public class Transformation {
 
             // compute translation
             //++ // TODO
-            Vector mEye = new Vector(eye); //<!!
-            mEye.scale(-1.0);
+            Vector mEye = (new Vector(eye)).scale(-1.0); //<!!
             Matrix m = worldToCamera.getSubMatrix(0, 0, 3, 3);
 
             Vector t = m.multiply(mEye);

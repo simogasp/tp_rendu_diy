@@ -402,11 +402,14 @@ public class Matrix {
     /**
      * Multiplies the Matrix by the given constant.
      * @param f the constant to multiply the Vector by
+     * @return the resulting matrix.
      */
-    public void scale(double f) {
+    public Matrix scale(final double f) {
+        final Matrix res = new Matrix(nRows, nCols);
         for (int i = 0; i < values.length; i++) {
-            values[i] *= f;
+            res.values[i] = values[i] * f;
         }
+        return res;
     }
 
 }

@@ -110,14 +110,9 @@ public class Vector extends Matrix implements Cloneable {
      * @return the normalized vector
      */
     public Vector normalize() {
-        double norm = norm();
-        System.out.println("norm = " + norm);
+        final double norm = norm();
         if (norm > 0) {
-            for (int i = 0; i < nRows; i++) {
-                this.values[i] /= norm;
-                System.out.println("t = " + this.values[i]);
-            }
-            return this;
+            return scale(1. / norm);
         } else {
             return zeros();
         }
@@ -231,6 +226,15 @@ public class Vector extends Matrix implements Cloneable {
      */
     public Vector subtract(Vector v) {
         return new Vector(super.subtract(v).values);
+    }
+
+    /**
+     * Vector scaling : fv.
+     * @param f the scalar
+     * @return the resulting vector
+     */
+    public Vector scale(double f) {
+        return new Vector(super.scale(f).values);
     }
 
     /**

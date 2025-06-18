@@ -80,9 +80,9 @@ public class TestVector {
         for (int i = 0; i < vectorSize; i++) {
             v.set(i, i + 1.0);
         }
-        v.scale(scale);
+        final Vector nv = v.scale(scale);
         for (int i = 0; i < vectorSize; i++) {
-            assertEquals((i + 1.0) * scale, v.get(i), EPSILON);
+            assertEquals((i + 1.0) * scale, nv.get(i), EPSILON);
         }
     }
 
