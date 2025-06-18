@@ -60,7 +60,7 @@ public class Matrix {
      * @param nCols number of columns
      * @throws IllegalArgumentException if the matrix dimensions are invalid
      */
-    public Matrix(int nRows, int nCols) throws IllegalArgumentException {
+    public Matrix(final int nRows, final int nCols) throws IllegalArgumentException {
         this(DEFAULT_NAME, nRows, nCols);
     }
 
@@ -71,7 +71,7 @@ public class Matrix {
      * @return the identity matrix of size @size
      * @throws IllegalArgumentException if the matrix dimensions are invalid
      */
-    public static final Matrix createIdentity(int size) 
+    public static final Matrix createIdentity(final int size) 
             throws IllegalArgumentException {
         String name = "I" + size;
         return createIdentity(name, size);
@@ -84,7 +84,7 @@ public class Matrix {
      * @return the identity matrix of size @size and name @name
      * @throws IllegalArgumentException if the matrix dimensions are invalid
      */
-    public static final Matrix createIdentity(String name, int size) 
+    public static final Matrix createIdentity(final String name, final int size) 
             throws IllegalArgumentException {
         Matrix id = new Matrix(name, size, size);
 
