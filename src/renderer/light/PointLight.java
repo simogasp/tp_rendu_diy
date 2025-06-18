@@ -1,5 +1,6 @@
 package renderer.light;
 
+import renderer.algebra.Vector;
 import renderer.algebra.Vector3;
 
 public class PointLight extends Light {
@@ -35,7 +36,7 @@ public class PointLight extends Light {
         this.z = z;
     }
 
-    public double getContribution(Vector3 position, Vector3 normal, double[] color, Vector3 cameraPosition, double ka,
+    public double getContribution(Vector3 position, Vector normal, double[] color, Vector3 cameraPosition, double ka,
             double kd, double ks, double s) {
         double I = 0;
 

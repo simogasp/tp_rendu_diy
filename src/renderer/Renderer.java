@@ -7,6 +7,7 @@ import renderer.algebra.Vector;
 import renderer.algebra.Vector3;
 import renderer.light.Lighting;
 import renderer.rasterizer.Rasterizer;
+import renderer.shader.NormalMapShader;
 import renderer.shader.PainterShader;
 import renderer.shader.Shader;
 import renderer.shader.TextureShader;
@@ -49,13 +50,6 @@ public final class Renderer {
     static void init(String sceneFilename) throws IOException {
         scene = new Scene(sceneFilename);
         mesh = new Mesh(scene.getMeshFileName());
-        screen = new GraphicsWrapper(scene.getScreenW(), scene.getScreenH());
-        screen.clearBuffer();
-        //++ shader = new SimpleShader (screen);
-        shader = new PainterShader(screen); //??
-        shader = new DepthShader(screen); //??
-        rasterizer = new Rasterizer(shader);
-        // rasterizer = new PerspectiveCorrectRasterizer(shader);
 
         xform = new Transformation();
         xform.setLookAt(scene.getCameraPosition(),
@@ -65,6 +59,15 @@ public final class Renderer {
         xform.setCalibration(scene.getCameraFocal(),
                             scene.getScreenW(),
                             scene.getScreenH());
+
+        screen = new GraphicsWrapper(scene.getScreenW(), scene.getScreenH());
+        screen.clearBuffer();
+        //++ shader = new SimpleShader (screen);
+        shader = new PainterShader(screen); //??
+        shader = new NormalMapShader(screen, xform); //??
+        rasterizer = new Rasterizer(shader);
+        // rasterizer = new PerspectiveCorrectRasterizer(shader);
+
 
         lighting = new Lighting();
         lighting.addAmbientLight(scene.getAmbientI());
