@@ -2,6 +2,7 @@ import org.junit.Test;
 
 import renderer.Fragment;
 import renderer.GraphicsWrapper;
+import renderer.rasterizer.NormalLayer;
 import renderer.rasterizer.Rasterizer;
 import renderer.shader.Shader;
 
@@ -24,10 +25,6 @@ public class TestRasterizer {
                     + " - color = (" + fragment.getColor() + ")");
         }
 
-        @Override
-        public void shadeNormal(Fragment fragment) {
-            shade(fragment);
-        }
     }
 
     @Test
@@ -36,7 +33,7 @@ public class TestRasterizer {
         System.out.println("OFF\n# Test Start");
 
         TestShader shader = new TestShader(new GraphicsWrapper(256, 256));
-        Rasterizer rasterizer = new Rasterizer(shader);
+        Rasterizer rasterizer = new Rasterizer(shader, null);
 
         System.out.println("Rasterizing edge");
         Fragment v1 = new Fragment(0, 20);
