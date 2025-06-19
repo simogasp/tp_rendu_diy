@@ -20,8 +20,8 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
      * Creates a PerspectiveCorrectRasterizer with the given shader.
      * @param shader the shader to use
      */
-    public PerspectiveCorrectRasterizer(Shader shader) {
-        super(shader);
+    public PerspectiveCorrectRasterizer(final Shader shader, final NormalLayer normalLayer) {
+        super(shader, normalLayer);
     }
 
     /**
@@ -32,7 +32,7 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
      * @throws SizeMismatchException if the size of the fragments do not match
      */
     @Override
-    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3) {
+    public void rasterizeFace(final Fragment v1, final Fragment v2, final Fragment v3) {
 
         final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 

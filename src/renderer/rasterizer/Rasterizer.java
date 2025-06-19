@@ -24,13 +24,18 @@ public class Rasterizer {
      * The shader used by the Rasterizer.
      */
     protected Shader shader;
+    /**
+     * The layer where the the normals will be rendered.
+     */
+    private NormalLayer normalLayer;
 
     /**
      * Creates a Rasterizer with the given Shader.
      * @param shader the shader to use
      */
-    public Rasterizer(Shader shader) {
+    public Rasterizer(Shader shader, NormalLayer normalLayer) {
         this.shader = shader;
+        this.normalLayer = normalLayer;
     }
 
     /**
@@ -284,7 +289,7 @@ public class Rasterizer {
                     swapXAndY(fragment);
                 }
                 if (normal) {
-                    shader.shadeNormal(fragment);
+                    normalLayer.print(fragment);
                 } else {
                     shader.shade(fragment);
                 }

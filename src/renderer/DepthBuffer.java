@@ -9,7 +9,7 @@ public class DepthBuffer {
     /**
      * The buffer of depth values.
      */
-    private Matrix buffer;
+    private static Matrix buffer;
 
     /**
      * The width the buffer.

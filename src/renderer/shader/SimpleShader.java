@@ -26,11 +26,4 @@ public class SimpleShader extends Shader {
     public void shade(Fragment fragment) {
         screen.setPixel(fragment.getX(), fragment.getY(), fragment.getColor());
     }
-
-    @Override
-    public void shadeNormal(Fragment fragment) {
-        screen.setPixel(fragment.getX(), fragment.getY(), Color.RED);
-    }
-
-    
 }
