@@ -6,7 +6,7 @@ import renderer.algebra.Vector;
  * Interface describing a light source.
  */
 public abstract class Light {
-    
+
     /**
      * the intensity of the light.
      */
@@ -22,7 +22,7 @@ public abstract class Light {
 
     /**
      * get the Intensity of the light.
-     * 
+     *
      * @return the intensity
      */
     public double getIntensity() {
@@ -32,7 +32,7 @@ public abstract class Light {
     /**
      * Computes the illuminated color of a 3D points of given position, normal and
      * color, and given the camera position and material parameters.
-     * 
+     *
      * @param position       the position of the point
      * @param normal         the normal at the point
      * @param color          the color of the point
@@ -43,7 +43,7 @@ public abstract class Light {
      * @param s              the shininess coefficient
      * @return the intensity of the light of the point
      */
-    abstract public double getContribution(Vector position, Vector normal, double[] color,
+    public abstract double getContribution(Vector position, Vector normal, double[] color,
             Vector cameraPosition, double ka, double kd, double ks, double s);
 
 }

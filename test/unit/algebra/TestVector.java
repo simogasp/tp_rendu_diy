@@ -3,6 +3,7 @@ package algebra;
 import renderer.algebra.Vector;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -144,10 +145,10 @@ public class TestVector {
         final Vector nv = v.normalize();
         
         // v and nv are the same object.
-        assertTrue("v == nv should be true", v == nv);
+        assertFalse("v == nv should be false", v == nv);
 
         for (int i = 0; i < vectorSize; i++) {
-            assertEquals("error for " + i + "-th component", expectedValue, v.get(i), EPSILON);
+            assertEquals("error for " + i + "-th component", expectedValue, nv.get(i), EPSILON);
         }
 
     }

@@ -8,13 +8,17 @@ import renderer.algebra.Vector;
 public class AmbientLight extends Light {
 
 
-    
+    /**
+     * Create a AmbientLight from its intensity.
+     * @param intensity the intensity of the light
+     */
     public AmbientLight(double intensity) {
         super(intensity);
     }
 
-    public double getContribution(Vector position, Vector normal, double[] color, Vector cameraPosition, double ka,
-            double kd, double ks, double s) {
+    @Override
+    public double getContribution(Vector position, Vector normal, double[] color,
+            Vector cameraPosition, double ka, double kd, double ks, double s) {
         return intensity;
     }
 }

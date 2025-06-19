@@ -19,6 +19,11 @@ import renderer.algebra.Vector;
 public class Rasterizer {
 
     /**
+     * The default value for interpolate between 2 points.
+     */
+    private static final double MIDDLE_DOUBLE_VALUE = .5;
+
+    /**
      * The shader used by the Rasterizer.
      */
     protected Shader shader;
@@ -55,7 +60,7 @@ public class Rasterizer {
         final int y = f.getX();
 
         // corner case in which the two vertices are the same
-        double alpha = .5;
+        double alpha = MIDDLE_DOUBLE_VALUE;
         // if we have more pixel on the horizontal axis
         if (Math.abs(x2 - x1) >= Math.abs(y2 - y1)) {
             if (x2 != x1) {
@@ -228,7 +233,8 @@ public class Rasterizer {
      * @param v3 the third vertex of the triangle
      * @throws SizeMismatchException if the size of the Fragment is not correct.
      */
-    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3) {
+    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3)
+        throws SizeMismatchException {
 
         final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 

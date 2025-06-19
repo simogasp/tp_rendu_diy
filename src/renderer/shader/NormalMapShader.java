@@ -1,6 +1,5 @@
 package renderer.shader;
 
-
 import renderer.DepthBuffer;
 import renderer.Fragment;
 import renderer.GraphicsWrapper;
@@ -18,30 +17,28 @@ public class NormalMapShader extends Shader {
      * The depth buffer.
      */
     private DepthBuffer depthBuffer;
-    /** 
+    /**
      * The transformation.
      */
     private Transformation xform;
 
-    
     /**
      * Creates a NormalMapShader with the given screen.
+     *
      * @param screen the screen to draw on
+     * @param xform  the Transformation to pass from the
+     *               world reference to the camera one
      */
-    public NormalMapShader(GraphicsWrapper screen, Transformation xform) {
+    public NormalMapShader(final GraphicsWrapper screen, final Transformation xform) {
         super(screen);
         this.depthBuffer = new DepthBuffer(screen.getWidth(), screen.getHeight());
         this.xform = xform;
     }
 
-
-
     @Override
     public void reset() {
         this.depthBuffer.clear();
     }
-
-
 
     @Override
     public void shade(Fragment fragment) {
@@ -59,7 +56,7 @@ public class NormalMapShader extends Shader {
         }
 
         // we normalize the vector to compute the color of the pixel.
-        if (Math.abs(n.norm() - 1) > EPSILON){
+        if (Math.abs(n.norm() - 1) > EPSILON) {
             n.normalize();
         }
 
@@ -75,6 +72,4 @@ public class NormalMapShader extends Shader {
         this.depthBuffer.writeFragment(fragment);
     }
 
-    
-    
 }

@@ -71,7 +71,7 @@ public class Matrix {
      * @return the identity matrix of size @size
      * @throws IllegalArgumentException if the matrix dimensions are invalid
      */
-    public static final Matrix createIdentity(final int size) 
+    public static final Matrix createIdentity(final int size)
             throws IllegalArgumentException {
         String name = "I" + size;
         return createIdentity(name, size);
@@ -84,7 +84,7 @@ public class Matrix {
      * @return the identity matrix of size @size and name @name
      * @throws IllegalArgumentException if the matrix dimensions are invalid
      */
-    public static final Matrix createIdentity(final String name, final int size) 
+    public static final Matrix createIdentity(final String name, final int size)
             throws IllegalArgumentException {
         Matrix id = new Matrix(name, size, size);
 
@@ -103,7 +103,7 @@ public class Matrix {
      * @return the nRows x nCols matrix named `name` filled with random values
      * @throws IllegalArgumentException if the matrix dimensions are invalid
      */
-    public static Matrix createRandom(final String name, final int nRows, final int nCols) 
+    public static Matrix createRandom(final String name, final int nRows, final int nCols)
             throws IllegalArgumentException {
         Matrix m = new Matrix(name, nRows, nCols);
         for (int i = 0; i < nRows; i++) {
@@ -124,7 +124,8 @@ public class Matrix {
      * @return the submatrix of size nRows x nCols
      * @throws IllegalArgumentException if the submatrix the dimensions are invalid
      */
-    public Matrix getSubMatrix(final int offsetRow, final int offsetCol, final int numRows, final int numCols) 
+    public Matrix getSubMatrix(final int offsetRow, final int offsetCol,
+            final int numRows, final int numCols)
             throws IllegalArgumentException {
         if ((offsetRow < 0) || (offsetCol < 0) || (numRows < 1) || (numCols < 1)
                 || (offsetRow + numRows > this.nRows)
@@ -134,13 +135,9 @@ public class Matrix {
 
         final Matrix sub = new Matrix(numRows, numCols);
 
-        final int endXDim = offsetCol + numCols - 1;
-        final int endYDim = offsetRow + numRows - 1;
-
-
-        for (int i = offsetRow; i < endYDim; i++) {
-            for (int j = offsetCol; j < endXDim; j++) {
-                sub.set(i, j, this.get(i, j));
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                sub.set(i, j, this.get(i + offsetRow, j + offsetCol));
             }
         }
 
@@ -188,12 +185,12 @@ public class Matrix {
 
     /**
      * Matrix/Vector multiplication.
-     * @param m the vector to multiply with
+     * @param v the vector to multiply with
      * @return the resulting matrix
      * @throws SizeMismatchException if the matrix sizes do not match for multiplication
      */
     public final Vector multiply(final Vector v) throws SizeMismatchException {
-        return new Vector(multiply((Matrix) v). values);
+        return new Vector(multiply((Matrix) v).values);
     }
 
 
@@ -227,7 +224,7 @@ public class Matrix {
      */
     public final Matrix subtract(final Matrix m) throws SizeMismatchException {
         if (nCols != m.nCols || nRows != m.nRows) {
-            throw new SizeMismatchException(name + " is " + nRows + "x" + nCols 
+            throw new SizeMismatchException(name + " is " + nRows + "x" + nCols
                 + " and " + m.name + " is " + m.nRows + "x" + m.nCols);
         }
 

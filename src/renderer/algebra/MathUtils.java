@@ -5,17 +5,24 @@ package renderer.algebra;
  */
 public final class MathUtils {
 
+    /**
+     * The max value on 8 bits.
+     */
+    public static final int MAX8INT = 255;
+
     private MathUtils() {
         // Private constructor to prevent instantiation
     }
 
     /**
      * Clamps a value to a given range.
-     * @param <T> the type of the value
+     *
+     * @param <T>   the type of the value
      * @param value the value to clamp
-     * @param min the minimum value
-     * @param max the maximum value
-     * @return the clamped value (min if value {@literal <} min, max if value {@literal >} max, value otherwise)
+     * @param min   the minimum value
+     * @param max   the maximum value
+     * @return the clamped value (min if value {@literal <} min,
+     *         max if value {@literal >} max, value otherwise)
      */
     public static <T extends Comparable<T>> T clamp(T value, T min, T max) {
         if (min.compareTo(max) > 0) {
@@ -32,10 +39,11 @@ public final class MathUtils {
 
     /**
      * Checks if a value is in a given range.
-     * @param <E> the type of the value
+     *
+     * @param <E>   the type of the value
      * @param value the value to check
-     * @param min the minimum value (inclusive)
-     * @param max the maximum value (inclusive)
+     * @param min   the minimum value (inclusive)
+     * @param max   the maximum value (inclusive)
      * @return true if value is in the range [min, max], false otherwise
      */
     public static <E extends Number> boolean isInRange(E value, E min, E max) {
@@ -60,18 +68,20 @@ public final class MathUtils {
 
     /**
      * Checks if the type of a value is an integer type (int, short, long etc).
+     *
      * @param num the value to check
      * @return true if the value is an integer type, false otherwise
      */
     private static boolean isIntegerType(Number num) {
         return num instanceof Integer
-            || num instanceof Long
-            || num instanceof Short
-            || num instanceof Byte;
+                || num instanceof Long
+                || num instanceof Short
+                || num instanceof Byte;
     }
 
     /**
      * Checks if the type of a value is a floating point type (float, double).
+     *
      * @param num the value to check
      * @return true if the value is a floating point type, false otherwise
      */

@@ -39,16 +39,16 @@ public class Transformation {
      * @param lookAtPoint the point to look at
      * @param up the up vector
      */
-    public void setLookAt(Vector eye, Vector lookAtPoint, Vector up) {
+    public void setLookAt(final Vector eye, final Vector lookAtPoint, final Vector up) {
         try {
             // compute rotation
             //++ // TODO
             Vector z = lookAtPoint.subtract(eye); //<!!
             System.out.println("z" + z);
+            z = z.normalize();
 
-            z.normalize();
             Vector x = up.cross(z);
-            x.normalize();
+            x = x.normalize();
             Vector y = z.cross(x);
 
             worldToCamera.set(0, 0, x.getX());
@@ -63,7 +63,7 @@ public class Transformation {
 
             // compute translation
             //++ // TODO
-            Vector mEye = (new Vector(eye)).scale(-1.0); //<!!
+            Vector mEye = eye.scale(-1.0); //<!!
             Matrix m = worldToCamera.getSubMatrix(0, 0, 3, 3);
 
             Vector t = m.multiply(mEye);
@@ -119,7 +119,7 @@ public class Transformation {
      * @return the projected point
      * @throws SizeMismatchException if the size of the input vector is not 4
      */
-    public Vector projectPoint(Vector p) {
+    public Vector projectPoint(Vector p) throws SizeMismatchException {
         //++ Vector ps = new Vector(3);
         //++ // TODO
         Vector pe = worldToCamera.multiply(p); //<!!

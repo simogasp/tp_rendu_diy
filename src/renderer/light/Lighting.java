@@ -1,6 +1,5 @@
 package renderer.light;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,7 +15,7 @@ public class Lighting {
     /** List of light sources. */
     private List<Light> lights;
 
-    
+
 
     /**
      * Creates a new Lighting environment.
@@ -66,7 +65,8 @@ public class Lighting {
         double I = 0.0;
 
         for (Light light : lights) {
-            I += light.getContribution(position, normal, color, cameraPosition, ka, kd, ks, s);
+            I += light.getContribution(position, normal, color,
+                cameraPosition, ka, kd, ks, s);
         }
 
         return new double[]{clampColor(color[0] * I),
