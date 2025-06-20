@@ -1,7 +1,7 @@
 package renderer.shader;
 
 import renderer.Fragment;
-import renderer.GraphicsWrapper;
+import renderer.gui.RenderPanel;
 
 /**
  * The Shader class is responsible for writing final pixel color
@@ -15,13 +15,13 @@ public abstract class Shader {
     /**
      * The screen to draw on.
      */
-    protected GraphicsWrapper screen;
+    protected RenderPanel screen;
 
     /**
      * Creates a Shader with the given screen.
      * @param screen the screen to draw on
      */
-    protected Shader(GraphicsWrapper screen) {
+    protected Shader(RenderPanel screen) {
         this.screen = screen;
     }
 

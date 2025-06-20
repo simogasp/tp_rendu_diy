@@ -5,13 +5,14 @@ import java.io.IOException;
 
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
+import renderer.gui.RenderPanel;
 import renderer.light.Lighting;
+import renderer.rasterizer.PerspectiveCorrectRasterizer;
 import renderer.rasterizer.Rasterizer;
 import renderer.shader.DepthShader;
 import renderer.shader.NormalMapShader;
 import renderer.shader.PainterShader;
 import renderer.shader.Shader;
-import renderer.shader.TextureShader;
 
 /**
  * The Renderer class drives the rendering pipeline: read in a scene, projects
@@ -28,7 +29,7 @@ public final class Renderer {
     /** The rasterizer. */
     private static Rasterizer rasterizer;
     /** The screen. */
-    private static GraphicsWrapper screen;
+    private static RenderPanel screen;
     /** The shader. */
     private static Shader shader;
     /** The transformation. */
@@ -51,7 +52,7 @@ public final class Renderer {
      * @param sceneFilename the scene file to load
      * @throws IOException if the scene file cannot be loaded
      */
-    static void init(String sceneFilename) throws IOException {
+    public static void init(final String sceneFilename) throws IOException {
         scene = new Scene(sceneFilename);
         mesh = new Mesh(scene.getMeshFileName());
 
@@ -64,8 +65,7 @@ public final class Renderer {
                 scene.getScreenW(),
                 scene.getScreenH());
 
-        screen = new GraphicsWrapper(scene.getScreenW(), scene.getScreenH());
-        screen.clearBuffer();
+        screen.updateDims(scene.getScreenW(), scene.getScreenH());
         //++ shader = new SimpleShader (screen);
         shader = new PainterShader(screen); //??
         shader = new NormalMapShader(screen, xform); //??
@@ -128,7 +128,7 @@ public final class Renderer {
      *
      * @return an array of fragments
      */
-    static Fragment[] projectVertices() {
+    private static Fragment[] projectVertices() {
         Vector[] vertices = mesh.getVertices();
         Vector[] normals = mesh.getNormals();
         double[] colors = mesh.getColors();
@@ -176,7 +176,7 @@ public final class Renderer {
     /**
      * Renders the wireframe of the mesh.
      */
-    static void renderWireframe() {
+    public static void renderWireframe() {
         Fragment[] fragment = projectVertices();
         int[] faces = mesh.getFaces();
 
@@ -229,7 +229,7 @@ public final class Renderer {
      *
      * @throws SizeMismatchException if the size of the fragments do not match
      */
-    static void renderSolid() throws SizeMismatchException {
+    public static void renderSolid() {
         Fragment[] fragments = projectVertices();
         int[] faces = mesh.getFaces();
 
@@ -275,79 +275,34 @@ public final class Renderer {
         }
     }
 
-    /**
-     * Main entry point of the renderer.
-     *
-     * @param args the command line arguments
-     * @throws SizeMismatchException if the size of the fragments do not match
-     */
-    public static void main(String[] args) throws SizeMismatchException {
+    public static void setScreen(RenderPanel renderPanel) {
+        screen = renderPanel;
+    }
 
-        final int timeout = 10;
+    public static void setShader(Shader nShader) {
+        shader = nShader;
+        updateRasterizer();
+    }
 
-        if (args.length == 0) {
-            System.out.println("usage: java Renderer <scene_file>");
-            System.exit(-1);
-        } else {
-            try {
-                init(args[0]);
-            } catch (Exception e) {
-                System.out.println("Problem initializing Renderer: " + e);
-                e.printStackTrace();
-                return;
-            }
+    public static Transformation getXform() {
+        return xform;
+    }
+
+    private static void updateRasterizer() {
+        if (rasterizer != null) {
+            rasterizer.setShader(shader);
         }
+    }
 
-        // get the nearest and the farest point for depth Shader
-        initShader();
-
-        // wireframe rendering
-        renderWireframe();
-        renderNormal();
-        screen.swapBuffers();
-        wait(timeout);
-
-        // solid rendering, no lighting
-        screen.clearBuffer(); //<??
+    public static void resetShader() {
         shader.reset();
-        // get the nearest and the farest point for depth Shader
-        initShader();
-        renderSolid();
-        renderNormal();
-        screen.swapBuffers();
-        wait(timeout); //>??
+    }
 
-        // solid rendering, with lighting
-        screen.clearBuffer(); //<??
-        shader.reset();
-        // get the nearest and the farest point for depth Shader
-        initShader();
-        setLightingEnabled(true);
-        renderSolid();
-        screen.swapBuffers();
-        wait(timeout); //>??
+    public static void setRasterizer() {
+        rasterizer = new Rasterizer(shader);
+    }
 
-        // solid rendering, with texture
-        screen.clearBuffer(); //<??
-        TextureShader texShader = new TextureShader(screen);
-        texShader.setTexture("data/brick.jpg");
-        shader = texShader;
-        rasterizer.setShader(texShader);
-        setLightingEnabled(true);
-        renderSolid();
-        screen.swapBuffers();
-        wait(timeout); //>??
-
-        // solid rendering, with texture combined with base color
-        screen.clearBuffer(); //<??
-        texShader.reset();
-        texShader.setCombineWithBaseColor(true);
-        shader = texShader;
-        renderSolid();
-        screen.swapBuffers();
-        wait(timeout); //>??
-
-        screen.destroy();
-        System.exit(0);
+    public static void setPerpectiveRasterizer() {
+        rasterizer = new PerspectiveCorrectRasterizer(shader);
     }
 }

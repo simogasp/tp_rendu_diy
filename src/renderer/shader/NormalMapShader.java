@@ -2,9 +2,9 @@ package renderer.shader;
 
 import renderer.DepthBuffer;
 import renderer.Fragment;
-import renderer.GraphicsWrapper;
 import renderer.Transformation;
 import renderer.algebra.Vector;
+import renderer.gui.RenderPanel;
 
 public class NormalMapShader extends Shader {
 
@@ -18,18 +18,18 @@ public class NormalMapShader extends Shader {
      */
     private DepthBuffer depthBuffer;
     /**
-     * The transformation.
+     * The transformation to get an object from the world reference to the camera reference.
      */
     private Transformation xform;
 
     /**
      * Creates a NormalMapShader with the given screen.
-     *
+     * 
      * @param screen the screen to draw on
-     * @param xform  the Transformation to pass from the
-     *               world reference to the camera one
+     * @param xform  the transformation to get an object from the world reference to
+     *               the camera reference
      */
-    public NormalMapShader(final GraphicsWrapper screen, final Transformation xform) {
+    public NormalMapShader(final RenderPanel screen, final Transformation xform) {
         super(screen);
         this.depthBuffer = new DepthBuffer(screen.getWidth(), screen.getHeight());
         this.xform = xform;

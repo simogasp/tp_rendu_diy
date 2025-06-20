@@ -1,7 +1,7 @@
 import org.junit.Test;
 
 import renderer.Fragment;
-import renderer.GraphicsWrapper;
+import renderer.gui.RenderPanel;
 import renderer.rasterizer.Rasterizer;
 import renderer.shader.Shader;
 
@@ -14,7 +14,7 @@ public class TestRasterizer {
 
     static class TestShader extends Shader {
 
-        public TestShader(GraphicsWrapper screen) {
+        public TestShader(RenderPanel screen) {
             super(screen);
         }
 
@@ -29,14 +29,14 @@ public class TestRasterizer {
 
         System.out.println("OFF\n# Test Start");
 
-        TestShader shader = new TestShader(new GraphicsWrapper(256, 256));
+        TestShader shader = new TestShader(new RenderPanel(null, 256, 256));
         Rasterizer rasterizer = new Rasterizer(shader);
 
         System.out.println("Rasterizing edge");
         Fragment v1 = new Fragment(0, 20);
         v1.setColor(0, 0, 0);
         Fragment v2 = new Fragment(5, -35);
-        v2.setColor(50 / 255, 100 / 255, 0);
+        v2.setColor((float) 50 / 255, (float) 100 / 255, 0);
 
         rasterizer.rasterizeEdge(v1, v2);
     }

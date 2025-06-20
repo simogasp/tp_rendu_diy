@@ -4,9 +4,9 @@ import java.awt.Color;
 
 import renderer.DepthBuffer;
 import renderer.Fragment;
-import renderer.GraphicsWrapper;
 import renderer.shader.colormap.ColorMap;
 import renderer.shader.colormap.ColorMapFactory;
+import renderer.gui.RenderPanel;
 
 /**
  * Shader color the model in function of the depth of the surface.
@@ -38,8 +38,8 @@ public class DepthShader extends Shader {
      *
      * @param screen the screen to draw on
      */
-    public DepthShader(final GraphicsWrapper screen) {
-        this(screen, ColorMapFactory.create(ColorMapFactory.Maps.VERIDIS));
+    public DepthShader(final RenderPanel renderPanel) {
+        this(renderPanel, ColorMapFactory.create(ColorMapFactory.Maps.VERIDIS));
     }
 
     /**
@@ -48,9 +48,10 @@ public class DepthShader extends Shader {
      * @param screen       the screen to draw on
      * @param initColorMap the init color map
      */
-    public DepthShader(final GraphicsWrapper screen, final ColorMap initColorMap) {
-        super(screen);
-        this.depth = new DepthBuffer(screen.getWidth(), screen.getHeight());
+    public DepthShader(final RenderPanel renderPanel, final ColorMap initColorMap) {
+        super(renderPanel);
+        this.depth = new DepthBuffer(renderPanel.getScreenWidth(),
+                renderPanel.getScreenHeight());
         colorMap = initColorMap;
     }
 
@@ -84,9 +85,7 @@ public class DepthShader extends Shader {
     }
 
     /**
-     * Returns a color in the color gradient (Red, green, Blue) where red is near,
-     * green the middle
-     * and blue the back of the model.
+     * Returns a color in the color gradient according to the depth.
      *
      * @param depth the depth of the current point
      * @return the color in the color gradient

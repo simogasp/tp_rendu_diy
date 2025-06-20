@@ -45,21 +45,20 @@
 		<delete dir="${result}" />
 		<delete dir="${testsoutput}" />
 		<delete dir="${bin}" />
+		<delete dir="${doc}" />
 	</target>
 
 	<target name="run" depends="compile">
-		<java classname="renderer.Renderer">
+		<java classname="renderer.gui.GUIApp">
 			<classpath>
 				<pathelement path="${classes}" />
 			</classpath>
-			<arg value="${SCENE}" />
 			<arg value="-Djava.security.manager=allow" />
 		</java>
-
+		<input message="Press Return key to exit ..."/>
 	</target>
 
-	<target
-		name="clean-doc">
+	<target	name="clean-doc">
 		<delete dir="${doc}" />
 	</target>
 
@@ -136,6 +135,5 @@
 			<formatter type="plain" />
 		</checkstyle>
 	</target>
-
 
 </project>

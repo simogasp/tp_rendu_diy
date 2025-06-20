@@ -2,7 +2,49 @@
 
 This is a simple rendering engine made in Java.
 
-![Suzanne](./data/screenshots/suzanne.png)
+![Suzanne](./data/screenshots/suzanne_in_new_gui.png)
+
+## The GUI
+
+The GUI provides tools to render the scene.
+
+### Model
+
+You can choose the model to render in the filname part of the menu. If you have
+another `file.scene` which you want to render using this App, you can also copy
+the file in the `data/` dir and write his basename in the Text Field "With
+another scene file".
+
+![ModelMenu](./data/screenshots/Filename_menu.png)
+
+### Shader
+
+You can choose differents shader to render the model in the shader menu.
+
+![ShaderMenu](./data/screenshots/Shader_menu.png)
+
+### Render
+
+You can choose what you want the GUI to render in the render menu.
+
+![RenderMenu](./data/screenshots/Render_menu.png)
+
+### Rasterizer
+
+You can choose what rasterizer you want the GUI to use in the Rasterizer menu.
+
+![RasterizerMenu](./data/screenshots/Rasterizer_menu.png)
+
+### Options
+
+You can enable and disable options such as light and drawn of normals in the
+option menu.
+
+![OptionMenu](./data/screenshots/Option_menu.png)
+
+### Render Button
+
+It will update the view panel.
 
 ## MakeFile
 
@@ -26,7 +68,6 @@ cleans the `build` folder.
 
 ### Tests
 
-
 To run the tests use the following command:
 
 ```bash
@@ -38,12 +79,8 @@ make tests
 To run the project you can use the following command:
 
 ```bash
-make run SCENE=path/to/file.scene
+make run
 ```
-
-where `path/to/file.scene` is the path to the scene file, e.g. `data/example0.scene`.
-
-
 
 ## Ant
 
@@ -51,14 +88,16 @@ where `path/to/file.scene` is the path to the scene file, e.g. `data/example0.sc
 
 #### Java 17 and below
 
-You can compile the project using Ant version 1.10.7 (already on ENSEEIHT's computer).
-
+You can compile the project using Ant version 1.10.7 (already on ENSEEIHT's
+computer).
 
 #### All Java
 
-You can compile the project using Ant version 1.10.14 and later ([download here](https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.15-bin.tar.gz)).
+You can compile the project using Ant version 1.10.14 and later
+([download here](https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.15-bin.tar.gz)).
 
-You can also install ant package as any other package by the command on your personal computer:
+You can also install ant package as any other package by the command on your
+personal computer:
 
 ```bash
 sudo snap install ant --stable --classic
@@ -94,7 +133,6 @@ ant clean
 
 cleans the `bin` folder.
 
-
 ### Tests
 
 To run all tests use the following command:
@@ -102,7 +140,8 @@ To run all tests use the following command:
 ```bash
 ant test
 ```
-The test reports will be written in the dir ```test/reports/```.
+
+The test reports will be written in the dir `test/reports/`.
 
 To run fonctionnal Tests:
 
@@ -110,7 +149,7 @@ To run fonctionnal Tests:
 ant func-tests
 ```
 
-To run unit Tests;
+To run unit Tests:
 
 ```bash
 ant unit-tests
@@ -121,10 +160,8 @@ ant unit-tests
 To run the project you can use the following command:
 
 ```bash
-ant run -DSCENE=path/to/file.scene
+ant run
 ```
-
-where `path/to/file.scene` is the path to the scene file, e.g. `data/example0.scene`.
 
 ### Generate JavaDoc
 
@@ -140,7 +177,6 @@ To clean JavaDoc
 ant clean-doc
 ```
 
-
 ### verify the CheckStyle
 
 To verify checkstyle on the project if you have checkstyle in lib:
@@ -149,7 +185,7 @@ To verify checkstyle on the project if you have checkstyle in lib:
 ant checkstyle
 ```
 
-To download it:
+To download the lib:
 
 ```bash
 ant dl-checkstyle
