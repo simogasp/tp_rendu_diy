@@ -31,7 +31,8 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
      * @throws SizeMismatchException if the size of the fragments do not match
      */
     @Override
-    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3) {
+    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3) 
+        throws SizeMismatchException {
 
         final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 
