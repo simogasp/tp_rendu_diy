@@ -1,12 +1,10 @@
 package renderer.light;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import renderer.algebra.MathUtils;
 import renderer.algebra.Vector;
-import renderer.algebra.Vector3;
 
 /**
  * The Lighting class describes a scene lighting environment.
@@ -17,7 +15,7 @@ public class Lighting {
     /** List of light sources. */
     private List<Light> lights;
 
-    
+
 
     /**
      * Creates a new Lighting environment.
@@ -59,15 +57,16 @@ public class Lighting {
      * @param s the shininess coefficient
      * @return the illuminated color of the point as an array of 3 doubles
      */
-    public double[] applyLights(Vector3 position, Vector normal, double[] color,
-            Vector3 cameraPosition,
+    public double[] applyLights(Vector position, Vector normal, double[] color,
+            Vector cameraPosition,
             double ka, double kd, double ks, double s) {
 
         // total light intensity
         double I = 0.0;
 
         for (Light light : lights) {
-            I += light.getContribution(position, normal, color, cameraPosition, ka, kd, ks, s);
+            I += light.getContribution(position, normal, color,
+                cameraPosition, ka, kd, ks, s);
         }
 
         return new double[]{clampColor(color[0] * I),

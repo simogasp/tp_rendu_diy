@@ -1,57 +1,107 @@
 package renderer;
 
-/**
- * A "virtual" screen, where only "setPixel" is available
- * (It is a JFrame, and JFrame.EXIT_ON_CLOSE is set).
- * @author smondet
- */
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import javax.swing.*;
-import java.lang.Math;
+import javax.swing.JFrame;
+
+import renderer.algebra.MathUtils;
 
 class ImageComponent extends Component {
 
-  BufferedImage renderedImage = null;
+  /**
+   * The image displayed.
+   */
+  private BufferedImage renderedImage = null;
 
-  public ImageComponent(BufferedImage init) {
+  ImageComponent(final BufferedImage init) {
     renderedImage = init;
   }
 
-  public BufferedImage swapImage(BufferedImage bi) {
-    BufferedImage ret = renderedImage;
+  /**
+   * Update the display image by a new one.
+   *
+   * @param bi the new display
+   * @return the old one
+   */
+  public BufferedImage swapImage(final BufferedImage bi) {
+    final BufferedImage ret = renderedImage;
     renderedImage = bi;
     return ret;
   }
 
-  public void paint(Graphics g) {
+  /**
+   * Display the rendered image if it exists.
+   *
+   * @param g the screen
+   */
+  public void paint(final Graphics g) {
 
     if (renderedImage != null) {
-      ((Graphics2D) g).drawImage(renderedImage, new AffineTransform(1f, 0f, 0f, 1f, 0, 0), null);
+      ((Graphics2D) g).drawImage(renderedImage, new AffineTransform(1f, 0f, 0f, 1f, 0, 0),
+          null);
     }
   }
 
 }
 
+/**
+ * A "virtual" screen, where only "setPixel" is available
+ * (It is a JFrame, and JFrame.EXIT_ON_CLOSE is set).
+ *
+ * @author smondet
+ */
 public class GraphicsWrapper {
 
+
+  /**
+   * The height of represented pixel.
+   */
   private int height = 0;
+  /**
+   * The width of represented pixel.
+   */
   private int width = 0;
+  /**
+   * The pixelSize of a represented pixel.
+   */
   private int pixelSize = 0;
 
+  /**
+   * The App.
+   */
   private JFrame myFrame;
 
+  /**
+   * The Image component.
+   */
   private ImageComponent drawComp = null;
 
+  /**
+   * The next image to render.
+   */
   private BufferedImage backBuffer = null;
+  /**
+   * The image displayed.
+   */
   private BufferedImage frontBuffer = null;
 
+  /**
+   * Init the App : fill all field by the values.
+   */
   private void init() {
-    backBuffer = new BufferedImage(width * pixelSize, height * pixelSize, BufferedImage.TYPE_INT_ARGB);
+    backBuffer = new BufferedImage(width * pixelSize,
+      height * pixelSize,
+      BufferedImage.TYPE_INT_ARGB);
 
-    frontBuffer = new BufferedImage(width * pixelSize, height * pixelSize, BufferedImage.TYPE_3BYTE_BGR);
+    frontBuffer = new BufferedImage(width * pixelSize,
+      height * pixelSize,
+      BufferedImage.TYPE_3BYTE_BGR);
 
     /*
      * Graphics2D gd = initial.createGraphics ();
@@ -76,7 +126,8 @@ public class GraphicsWrapper {
   /**
    * Build a virtual screen of size width x height
    * And set its window visible.
-   * @param width the width of the screen
+   *
+   * @param width  the width of the screen
    * @param height the height of the screen
    */
   public GraphicsWrapper(int width, int height) {
@@ -91,8 +142,9 @@ public class GraphicsWrapper {
    * represented by
    * a pixelSize x pixelSize square.
    * And set its window visible.
-   * @param width the width of the screen
-   * @param height the height of the screen
+   *
+   * @param width     the width of the screen
+   * @param height    the height of the screen
    * @param pixelSize the size of a virtual pixel
    */
   public GraphicsWrapper(int width, int height, int pixelSize) {
@@ -106,6 +158,7 @@ public class GraphicsWrapper {
    * Lights the pixel (x,y) with color (r, g, b) (values clamped to [0,1])
    * on the current draw buffer.
    * Does nothing for pixels out of the screen.
+   *
    * @param x the x coordinate of the pixel
    * @param y the y coordinate of the pixel
    * @param r the red component of the color
@@ -118,13 +171,16 @@ public class GraphicsWrapper {
     g = Math.min(1.0, Math.max(0.0, g));
     b = Math.min(1.0, Math.max(0.0, b));
 
-    setPixel(x, y, (char) (r * 255), (char) (g * 255), (char) (b * 255));
+    setPixel(x, y, (char) (r * MathUtils.MAX8INT),
+      (char) (g * MathUtils.MAX8INT),
+      (char) (b * MathUtils.MAX8INT));
   }
 
   /**
    * Lights the pixel (x,y) with color (r, g, b) (values clamped to [0, 255])
    * on the current draw buffer.
    * Does nothing for pixels out of the screen.
+   *
    * @param x the x coordinate of the pixel
    * @param y the y coordinate of the pixel
    * @param r the red component of the color (clamped to [0, 255])
@@ -150,8 +206,9 @@ public class GraphicsWrapper {
   /**
    * Lights the pixel (x,y) with the given color.
    * Does nothing for pixels out of the screen.
-   * @param x the x coordinate of the pixel
-   * @param y the y coordinate of the pixel
+   *
+   * @param x     the x coordinate of the pixel
+   * @param y     the y coordinate of the pixel
    * @param color the color of the pixel
    */
   public void setPixel(int x, int y, Color color) {
@@ -168,6 +225,7 @@ public class GraphicsWrapper {
 
   /**
    * Gets the pixel in the back buffer.
+   *
    * @param x the x coordinate of the pixel
    * @param y the y coordinate of the pixel
    * @return the color of the pixel
@@ -186,6 +244,7 @@ public class GraphicsWrapper {
 
   /**
    * Gets the pixel in the front buffer.
+   *
    * @param x the x coordinate of the pixel
    * @param y the y coordinate of the pixel
    * @return the color of the pixel
@@ -204,6 +263,7 @@ public class GraphicsWrapper {
 
   /**
    * Gets the width of the screen.
+   *
    * @return the width of the screen
    */
   public int getWidth() {
@@ -212,6 +272,7 @@ public class GraphicsWrapper {
 
   /**
    * Gets the height of the screen.
+   *
    * @return the height of the screen
    */
   public int getHeight() {

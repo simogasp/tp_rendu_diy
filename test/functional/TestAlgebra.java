@@ -1,7 +1,10 @@
 
 import org.junit.Test;
 
-import renderer.algebra.*;
+import renderer.algebra.Matrix;
+import renderer.algebra.SizeMismatchException;
+import renderer.algebra.Vector;
+
 
 public class TestAlgebra {
 
@@ -49,10 +52,10 @@ public class TestAlgebra {
             System.out.println("Caught exception: " + e);
         }
 
-        Vector3 r1 = new Vector3("u1", 1.0, 2.0, 3.0);
-        Vector3 r2 = new Vector3("u2", 1.0, 3.0, 1.0);
+        Vector r1 = new Vector("u1", 1.0, 2.0, 3.0);
+        Vector r2 = new Vector("u2", 1.0, 3.0, 1.0);
 
-        Vector3 r = r1.cross(r2);
+        Vector r = r1.cross(r2);
 
         System.out.println(r1);
         System.out.println(r2);

@@ -4,7 +4,6 @@ import renderer.Fragment;
 import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
-import renderer.algebra.Vector3;
 import renderer.shader.Shader;
 
 /**
@@ -32,7 +31,8 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
      * @throws SizeMismatchException if the size of the fragments do not match
      */
     @Override
-    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3) {
+    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3) 
+        throws SizeMismatchException {
 
         final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 
@@ -54,7 +54,7 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
                     continue;
                 }
 
-                final Vector3 v = new Vector3(1.0, (double) x, (double) y);
+                final Vector v = new Vector(1.0, (double) x, (double) y);
                 final Vector bar = cMat.multiply(v);
                 if ((bar.get(0) >= 0.0)
                         && (bar.get(1) >= 0.0)

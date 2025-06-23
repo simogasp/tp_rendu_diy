@@ -3,7 +3,6 @@ package renderer.rasterizer;
 import renderer.Fragment;
 import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;
-import renderer.algebra.Vector3;
 import renderer.shader.Shader;
 import renderer.algebra.Vector;
 
@@ -18,6 +17,11 @@ import renderer.algebra.Vector;
  * @author morin, chambon, cdehais
  */
 public class Rasterizer {
+
+    /**
+     * The default value for interpolate between 2 points.
+     */
+    private static final double MIDDLE_DOUBLE_VALUE = .5;
 
     /**
      * The shader used by the Rasterizer.
@@ -56,7 +60,7 @@ public class Rasterizer {
         final int y = f.getX();
 
         // corner case in which the two vertices are the same
-        double alpha = .5;
+        double alpha = MIDDLE_DOUBLE_VALUE;
         // if we have more pixel on the horizontal axis
         if (Math.abs(x2 - x1) >= Math.abs(y2 - y1)) {
             if (x2 != x1) {
@@ -229,7 +233,8 @@ public class Rasterizer {
      * @param v3 the third vertex of the triangle
      * @throws SizeMismatchException if the size of the Fragment is not correct.
      */
-    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3) {
+    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3)
+        throws SizeMismatchException {
 
         final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 
@@ -251,7 +256,7 @@ public class Rasterizer {
                 fragment.setPosition(x, y);
                 if (!shader.isClipped(fragment)) {
 
-                    final Vector3 v = new Vector3(1.0, (double) x, (double) y);
+                    final Vector v = new Vector(1.0, (double) x, (double) y);
                     final Vector bar = cMat.multiply(v);
                     if ((bar.get(0) >= 0.0)
                         && (bar.get(1) >= 0.0)

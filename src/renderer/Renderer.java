@@ -4,13 +4,13 @@ import java.io.IOException;
 
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
-import renderer.algebra.Vector3;
 import renderer.light.Lighting;
 import renderer.rasterizer.Rasterizer;
 import renderer.shader.NormalMapShader;
 import renderer.shader.PainterShader;
 import renderer.shader.Shader;
 import renderer.shader.TextureShader;
+import renderer.shader.DepthShader;
 
 
 /**
@@ -65,6 +65,7 @@ public final class Renderer {
         //++ shader = new SimpleShader (screen);
         shader = new PainterShader(screen); //??
         shader = new NormalMapShader(screen, xform); //??
+        shader = new DepthShader(screen);
         rasterizer = new Rasterizer(shader);
         // rasterizer = new PerspectiveCorrectRasterizer(shader);
 
@@ -84,7 +85,7 @@ public final class Renderer {
      */
     static Fragment[] projectVertices() {
         Vector[] vertices = mesh.getVertices();
-        Vector3[] normals = mesh.getNormals();
+        Vector[] normals = mesh.getNormals();
         double[] colors = mesh.getColors();
 
         Fragment[] fragments = new Fragment[vertices.length];
@@ -92,7 +93,7 @@ public final class Renderer {
         for (int i = 0; i < vertices.length; i++) {
             Vector pVertex = xform.projectPoint(vertices[i]);
             // Vector pNormal = xform.transformVector (normals[i]);
-            Vector3 pNormal = normals[i];
+            Vector pNormal = normals[i];
 
             int x = (int) Math.round(pVertex.get(0));
             int y = (int) Math.round(pVertex.get(1));
@@ -107,14 +108,17 @@ public final class Renderer {
             }
 
             if (!lightingEnabled) {
-                fragments[i].setColor(colors[3 * i], colors[3 * i + 1], colors[3 * i + 2]);
+                fragments[i].setColor(colors[3 * i],
+                    colors[3 * i + 1],
+                    colors[3 * i + 2]);
             } else {
                 double[] color = new double[3];
                 color[0] = colors[3 * i];
                 color[1] = colors[3 * i + 1];
                 color[2] = colors[3 * i + 2];
-                double material[] = scene.getMaterial();
-                double[] litColor = lighting.applyLights(new Vector3(vertices[i]), pNormal, color,
+                double[] material = scene.getMaterial();
+                final Vector v3d = new Vector(vertices[i].getSubVector(0, 3));
+                double[] litColor = lighting.applyLights(v3d, pNormal, color,
                         scene.getCameraPosition(),
                         material[0], material[1], material[2], material[3]);
                 fragments[i].setColor(litColor[0], litColor[1], litColor[2]);
@@ -144,7 +148,7 @@ public final class Renderer {
      * Renders the solid of the mesh.
      * @throws SizeMismatchException if the size of the fragments do not match
      */
-    static void renderSolid() {
+    static void renderSolid() throws SizeMismatchException {
         Fragment[] fragments = projectVertices();
         int[] faces = mesh.getFaces();
 
@@ -165,6 +169,9 @@ public final class Renderer {
         lightingEnabled = enabled;
     }
 
+    /**
+     * Initializes the nearest and farest point of the object for the depth shader.
+     */
     public static void initShader() {
         Fragment[] fragments = projectVertices();
         for (Fragment fragment : fragments) {
@@ -190,7 +197,7 @@ public final class Renderer {
      * @param args the command line arguments
      * @throws SizeMismatchException if the size of the fragments do not match
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SizeMismatchException {
 
         final int timeout = 3;
 

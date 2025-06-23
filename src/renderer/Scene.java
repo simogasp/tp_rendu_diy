@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import renderer.algebra.Vector3;
+import renderer.algebra.Vector;
 
 /**
  * Class that describes a simple 3D Scene:
@@ -16,9 +16,14 @@ import renderer.algebra.Vector3;
  *
  * @author cdehais based on smondet, gmorin
  */
-
 public class Scene {
 
+    /**
+     * Parses a line of the files.
+     * @param in the input reader
+     * @return the next lines
+     * @throws IOException
+     */
     private static String nextLine(BufferedReader in) throws IOException {
         String r = in.readLine();
 
@@ -28,17 +33,46 @@ public class Scene {
         return r;
     }
 
-    String meshFilename;
-    Vector3 cameraPosition = new Vector3("cam_pos");
-    Vector3 cameraLookAt = new Vector3("cam_lookat");
-    Vector3 cameraUp = new Vector3("cam_up");
-    double cameraFocal;
-    int screenW;
-    int screenH;
-    double ambientI;
-    double sourceI;
-    double[] sourceCoord = new double[4];
-    double[] material = new double[4];
+    /**The mesh filename. */
+    private String meshFilename;
+    /**
+     * The camera position.
+     */
+    private Vector cameraPosition = new Vector("cam_pos", 3);
+    /**
+     * the lookat vector of the camera.
+     */
+    private Vector cameraLookAt = new Vector("cam_lookat", 3);
+    /**
+     * The up vector of the camera.
+     */
+    private Vector cameraUp = new Vector("cam_up", 3);
+    /**
+     * The focal of the camera.
+     */
+    private double cameraFocal;
+    /**
+     * The width of the screen.
+     */
+    private int screenW;
+    /**
+     * The height of the screen.
+     */
+    private int screenH;
+    /**
+     * The ambient light intensity.
+     */
+    private double ambientI;
+    /** The intensity of the ponctual source. */
+    private double sourceI;
+    /**
+     * The point of the source of light.
+     */
+    private double[] sourceCoord = new double[4];
+    /**
+     * The material of the object.
+     */
+    private double[] material = new double[4];
 
     /**
      * Creates a new Scene object by reading in a scene description file.
@@ -107,7 +141,7 @@ public class Scene {
      * Gets the camera position.
      * @return the camera position.
      */
-    public Vector3 getCameraPosition() {
+    public Vector getCameraPosition() {
         return cameraPosition;
     }
 
@@ -115,7 +149,7 @@ public class Scene {
      * Gets the camera look at point.
      * @return the camera look at point.
      */
-    public Vector3 getCameraLookAt() {
+    public Vector getCameraLookAt() {
         return cameraLookAt;
     }
 
@@ -123,7 +157,7 @@ public class Scene {
      * Gets the camera up vector.
      * @return the camera up vector.
      */
-    public Vector3 getCameraUp() {
+    public Vector getCameraUp() {
         return cameraUp;
     }
 

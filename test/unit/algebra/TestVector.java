@@ -1,11 +1,11 @@
 package algebra;
 
-import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class TestVector {
     @Test
     public void testVectorCreation() {
         final int vectorSize = 5;
-        Vector v = new Vector(VECTOR_NAME, vectorSize);
+        final Vector v = new Vector(VECTOR_NAME, vectorSize);
         assertNotNull(v);
         assertEquals(VECTOR_NAME, v.getName());
         assertEquals(vectorSize, v.size());
@@ -41,7 +41,7 @@ public class TestVector {
     @Test
     public void testDefaultName() {
         final int vectorSize = 5;
-        Vector v = new Vector(vectorSize);
+        final Vector v = new Vector(vectorSize);
         assertEquals(Vector.DEFAULT_NAME, v.getName());
         assertEquals(vectorSize, v.size());
     }
@@ -61,7 +61,7 @@ public class TestVector {
     @Test
     public void testSetAndGetValues() {
         final int vectorSize = 5;
-        Vector v = new Vector(VECTOR_NAME, vectorSize);
+        final Vector v = new Vector(VECTOR_NAME, vectorSize);
         for (int i = 0; i < vectorSize; i++) {
             v.set(i, i + 1.0);
         }
@@ -77,13 +77,13 @@ public class TestVector {
     public void testScale() {
         final int vectorSize = 6;
         final double scale = 2.0;
-        Vector v = new Vector(VECTOR_NAME, vectorSize);
+        final Vector v = new Vector(VECTOR_NAME, vectorSize);
         for (int i = 0; i < vectorSize; i++) {
             v.set(i, i + 1.0);
         }
-        v.scale(scale);
+        final Vector nv = v.scale(scale);
         for (int i = 0; i < vectorSize; i++) {
-            assertEquals((i + 1.0) * scale, v.get(i), EPSILON);
+            assertEquals((i + 1.0) * scale, nv.get(i), EPSILON);
         }
     }
 
@@ -94,8 +94,8 @@ public class TestVector {
     public void testDot() {
         final int vectorSize = 4;
         final double expected = 20.0;
-        Vector v1 = new Vector("v1", vectorSize);
-        Vector v2 = new Vector("v2", vectorSize);
+        final Vector v1 = new Vector("v1", vectorSize);
+        final Vector v2 = new Vector("v2", vectorSize);
         for (int i = 0; i < vectorSize; i++) {
             v1.set(i, i + 1.0);
             v2.set(i, (double) vectorSize - i);
@@ -105,73 +105,81 @@ public class TestVector {
 
     }
 
-    /**
-     * Test the addition of two Vectors.
-     */
-    @Test
-    public void testAdd() {
-        final int vectorSize = 4;
-        final double expectedSum = 5;
-        Vector v1 = new Vector("v1", vectorSize);
-        Vector v2 = new Vector("v2", vectorSize);
-        for (int i = 0; i < vectorSize; i++) {
-            v1.set(i, i + 1.0);
-            v2.set(i, (double) vectorSize - i);
-        }
-
-        v1.add(v2);
-        for (int i = 0; i < vectorSize; i++) {
-            assertEquals(expectedSum, v1.get(i), EPSILON);
-        }
-    }
 
     /**
-     * Test the subtraction of two Vectors.
+     * Test the getter of the norm.
      */
     @Test
-    public void testSubtract() {
-        final int vectorSize = 4;
-        final double expectedRes = -vectorSize;
-        Vector v1 = new Vector("v1", vectorSize);
-        Vector v2 = new Vector("v2", vectorSize);
-        for (int i = 0; i < vectorSize; i++) {
-            v1.set(i, i + 1.0);
-            v2.set(i, vectorSize + 1.0 + i);
-        }
+    public void testNorm() {
+        final int vectorSize = 3;
+        final Vector v = new Vector(vectorSize);
 
-        v1.subtract(v2);
-        for (int i = 0; i < vectorSize; i++) {
-            assertEquals(expectedRes, v1.get(i), EPSILON);
-        }
+        // square root of the sum of integer squares from 1 to vectorSize
 
-        Vector v3 = new Vector("testVector3", 2);
-        assertThrows(SizeMismatchException.class, () -> {
-            v1.subtract(v3);
-        });
+        final double expectedValue = Math.sqrt(vectorSize * (vectorSize + 1) * (2 * vectorSize + 1) / 6);
+
+        double value = 1;
+        for (int i = 0; i < vectorSize; i++) {
+            v.set(i, value++);
+        }
+        
+        assertEquals(expectedValue, v.norm(), EPSILON);
 
     }
 
     /**
-     * Test the normalization of a Vector.
+     * Test the normalization of a vector
+     */
+    @Test
+    public void testNormalization() {
+        final int vectorSize = 23;
+        final Vector v = new Vector(vectorSize);
+
+        final double expectedValue = 1 / Math.sqrt(vectorSize);
+        final double value = 1;
+
+        for (int i = 0; i < vectorSize; i++) {
+            v.set(i, value);
+        }
+
+        final Vector nv = v.normalize();
+        
+        // v and nv are the same object.
+        assertFalse("v == nv should be false", v == nv);
+
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals("error for " + i + "-th component", expectedValue, nv.get(i), EPSILON);
+        }
+
+    }
+
+    /**
+     * Test the set zeros on a vector.
      */
     @Test
     public void testZeros() {
         final int vectorSize = 6;
-        Vector v = new Vector(VECTOR_NAME, vectorSize);
-        v.zeros();
+        final Vector v = new Vector(VECTOR_NAME, vectorSize);
+        final Vector nv = v.zeros();
+        
+        // v and nv are the same object.
+        assertTrue(v == nv);
         for (int i = 0; i < vectorSize; i++) {
             assertEquals(0.0, v.get(i), EPSILON);
         }
     }
 
     /**
-     * Test the normalization of a Vector.
+     * Test the set ones of a Vector.
      */
     @Test
     public void testOnes() {
         final int vectorSize = 6;
-        Vector v = new Vector(VECTOR_NAME, vectorSize);
-        v.ones();
+        final Vector v = new Vector(VECTOR_NAME, vectorSize);
+        final Vector nv = v.ones();
+        
+        // v and nv are the same object.
+        assertTrue(v == nv);
         for (int i = 0; i < vectorSize; i++) {
             assertEquals(1.0, v.get(i), EPSILON);
         }
