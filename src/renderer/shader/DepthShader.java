@@ -6,7 +6,7 @@ import renderer.DepthBuffer;
 import renderer.Fragment;
 import renderer.GraphicsWrapper;
 import renderer.shader.colormap.ColorMap;
-import renderer.shader.colormap.Viridis;
+import renderer.shader.colormap.ColorMapFactory;
 
 /**
  * Shader color the model in function of the depth of the surface.
@@ -42,7 +42,7 @@ public class DepthShader extends Shader {
     public DepthShader(final GraphicsWrapper screen) {
         super(screen);
         this.depth = new DepthBuffer(screen.getWidth(), screen.getHeight());
-        colorMap = new Viridis();
+        colorMap = ColorMapFactory.create(ColorMapFactory.Maps.MAGMA);
     }
 
     public DepthShader(final GraphicsWrapper screen, final ColorMap initColorMap) {
@@ -86,12 +86,10 @@ public class DepthShader extends Shader {
      */
     private static Color getColorFor(final double depth) {
 
-        final Color[] colors = colorMap.getColors();
-
-        final int bucketNumber = colors.length - 1;
+        final int bucketNumber = colorMap.length() - 1;
 
         if (Math.abs(depth - nearest) < 0.01) {
-            return colors[bucketNumber - 1];
+            return colorMap.getColor(bucketNumber - 1);
         }
 
         final double d = (farest - nearest) / bucketNumber;
@@ -101,7 +99,7 @@ public class DepthShader extends Shader {
 
         final double alpha = (cursor - bucket * d) / d;
 
-        return interpolate(colors[bucket], colors[bucket + 1], alpha);
+        return interpolate(colorMap.getColor(bucket), colorMap.getColor(bucket + 1), alpha);
     }
 
     /**
