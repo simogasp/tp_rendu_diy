@@ -9,6 +9,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import renderer.algebra.MathUtils;
+import renderer.controller.ImageWrapper;
 
 public class RenderPanel extends Canvas {
 
@@ -28,7 +29,7 @@ public class RenderPanel extends Canvas {
     private int width;
 
     /**
-     * The height of the screen.
+     * The height of the screen.renderer.gui.RenderPanel.setImage
      */
     private int height;
 
@@ -85,111 +86,18 @@ public class RenderPanel extends Canvas {
         this(app, width, height, DEFAULT_PIXEL_SIZE);
     }
 
-    /**
-     * Lights the pixel (x,y) with color (r, g, b) (values clamped to [0,1])
-     * on the current draw buffer.
-     * Does nothing for pixels out of the screen.
-     *
-     * @param x the x coordinate of the pixel
-     * @param y the y coordinate of the pixel
-     * @param r the red component of the color
-     * @param g the green component of the color
-     * @param b the blue component of the color
-     */
-    public void setPixel(final int x, final int y, double r, double g, double b) {
-
-        r = MathUtils.clamp(r, 0d, 1d);
-        g = MathUtils.clamp(g, 0d, 1d);
-        b = MathUtils.clamp(b, 0d, 1d);
-
-        setPixel(x, y, (char) (r * 255), (char) (g * 255), (char) (b * 255));
-    }
-
-    /**
-     * Lights the pixel (x,y) with color (r, g, b) (values clamped to [0, 255])
-     * on the current draw buffer.
-     * Does nothing for pixels out of the screen.
-     *
-     * @param x the x coordinate of the pixel
-     * @param y the y coordinate of the pixel
-     * @param r the red component of the color (clamped to [0, 255])
-     * @param g the green component of the color (clamped to [0, 255])
-     * @param b the blue component of the color (clamped to [0, 255])
-     */
-    public void setPixel(final int x, final int y,
-            final char r, final char g, final char b) {
-
-        if ((x >= 0) && (x < width) && (y >= 0) && (y < height)) {
-            int argb = 0xFF000000;
-            argb += ((int) r) << (8 * 2);
-            argb += ((int) g) << (8 * 1);
-            argb += ((int) b);
-
-            for (int i = 0; i < pixelSize; i++) {
-                for (int j = 0; j < pixelSize; j++) {
-                    renderedImage.setRGB(i + (x * pixelSize), j + (y * pixelSize), argb);
-                }
-            }
-        }
-    }
-
-    /**
-     * Clears the screen.
-     */
-    public void clear() {
-        Graphics2D gd = renderedImage.createGraphics();
-        gd.setColor(Color.BLACK);
-        gd.fillRect(0, 0, width * pixelSize, height * pixelSize);
-        repaint();
-    }
-
     @Override
     public void paint(Graphics g) {
+        super.paint(g);
         if (renderedImage == null) {
             return;
         }
+        System.out.println("paint with " + new Color(renderedImage.getRGB(256, 256)));
         ((Graphics2D) g).drawImage(renderedImage,
                 new AffineTransform(1f, 0f, 0f, 1f, 0, 0),
                 null);
     }
 
-    /**
-     * Lights the pixel (x,y) with the given color.
-     * Does nothing for pixels out of the screen.
-     *
-     * @param x     the x coordinate of the pixel
-     * @param y     the y coordinate of the pixel
-     * @param color the color of the pixel
-     */
-    public void setPixel(int x, int y, Color color) {
-
-        if ((x >= 0) && (x < width) && (y >= 0) && (y < height)) {
-            int rgb = color.getRGB();
-            for (int i = 0; i < pixelSize; i++) {
-                for (int j = 0; j < pixelSize; j++) {
-                    renderedImage.setRGB(i + (x * pixelSize), j + (y * pixelSize), rgb);
-                }
-            }
-        }
-    }
-
-    /**
-     * Gets the width of the screen.
-     *
-     * @return the width
-     */
-    public int getScreenWidth() {
-        return width;
-    }
-
-    /**
-     * Gets the height of the screen.
-     *
-     * @return the height
-     */
-    public int getScreenHeight() {
-        return height;
-    }
 
     /**
      * Gets the pixels size.
@@ -210,21 +118,19 @@ public class RenderPanel extends Canvas {
         width = screenW;
         height = screenH;
 
-        // set the size of the panel
-        final int realWidth = width * pixelSize;
-        final int realHeight = height * pixelSize;
-
-        renderedImage = new BufferedImage(realWidth,
-                realHeight,
-                BufferedImage.TYPE_3BYTE_BGR);
-
         final Dimension dim = getSize();
-        dim.width = realWidth;
-        dim.height = realHeight;
+        dim.width = width;
+        dim.height = height;
 
         setSize(dim);
         setPreferredSize(dim);
         setMinimumSize(dim);
         gui.updateDims();
+    }
+
+    public void setImage(ImageWrapper render) {
+        updateDims(render.getWidth(), render.getHeight());
+        this.renderedImage = render;
+        repaint();
     }
 }

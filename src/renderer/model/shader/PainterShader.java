@@ -1,8 +1,9 @@
-package renderer.shader;
+package renderer.model.shader;
 
-import renderer.DepthBuffer;
-import renderer.Fragment;
-import renderer.gui.RenderPanel;
+import renderer.controller.ImageWrapper;
+import renderer.controller.Renderer;
+import renderer.model.DepthBuffer;
+import renderer.model.Fragment;
 
 /**
  * Simple shader that just copy the interpolated color to the screen,
@@ -18,11 +19,9 @@ public class PainterShader extends Shader {
 
     /**
      * Creates a PainterShader with the given screen.
-     * @param renderPanel the screen to draw on
      */
-    public PainterShader(RenderPanel renderPanel) {
-        super(renderPanel);
-        depth = new DepthBuffer(renderPanel.getWidth(), renderPanel.getHeight());
+    public PainterShader() {
+        super();
     }
 
     /**
@@ -31,21 +30,19 @@ public class PainterShader extends Shader {
      */
     public void shade(Fragment fragment) {
         if (depth.testFragment(fragment)) {
-            screen.setPixel(fragment.getX(), fragment.getY(), fragment.getColor());
+            screen.setRGB(fragment.getX(), fragment.getY(), fragment.getColor().getRGB());
             depth.writeFragment(fragment);
         }
     }
 
-    /**
-     * Reset the shader.
-     */
     @Override
     public void reset() {
         depth.clear();
     }
 
     @Override
-    public void init(int width, int height, Fragment[] vertices) {
-        depth.resize(width, height);
+    public void init(Renderer renderer, ImageWrapper screen) {
+        super.init(renderer, screen);
+        this.depth = new DepthBuffer(screen.getWidth(), screen.getHeight());
     }
 }

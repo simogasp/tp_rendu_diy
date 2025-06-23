@@ -1,10 +1,10 @@
-package renderer.rasterizer;
+package renderer.model.rasterizer;
 
-import renderer.Fragment;
 import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
-import renderer.shader.Shader;
+import renderer.model.Fragment;
+import renderer.model.shader.Shader;
 
 /**
  * The PerspectiveCorrectRasterizer class extends Rasterizer to perform

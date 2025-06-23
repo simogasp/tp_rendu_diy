@@ -1,10 +1,11 @@
-package renderer.shader;
+package renderer.model.shader;
 
-import renderer.DepthBuffer;
-import renderer.Fragment;
-import renderer.Transformation;
 import renderer.algebra.Vector;
-import renderer.gui.RenderPanel;
+import renderer.controller.ImageWrapper;
+import renderer.controller.Renderer;
+import renderer.model.DepthBuffer;
+import renderer.model.Fragment;
+import renderer.model.Transformation;
 
 public class NormalMapShader extends Shader {
 
@@ -25,20 +26,21 @@ public class NormalMapShader extends Shader {
 
     /**
      * Creates a NormalMapShader with the given screen.
-     *
-     * @param screen the screen to draw on
-     * @param xform  the transformation to get an object from the world reference to
-     *               the camera reference
      */
-    public NormalMapShader(final RenderPanel screen, final Transformation xform) {
-        super(screen);
-        this.depthBuffer = new DepthBuffer(screen.getWidth(), screen.getHeight());
-        this.xform = xform;
+    public NormalMapShader() {
+        super();
     }
 
     @Override
     public void reset() {
         this.depthBuffer.clear();
+    }
+
+    @Override
+    public void init(final Renderer renderer, final ImageWrapper screen) {
+        super.init(renderer, screen);
+        this.depthBuffer = new DepthBuffer(screen.getWidth(), screen.getHeight());
+        this.xform = renderer.getTransformation();
     }
 
     @Override
@@ -69,13 +71,8 @@ public class NormalMapShader extends Shader {
 
         fragment.setColor(r, g, b);
 
-        screen.setPixel(fragment.getX(), fragment.getY(), fragment.getColor());
+        screen.setRGB(fragment.getX(), fragment.getY(), fragment.getColor().getRGB());
         this.depthBuffer.writeFragment(fragment);
-    }
-
-    @Override
-    public void init(int width, int height, Fragment[] vertices) {
-        depthBuffer.resize(width, height);
     }
 
 }

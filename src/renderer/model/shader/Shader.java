@@ -1,7 +1,9 @@
-package renderer.shader;
+package renderer.model.shader;
 
-import renderer.Fragment;
-import renderer.gui.RenderPanel;
+
+import renderer.controller.ImageWrapper;
+import renderer.controller.Renderer;
+import renderer.model.Fragment;
 
 /**
  * The Shader class is responsible for writing final pixel color
@@ -15,29 +17,18 @@ public abstract class Shader {
     /**
      * The screen to draw on.
      */
-    protected RenderPanel screen;
+    protected ImageWrapper screen;
 
     /**
      * Creates a Shader with the given screen.
-     * @param screen the screen to draw on
      */
-    protected Shader(RenderPanel screen) {
-        this.screen = screen;
+    protected Shader() {
     }
 
     /**
      * Common entry point to ree-initialize the shader.
      */
     public void reset() {
-    }
-
-    /**
-     * Initializes the shader with the given vertices.
-     * @param width the width of the render
-     * @param height the height of the render
-     * @param vertices the vertices of the mesh
-     */
-    public void init(int width, int height, Fragment[] vertices) {
     }
 
     /**
@@ -52,7 +43,15 @@ public abstract class Shader {
      * @return true if the fragment is clipped, false otherwise
      */
     public boolean isClipped(Fragment fragment) {
-        return ((fragment.getX() < 0) || (fragment.getX() >= screen.getScreenWidth())
-            || (fragment.getY() < 0) || (fragment.getY() >= screen.getScreenHeight()));
+        return screen.isClipped(fragment);
+    }
+
+    /**
+     * Initializes a shader.
+     * @param renderer the renderer that contains all the information
+     * @param screen the screen to draw on.
+     */
+    public void init(final Renderer renderer, ImageWrapper screen) {
+        this.screen = screen;
     }
 }

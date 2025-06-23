@@ -1,12 +1,13 @@
-package renderer.shader;
+package renderer.model.shader;
 
 import java.awt.Color;
 
-import renderer.DepthBuffer;
-import renderer.Fragment;
-import renderer.shader.colormap.ColorMap;
-import renderer.shader.colormap.ColorMapFactory;
-import renderer.gui.RenderPanel;
+import renderer.controller.ImageWrapper;
+import renderer.controller.Renderer;
+import renderer.model.DepthBuffer;
+import renderer.model.Fragment;
+import renderer.model.shader.colormap.ColorMap;
+import renderer.model.shader.colormap.ColorMapFactory;
 
 /**
  * Shader color the model in function of the depth of the surface.
@@ -26,32 +27,28 @@ public class DepthShader extends Shader {
     /**
      * The depth buffer.
      */
-    private final DepthBuffer depthBuffer;
+    private DepthBuffer depthBuffer;
 
     /**
      * A colors Map.
      */
-    private ColorMap colorMap;
+    public ColorMap colorMap;
+
+
 
     /**
-     * Creates a DepthShader with the given screen.
-     *
-     * @param renderPanel the screen to draw on
+     * Creates a DepthShader.
      */
-    public DepthShader(final RenderPanel renderPanel) {
-        this(renderPanel, ColorMapFactory.create(ColorMapFactory.Maps.VERIDIS));
+    public DepthShader() {
+        this(ColorMapFactory.create(ColorMapFactory.Maps.VERIDIS));
     }
 
-    /**
-     * Creates a DepthShader with the given screen and colorMap.
-     *
-     * @param renderPanel  the screen to draw on
+    /** 
+     * Creates a DepthShader with the given colorMap.
      * @param initColorMap the init color map
      */
-    public DepthShader(final RenderPanel renderPanel, final ColorMap initColorMap) {
-        super(renderPanel);
-        this.depthBuffer = new DepthBuffer(renderPanel.getScreenWidth(),
-                renderPanel.getScreenHeight());
+    public DepthShader(final ColorMap initColorMap) {
+        super();
         colorMap = initColorMap;
     }
 
@@ -72,14 +69,6 @@ public class DepthShader extends Shader {
         near = Double.POSITIVE_INFINITY;
     }
 
-    @Override
-    public void init(final int width, final int height, final Fragment[] vertices) {
-        depthBuffer.resize(width, height);
-        for (final Fragment fragment : vertices) {
-            update(fragment.getDepth());
-        }
-    }
-
     /**
      * Update the nearest and the farest depth according to the given depth.
      *
@@ -91,6 +80,18 @@ public class DepthShader extends Shader {
         }
         if (depth > far) {
             far = depth;
+        }
+    }
+    @Override
+    public void init(final Renderer renderer, final ImageWrapper screen) {
+        super.init(renderer, screen);
+        if (depthBuffer == null) {
+            depthBuffer = new DepthBuffer(screen.getWidth(), screen.getHeight());
+        } else {
+            depthBuffer.resize(screen.getWidth(), screen.getHeight());
+        }
+        for (Fragment fragment : renderer.projectVertices()) {
+            update(fragment.getDepth());
         }
     }
 

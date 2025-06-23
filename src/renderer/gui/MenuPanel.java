@@ -16,12 +16,12 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import renderer.Renderer;
-import renderer.shader.DepthShader;
-import renderer.shader.NormalMapShader;
-import renderer.shader.PainterShader;
-import renderer.shader.SimpleShader;
-import renderer.shader.TextureShader;
+import renderer.controller.Renderer;
+import renderer.model.shader.DepthShader;
+import renderer.model.shader.NormalMapShader;
+import renderer.model.shader.PainterShader;
+import renderer.model.shader.SimpleShader;
+import renderer.model.shader.TextureShader;
 
 public class MenuPanel extends JPanel {
 
@@ -155,7 +155,7 @@ public class MenuPanel extends JPanel {
     /**
      * The renderer used to make a render.
      */
-    private final Renderer renderer;
+    private final Renderer render;
 
     /**
      * Creates a MenuPanel from a RenderPanel.
@@ -163,14 +163,29 @@ public class MenuPanel extends JPanel {
      * @param renderPanel the render panel
      */
     public MenuPanel(final RenderPanel renderPanel) {
+        // set up the panel
         super(IS_DOUBLE_BUFFERED);
-        this.renderer = new Renderer();
+
+        // set up the renderer
+        Renderer tmp;
+        try {
+            tmp = new Renderer();
+        } catch (IOException e) {
+            // should not be reach
+            e.printStackTrace();
+            tmp = null;
+        }
+        render = tmp;
+
+        // set up the renderPanel
         this.renderPanel = renderPanel;
-        renderer.setScreen(renderPanel);
+
         // add a grid bag layout
         setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
+
+        // set up the button insets
 
         // radio insets
         insetsRadio = new JButton().getInsets();
@@ -182,11 +197,15 @@ public class MenuPanel extends JPanel {
         // create a tab
         insetsCheckBox.left = TAB_SIZE_PIXEL;
 
+        
+        // fill the panel
+        // add a title
         constraints.gridx = 0;
         constraints.gridy++;
         add(new JLabel("MENU"), constraints);
 
         // mesh radio
+        // add a subtitle
         constraints.gridy++;
         add(new JLabel("Filename"), constraints);
         meshGroup = new ButtonGroup();
@@ -196,8 +215,11 @@ public class MenuPanel extends JPanel {
         texture = new JRadioButton("Texture");
 
         filenameTextField = new JTextField();
+        // set up the buttons
         meshRadioConfiguration();
 
+
+        // add a subtitle
         constraints.gridy++;
         add(new JLabel("Shader"), constraints);
 
@@ -208,8 +230,10 @@ public class MenuPanel extends JPanel {
         textureShader = new JRadioButton("Texture");
         depthShader = new JRadioButton("Depth");
         normalShader = new JRadioButton("Normal Map");
+        // set up the buttons
         shaderRadioConfiguration();
 
+        // add a subtitle
         constraints.gridy++;
         add(new JLabel("Render"), constraints);
 
@@ -219,16 +243,20 @@ public class MenuPanel extends JPanel {
         // check box to enable the lighting
         drawSolidCheckBox = new JCheckBox("Draw solid");
 
+        // set up the buttons
         renderConfiguration();
 
+        // add a subtitle
         constraints.gridy++;
         add(new JLabel("Rasterizer"), constraints);
+        
         rasterizerGroup = new ButtonGroup();
         simpleRasterizer = new JRadioButton("Rasterizer");
         persperctiveRasterizer = new JRadioButton("Perspective Rasterizer");
-
+        // set up the buttons
         rasterizerConfiguration();
 
+        // add a subtitle
         constraints.gridy++;
         add(new JLabel("Option"), constraints);
 
@@ -238,8 +266,10 @@ public class MenuPanel extends JPanel {
         // check box to enable the lighting
         lightingCheckBox = new JCheckBox("lighting");
 
+        // set up the buttons
         optionConfiguration();
 
+        //add a update button (useless normally)
         constraints.gridy++;
         final JButton but = new JButton("Render");
         add(but, constraints);
@@ -265,7 +295,7 @@ public class MenuPanel extends JPanel {
                 return;
             }
             try {
-                renderer.init(CUBE_ENDPOINT);
+                render.setScene(CUBE_ENDPOINT);
             } catch (final IOException e1) {
                 // should not be reach
                 e1.printStackTrace();
@@ -283,7 +313,7 @@ public class MenuPanel extends JPanel {
                 return;
             }
             try {
-                renderer.init(RABBIT_ENDPOINT);
+                render.setScene(RABBIT_ENDPOINT);
             } catch (final IOException e1) {
                 // should not be reach
                 e1.printStackTrace();
@@ -301,7 +331,7 @@ public class MenuPanel extends JPanel {
                 return;
             }
             try {
-                renderer.init(SUZANNE_ENDPOINT);
+                render.setScene(SUZANNE_ENDPOINT);
             } catch (final IOException e1) {
                 // should not be reach
                 e1.printStackTrace();
@@ -319,7 +349,7 @@ public class MenuPanel extends JPanel {
                 return;
             }
             try {
-                renderer.init(TEXTURE_ENDPOINT);
+                render.setScene(TEXTURE_ENDPOINT);
             } catch (final IOException e1) {
                 // should not be reach
                 e1.printStackTrace();
@@ -335,7 +365,7 @@ public class MenuPanel extends JPanel {
         constraints.gridy++;
         filenameTextField.addActionListener(e -> {
             try {
-                renderer.init("data/" + filenameTextField.getText());
+                render.setScene("data/" + filenameTextField.getText());
             } catch (final IOException e1) {
                 JOptionPane.showMessageDialog(filenameTextField,
                         e1.getMessage(),
@@ -358,7 +388,7 @@ public class MenuPanel extends JPanel {
             if (!simpleShader.isSelected()) {
                 return;
             }
-            renderer.setShader(new SimpleShader(renderPanel));
+            render.setShader(new SimpleShader());
             updateRender();
         });
         add(simpleShader, constraints);
@@ -371,7 +401,7 @@ public class MenuPanel extends JPanel {
             if (!painterShader.isSelected()) {
                 return;
             }
-            renderer.setShader(new PainterShader(renderPanel));
+            render.setShader(new PainterShader());
             updateRender();
 
         });
@@ -385,9 +415,9 @@ public class MenuPanel extends JPanel {
             if (!textureShader.isSelected()) {
                 return;
             }
-            final TextureShader texShader = new TextureShader(renderPanel);
+            final TextureShader texShader = new TextureShader();
             texShader.setTexture("data/brick.jpg");
-            renderer.setShader(texShader);
+            render.setShader(texShader);
             updateRender();
 
         });
@@ -401,7 +431,7 @@ public class MenuPanel extends JPanel {
             if (!depthShader.isSelected()) {
                 return;
             }
-            renderer.setShader(new DepthShader(renderPanel));
+            render.setShader(new DepthShader());
             updateRender();
         });
         add(depthShader, constraints);
@@ -414,7 +444,7 @@ public class MenuPanel extends JPanel {
             if (!normalShader.isSelected()) {
                 return;
             }
-            renderer.setShader(new NormalMapShader(renderPanel, renderer.getXform()));
+            render.setShader(new NormalMapShader());
             updateRender();
         });
         add(normalShader, constraints);
@@ -438,10 +468,12 @@ public class MenuPanel extends JPanel {
 
         // add the interdependant Item listener
         drawWireframeCheckBox.addItemListener(e -> {
+            render.setWiredRendered(drawWireframeCheckBox.isSelected());
             updateRender();
         });
 
         drawSolidCheckBox.addItemListener(e -> {
+            render.setSolidRendered(drawSolidCheckBox.isSelected());
             updateRender();
         });
 
@@ -455,10 +487,11 @@ public class MenuPanel extends JPanel {
         // rasterizer
         simpleRasterizer.setMargin(insetsRadio);
         constraints.gridy++;
-        simpleRasterizer.addActionListener(e -> {
+        simpleRasterizer.addItemListener(e -> {
             if (!simpleRasterizer.isSelected()) {
                 return;
             }
+            render.setRasterizer();
             updateRender();
         });
         add(simpleRasterizer, constraints);
@@ -467,10 +500,11 @@ public class MenuPanel extends JPanel {
         // rasterizer
         persperctiveRasterizer.setMargin(insetsRadio);
         constraints.gridy++;
-        persperctiveRasterizer.addActionListener(e -> {
+        persperctiveRasterizer.addItemListener(e -> {
             if (!persperctiveRasterizer.isSelected()) {
                 return;
             }
+            render.setPerpectiveCorrectRasterizer();
             updateRender();
         });
         add(persperctiveRasterizer, constraints);
@@ -484,9 +518,7 @@ public class MenuPanel extends JPanel {
     private void optionConfiguration() {
         drawNormalCheckBox.addItemListener(new ItemListener() {
             public void itemStateChanged(final ItemEvent e) {
-                System.out.println(drawNormalCheckBox.isSelected()
-                        ? "Should draw normal"
-                        : "should not draw normals");
+                render.setNormalsRendered(drawNormalCheckBox.isSelected());
                 updateRender();
             }
         });
@@ -513,34 +545,16 @@ public class MenuPanel extends JPanel {
      */
     private void setConfiguration() {
         // set the start configuration
+        simpleRasterizer.setSelected(SELECTED);
         cube.setSelected(SELECTED);
         simpleShader.setSelected(SELECTED);
         drawWireframeCheckBox.setSelected(SELECTED);
-        simpleRasterizer.setSelected(SELECTED);
     }
 
     /**
      * Update the render.
      */
     private void updateRender() {
-        renderPanel.clear();
-        if (simpleRasterizer.isSelected()) {
-            renderer.setRasterizer();
-        } else {
-            renderer.setPerpectiveRasterizer();
-        }
-        renderer.resetShader();
-        renderer.initShader();
-        renderer.setLightingEnabled(lightingCheckBox.isSelected());
-        if (drawNormalCheckBox.isSelected()) {
-            System.out.println("Should print Normal");
-        }
-        if (drawSolidCheckBox.isSelected()) {
-            renderer.renderSolid();
-        }
-        if (drawWireframeCheckBox.isSelected()) {
-            renderer.renderWireframe();
-        }
-        renderPanel.repaint();
+        renderPanel.setImage(render.render());
     }
 }

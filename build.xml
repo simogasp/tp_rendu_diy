@@ -1,17 +1,17 @@
 <project name="Renderer" default="compile" basedir=".">
 
 	<property name="java" location="src" />
-	<property name="classes" location="bin/cls" />
-	<property name="result" location="bin/jar" />
-	<property name="bin" location="bin" />
+	<property name="bin" location="build" />
+	<property name="classes" location="${bin}/cls" />
+	<property name="result" location="${bin}/jar" />
 	<property name="test" location="test" />
-	<property name="testsoutput" location="bin/test" />
-	<property name="reports" location="test/reports" />
+	<property name="testsoutput" location="${bin}/test" />
+	<property name="reports" location="${test}/reports" />
 	<property name="lib" location="lib" />
 	<property name="data" location="data" />
 	<property name="base" location="." />
 	<property name="doc" location="doc" />
-	<property name="functional" location="test/functional" />
+	<property name="functional" location="${test}/functional" />
 	<property name="unit" location="test/unit" />
 
 	<description>
@@ -29,12 +29,8 @@ This is a simple rendering engine made in Java.
 		<files includes="${lib}/junit-4.13.2.jar" />
 	</path>
 
-	<target name="dl-checkstyle" description="Download a checkstyle jar in lib.">
-		<get
-			src="https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.25.0/checkstyle-10.25.0-all.jar"
-			dest="${lib}/checkstyle-10.25.0-all.jar" />
-	</target>
 
+	<!-- target to compile the sources. -->
 	<target name="compile" description="Compile sources.">
 		<mkdir dir="${classes}" />
 		<javac includeantruntime="false" srcdir="${java}" destdir="${classes}">
@@ -42,21 +38,20 @@ This is a simple rendering engine made in Java.
 		</javac>
 	</target>
 
+	<!-- target to generate a jar of the project. -->
 	<target name="jar" depends="compile" description="Build a jar file of the project.">
 		<mkdir dir="${result}" />
 		<jar destfile="${result}/App.jar" basedir="${classes}">
 		</jar>
 	</target>
 
-
+	<!-- target to clean the repository -->
 	<target name="clean" description="Clean the directory.">
-		<delete dir="${classes}" />
-		<delete dir="${result}" />
-		<delete dir="${testsoutput}" />
 		<delete dir="${bin}" />
 		<delete dir="${doc}" />
 	</target>
 
+	<!-- target to run the application. -->
 	<target name="run" depends="compile" description="Run the application.">
 		<java classname="renderer.gui.GUIApp">
 			<classpath>
@@ -66,17 +61,21 @@ This is a simple rendering engine made in Java.
 		</java>
 		<input message="Press Return key to exit ..." />
 	</target>
-
-	<target name="clean-doc" description="Clean the doc directory.">
-		<delete dir="${doc}" />
-	</target>
-
+	
+	<!-- target to generate javadoc. -->
 	<target name="doc" depends="clean-doc" description="Update the doc, create if doesn't exists.">
 		<mkdir dir="${doc}" />
 		<javadoc destdir="${doc}" sourcepath="${java}">
 		</javadoc>
 	</target>
 
+	
+	<!-- target to clean javadoc. -->
+	<target name="clean-doc" description="Clean the doc directory.">
+		<delete dir="${doc}" />
+	</target>
+
+	<!-- target to compile tests. -->
 	<target name="compile-test" depends="compile" description="Compile Tests files.">
 		<mkdir dir="${testsoutput}" />
 		<mkdir dir="${reports}" />
@@ -89,6 +88,7 @@ This is a simple rendering engine made in Java.
 		</javac>
 	</target>
 
+	<!-- target to run fonctionnal tests. -->
 	<target
 		name="func-tests" depends="compile-test" description="Run Functionnal Test. Writes the result in tests/reports.">
 
@@ -108,6 +108,7 @@ This is a simple rendering engine made in Java.
 		</junit>
 	</target>
 
+	<!-- target to run unit tests. -->
 	<target
 		name="unit-tests" depends="compile-test" description="Run units Tests. Writes the results in tests/reports.">
 
@@ -132,12 +133,23 @@ This is a simple rendering engine made in Java.
 
 	</target>
 
+	<!-- Target to run both test -->
 	<target name="test" description="Run tests.">
 		<antcall target="func-tests" />
 		<antcall target="unit-tests" />
 	</target>
 
-	<!-- Exécution de checkstyle -->
+
+
+	<!-- Checkstyle part. -->
+	<!-- Download it with this target. -->
+	<target name="dl-checkstyle" description="Download a checkstyle jar in lib.">
+		<get
+			src="https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.25.0/checkstyle-10.25.0-all.jar"
+			dest="${lib}/checkstyle-10.25.0-all.jar" />
+	</target>
+	
+	<!-- Execution of checkstyle -->
 	<target name="checkstyle" description="Make a CheckStyle review.">
 		<checkstyle config="checkstyle.xml">
 			<fileset dir="${java}" />

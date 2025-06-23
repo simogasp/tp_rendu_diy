@@ -1,4 +1,4 @@
-package renderer.light;
+package renderer.model.light;
 
 import renderer.algebra.Vector;
 

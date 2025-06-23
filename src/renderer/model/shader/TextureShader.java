@@ -1,12 +1,13 @@
-package renderer.shader;
+package renderer.model.shader;
 
-import java.awt.Color;
+import java.awt.*;
 
-import renderer.DepthBuffer;
-import renderer.Fragment;
-import renderer.gui.RenderPanel;
-import renderer.Texture;
 import renderer.algebra.MathUtils;
+import renderer.controller.ImageWrapper;
+import renderer.controller.Renderer;
+import renderer.model.DepthBuffer;
+import renderer.model.Fragment;
+import renderer.model.Texture;
 
 /**
  * Simple shader that just copy the interpolated color to the screen,
@@ -37,13 +38,10 @@ public class TextureShader extends Shader {
     private boolean combineWithBaseColor;
 
     /**
-     * Creates a PainterShader with the given screen.
-     *
-     * @param screen the screen to draw on
+     * Creates a PainterShader.
      */
-    public TextureShader(RenderPanel screen) {
-        super(screen);
-        depth = new DepthBuffer(screen.getWidth(), screen.getHeight());
+    public TextureShader() {
+        super();
         texture = null;
     }
 
@@ -118,8 +116,18 @@ public class TextureShader extends Shader {
         depth.clear();
     }
 
-    @Override
-    public void init(int width, int height, Fragment[] vertices) {
-        depth.resize(width, height);
+    public boolean getCombineWithBaseColor() {
+        return combineWithBaseColor;
     }
+
+    @Override
+    public void init(final Renderer renderer, final ImageWrapper screen) {
+        super.init(renderer, screen);
+        if (depth == null) {
+            depth = new DepthBuffer(screen.getWidth(), screen.getHeight());
+        } else {
+            depth.resize(screen.getWidth(), screen.getHeight());
+        }
+    }
+    
 }

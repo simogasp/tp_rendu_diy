@@ -1,4 +1,4 @@
-package renderer.light;
+package renderer.model.light;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +13,7 @@ import renderer.algebra.Vector;
 public class Lighting {
 
     /** List of light sources. */
-    private List<Light> lights;
+    private final List<Light> lights;
 
 
 
@@ -28,7 +28,7 @@ public class Lighting {
      * Adds a new ambient light source of intensity @ia to the environment.
      * @param ia the intensity of the ambient light
      */
-    public void addAmbientLight(double ia) {
+    public void addAmbientLight(final double ia) {
         lights.add(new AmbientLight(ia));
     }
 
@@ -40,7 +40,7 @@ public class Lighting {
      * @param z the z coordinate of the light source
      * @param id the intensity of the light source
      */
-    public void addPointLight(double x, double y, double z, double id) {
+    public void addPointLight(final double x, final double y, final double z, final double id) {
         lights.add(new PointLight(x, y, z, id));
     }
 
@@ -57,14 +57,14 @@ public class Lighting {
      * @param s the shininess coefficient
      * @return the illuminated color of the point as an array of 3 doubles
      */
-    public double[] applyLights(Vector position, Vector normal, double[] color,
-            Vector cameraPosition,
-            double ka, double kd, double ks, double s) {
+    public double[] applyLights(final Vector position, final Vector normal, final double[] color,
+            final Vector cameraPosition,
+            final double ka, final double kd, final double ks, final double s) {
 
         // total light intensity
         double I = 0.0;
 
-        for (Light light : lights) {
+        for (final Light light : lights) {
             I += light.getContribution(position, normal, color,
                 cameraPosition, ka, kd, ks, s);
         }
@@ -74,9 +74,13 @@ public class Lighting {
                             clampColor(color[2] * I)};
     }
 
-    private static double clampColor(double value) {
+    private static double clampColor(final double value) {
         final double min = 0.0;
         final double max = 1.0;
         return MathUtils.clamp(value, min, max);
+    }
+
+    public void reset() {
+        lights.clear();
     }
 }

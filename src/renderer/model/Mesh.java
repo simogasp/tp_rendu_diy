@@ -1,4 +1,4 @@
-package renderer;
+package renderer.model;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -140,7 +140,7 @@ public class Mesh {
     /**
      * Constructs a normal for each vertex of the mesh
      * by averaging the normals of the faces that share the vertex.
-     * @return an array of Vector3 containing the normals of each vertex.
+     * @return an array of Vector containing the normals of each vertex.
      */
     private Vector[] computeNormals() {
 
@@ -201,7 +201,7 @@ public class Mesh {
     /**
      * Return the normals associated to the vertices.
      * If the normals have not been computed yet, they are computed.
-     * @return an array of Vector3 containing the normals of the mesh
+     * @return an array of Vector containing the normals of the mesh
      */
     public Vector[] getNormals() {
         if (normals == null) {

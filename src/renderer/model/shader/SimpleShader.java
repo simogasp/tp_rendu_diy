@@ -1,7 +1,6 @@
-package renderer.shader;
+package renderer.model.shader;
 
-import renderer.Fragment;
-import renderer.gui.RenderPanel;
+import renderer.model.Fragment;
 
 /**
  * Simple shader that just copy the interpolated color to the screen.
@@ -10,11 +9,10 @@ import renderer.gui.RenderPanel;
 public class SimpleShader extends Shader {
 
     /**
-     * Creates a SimpleShader with the given screen.
-     * @param renderPanel the screen to draw on
+     * Creates a SimpleShader.
      */
-    public SimpleShader(final RenderPanel renderPanel) {
-        super(renderPanel);
+    public SimpleShader() {
+        super();
     }
 
     /**
