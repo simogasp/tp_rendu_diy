@@ -16,7 +16,7 @@ import renderer.shader.TextureShader;
 /**
  * The Renderer class drives the rendering pipeline: read in a scene, projects
  * the vertices and rasterizes every faces / edges.
- * 
+ *
  * @author cdehais
  */
 public final class Renderer {
@@ -47,7 +47,7 @@ public final class Renderer {
 
     /**
      * Initialize the renderer with the given scene file.
-     * 
+     *
      * @param sceneFilename the scene file to load
      * @throws IOException if the scene file cannot be loaded
      */
@@ -125,7 +125,7 @@ public final class Renderer {
 
     /**
      * Projects the vertices of the mesh into the screen space.
-     * 
+     *
      * @return an array of fragments
      */
     static Fragment[] projectVertices() {
@@ -226,7 +226,7 @@ public final class Renderer {
 
     /**
      * Renders the solid of the mesh.
-     * 
+     *
      * @throws SizeMismatchException if the size of the fragments do not match
      */
     static void renderSolid() throws SizeMismatchException {
@@ -244,7 +244,7 @@ public final class Renderer {
 
     /**
      * Enables or disables lighting.
-     * 
+     *
      * @param enabled true to enable lighting, false to disable it
      */
     public static void setLightingEnabled(boolean enabled) {
@@ -263,7 +263,7 @@ public final class Renderer {
 
     /**
      * Wait for a number of seconds.
-     * 
+     *
      * @param sec the number of seconds to wait
      */
     public static void wait(int sec) {
@@ -277,7 +277,7 @@ public final class Renderer {
 
     /**
      * Main entry point of the renderer.
-     * 
+     *
      * @param args the command line arguments
      * @throws SizeMismatchException if the size of the fragments do not match
      */
@@ -310,18 +310,22 @@ public final class Renderer {
         // solid rendering, no lighting
         screen.clearBuffer(); //<??
         shader.reset();
+        // get the nearest and the farest point for depth Shader
+        initShader();
         renderSolid();
         renderNormal();
         screen.swapBuffers();
-        wait(timeout); // >??
+        wait(timeout); //>??
 
         // solid rendering, with lighting
         screen.clearBuffer(); //<??
         shader.reset();
+        // get the nearest and the farest point for depth Shader
+        initShader();
         setLightingEnabled(true);
         renderSolid();
         screen.swapBuffers();
-        wait(timeout); // >??
+        wait(timeout); //>??
 
         // solid rendering, with texture
         screen.clearBuffer(); //<??
@@ -332,7 +336,7 @@ public final class Renderer {
         setLightingEnabled(true);
         renderSolid();
         screen.swapBuffers();
-        wait(timeout); // >??
+        wait(timeout); //>??
 
         // solid rendering, with texture combined with base color
         screen.clearBuffer(); //<??
@@ -341,7 +345,7 @@ public final class Renderer {
         shader = texShader;
         renderSolid();
         screen.swapBuffers();
-        wait(timeout); // >??
+        wait(timeout); //>??
 
         screen.destroy();
         System.exit(0);

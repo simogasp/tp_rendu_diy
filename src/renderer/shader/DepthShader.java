@@ -16,12 +16,12 @@ public class DepthShader extends Shader {
     /**
      * Represents the minimal Depth of the Model.
      */
-    private static double nearest = Double.POSITIVE_INFINITY;
-    
+    private static double near = Double.POSITIVE_INFINITY;
+
     /**
      * Represents the maximum Depth of the Model.
      */
-    private static double farest = 0;
+    private static double far = Double.NEGATIVE_INFINITY;
 
     /**
      * The depth buffer.
@@ -31,21 +31,21 @@ public class DepthShader extends Shader {
     /**
      * A colors Map.
      */
-    public static ColorMap colorMap;
-
-
+    private ColorMap colorMap;
 
     /**
      * Creates a DepthShader with the given screen.
+     *
      * @param screen the screen to draw on
      */
     public DepthShader(final GraphicsWrapper screen) {
         this(screen, ColorMapFactory.create(ColorMapFactory.Maps.VERIDIS));
     }
 
-    /** 
+    /**
      * Creates a DepthShader with the given screen and colorMap.
-     * @param screen the screen to draw on
+     *
+     * @param screen       the screen to draw on
      * @param initColorMap the init color map
      */
     public DepthShader(final GraphicsWrapper screen, final ColorMap initColorMap) {
@@ -65,6 +65,8 @@ public class DepthShader extends Shader {
     @Override
     public void reset() {
         depth.clear();
+        far = Double.NEGATIVE_INFINITY;
+        near = Double.POSITIVE_INFINITY;
     }
 
     /**
@@ -73,31 +75,32 @@ public class DepthShader extends Shader {
      * @param depth the new one
      */
     public static void update(final double depth) {
-        if (depth < nearest) {
-            nearest = depth;
+        if (depth < near) {
+            near = depth;
         }
-        if (depth > farest) {
-            farest = depth;
+        if (depth > far) {
+            far = depth;
         }
     }
 
     /**
-     * Returns a color in the color gradient (Red, green, Blue) where red is near, green the middle 
+     * Returns a color in the color gradient (Red, green, Blue) where red is near,
+     * green the middle
      * and blue the back of the model.
+     *
      * @param depth the depth of the current point
      * @return the color in the color gradient
      */
     private static Color getColorFor(final double depth) {
-
-        final int bucketNumber = colorMap.length();
-
-        if (Math.abs(depth - nearest) < 0.01) {
-            return colorMap.getColor(bucketNumber - 1);
+        if (depth < near || depth > far) {
+            return Color.RED;
         }
 
-        final double d = (farest - nearest) / bucketNumber;
+        final int bucketNumber = colorMap.length() - 2;
 
-        final double cursor = farest - depth;
+        final double d = (far - near) / bucketNumber;
+
+        final double cursor = far - depth;
         final int bucket = (int) (cursor / d);
 
         final double alpha = (cursor - bucket * d) / d;
@@ -107,8 +110,9 @@ public class DepthShader extends Shader {
 
     /**
      * Returns a mix of c1 and c2 with the value alpha.
-     * @param c1 the first color
-     * @param c2 the second one
+     *
+     * @param c1    the first color
+     * @param c2    the second one
      * @param alpha the coefficient of interpolation
      * @return the mixed color
      */
