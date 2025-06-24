@@ -87,7 +87,7 @@ public final class Renderer {
     }
 
     /**
-     * Computes the lenght of the normals for the rendering.
+     * Computes the length of the normals for the rendering.
      */
     private static void initNormalLength() {
         double minX = Double.POSITIVE_INFINITY;
