@@ -86,6 +86,9 @@ public final class Renderer {
 
     }
 
+    /**
+     * Computes the lenght of the normals for the rendering.
+     */
     private static void initNormalLength() {
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
@@ -115,7 +118,7 @@ public final class Renderer {
             }
         }
 
-        // the length of the normal is abitrarely egal to 1/10 of the minimal
+        // The length of the normal is approximately egal to 1/100 of the minimal
         // length of the bounding box
         normalLength = Math.min(Math.min(maxX - minX, maxY - minY), maxZ - minZ) / 100;
     }
