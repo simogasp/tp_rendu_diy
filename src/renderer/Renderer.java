@@ -80,10 +80,9 @@ public final class Renderer {
                 lightCoord[1],
                 lightCoord[2],
                 scene.getSourceI());
-        
+
         // determine the normal length
         initNormalLength();
-
 
     }
 
@@ -118,7 +117,7 @@ public final class Renderer {
 
         // the length of the normal is abitrarely egal to 1/10 of the minimal
         // length of the bounding box
-        normalLength = Math.min(Math.min(maxX - minX, maxY - minY), maxZ - minZ) / 10;
+        normalLength = Math.min(Math.min(maxX - minX, maxY - minY), maxZ - minZ) / 100;
     }
 
     /**
@@ -152,8 +151,8 @@ public final class Renderer {
 
             if (!lightingEnabled) {
                 fragments[i].setColor(colors[3 * i],
-                    colors[3 * i + 1],
-                    colors[3 * i + 2]);
+                        colors[3 * i + 1],
+                        colors[3 * i + 2]);
             } else {
                 double[] color = new double[3];
                 color[0] = colors[3 * i];
@@ -199,13 +198,10 @@ public final class Renderer {
             final Fragment fragment = fragments[i];
             final Vector normal = fragment.getNormal();
 
-            final double[] v = {
+            final Vector destVector = new Vector(
                     vertex.get(0) + normalLength * normal.get(0),
                     vertex.get(1) + normalLength * normal.get(1),
-                    vertex.get(2) + normalLength * normal.get(2)
-            };
-
-            final Vector destVector = new Vector(v);
+                    vertex.get(2) + normalLength * normal.get(2));
 
             final Vector destVectorPoint = xform.projectPoint(destVector.homogeneous());
 
@@ -284,7 +280,7 @@ public final class Renderer {
      */
     public static void main(String[] args) throws SizeMismatchException {
 
-        final int timeout = 3;
+        final int timeout = 10;
 
         if (args.length == 0) {
             System.out.println("usage: java Renderer <scene_file>");
@@ -312,6 +308,7 @@ public final class Renderer {
         screen.clearBuffer(); // <??
         shader.reset();
         renderSolid();
+        renderNormal();
         screen.swapBuffers();
         wait(timeout); // >??
 
