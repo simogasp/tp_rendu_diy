@@ -4,7 +4,6 @@ import renderer.model.Fragment;
 import renderer.model.rasterizer.Rasterizer;
 import renderer.model.shader.Shader;
 
-
 /**
  * Test class for the Rasterizer class
  * 
