@@ -83,7 +83,7 @@ public class TextureShader extends Shader {
         }
         // The Fragment may not have texture coordinates
         try {
-            // ++ // TODO
+            //++ // TODO
             final double[] uv = fragment.getAttribute(START_TEXTURE_ATTRIBUTE, //<!!
                     NUMBER_TEXTURE_ATTRIBUTE);
             Color texColor;
@@ -116,5 +116,11 @@ public class TextureShader extends Shader {
      */
     public void reset() {
         depth.clear();
+    }
+
+    @Override
+    public void init(int width, int height, Fragment[] vertices) {
+        depth.resize(width, height);
+        reset();
     }
 }

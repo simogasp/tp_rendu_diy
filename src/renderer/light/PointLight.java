@@ -53,13 +53,13 @@ public class PointLight extends Light {
         h = h.normalize();
 
         // diffuse contribution
-        double I_diffuse = kd * intensity * normal.dot(l); // ++ // TODO
-        // ++ // double I_diffuse = ...;
+        double I_diffuse = kd * intensity * normal.dot(l); //++ // TODO
+        //++ // double I_diffuse = ...;
 
         // specular contribution
-        double I_specular = ks * intensity * Math.pow(normal.dot(h), s); // ++ // TODO
-        // ++ // double I_specular = ...;
-        I += I_diffuse + I_specular; // ++ // I += I_diffuse + I_specular;
+        double I_specular = ks * intensity * Math.pow(normal.dot(h), s); //++ // TODO
+        //++ // double I_specular = ...;
+        I += I_diffuse + I_specular; //++ // I += I_diffuse + I_specular;
 
         return I;
     }

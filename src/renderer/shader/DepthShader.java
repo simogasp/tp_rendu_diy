@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import renderer.DepthBuffer;
 import renderer.Fragment;
+import renderer.algebra.MathUtils;
 import renderer.shader.colormap.ColorMap;
 import renderer.shader.colormap.ColorMapFactory;
 import renderer.gui.RenderPanel;
@@ -14,19 +15,24 @@ import renderer.gui.RenderPanel;
 public class DepthShader extends Shader {
 
     /**
+     * Tolerance to considere a fragment is in the far plan.
+     */
+    private static final double EPSILON = 0.01;
+
+    /**
      * Represents the minimal Depth of the Model.
      */
-    private static double near = Double.POSITIVE_INFINITY;
+    private double near = Double.POSITIVE_INFINITY;
 
     /**
      * Represents the maximum Depth of the Model.
      */
-    private static double far = Double.NEGATIVE_INFINITY;
+    private double far = Double.NEGATIVE_INFINITY;
 
     /**
      * The depth buffer.
      */
-    private DepthBuffer depth;
+    private final DepthBuffer depthBuffer;
 
     /**
      * A colors Map.
@@ -36,7 +42,7 @@ public class DepthShader extends Shader {
     /**
      * Creates a DepthShader with the given screen.
      *
-     * @param screen the screen to draw on
+     * @param renderPanel the screen to draw on
      */
     public DepthShader(final RenderPanel renderPanel) {
         this(renderPanel, ColorMapFactory.create(ColorMapFactory.Maps.VERIDIS));
@@ -45,29 +51,40 @@ public class DepthShader extends Shader {
     /**
      * Creates a DepthShader with the given screen and colorMap.
      *
-     * @param screen       the screen to draw on
+     * @param renderPanel  the screen to draw on
      * @param initColorMap the init color map
      */
     public DepthShader(final RenderPanel renderPanel, final ColorMap initColorMap) {
         super(renderPanel);
-        this.depth = new DepthBuffer(renderPanel.getScreenWidth(),
+        this.depthBuffer = new DepthBuffer(renderPanel.getScreenWidth(),
                 renderPanel.getScreenHeight());
         colorMap = initColorMap;
     }
 
     @Override
     public void shade(final Fragment fragment) {
-        if (depth.testFragment(fragment)) {
-            screen.setPixel(fragment.getX(), fragment.getY(), getColorFor(fragment.getDepth()));
-            depth.writeFragment(fragment);
+        if (depthBuffer.testFragment(fragment)) {
+            screen.setPixel(fragment.getX(),
+                    fragment.getY(),
+                    getColorFor(fragment.getDepth()));
+            depthBuffer.writeFragment(fragment);
         }
     }
 
     @Override
     public void reset() {
-        depth.clear();
+        depthBuffer.clear();
         far = Double.NEGATIVE_INFINITY;
         near = Double.POSITIVE_INFINITY;
+    }
+
+    @Override
+    public void init(final int width, final int height, final Fragment[] vertices) {
+        depthBuffer.resize(width, height);
+        reset();
+        for (final Fragment fragment : vertices) {
+            update(fragment.getDepth());
+        }
     }
 
     /**
@@ -75,7 +92,7 @@ public class DepthShader extends Shader {
      *
      * @param depth the new one
      */
-    public static void update(final double depth) {
+    private void update(final double depth) {
         if (depth < near) {
             near = depth;
         }
@@ -104,7 +121,9 @@ public class DepthShader extends Shader {
 
         final double alpha = (cursor - bucket * d) / d;
 
-        return interpolate(colorMap.getColor(bucket), colorMap.getColor(bucket + 1), alpha);
+        return interpolate(colorMap.getColor(bucket),
+                colorMap.getColor(MathUtils.clamp(bucket + 1, 0, bucketNumber - 1)),
+                alpha);
     }
 
     /**

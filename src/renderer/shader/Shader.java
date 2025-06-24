@@ -32,6 +32,15 @@ public abstract class Shader {
     }
 
     /**
+     * Initializes the shader with the given vertices.
+     * @param width the width of the render
+     * @param height the height of the render
+     * @param vertices the vertices of the mesh
+     */
+    public void init(int width, int height, Fragment[] vertices) {
+    }
+
+    /**
      * Computes the fragment color and write the result to the screen.
      * @param fragment the fragment to shade
      */
@@ -43,7 +52,7 @@ public abstract class Shader {
      * @return true if the fragment is clipped, false otherwise
      */
     public boolean isClipped(Fragment fragment) {
-        return ((fragment.getX() < 0) || (fragment.getX() >= screen.getWidth())
-            || (fragment.getY() < 0) || (fragment.getY() >= screen.getHeight()));
+        return ((fragment.getX() < 0) || (fragment.getX() >= screen.getScreenWidth())
+            || (fragment.getY() < 0) || (fragment.getY() >= screen.getScreenHeight()));
     }
 }

@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
-import renderer.Renderer;
 import renderer.algebra.MathUtils;
 
 public class RenderPanel extends Canvas {
@@ -54,8 +53,6 @@ public class RenderPanel extends Canvas {
         // initialize the JPanel
         super();
         gui = app;
-
-        Renderer.setScreen(this);
 
         // fields
         this.height = height;
@@ -219,9 +216,6 @@ public class RenderPanel extends Canvas {
         final int realWidth = width * pixelSize;
         final int realHeight = height * pixelSize;
 
-        renderedImage = new BufferedImage(realWidth,
-                realHeight,
-                BufferedImage.TYPE_3BYTE_BGR);
         renderedImage = new BufferedImage(realWidth,
                 realHeight,
                 BufferedImage.TYPE_3BYTE_BGR);
