@@ -6,11 +6,11 @@ import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
 import renderer.light.Lighting;
 import renderer.rasterizer.Rasterizer;
+import renderer.shader.DepthShader;
 import renderer.shader.NormalMapShader;
 import renderer.shader.PainterShader;
 import renderer.shader.Shader;
 import renderer.shader.TextureShader;
-import renderer.shader.DepthShader;
 
 
 /**
@@ -65,7 +65,8 @@ public final class Renderer {
         //++ shader = new SimpleShader (screen);
         shader = new PainterShader(screen); //??
         shader = new NormalMapShader(screen, xform); //??
-        shader = new DepthShader(screen);
+        shader = new DepthShader(screen); //??
+
         rasterizer = new Rasterizer(shader);
         // rasterizer = new PerspectiveCorrectRasterizer(shader);
 
