@@ -7,6 +7,9 @@ import java.awt.Color;
  */
 public class ColorMap {
 
+    /**
+     * The array of Color for the ColorMap.
+     */
     private final Color[] lut;
 
     /**
@@ -26,6 +29,10 @@ public class ColorMap {
         return lut[value];
     }
 
+    /**
+     * Gets the number of colors the color Map contains.
+     * @return the number of colors
+     */
     public int length() {
         return lut.length;
     }

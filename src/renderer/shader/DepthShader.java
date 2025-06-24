@@ -40,11 +40,14 @@ public class DepthShader extends Shader {
      * @param screen the screen to draw on
      */
     public DepthShader(final GraphicsWrapper screen) {
-        super(screen);
-        this.depth = new DepthBuffer(screen.getWidth(), screen.getHeight());
-        colorMap = ColorMapFactory.create(ColorMapFactory.Maps.MAGMA);
+        this(screen, ColorMapFactory.create(ColorMapFactory.Maps.VERIDIS));
     }
 
+    /** 
+     * Creates a DepthShader with the given screen and colorMap.
+     * @param screen the screen to draw on
+     * @param initColorMap the init color map
+     */
     public DepthShader(final GraphicsWrapper screen, final ColorMap initColorMap) {
         super(screen);
         this.depth = new DepthBuffer(screen.getWidth(), screen.getHeight());
@@ -86,7 +89,7 @@ public class DepthShader extends Shader {
      */
     private static Color getColorFor(final double depth) {
 
-        final int bucketNumber = colorMap.length() - 1;
+        final int bucketNumber = colorMap.length();
 
         if (Math.abs(depth - nearest) < 0.01) {
             return colorMap.getColor(bucketNumber - 1);
