@@ -118,7 +118,7 @@ public final class Renderer {
             }
         }
 
-        // The length of the normal is approximately egal to 1/100 of the minimal
+        // The length of the normal is approximately equal to 1/100 of the minimal
         // length of the bounding box
         normalLength = Math.min(Math.min(maxX - minX, maxY - minY), maxZ - minZ) / 100;
     }

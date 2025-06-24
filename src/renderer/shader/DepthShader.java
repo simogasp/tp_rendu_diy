@@ -91,7 +91,7 @@ public class DepthShader extends Shader {
      * @param depth the depth of the current point
      * @return the color in the color gradient
      */
-    private static Color getColorFor(final double depth) {
+    private Color getColorFor(final double depth) {
         if (depth < near || depth > far) {
             return Color.RED;
         }

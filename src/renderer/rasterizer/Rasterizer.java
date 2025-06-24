@@ -105,17 +105,17 @@ public class Rasterizer {
         int y2 = v2.getY();
 
         // For now : just display the vertices
-        // Fragment f = new Fragment(0, 0);
-        // final int size = 2;
-        // for (int i = 0; i < v1.getNumAttributes(); i++) {
-        //     f.setAttribute(i, v1.getAttribute(i));
-        // }
-        // for (int i = -size; i <= size; i++) {
-        //     for (int j = -size; j <= size; j++) {
-        //         f.setPosition(x1 + i, y1 + j);
-        //         shader.shade(f);
-        //     }
-        // }
+        Fragment f = new Fragment(0, 0);
+        final int size = 2;
+        for (int i = 0; i < v1.getNumAttributes(); i++) {
+            f.setAttribute(i, v1.getAttribute(i));
+        }
+        for (int i = -size; i <= size; i++) {
+            for (int j = -size; j <= size; j++) {
+                f.setPosition(x1 + i, y1 + j);
+                shader.shade(f);
+            }
+        }
 
         // Uncomment the following block of code for drawing the wireframe
         // int numAttributes = v1.getNumAttributes (); //<??
