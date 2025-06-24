@@ -183,7 +183,7 @@ public class Mesh {
             if (normals[i] == null) {
                 normals[i] = new Vector("n_orphan", 3);
             } else {
-                normals[i].normalize();
+                normals[i] = normals[i].normalize();
             }
         }
 

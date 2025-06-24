@@ -44,12 +44,11 @@ public class Transformation {
             // compute rotation
             //++ // TODO
             Vector z = lookAtPoint.subtract(eye); //<!!
-            System.out.println("z" + z);
             z = z.normalize();
 
             Vector x = up.cross(z);
             x = x.normalize();
-            Vector y = z.cross(x);
+            final Vector y = z.cross(x);
 
             worldToCamera.set(0, 0, x.getX());
             worldToCamera.set(0, 1, x.getY());
@@ -63,13 +62,12 @@ public class Transformation {
 
             // compute translation
             //++ // TODO
-            Vector mEye = eye.scale(-1.0); //<!!
-            Matrix m = worldToCamera.getSubMatrix(0, 0, 3, 3);
+            final Vector mEye = eye.scale(-1.0); //<!!
+            final Matrix m = worldToCamera.getSubMatrix(0, 0, 3, 3);
 
-            Vector t = m.multiply(mEye);
+            final Vector t = m.multiply(mEye);
             System.out.println(m);
             System.out.println(mEye);
-            System.out.println(t);
 
             worldToCamera.set(0, 3, t.get(0));
             worldToCamera.set(1, 3, t.get(1));
@@ -122,11 +120,11 @@ public class Transformation {
     public Vector projectPoint(Vector p) throws SizeMismatchException {
         //++ Vector ps = new Vector(3);
         //++ // TODO
-        Vector pe = worldToCamera.multiply(p); //<!!
-        Vector ps = calibration.multiply(projection.multiply(pe));
+        final Vector pe = worldToCamera.multiply(p); //<!!
+        final Vector ps = calibration.multiply(projection.multiply(pe));
         ps.set(0, ps.get(0) / ps.get(2));
         ps.set(1, ps.get(1) / ps.get(2)); //>!!
-        return new Vector(ps);
+        return ps;
     }
 
     /**
@@ -135,11 +133,10 @@ public class Transformation {
      * @return the transformed vector
      * @throws SizeMismatchException if the size of the input vector is not 3
      */
-    public Vector transformVector(Vector v) {
+    public Vector transformVector(final Vector v) {
         // Doing nothing special here because there is no scaling
-        Matrix m = worldToCamera.getSubMatrix(0, 0, 3, 3);
-        Vector tv = m.multiply(v);
-        return new Vector(tv);
+        final Matrix m = worldToCamera.getSubMatrix(0, 0, 3, 3);
+        return m.multiply(v);
     }
 
 }

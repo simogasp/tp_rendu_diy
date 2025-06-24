@@ -63,7 +63,7 @@ public class TestAlgebra {
         System.out.println("r1.r2 = " + r1.dot((Vector) r2) + " (as Vector)");
         System.out.println("r1 x r2 = " + r);
         System.out.println("norm(" + r.getName() + ") = " + r.norm());
-        r.normalize();
+        r = r.normalize();
         System.out.println("norm(" + r.getName() + ") (after ::normalize()) = " + r.norm());
 
         // -------------------------------------

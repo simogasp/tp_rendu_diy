@@ -66,11 +66,7 @@ public final class Renderer {
                 scene.getScreenH());
 
         screen.updateDims(scene.getScreenW(), scene.getScreenH());
-        //++ shader = new SimpleShader (screen);
-        shader = new PainterShader(screen); //??
-        shader = new NormalMapShader(screen, xform); //??
-        shader = new DepthShader(screen); //??
-        rasterizer = new Rasterizer(shader);
+        // rasterizer = new Rasterizer(shader);
         // rasterizer = new PerspectiveCorrectRasterizer(shader);
 
         lighting = new Lighting();
@@ -291,6 +287,8 @@ public final class Renderer {
     private static void updateRasterizer() {
         if (rasterizer != null) {
             rasterizer.setShader(shader);
+        } else {
+            rasterizer = new Rasterizer(shader);
         }
     }
 

@@ -42,15 +42,15 @@ public class PointLight extends Light {
 
         // vector from point to camera center
         Vector e = cameraPosition.subtract(position);
-        e.normalize();
+        e = e.normalize();
 
         // vector from point to light
         Vector l = getPositionAsVector().subtract(position);
-        l.normalize();
+        l = l.normalize();
 
         // half-vector between e and l
         Vector h = e.add(l);
-        h.normalize();
+        h = h.normalize();
 
         // diffuse contribution
         double I_diffuse = kd * intensity * normal.dot(l); // ++ // TODO

@@ -521,6 +521,9 @@ public class MenuPanel extends JPanel {
      */
     private void updateRender() {
         renderPanel.clear();
+        if (simpleRasterizer.isSelected()) {
+            Renderer.setRasterizer();
+        }
         Renderer.resetShader();
         Renderer.setLightingEnabled(lightingCheckBox.isSelected());
         if (drawNormalCheckBox.isSelected()) {
