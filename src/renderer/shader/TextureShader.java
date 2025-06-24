@@ -10,7 +10,7 @@ import renderer.algebra.MathUtils;
 
 /**
  * Simple shader that just copy the interpolated color to the screen,
- * taking the depth of the fragment into acount.
+ * taking the depth of the fragment into account.
  *
  * @author cdehais
  */
@@ -104,7 +104,7 @@ public class TextureShader extends Shader {
             } else {
                 finalColor = texColor;
             }
-            screen.setPixel(fragment.getX(), fragment.getY(), finalColor); // >!!
+            screen.setPixel(fragment.getX(), fragment.getY(), finalColor); //>!!
         } catch (ArrayIndexOutOfBoundsException e) {
             screen.setPixel(fragment.getX(), fragment.getY(), fragment.getColor());
         }

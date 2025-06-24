@@ -161,7 +161,7 @@ public class Mesh {
             final Vector v2 = c.subtract(b);
 
             Vector n = v1.cross(v2);
-            n.normalize(); //>!!
+            n = n.normalize(); //>!!
 
             // add the calculated normal n to each vertex of the face
             for (int j = 0; j < VERTICES_PER_FACE; j++) {
@@ -171,7 +171,8 @@ public class Mesh {
                     normals[faces[i + j]] = new Vector(n);
                     normals[faces[i + j]].setName("n" + faces[i + j]);
                 } else {
-                    nj.add(n);
+                    // add() returns a new vector, so we assign the result to the normal.
+                    normals[faces[i + j]] = nj.add(n);
                 }
             }
         }

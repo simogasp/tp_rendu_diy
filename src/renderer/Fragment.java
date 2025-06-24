@@ -271,4 +271,14 @@ public class Fragment {
     public String toString() {
         return "(" + x + "," + y + ")";
     }
+
+    @Override
+    public Fragment clone() {
+        final Fragment res = new Fragment(x, y);
+        for (int i = 0; i < attributes.length; i++) {
+            res.attributes[i] = attributes[i];
+        }
+        return res;
+    }
+
 }

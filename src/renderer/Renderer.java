@@ -1,5 +1,6 @@
 package renderer;
 
+import java.awt.Color;
 import java.io.IOException;
 
 import renderer.algebra.SizeMismatchException;
@@ -12,10 +13,10 @@ import renderer.shader.PainterShader;
 import renderer.shader.Shader;
 import renderer.shader.TextureShader;
 
-
 /**
  * The Renderer class drives the rendering pipeline: read in a scene, projects
  * the vertices and rasterizes every faces / edges.
+ *
  * @author cdehais
  */
 public final class Renderer {
@@ -36,6 +37,8 @@ public final class Renderer {
     private static Lighting lighting;
     /** Whether lighting is enabled.. */
     private static boolean lightingEnabled;
+    /** The length of the normal. */
+    private static double normalLength;
 
     // Private constructor to prevent instantiation
     private Renderer() {
@@ -44,6 +47,7 @@ public final class Renderer {
 
     /**
      * Initialize the renderer with the given scene file.
+     *
      * @param sceneFilename the scene file to load
      * @throws IOException if the scene file cannot be loaded
      */
@@ -57,8 +61,8 @@ public final class Renderer {
                 scene.getCameraUp());
         xform.setProjection();
         xform.setCalibration(scene.getCameraFocal(),
-                            scene.getScreenW(),
-                            scene.getScreenH());
+                scene.getScreenW(),
+                scene.getScreenH());
 
         screen = new GraphicsWrapper(scene.getScreenW(), scene.getScreenH());
         screen.clearBuffer();
@@ -66,22 +70,62 @@ public final class Renderer {
         shader = new PainterShader(screen); //??
         shader = new NormalMapShader(screen, xform); //??
         shader = new DepthShader(screen); //??
-
         rasterizer = new Rasterizer(shader);
         // rasterizer = new PerspectiveCorrectRasterizer(shader);
-
 
         lighting = new Lighting();
         lighting.addAmbientLight(scene.getAmbientI());
         double[] lightCoord = scene.getSourceCoord();
         lighting.addPointLight(lightCoord[0],
-                                lightCoord[1],
-                                lightCoord[2],
-                                scene.getSourceI());
+                lightCoord[1],
+                lightCoord[2],
+                scene.getSourceI());
+
+        // determine the normal length
+        initNormalLength();
+
+    }
+
+    /**
+     * Computes the length of the normals for the rendering.
+     */
+    private static void initNormalLength() {
+        double minX = Double.POSITIVE_INFINITY;
+        double maxX = Double.NEGATIVE_INFINITY;
+        double minY = Double.POSITIVE_INFINITY;
+        double maxY = Double.NEGATIVE_INFINITY;
+        double minZ = Double.POSITIVE_INFINITY;
+        double maxZ = Double.NEGATIVE_INFINITY;
+
+        for (Vector vertex : mesh.getVertices()) {
+            if (vertex.get(0) < minX) {
+                minX = vertex.get(0);
+            }
+            if (vertex.get(0) > maxX) {
+                maxX = vertex.get(0);
+            }
+            if (vertex.get(1) < minY) {
+                minY = vertex.get(1);
+            }
+            if (vertex.get(1) > maxY) {
+                maxY = vertex.get(1);
+            }
+            if (vertex.get(2) < minZ) {
+                minZ = vertex.get(2);
+            }
+            if (vertex.get(2) > maxZ) {
+                maxZ = vertex.get(2);
+            }
+        }
+
+        // The length of the normal is approximately equal to 1/100 of the minimal
+        // length of the bounding box
+        normalLength = Math.min(Math.min(maxX - minX, maxY - minY), maxZ - minZ) / 100;
     }
 
     /**
      * Projects the vertices of the mesh into the screen space.
+     *
      * @return an array of fragments
      */
     static Fragment[] projectVertices() {
@@ -110,8 +154,8 @@ public final class Renderer {
 
             if (!lightingEnabled) {
                 fragments[i].setColor(colors[3 * i],
-                    colors[3 * i + 1],
-                    colors[3 * i + 2]);
+                        colors[3 * i + 1],
+                        colors[3 * i + 2]);
             } else {
                 double[] color = new double[3];
                 color[0] = colors[3 * i];
@@ -146,7 +190,43 @@ public final class Renderer {
     }
 
     /**
+     * Renders the normals of the mesh.
+     */
+    public static void renderNormal() {
+        final Vector[] vertices = mesh.getVertices();
+        final Fragment[] fragments = projectVertices();
+
+        for (int i = 0; i < vertices.length; i++) {
+            final Vector vertex = vertices[i];
+            final Fragment fragment = fragments[i];
+            final Vector normal = fragment.getNormal();
+
+            final Vector destVector = new Vector(
+                    vertex.get(0) + normalLength * normal.get(0),
+                    vertex.get(1) + normalLength * normal.get(1),
+                    vertex.get(2) + normalLength * normal.get(2));
+
+            final Vector destVectorPoint = xform.projectPoint(destVector.homogeneous());
+
+            int x = (int) Math.round(destVectorPoint.get(0));
+            int y = (int) Math.round(destVectorPoint.get(1));
+
+            final Fragment destFragment = new Fragment(x, y);
+            destFragment.setColor(Color.RED);
+            destFragment.setNormal(normal);
+            destFragment.setDepth(destVectorPoint.get(2));
+
+            final Fragment originFragment = fragment.clone();
+            originFragment.setColor(Color.RED);
+
+            rasterizer.rasterizeEdge(originFragment, destFragment);
+
+        }
+    }
+
+    /**
      * Renders the solid of the mesh.
+     *
      * @throws SizeMismatchException if the size of the fragments do not match
      */
     static void renderSolid() throws SizeMismatchException {
@@ -164,6 +244,7 @@ public final class Renderer {
 
     /**
      * Enables or disables lighting.
+     *
      * @param enabled true to enable lighting, false to disable it
      */
     public static void setLightingEnabled(boolean enabled) {
@@ -182,6 +263,7 @@ public final class Renderer {
 
     /**
      * Wait for a number of seconds.
+     *
      * @param sec the number of seconds to wait
      */
     public static void wait(int sec) {
@@ -195,12 +277,13 @@ public final class Renderer {
 
     /**
      * Main entry point of the renderer.
+     *
      * @param args the command line arguments
      * @throws SizeMismatchException if the size of the fragments do not match
      */
     public static void main(String[] args) throws SizeMismatchException {
 
-        final int timeout = 3;
+        final int timeout = 10;
 
         if (args.length == 0) {
             System.out.println("usage: java Renderer <scene_file>");
@@ -220,19 +303,25 @@ public final class Renderer {
 
         // wireframe rendering
         renderWireframe();
+        renderNormal();
         screen.swapBuffers();
         wait(timeout);
 
         // solid rendering, no lighting
         screen.clearBuffer(); //<??
         shader.reset();
+        // get the nearest and the farest point for depth Shader
+        initShader();
         renderSolid();
+        renderNormal();
         screen.swapBuffers();
         wait(timeout); //>??
 
         // solid rendering, with lighting
         screen.clearBuffer(); //<??
         shader.reset();
+        // get the nearest and the farest point for depth Shader
+        initShader();
         setLightingEnabled(true);
         renderSolid();
         screen.swapBuffers();
