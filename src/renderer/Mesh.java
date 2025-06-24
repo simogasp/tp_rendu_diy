@@ -171,7 +171,7 @@ public class Mesh {
                     normals[faces[i + j]] = new Vector(n);
                     normals[faces[i + j]].setName("n" + faces[i + j]);
                 } else {
-                    // `add()` returns a new vector, so we assign the result to the normal.
+                    // add() returns a new vector, so we assign the result to the normal.
                     normals[faces[i + j]] = nj.add(n);
                 }
             }

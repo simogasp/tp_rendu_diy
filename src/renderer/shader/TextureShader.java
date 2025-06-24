@@ -10,7 +10,7 @@ import renderer.algebra.MathUtils;
 
 /**
  * Simple shader that just copy the interpolated color to the screen,
- * taking the depth of the fragment into acount.
+ * taking the depth of the fragment into account.
  *
  * @author cdehais
  */

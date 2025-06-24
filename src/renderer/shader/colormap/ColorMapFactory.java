@@ -5,7 +5,7 @@ import java.awt.Color;
 public final class ColorMapFactory {
 
     /**
-     * Create a ColorMapFactory. Should not been instanciate.
+     * Create a ColorMapFactory. Should not been instantiated.
      */
     private ColorMapFactory() {
     }
