@@ -103,6 +103,13 @@ personal computer:
 sudo snap install ant --stable --classic
 ```
 
+### Show help in terminal
+
+To a small description of the available task in ant, do:
+```bash
+ant -projecthelp
+```
+
 ### Build
 
 Use the following command to build the project:
@@ -115,6 +122,28 @@ or
 
 ```bash
 ant compile
+```
+
+### Run
+
+To run the project you can use the following command:
+
+```bash
+ant run
+```
+
+### Generate JavaDoc
+
+To genrate JavaDoc of the project do:
+
+```bash
+ant doc
+```
+
+To clean JavaDoc
+
+```bash
+ant clean-doc
 ```
 
 ### Build Tests
@@ -153,28 +182,6 @@ To run unit Tests:
 
 ```bash
 ant unit-tests
-```
-
-### Run
-
-To run the project you can use the following command:
-
-```bash
-ant run
-```
-
-### Generate JavaDoc
-
-To genrate JavaDoc of the project do:
-
-```bash
-ant doc
-```
-
-To clean JavaDoc
-
-```bash
-ant clean-doc
 ```
 
 ### verify the CheckStyle

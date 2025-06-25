@@ -167,7 +167,6 @@ public final class Renderer {
      * Renders the wireframe of the mesh.
      */
     public void renderWireframe() {
-        System.out.println("RENDER " + screen.getWidth() + " " + screen.getHeight());
         Fragment[] fragment = projectVertices();
         int[] faces = mesh.getFaces();
 

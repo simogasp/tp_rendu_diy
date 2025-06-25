@@ -14,9 +14,12 @@
 	<property name="functional" location="test/functional" />
 	<property name="unit" location="test/unit" />
 
-	<target name="dl-checkstyle">
-		<get src="https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.25.0/checkstyle-10.25.0-all.jar" dest="${lib}/checkstyle-10.25.0-all.jar" />
-	</target>
+	<description>
+	A "Do It Yourself" renderer.
+
+This is a simple rendering engine made in Java.
+	</description>
+
 
 	<taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
 		classpath="${lib}/checkstyle-10.25.0-all.jar" />
@@ -26,21 +29,27 @@
 		<files includes="${lib}/junit-4.13.2.jar" />
 	</path>
 
-	<target name="compile">
+	<target name="dl-checkstyle" description="Download a checkstyle jar in lib.">
+		<get
+			src="https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.25.0/checkstyle-10.25.0-all.jar"
+			dest="${lib}/checkstyle-10.25.0-all.jar" />
+	</target>
+
+	<target name="compile" description="Compile sources.">
 		<mkdir dir="${classes}" />
 		<javac includeantruntime="false" srcdir="${java}" destdir="${classes}">
 			<classpath refid="libraries" />
 		</javac>
 	</target>
 
-	<target name="jar" depends="compile">
+	<target name="jar" depends="compile" description="Build a jar file of the project.">
 		<mkdir dir="${result}" />
 		<jar destfile="${result}/App.jar" basedir="${classes}">
 		</jar>
 	</target>
 
 
-	<target name="clean">
+	<target name="clean" description="Clean the directory.">
 		<delete dir="${classes}" />
 		<delete dir="${result}" />
 		<delete dir="${testsoutput}" />
@@ -48,27 +57,27 @@
 		<delete dir="${doc}" />
 	</target>
 
-	<target name="run" depends="compile">
+	<target name="run" depends="compile" description="Run the application.">
 		<java classname="renderer.gui.GUIApp">
 			<classpath>
 				<pathelement path="${classes}" />
 			</classpath>
 			<arg value="-Djava.security.manager=allow" />
 		</java>
-		<input message="Press Return key to exit ..."/>
+		<input message="Press Return key to exit ..." />
 	</target>
 
-	<target	name="clean-doc">
+	<target name="clean-doc" description="Clean the doc directory.">
 		<delete dir="${doc}" />
 	</target>
 
-	<target name="doc" depends="clean-doc">
+	<target name="doc" depends="clean-doc" description="Update the doc, create if doesn't exists.">
 		<mkdir dir="${doc}" />
 		<javadoc destdir="${doc}" sourcepath="${java}">
 		</javadoc>
 	</target>
 
-	<target name="compile-test" depends="compile">
+	<target name="compile-test" depends="compile" description="Compile Tests files.">
 		<mkdir dir="${testsoutput}" />
 		<mkdir dir="${reports}" />
 		<javac includeantruntime="false" srcdir="${test}" destdir="${testsoutput}">
@@ -81,7 +90,7 @@
 	</target>
 
 	<target
-		name="func-tests" depends="compile-test">
+		name="func-tests" depends="compile-test" description="Run Functionnal Test. Writes the result in tests/reports.">
 
 		<echo message="Running functional tests ..." />
 
@@ -100,7 +109,7 @@
 	</target>
 
 	<target
-		name="unit-tests" depends="compile-test">
+		name="unit-tests" depends="compile-test" description="Run units Tests. Writes the results in tests/reports.">
 
 		<echo message="Running unit tests ..." />
 
@@ -123,14 +132,14 @@
 
 	</target>
 
-	<target name="test">
+	<target name="test" description="Run tests.">
 		<antcall target="func-tests" />
 		<antcall target="unit-tests" />
 	</target>
 
 	<!-- Exécution de checkstyle -->
-	<target name="checkstyle" description="CheckStyle">
-			<checkstyle config="checkstyle.xml">
+	<target name="checkstyle" description="Make a CheckStyle review.">
+		<checkstyle config="checkstyle.xml">
 			<fileset dir="${java}" />
 			<formatter type="plain" />
 		</checkstyle>
