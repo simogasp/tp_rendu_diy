@@ -148,7 +148,7 @@ public class Fragment {
      * @return the depth of the Fragment
      */
     public double getDepth() {
-        return attributes[0];
+        return attributes[DEPTH];
     }
 
     /**

@@ -4,9 +4,9 @@ import java.awt.Color;
 
 import renderer.DepthBuffer;
 import renderer.Fragment;
-import renderer.GraphicsWrapper;
 import renderer.shader.colormap.ColorMap;
 import renderer.shader.colormap.ColorMapFactory;
+import renderer.gui.RenderPanel;
 
 /**
  * Shader color the model in function of the depth of the surface.
@@ -16,17 +16,17 @@ public class DepthShader extends Shader {
     /**
      * Represents the minimal Depth of the Model.
      */
-    private static double near = Double.POSITIVE_INFINITY;
+    private double near = Double.POSITIVE_INFINITY;
 
     /**
      * Represents the maximum Depth of the Model.
      */
-    private static double far = Double.NEGATIVE_INFINITY;
+    private double far = Double.NEGATIVE_INFINITY;
 
     /**
      * The depth buffer.
      */
-    private DepthBuffer depth;
+    private final DepthBuffer depthBuffer;
 
     /**
      * A colors Map.
@@ -36,37 +36,48 @@ public class DepthShader extends Shader {
     /**
      * Creates a DepthShader with the given screen.
      *
-     * @param screen the screen to draw on
+     * @param renderPanel the screen to draw on
      */
-    public DepthShader(final GraphicsWrapper screen) {
-        this(screen, ColorMapFactory.create(ColorMapFactory.Maps.VERIDIS));
+    public DepthShader(final RenderPanel renderPanel) {
+        this(renderPanel, ColorMapFactory.create(ColorMapFactory.Maps.VERIDIS));
     }
 
     /**
      * Creates a DepthShader with the given screen and colorMap.
      *
-     * @param screen       the screen to draw on
+     * @param renderPanel  the screen to draw on
      * @param initColorMap the init color map
      */
-    public DepthShader(final GraphicsWrapper screen, final ColorMap initColorMap) {
-        super(screen);
-        this.depth = new DepthBuffer(screen.getWidth(), screen.getHeight());
+    public DepthShader(final RenderPanel renderPanel, final ColorMap initColorMap) {
+        super(renderPanel);
+        this.depthBuffer = new DepthBuffer(renderPanel.getScreenWidth(),
+                renderPanel.getScreenHeight());
         colorMap = initColorMap;
     }
 
     @Override
     public void shade(final Fragment fragment) {
-        if (depth.testFragment(fragment)) {
-            screen.setPixel(fragment.getX(), fragment.getY(), getColorFor(fragment.getDepth()));
-            depth.writeFragment(fragment);
+        if (depthBuffer.testFragment(fragment)) {
+            screen.setPixel(fragment.getX(),
+                    fragment.getY(),
+                    getColorFor(fragment.getDepth()));
+            depthBuffer.writeFragment(fragment);
         }
     }
 
     @Override
     public void reset() {
-        depth.clear();
+        depthBuffer.clear();
         far = Double.NEGATIVE_INFINITY;
         near = Double.POSITIVE_INFINITY;
+    }
+
+    @Override
+    public void init(final int width, final int height, final Fragment[] vertices) {
+        depthBuffer.resize(width, height);
+        for (final Fragment fragment : vertices) {
+            update(fragment.getDepth());
+        }
     }
 
     /**
@@ -74,7 +85,7 @@ public class DepthShader extends Shader {
      *
      * @param depth the new one
      */
-    public static void update(final double depth) {
+    private void update(final double depth) {
         if (depth < near) {
             near = depth;
         }
@@ -84,9 +95,7 @@ public class DepthShader extends Shader {
     }
 
     /**
-     * Returns a color in the color gradient (Red, green, Blue) where red is near,
-     * green the middle
-     * and blue the back of the model.
+     * Returns a color in the color gradient according to the depth.
      *
      * @param depth the depth of the current point
      * @return the color in the color gradient
@@ -105,7 +114,9 @@ public class DepthShader extends Shader {
 
         final double alpha = (cursor - bucket * d) / d;
 
-        return interpolate(colorMap.getColor(bucket), colorMap.getColor(bucket + 1), alpha);
+        return interpolate(colorMap.getColor(bucket),
+                colorMap.getColor(bucket + 1),
+                alpha);
     }
 
     /**

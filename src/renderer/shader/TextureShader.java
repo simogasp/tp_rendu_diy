@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import renderer.DepthBuffer;
 import renderer.Fragment;
-import renderer.GraphicsWrapper;
+import renderer.gui.RenderPanel;
 import renderer.Texture;
 import renderer.algebra.MathUtils;
 
@@ -41,7 +41,7 @@ public class TextureShader extends Shader {
      *
      * @param screen the screen to draw on
      */
-    public TextureShader(GraphicsWrapper screen) {
+    public TextureShader(RenderPanel screen) {
         super(screen);
         depth = new DepthBuffer(screen.getWidth(), screen.getHeight());
         texture = null;
@@ -83,8 +83,8 @@ public class TextureShader extends Shader {
         }
         // The Fragment may not have texture coordinates
         try {
-            // ++ // TODO
-            final double[] uv = fragment.getAttribute(START_TEXTURE_ATTRIBUTE,
+            //++ // TODO
+            final double[] uv = fragment.getAttribute(START_TEXTURE_ATTRIBUTE, //<!!
                     NUMBER_TEXTURE_ATTRIBUTE);
             Color texColor;
             if (texture == null) {
@@ -116,5 +116,10 @@ public class TextureShader extends Shader {
      */
     public void reset() {
         depth.clear();
+    }
+
+    @Override
+    public void init(int width, int height, Fragment[] vertices) {
+        depth.resize(width, height);
     }
 }

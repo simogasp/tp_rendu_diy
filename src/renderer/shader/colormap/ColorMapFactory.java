@@ -2,33 +2,36 @@ package renderer.shader.colormap;
 
 import java.awt.Color;
 
+/**
+ * Factory to build ColorMap.
+ */
 public final class ColorMapFactory {
 
     /**
-     * Create a ColorMapFactory. Should not been instantiated.
+     * The factory should not be instantiated.
      */
     private ColorMapFactory() {
     }
 
     /**
-     * ColorMap Available.
+     * Enumerates available color map in this App.
      */
     public enum Maps {
         /**
-         * Veridis color map.
+         * Veridis color Map.
          */
         VERIDIS,
         /**
-         * Magma color map.
+         * Magma color Map.
          */
         MAGMA
     }
 
     /**
-     * Create a ColorMap with the given enum name.
+     * Create a colorMap with the given enum label.
      *
-     * @param name the name of the color map
-     * @return the color map
+     * @param name the enum label
+     * @return the colorMap
      */
     public static ColorMap create(Maps name) {
         switch (name) {
@@ -43,6 +46,7 @@ public final class ColorMapFactory {
 
     /**
      * Build the magma color map table of colors.
+     * 
      * @return an array of Color
      */
     private static Color[] buildMagma() {
@@ -309,6 +313,7 @@ public final class ColorMapFactory {
 
     /**
      * Build the Veridis color map table of colors.
+     * 
      * @return an array of colors.
      */
     private static Color[] buildViridis() {

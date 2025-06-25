@@ -51,7 +51,7 @@ func-tests: compile
 
 # run the renderer
 run: compile
-	java -cp $(CLASSPATH) renderer.Renderer ${SCENE}
+	java -cp $(CLASSPATH) renderer.gui.GUIApp
 
 # Generate Javadoc
 doc: clean-doc

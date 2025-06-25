@@ -23,7 +23,8 @@ public class DepthBuffer {
     /**
      * Constructs a DepthBuffer of size width x height.
      * The buffer is initially cleared.
-     * @param width the width of the buffer
+     *
+     * @param width  the width of the buffer
      * @param height the height of the buffer
      */
     public DepthBuffer(int width, int height) {
@@ -48,13 +49,14 @@ public class DepthBuffer {
     /**
      * Test if a fragment passes the DepthBuffer test, i.e. is the fragment the
      * closest at its position.
+     *
      * @param f the fragment to test
      * @return true if the fragment passes the test, false otherwise
      */
     public boolean testFragment(Fragment f) {
         if ((f.getX() >= 0) && (f.getX() < width) && (f.getY() >= 0)
                 && (f.getY() < height)) {
-            return (buffer.get(f.getY(), f.getX()) > f.getAttribute(0)); //++ // TODO
+            return (buffer.get(f.getY(), f.getX()) > f.getDepth()); //++ // TODO
             //++ return false;
         } else {
             return false;
@@ -63,6 +65,7 @@ public class DepthBuffer {
 
     /**
      * Writes the fragment depth to the buffer.
+     *
      * @param f the fragment to write
      */
     public void writeFragment(Fragment f) {
@@ -70,6 +73,23 @@ public class DepthBuffer {
                 && (f.getY() < height)) {
             buffer.set(f.getY(), f.getX(), f.getAttribute(0)); //++ // TODO
         }
+    }
+
+    /**
+     * Resize the buffer if it's needed.
+     *
+     * @param nWidth  the new width
+     * @param nHeight the new height
+     */
+    public void resize(int nWidth, int nHeight) {
+        if (width == nWidth && height == nHeight) {
+            clear();
+            return;
+        }
+        width = nWidth;
+        height = nHeight;
+        buffer = new Matrix(height, width);
+        clear();
     }
 
 }
