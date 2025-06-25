@@ -103,7 +103,7 @@ personal computer:
 sudo snap install ant --stable --classic
 ```
 
-### Show help in terminal
+### Show help in terminal
 
 To a small description of the available task in ant, do:
 ```bash
