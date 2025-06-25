@@ -8,7 +8,7 @@ import java.awt.Color;
 public final class ColorMapFactory {
 
     /**
-     * The factory should not be instanciate.
+     * The factory should not be instantiated.
      */
     private ColorMapFactory() {
     }
