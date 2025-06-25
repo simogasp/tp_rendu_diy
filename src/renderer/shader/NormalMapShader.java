@@ -76,7 +76,6 @@ public class NormalMapShader extends Shader {
     @Override
     public void init(int width, int height, Fragment[] vertices) {
         depthBuffer.resize(width, height);
-        reset();
     }
 
 }

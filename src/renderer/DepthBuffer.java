@@ -56,7 +56,7 @@ public class DepthBuffer {
     public boolean testFragment(Fragment f) {
         if ((f.getX() >= 0) && (f.getX() < width) && (f.getY() >= 0)
                 && (f.getY() < height)) {
-            return (buffer.get(f.getY(), f.getX()) > f.getAttribute(0)); //++ // TODO
+            return (buffer.get(f.getY(), f.getX()) > f.getDepth()); //++ // TODO
             //++ return false;
         } else {
             return false;
@@ -83,11 +83,13 @@ public class DepthBuffer {
      */
     public void resize(int nWidth, int nHeight) {
         if (width == nWidth && height == nHeight) {
+            clear();
             return;
         }
         width = nWidth;
         height = nHeight;
-        buffer = new Matrix(width, height);
+        buffer = new Matrix(height, width);
+        clear();
     }
 
 }

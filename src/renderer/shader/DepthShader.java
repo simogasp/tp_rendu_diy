@@ -81,7 +81,6 @@ public class DepthShader extends Shader {
     @Override
     public void init(final int width, final int height, final Fragment[] vertices) {
         depthBuffer.resize(width, height);
-        reset();
         for (final Fragment fragment : vertices) {
             update(fragment.getDepth());
         }
@@ -122,7 +121,7 @@ public class DepthShader extends Shader {
         final double alpha = (cursor - bucket * d) / d;
 
         return interpolate(colorMap.getColor(bucket),
-                colorMap.getColor(MathUtils.clamp(bucket + 1, 0, bucketNumber - 1)),
+                colorMap.getColor(bucket + 1),
                 alpha);
     }
 

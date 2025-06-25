@@ -47,6 +47,5 @@ public class PainterShader extends Shader {
     @Override
     public void init(int width, int height, Fragment[] vertices) {
         depth.resize(width, height);
-        reset();
     }
 }
