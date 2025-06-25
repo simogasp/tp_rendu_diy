@@ -4,7 +4,6 @@ import java.awt.Color;
 
 import renderer.DepthBuffer;
 import renderer.Fragment;
-import renderer.algebra.MathUtils;
 import renderer.shader.colormap.ColorMap;
 import renderer.shader.colormap.ColorMapFactory;
 import renderer.gui.RenderPanel;
@@ -13,11 +12,6 @@ import renderer.gui.RenderPanel;
  * Shader color the model in function of the depth of the surface.
  */
 public class DepthShader extends Shader {
-
-    /**
-     * Tolerance to considere a fragment is in the far plan.
-     */
-    private static final double EPSILON = 0.01;
 
     /**
      * Represents the minimal Depth of the Model.
