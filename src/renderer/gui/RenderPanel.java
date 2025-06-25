@@ -66,9 +66,7 @@ public class RenderPanel extends Canvas {
         renderedImage = new BufferedImage(realWidth,
                 realHeight,
                 BufferedImage.TYPE_3BYTE_BGR);
-        renderedImage = new BufferedImage(realWidth,
-                realHeight,
-                BufferedImage.TYPE_3BYTE_BGR);
+
         final Dimension dim = new Dimension(realWidth, realHeight);
         setSize(dim);
         setPreferredSize(dim);
@@ -101,8 +99,8 @@ public class RenderPanel extends Canvas {
     public void setPixel(final int x, final int y, double r, double g, double b) {
 
         r = MathUtils.clamp(r, 0d, 1d);
-        r = MathUtils.clamp(g, 0d, 1d);
-        r = MathUtils.clamp(b, 0d, 1d);
+        g = MathUtils.clamp(g, 0d, 1d);
+        b = MathUtils.clamp(b, 0d, 1d);
 
         setPixel(x, y, (char) (r * 255), (char) (g * 255), (char) (b * 255));
     }
