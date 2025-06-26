@@ -32,7 +32,7 @@ public class DepthShader extends Shader {
     /**
      * A colors Map.
      */
-    public ColorMap colorMap;
+    private ColorMap colorMap;
 
 
 
@@ -43,7 +43,7 @@ public class DepthShader extends Shader {
         this(ColorMapFactory.create(ColorMapFactory.Maps.VERIDIS));
     }
 
-    /** 
+    /**
      * Creates a DepthShader with the given colorMap.
      * @param initColorMap the init color map
      */

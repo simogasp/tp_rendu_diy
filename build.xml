@@ -6,17 +6,13 @@
 	<property name="result" location="${bin}/jar" />
 	<property name="test" location="test" />
 	<property name="testsoutput" location="${bin}/test" />
-<<<<<<< HEAD
 	<property name="reports" location="${test}/reports" />
-=======
-	<property name="reports" location="test/reports" />
->>>>>>> 97d48a0 (fix: compile)
 	<property name="lib" location="lib" />
 	<property name="data" location="data" />
 	<property name="base" location="." />
 	<property name="doc" location="doc" />
 	<property name="functional" location="${test}/functional" />
-	<property name="unit" location="test/unit" />
+	<property name="unit" location="${test}/unit" />
 
 	<description>
 	A "Do It Yourself" renderer.

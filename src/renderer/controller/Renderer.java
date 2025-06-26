@@ -17,7 +17,7 @@ import renderer.model.shader.Shader;
 /**
  * The Renderer class drives the rendering pipeline: read in a scene, projects
  * the vertices and rasterizes every faces / edges.
- * 
+ *
  * @author cdehais
  */
 public final class Renderer {
@@ -39,6 +39,12 @@ public final class Renderer {
      * The default scene filename.
      */
     private static final String DEFAULT_FILENAME = "data/example0.scene";
+
+    /** The devider of the normal length. */
+    private static final double DIVIDER = 50;
+
+    /** The length of the normal. */
+    private static double normalLength;
 
     /** The scene. */
     private Scene scene;
@@ -77,7 +83,7 @@ public final class Renderer {
 
     /**
      * Creates a renderer, a controller with default values.
-     * 
+     *
      * @throws IOException if files doesn't exist
      */
     public Renderer() throws IOException {
@@ -86,7 +92,7 @@ public final class Renderer {
 
         // set default scene : cube
         setScene(DEFAULT_FILENAME);
-        
+
         // set a default shader that shouldn't been used.
         shader = new DefaultShader();
         rasterizer = new Rasterizer(shader);
@@ -99,8 +105,43 @@ public final class Renderer {
     }
 
     /**
+     * Renders the normals of the mesh.
+     */
+    public void renderNormal() {
+        final Vector[] vertices = mesh.getVertices();
+        final Fragment[] fragments = projectVertices();
+
+        for (int i = 0; i < vertices.length; i++) {
+            final Vector vertex = vertices[i];
+            final Fragment fragment = fragments[i];
+            final Vector normal = fragment.getNormal();
+
+            final Vector destVector = new Vector(
+                    vertex.get(0) + normalLength * normal.get(0),
+                    vertex.get(1) + normalLength * normal.get(1),
+                    vertex.get(2) + normalLength * normal.get(2));
+
+            final Vector destVectorPoint = xform.projectPoint(destVector.homogeneous());
+
+            int x = (int) Math.round(destVectorPoint.get(0));
+            int y = (int) Math.round(destVectorPoint.get(1));
+
+            final Fragment destFragment = new Fragment(x, y);
+            destFragment.setColor(Color.RED);
+            destFragment.setNormal(normal);
+            destFragment.setDepth(destVectorPoint.get(2));
+
+            final Fragment originFragment = fragment.clone();
+            originFragment.setColor(Color.RED);
+
+            rasterizer.rasterizeEdge(originFragment, destFragment);
+
+        }
+    }
+
+    /**
      * Enables or disables lighting.
-     * 
+     *
      * @param enabled true to enable lighting, false to disable it
      */
     public void setLightingEnabled(final boolean enabled) {
@@ -109,7 +150,7 @@ public final class Renderer {
 
     /**
      * Sets the scene with the given filename.
-     * 
+     *
      * @param fileName the filename of the scene
      * @throws IOException if the file doesn't exist
      */
@@ -127,7 +168,6 @@ public final class Renderer {
                 scene.getScreenW(),
                 scene.getScreenH());
 
-        
         // add lights of the scene
         lighting.reset();
         lighting.addAmbientLight(scene.getAmbientI());
@@ -136,6 +176,9 @@ public final class Renderer {
                 lightCoord[1],
                 lightCoord[2],
                 scene.getSourceI());
+
+        // determine the normal length
+        initNormalLength();
     }
 
     /**
@@ -158,7 +201,7 @@ public final class Renderer {
 
     /**
      * Sets the shader to the given values.
-     * 
+     *
      * @param shader the new shader.
      */
     public void setShader(final Shader shader) {
@@ -168,10 +211,12 @@ public final class Renderer {
 
     /**
      * Render an image from the current parameters.
-     * 
+     *
+     * @return the rendered image.
      * @throws SizeMismatchException if the size of the fragments do not match
      */
-    public ImageWrapper render() {
+    public ImageWrapper render()
+            throws SizeMismatchException {
 
         final ImageWrapper res = new ImageWrapper(scene,
                 shader,
@@ -186,13 +231,15 @@ public final class Renderer {
         // intialize the shader
         shader.init(this, res);
 
-
         // wireframe rendering
         if (wiredRendered) {
             renderWireframe();
         }
         if (solidRendered) {
             renderSolid();
+        }
+        if (normalsRendered) {
+            renderNormal();
         }
 
         lastRender = res;
@@ -201,7 +248,7 @@ public final class Renderer {
 
     /**
      * Projects the vertices of the mesh into the screen space.
-     * 
+     *
      * @return an array of fragments
      */
     public Fragment[] projectVertices() {
@@ -229,14 +276,18 @@ public final class Renderer {
             }
 
             if (!lightingEnabled) {
-                fragments[i].setColor(colors[3 * i], colors[3 * i + 1], colors[3 * i + 2]);
+                fragments[i].setColor(
+                        colors[3 * i],
+                        colors[3 * i + 1],
+                        colors[3 * i + 2]);
             } else {
                 final double[] color = new double[3];
                 color[0] = colors[3 * i];
                 color[1] = colors[3 * i + 1];
                 color[2] = colors[3 * i + 2];
-                final double material[] = scene.getMaterial();
-                final double[] litColor = lighting.applyLights(new Vector(vertices[i]), pNormal, color,
+                final double[] material = scene.getMaterial();
+                final double[] litColor = lighting.applyLights(
+                        vertices[i].getSubVector(0, 3), pNormal, color,
                         scene.getCameraPosition(),
                         material[0], material[1], material[2], material[3]);
                 fragments[i].setColor(litColor[0], litColor[1], litColor[2]);
@@ -246,14 +297,83 @@ public final class Renderer {
         return fragments;
     }
 
+    /**
+     * Gets the transformation to convert the world reference to the camera
+     * reference.
+     *
+     * @return the transformation
+     */
     public Transformation getTransformation() {
         return xform;
     }
 
     /**
+     * Sets wether the normals shoud be drawn.
+     *
+     * @param normalsRendered the normals shoud be normalsRendered
+     */
+    public void setNormalsRendered(final boolean normalsRendered) {
+        this.normalsRendered = normalsRendered;
+    }
+
+    /**
+     * Sets wether the wireFrameRender should be done.
+     *
+     * @param wiredRendered the new value
+     */
+    public void setWiredRendered(final boolean wiredRendered) {
+        this.wiredRendered = wiredRendered;
+    }
+
+    /**
+     * Sets wether the solidRender should be done.
+     *
+     * @param solidRendered the new value
+     */
+    public void setSolidRendered(final boolean solidRendered) {
+        this.solidRendered = solidRendered;
+    }
+
+    /**
+     * Computes the length of the normals for the rendering.
+     */
+    private void initNormalLength() {
+        double minX = Double.POSITIVE_INFINITY;
+        double maxX = Double.NEGATIVE_INFINITY;
+        double minY = Double.POSITIVE_INFINITY;
+        double maxY = Double.NEGATIVE_INFINITY;
+        double minZ = Double.POSITIVE_INFINITY;
+        double maxZ = Double.NEGATIVE_INFINITY;
+
+        for (Vector vertex : mesh.getVertices()) {
+            if (vertex.get(0) < minX) {
+                minX = vertex.get(0);
+            }
+            if (vertex.get(0) > maxX) {
+                maxX = vertex.get(0);
+            }
+            if (vertex.get(1) < minY) {
+                minY = vertex.get(1);
+            }
+            if (vertex.get(1) > maxY) {
+                maxY = vertex.get(1);
+            }
+            if (vertex.get(2) < minZ) {
+                minZ = vertex.get(2);
+            }
+            if (vertex.get(2) > maxZ) {
+                maxZ = vertex.get(2);
+            }
+        }
+
+        // The length of the normal is approximately equal to 1/50 of the minimal
+        // length of the bounding box
+        normalLength = Math.min(Math.min(maxX - minX, maxY - minY), maxZ - minZ)
+                / DIVIDER;
+    }
+
+    /**
      * Renders the wireframe of the mesh.
-     * 
-     * @param screen the screen
      */
     private void renderWireframe() {
         final Fragment[] fragment = projectVertices();
@@ -270,10 +390,11 @@ public final class Renderer {
 
     /**
      * Renders the solid of the mesh.
-     * 
+     *
      * @throws SizeMismatchException if the size of the fragments do not match
      */
-    private void renderSolid() {
+    private void renderSolid()
+            throws SizeMismatchException {
         final Fragment[] fragments = projectVertices();
         final int[] faces = mesh.getFaces();
 
@@ -284,43 +405,5 @@ public final class Renderer {
 
             rasterizer.rasterizeFace(v1, v2, v3);
         }
-    }
-
-    /**
-     * Wait for a number of seconds.
-     *
-     * @param sec the number of seconds to wait
-     */
-    public static void wait(final int sec) {
-        try {
-            final long millis = 1000;
-            Thread.sleep(sec * millis);
-        } catch (final Exception e) {
-            // nothing
-        }
-    }
-
-    /**
-     * Sets wether the normals shoud be drawn.
-     * @param normalsRendered the normals shoud be normalsRendered
-     */
-    public void setNormalsRendered(final boolean normalsRendered) {
-        this.normalsRendered = normalsRendered;
-    }
-
-    /**
-     * Sets wether the wireFrameRender should be done.
-     * @param wiredRendered the new value
-     */
-    public void setWiredRendered(final boolean wiredRendered) {
-        this.wiredRendered = wiredRendered;
-    }
-
-    /**
-     * Sets wether the solidRender should be done.
-     * @param solidRendered the new value
-     */
-    public void setSolidRendered(final boolean solidRendered) {
-        this.solidRendered = solidRendered;
     }
 }

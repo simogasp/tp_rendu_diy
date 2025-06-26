@@ -21,6 +21,11 @@ public class Vector extends Matrix implements Cloneable {
     public static final int NUMBER_COLUMN = 1;
 
     /**
+     * The dimension of Z.
+     */
+    private static final int DIM_Z = 3;
+
+    /**
      * Creates a random vector of size nRows x nCols.
      *
      * @param name  the name of the vector
@@ -335,7 +340,7 @@ public class Vector extends Matrix implements Cloneable {
      * @return the third values of a vector
      */
     public double getZ() {
-        if (size() < 3) {
+        if (size() < DIM_Z) {
             throw new RuntimeException("There is no Z component the size has "
                     + "to be more than 3 but here the size is " + size() + ".");
         }

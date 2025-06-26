@@ -1,6 +1,6 @@
 package renderer.model.shader;
 
-import java.awt.*;
+import java.awt.Color;
 
 import renderer.algebra.MathUtils;
 import renderer.controller.ImageWrapper;
@@ -116,6 +116,11 @@ public class TextureShader extends Shader {
         depth.clear();
     }
 
+
+    /**
+     * Gets wether the color has to be combine with the base color.
+     * @return wether the color has to be combine with the base color
+     */
     public boolean getCombineWithBaseColor() {
         return combineWithBaseColor;
     }
@@ -129,5 +134,4 @@ public class TextureShader extends Shader {
             depth.resize(screen.getWidth(), screen.getHeight());
         }
     }
-    
 }

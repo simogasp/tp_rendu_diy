@@ -46,7 +46,7 @@ public final class ColorMapFactory {
 
     /**
      * Build the magma color map table of colors.
-     * 
+     *
      * @return an array of Color
      */
     private static Color[] buildMagma() {
@@ -313,7 +313,7 @@ public final class ColorMapFactory {
 
     /**
      * Build the Veridis color map table of colors.
-     * 
+     *
      * @return an array of colors.
      */
     private static Color[] buildViridis() {

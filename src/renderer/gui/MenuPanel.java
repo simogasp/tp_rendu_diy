@@ -197,7 +197,7 @@ public class MenuPanel extends JPanel {
         // create a tab
         insetsCheckBox.left = TAB_SIZE_PIXEL;
 
-        
+
         // fill the panel
         // add a title
         constraints.gridx = 0;
@@ -249,7 +249,7 @@ public class MenuPanel extends JPanel {
         // add a subtitle
         constraints.gridy++;
         add(new JLabel("Rasterizer"), constraints);
-        
+
         rasterizerGroup = new ButtonGroup();
         simpleRasterizer = new JRadioButton("Rasterizer");
         persperctiveRasterizer = new JRadioButton("Perspective Rasterizer");
@@ -530,6 +530,7 @@ public class MenuPanel extends JPanel {
 
         lightingCheckBox.addItemListener(new ItemListener() {
             public void itemStateChanged(final ItemEvent e) {
+                render.setLightingEnabled(lightingCheckBox.isSelected());
                 updateRender();
             }
         });

@@ -49,9 +49,9 @@ public abstract class Shader {
     /**
      * Initializes a shader.
      * @param renderer the renderer that contains all the information
-     * @param screen the screen to draw on.
+     * @param newScreen the screen to draw on.
      */
-    public void init(final Renderer renderer, ImageWrapper screen) {
-        this.screen = screen;
+    public void init(final Renderer renderer, final ImageWrapper newScreen) {
+        screen = newScreen;
     }
 }

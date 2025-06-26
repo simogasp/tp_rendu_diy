@@ -1,17 +1,16 @@
 package renderer.gui;
 
-import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
-import renderer.algebra.MathUtils;
+import javax.swing.JPanel;
+
 import renderer.controller.ImageWrapper;
 
-public class RenderPanel extends Canvas {
+public class RenderPanel extends JPanel {
 
     /**
      * By default the size of the pixel of the render is 1 px by represented pixel.
@@ -29,7 +28,7 @@ public class RenderPanel extends Canvas {
     private int width;
 
     /**
-     * The height of the screen.renderer.gui.RenderPanel.setImage
+     * The height of the screen.
      */
     private int height;
 
@@ -92,7 +91,6 @@ public class RenderPanel extends Canvas {
         if (renderedImage == null) {
             return;
         }
-        System.out.println("paint with " + new Color(renderedImage.getRGB(256, 256)));
         ((Graphics2D) g).drawImage(renderedImage,
                 new AffineTransform(1f, 0f, 0f, 1f, 0, 0),
                 null);
@@ -128,6 +126,10 @@ public class RenderPanel extends Canvas {
         gui.updateDims();
     }
 
+    /**
+     * Update the render with the given one.
+     * @param render the new render.
+     */
     public void setImage(ImageWrapper render) {
         updateDims(render.getWidth(), render.getHeight());
         this.renderedImage = render;

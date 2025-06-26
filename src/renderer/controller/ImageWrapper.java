@@ -42,10 +42,7 @@ public class ImageWrapper extends BufferedImage {
 
     /**
      * Creates a Image wrapper with the image configuration.
-     * 
-     * @param width           the width of the image
-     * @param height          the height of the image
-     * @param imageType       the type of the image
+     *
      * @param scene           the scene of the image
      * @param shader          the shader of the image
      * @param rasterizer      the raster of the image
@@ -55,9 +52,9 @@ public class ImageWrapper extends BufferedImage {
      * @param solid           wether the render solid is enabled
      */
     public ImageWrapper(Scene scene, Shader shader, Rasterizer rasterizer,
-            boolean lightingEnabled, boolean normalsEnabled, boolean wired, boolean solid) {
+            boolean lightingEnabled, boolean normalsEnabled,
+            boolean wired, boolean solid) {
         super(scene.getScreenW(), scene.getScreenH(), BufferedImage.TYPE_3BYTE_BGR);
-        System.out.println("Size = " + getWidth() + "x" + getHeight());
         this.scene = scene;
         this.shader = shader;
         this.rasterizer = rasterizer;
@@ -69,8 +66,9 @@ public class ImageWrapper extends BufferedImage {
 
     /**
      * Places a pixel of rgb color in the (x, y) pixel.
-     * @param x the abscissa of the pixel
-     * @param y the ordinate of the pixel
+     *
+     * @param x   the abscissa of the pixel
+     * @param y   the ordinate of the pixel
      * @param rgb the color of the pixel
      */
     public void setPixel(final int x, final int y, final Color rgb) {
@@ -82,41 +80,36 @@ public class ImageWrapper extends BufferedImage {
 
     /**
      * Wether an other Image has the same parameter.
+     *
      * @param otherImageWrapper the other image.
      * @return wether the other Image has the parameters.
      */
     public boolean isSameParams(final ImageWrapper otherImageWrapper) {
-        return scene == otherImageWrapper.scene
-            && shader == otherImageWrapper.shader
-            && (!(shader instanceof TextureShader) 
-                || ((TextureShader) shader).getCombineWithBaseColor() == ((TextureShader) otherImageWrapper.shader).getCombineWithBaseColor())
-            && rasterizer == otherImageWrapper.rasterizer
-            && lightingEnabled == otherImageWrapper.lightingEnabled
-            && normalsEnabled == otherImageWrapper.normalsEnabled
-            && wired == otherImageWrapper.wired
-            && solid == otherImageWrapper.solid;
+        boolean ok = true;
+        if (shader instanceof TextureShader
+                && otherImageWrapper.shader instanceof TextureShader) {
+            final TextureShader textShader = (TextureShader) shader;
+            final TextureShader other = (TextureShader) otherImageWrapper.shader;
+            ok = textShader.getCombineWithBaseColor() == other.getCombineWithBaseColor();
+        }
+        return ok
+                && scene == otherImageWrapper.scene
+                && shader == otherImageWrapper.shader
+                && rasterizer == otherImageWrapper.rasterizer
+                && lightingEnabled == otherImageWrapper.lightingEnabled
+                && normalsEnabled == otherImageWrapper.normalsEnabled
+                && wired == otherImageWrapper.wired
+                && solid == otherImageWrapper.solid;
     }
-
-
 
     /**
      * Test whether the fragment falls onto the screen.
+     *
      * @param fragment the fragment to test
      * @return true if the fragment is clipped, false otherwise
      */
     public boolean isClipped(Fragment fragment) {
         return ((fragment.getX() < 0) || (fragment.getX() >= super.getWidth())
-            || (fragment.getY() < 0) || (fragment.getY() >= super.getHeight()));
+                || (fragment.getY() < 0) || (fragment.getY() >= super.getHeight()));
     }
-
-    @Override
-    public String toString() {
-        String ss = super.toString();
-        ss = ss.split("@")[1].split("[\\[]")[0];
-        return "ImageWrapper@" + ss + " [scene=" + scene.getMeshFileName() + ", shader=" + shader.getClass().getSimpleName() + ", rasterizer=" + rasterizer.getClass().getSimpleName()
-                + ", lightingEnabled=" + lightingEnabled + ", normalsEnabled=" + normalsEnabled + ", wired=" + wired
-                + ", solid=" + solid + ", getHeight()=" + getHeight() + ", getWidth()=" + getWidth() + "]";
-    }
-
-    
 }
