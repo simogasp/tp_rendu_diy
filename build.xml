@@ -35,17 +35,26 @@
 		<files includes="${lib}/junit-4.13.2.jar" />
 	</path>
 
-
-	<!-- traitement des fichiers du répertoire ./src -->
-	<target name="plantuml" description="Draw the diagramme in doc/uml." depends="createuml">
+	<target name="plantUML"
+		description="Create and draw the diagramme in ${uml}."
+		depends="createUML">
 		<plantuml dir="${uml}"
-		verbose="true"
-		overwrite="true"
-		output="${uml}"
+			overwrite="true"
+			output="${uml}"
 		>
-	</plantuml>
-</target>
-	<target name="createuml" description="Create the umlplantfile." depends="compile">
+		</plantuml>
+	</target>
+
+	<target name="create-plantUML"
+		description="Create and draw the diagramme in ${uml}."
+		depends="createUML">
+		<plantuml dir="${uml}"
+			overwrite="true"
+			output="${uml}"
+		>
+		</plantuml>
+	</target>
+	<target name="createUML" description="Create the PlantUML file." depends="compile">
 		<mkdir dir="${uml}" />
 		<java jar="lib/plantuml-dep-cli-1.4.0.jar"
 			fork="true"
@@ -61,8 +70,13 @@
 			<arg value="^renderer.(model|gui|controller).*" />
 			<arg value="-o" />
 			<arg value="${uml}/ClassDiagramWithoutMembers.puml" />
-			<arg value="-v" />
 		</java>
+		<replace file="${uml}/ClassDiagramWithoutMembers.puml">
+			<replacetoken>@startuml</replacetoken>
+			<replacevalue>@startuml "Class diagram without members"
+				title "Class diagram without members"
+				hide empty members</replacevalue>
+		</replace>
 		<java classname="renderer.doc.CreateClassDiagram">
 			<classpath>
 				<pathelement path="${classes}" />

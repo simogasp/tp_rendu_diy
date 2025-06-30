@@ -15,15 +15,15 @@ public class Texture {
     /**
      * The width of the texture.
      */
-    private int width;
+    private final int width;
     /**
      * The height of the texture.
      */
-    private int height;
+    private final int height;
     /**
      * The image of the texture.
      */
-    private BufferedImage image;
+    private final BufferedImage image;
 
     /**
      * Constructs a new Texture with the content of the image at @path.

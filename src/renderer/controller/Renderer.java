@@ -14,6 +14,7 @@ import renderer.model.mesh.Scene;
 import renderer.model.rasterizer.PerspectiveCorrectRasterizer;
 import renderer.model.rasterizer.Rasterizer;
 import renderer.model.shader.Shader;
+import renderer.model.shader.TextureShader;
 
 /**
  * The Renderer class drives the rendering pipeline: read in a scene, projects
@@ -78,9 +79,14 @@ public final class Renderer {
     private boolean solidRendered;
 
     /**
-     * Store the last render in cache to resend if the params hasn't change.
+     * Store the last texture set.
      */
-    private ImageWrapper lastRender;
+    private String texture;
+
+    /**
+     * Wether a TextureShader has to combine colors in render.
+     */
+    private boolean combineColorState;
 
     /**
      * Creates a renderer, a controller with default values.
@@ -222,16 +228,9 @@ public final class Renderer {
     public ImageWrapper render()
             throws SizeMismatchException {
 
-        final ImageWrapper res = new ImageWrapper(scene,
-                shader,
-                rasterizer,
-                lightingEnabled,
-                normalsRendered, wiredRendered, solidRendered);
+        // returned image
+        final ImageWrapper res = new ImageWrapper(scene);
 
-        // if the params hasn't change return the image in cache
-        if (lastRender != null && lastRender.isSameParams(res)) {
-            return lastRender;
-        }
         // intialize the shader
         shader.init(this, res);
 
@@ -246,7 +245,6 @@ public final class Renderer {
             renderNormal();
         }
 
-        lastRender = res;
         return res;
     }
 
@@ -411,13 +409,52 @@ public final class Renderer {
         }
     }
 
-    public boolean setShader(String shaderSelected) {
+    /**
+     * Sets the shader to a instance of the given shader value.
+     * @param shaderSelected the name of a implemantation of Shader
+     * @return wether the operation is successfull
+     */
+    public boolean setShader(final String shaderSelected) {
         final Optional<Shader> optionalShader = ShaderFactory.create(shaderSelected);
             if (optionalShader.isPresent()) {
-                setShader(optionalShader.get());
+                final Shader newShader = optionalShader.get();
+                setShader(newShader);
+                setTexture(texture);
+                /**
+                 * Wether a TextureShader has to combine colors in render.
+                 */
+                setCombineWithBaseColor(combineColorState);
                 return true;
             } else {
                 return false;
             }
+    }
+
+    /**
+     * Set the parameter combine with base color of the Texture shader.
+     * @param selected the new value
+     * @return wether the operation is a success
+     */
+    public void setCombineWithBaseColor(final boolean selected) {
+        if (!(shader instanceof TextureShader)) {
+            return;
+        }
+        ((TextureShader) shader).setCombineWithBaseColor(selected);
+    }
+
+    /**
+     * Set the texture from the file given.
+     * @param path the path of the file
+     * @return wether the operation as been correctely made.
+     */
+    public boolean setTexture(final String path) {
+        if (path == null) {
+            return true;
+        }
+        texture = path;
+        if (!(shader instanceof TextureShader)) {
+            return true;
+        }
+        return ((TextureShader) shader).setTexture(path);
     }
 }

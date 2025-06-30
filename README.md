@@ -144,8 +144,30 @@ To generate the [PlantUML](https://plantuml.com/class-diagram) file and get the 
 
 ```bash
 export PLANTUML_LIMIT_SIZE=8192
-ant createUML
+ant create-plantUML
 ```
+
+The class diagram can be a little big, to hide fields you can add :
+```
+hide fields
+```
+in the `doc/uml/Class Diagram.puml` file.
+
+To hide methods you can add :
+```
+hide methods
+```
+
+to hide both, you can add :
+```
+hide members
+```
+
+and then you can run :
+```sh
+ant plantUML
+```
+
 
 
 ### Generate JavaDoc

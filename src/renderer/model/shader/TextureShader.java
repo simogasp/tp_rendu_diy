@@ -47,14 +47,17 @@ public class TextureShader extends Shader {
      * Set the texture to use for shading.
      *
      * @param path the path to the texture image
+     * @return wether the operation is a success
      */
-    public void setTexture(String path) {
+    public boolean setTexture(String path) {
         try {
             texture = new Texture(path);
+            return true;
         } catch (Exception e) {
             System.out.println("Could not load texture " + path);
             e.printStackTrace();
             texture = null;
+            return false;
         }
     }
 

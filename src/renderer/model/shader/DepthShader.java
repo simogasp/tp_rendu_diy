@@ -89,6 +89,7 @@ public class DepthShader extends Shader {
             depthBuffer = new DepthBuffer(screen.getWidth(), screen.getHeight());
         } else {
             depthBuffer.resize(screen.getWidth(), screen.getHeight());
+            reset();
         }
         for (Fragment fragment : renderer.projectVertices()) {
             update(fragment.getDepth());
@@ -103,7 +104,6 @@ public class DepthShader extends Shader {
      */
     private Color getColorFor(final double depth) {
         if (depth - near < - EPSILON || depth - far > EPSILON) {
-            System.out.println("depth =" + depth + " " + "near = " + near);
             return Color.RED;
         }
 

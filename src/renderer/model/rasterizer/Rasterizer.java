@@ -180,7 +180,7 @@ public class Rasterizer {
                 y += ystep;
                 err -= dx;
             }
-        } // >??
+        } //>??
     }
 
     /**
@@ -247,8 +247,8 @@ public class Rasterizer {
         final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 
         // iterate over the triangle's bounding box
-        // ++ // TODO
-        // <!!
+        //++ // TODO
+        //<!!
         final int xmin = Math.min(v1.getX(), Math.min(v2.getX(), v3.getX()));
         final int ymin = Math.min(v1.getY(), Math.min(v2.getY(), v3.getY()));
         final int xmax = Math.max(v1.getX(), Math.max(v2.getX(), v3.getX()));
@@ -279,6 +279,6 @@ public class Rasterizer {
                 }
             }
         }
-        // >!!
+        //>!!
     }
 }

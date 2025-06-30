@@ -1,13 +1,15 @@
 package renderer.gui;
 
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -97,6 +99,11 @@ public class MenuPanel extends JPanel {
     private final JTextField filenameTextField;
 
     /**
+     * The texture ComboBox Input.
+     */
+    private final JComboBox<String> textureComboBox;
+
+    /**
      * The shader combo box.
      */
     private final JComboBox<String> shaderComboBox;
@@ -130,6 +137,10 @@ public class MenuPanel extends JPanel {
      * The lighting option check box.
      */
     private final JCheckBox lightingCheckBox;
+    /**
+     * The combine texture with color check box.
+     */
+    private final JCheckBox combineColorCheckBox;
 
     // ===================================================================================
     // controller part
@@ -206,7 +217,16 @@ public class MenuPanel extends JPanel {
         // shader ComboBox
         shaderComboBox = new JComboBox<>(ShaderFactory.getShaderSetAsStringArray());
         shaderComboBoxConfiguration();
-        
+
+        // Texture Part
+
+        // add a subtitle
+        constraints.gridy++;
+        add(new JLabel("Texture"), constraints);
+
+        textureComboBox = new JComboBox<>(getAvailableTexture());
+        textureConfiguration();
+
         // add a subtitle
         constraints.gridy++;
         add(new JLabel("Render"), constraints);
@@ -238,7 +258,10 @@ public class MenuPanel extends JPanel {
         drawNormalCheckBox = new JCheckBox("Draw normals");
 
         // check box to enable the lighting
-        lightingCheckBox = new JCheckBox("lighting");
+        lightingCheckBox = new JCheckBox("Lighting");
+
+        // check box to combine texture and origin color
+        combineColorCheckBox = new JCheckBox("Combine color with texture");
 
         // set up the buttons
         optionConfiguration();
@@ -255,18 +278,59 @@ public class MenuPanel extends JPanel {
         setConfiguration();
     }
 
+    /**
+     * return the list of path from data which finished by .jpg
+     * 
+     * @return a array of String
+     */
+    private String[] getAvailableTexture() {
+        final Set<String> tmp = new HashSet<>();
+        String endpoint = "data/";
+        File data = new File(endpoint);
+        for (String file : data.list()) {
+            if (file.endsWith(".jpg")) {
+                tmp.add(file);
+            }
+
+        }
+
+        // transform to array
+        final String[] res = new String[tmp.size()];
+        Iterator<String> it = tmp.iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            res[i++] = it.next();
+        }
+        return res;
+    }
+
+    private void textureConfiguration() {
+        constraints.gridy++;
+        textureComboBox.addActionListener(e -> {
+            final String textureSelected = "data/"
+                    + (String) textureComboBox.getSelectedItem();
+            if (!render.setTexture(textureSelected)) {
+                JOptionPane.showMessageDialog(textureComboBox,
+                        "Error : Texture could not been correctly loaded.",
+                        "Texture Loading",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            updateRender();
+        });
+        add(textureComboBox, constraints);
+    }
+
     private void shaderComboBoxConfiguration() {
         constraints.gridy++;
         shaderComboBox.addActionListener(e -> {
             final String shaderSelected = (String) shaderComboBox.getSelectedItem();
             if (!render.setShader(shaderSelected)) {
-                System.out.println("ERROR");
-                JOptionPane.showMessageDialog(filenameTextField,
+                JOptionPane.showMessageDialog(shaderComboBox,
                         "Error : creating the shader using the Factory.",
                         "Shader creation failed",
                         JOptionPane.ERROR_MESSAGE);
             }
-            
+
             updateRender();
         });
         add(shaderComboBox, constraints);
@@ -368,7 +432,6 @@ public class MenuPanel extends JPanel {
         add(filenameTextField, constraints);
     }
 
-
     /**
      * Set up the render button group.
      */
@@ -451,11 +514,21 @@ public class MenuPanel extends JPanel {
                 updateRender();
             }
         });
+
         // remove the border on the component
         lightingCheckBox.setMargin(insetsCheckBox);
         constraints.gridy++;
         add(lightingCheckBox, constraints);
 
+        combineColorCheckBox.addItemListener(e -> {
+            render.setCombineWithBaseColor(combineColorCheckBox.isSelected());
+            updateRender();
+        });
+
+        // remove the border on the component
+        combineColorCheckBox.setMargin(insetsCheckBox);
+        constraints.gridy++;
+        add(combineColorCheckBox, constraints);
     }
 
     /**
@@ -465,7 +538,8 @@ public class MenuPanel extends JPanel {
         // set the start configuration
         simpleRasterizer.setSelected(SELECTED);
         cube.setSelected(SELECTED);
-        shaderComboBox.setSelectedIndex(0);
+        shaderComboBox.setSelectedItem("SimpleShader");
+        textureComboBox.setSelectedItem("brick.jpg");
         drawWireframeCheckBox.setSelected(SELECTED);
     }
 
@@ -473,5 +547,6 @@ public class MenuPanel extends JPanel {
      * Update the render.
      */
     private void updateRender() {
-        renderPanel.setImage(render.render());    }
+        renderPanel.setImage(render.render());
+    }
 }
