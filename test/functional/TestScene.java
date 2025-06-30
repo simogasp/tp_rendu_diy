@@ -1,7 +1,7 @@
 import org.junit.Test;
 
 import renderer.algebra.Vector;
-import renderer.model.Scene;
+import renderer.model.mesh.Scene;
 
 
 /**

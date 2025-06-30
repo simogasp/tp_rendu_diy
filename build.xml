@@ -35,9 +35,8 @@
 		<files includes="${lib}/junit-4.13.2.jar" />
 	</path>
 
-	<target name="plantUML"
-		description="Create and draw the diagramme in ${uml}."
-		depends="createUML">
+	<target name="drawUML"
+		description="Draw the diagramme in ${uml}.">
 		<plantuml dir="${uml}"
 			overwrite="true"
 			output="${uml}"
@@ -45,25 +44,18 @@
 		</plantuml>
 	</target>
 
-	<target name="create-plantUML"
-		description="Create and draw the diagramme in ${uml}."
-		depends="createUML">
-		<plantuml dir="${uml}"
-			overwrite="true"
-			output="${uml}"
-		>
-		</plantuml>
+	<target name="create-drawUML"
+		description="Create and draw the diagramme in ${uml}.">
+		<antcall target="createUML" />
+		<antcall target="drawUML" />
 	</target>
+
 	<target name="createUML" description="Create the PlantUML file." depends="compile">
 		<mkdir dir="${uml}" />
 		<java jar="lib/plantuml-dep-cli-1.4.0.jar"
 			fork="true"
 			failonerror="true"
 			maxmemory="128m">
-			<classpath>
-				<pathelement location="dist/test.jar" />
-				<pathelement path="${java.class.path}" />
-			</classpath>
 			<arg value="-b" />
 			<arg value="src/" />
 			<arg value="-dp" />
@@ -106,6 +98,7 @@
 	<target name="clean" description="Clean the directory.">
 		<delete dir="${bin}" />
 		<delete dir="${doc}" />
+		<delete dir="${reports}" />
 	</target>
 
 	<!-- target to run the application. -->

@@ -9,6 +9,23 @@ import renderer.model.mesh.Scene;
 public class ImageWrapper extends BufferedImage {
 
     /**
+     * Default width of a screen (For test).
+     */
+    private static final int DEFAULT_WIDTH = 100;
+
+    /**
+     * Defalut height of a screen (For test).
+     */
+    private static final int DEFAULT_HEIGHT = 100;
+
+    /**
+     * Creates a default ImageWrapper for test.
+     */
+    public ImageWrapper() {
+        super(DEFAULT_WIDTH, DEFAULT_HEIGHT, BufferedImage.TYPE_3BYTE_BGR);
+    }
+
+    /**
      * Creates a Image wrapper with the image configuration.
      *
      * @param scene the scene of the image

@@ -1,6 +1,7 @@
 import org.junit.Test;
 
-import renderer.model.Fragment;
+import renderer.model.shader.Fragment;
+import renderer.controller.ImageWrapper;
 import renderer.model.rasterizer.Rasterizer;
 import renderer.model.shader.Shader;
 
@@ -29,6 +30,7 @@ public class TestRasterizer {
         System.out.println("OFF\n# Test Start");
 
         TestShader shader = new TestShader();
+        ImageWrapper screen = new ImageWrapper();
         Rasterizer rasterizer = new Rasterizer(shader);
 
         System.out.println("Rasterizing edge");

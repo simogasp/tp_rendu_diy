@@ -48,7 +48,7 @@ public class NormalMapShader extends Shader {
             return;
         }
 
-        Vector nn = fragment.getNormal();
+        final Vector nn = fragment.getNormal();
         Vector n = xform.transformVector(nn);
 
         // some vector has NaN value so we skip it

@@ -2,8 +2,10 @@
 SRC_DIR = src
 TEST_DIR = test
 BUILD_DIR = build
+CLASSES_DIR = $(BUILD_DIR)/cls
 DOC_DIR = doc
-CLASSPATH = $(BUILD_DIR):lib/*
+UML_DIR = $(DOC_DIR)/uml
+CLASSPATH = $(CLASSES_DIR):lib/*
 
 # Find all source and test Java files
 SRC_FILES = $(shell find $(SRC_DIR) -name "*.java")
@@ -12,7 +14,7 @@ FUNCTIONAL_TEST_FILES = $(shell find $(TEST_DIR)/functional -name "*.java")
 ALL_TEST_FILES = $(UNIT_TEST_FILES) $(FUNCTIONAL_TEST_FILES)
 
 # Targets
-.PHONY: all clean compile test
+.PHONY: all clean compile doc clean-doc tests
 
 all: compile
 
@@ -23,7 +25,8 @@ clean:
 # Compile all source and test files
 compile: clean
 	mkdir -p $(BUILD_DIR)
-	javac -d $(BUILD_DIR) -cp $(CLASSPATH) $(SRC_FILES) $(ALL_TEST_FILES)
+	mkdir -p $(CLASSES_DIR)
+	javac -d $(CLASSES_DIR) -cp $(CLASSPATH) $(SRC_FILES) $(ALL_TEST_FILES)
 
 # Run all tests
 tests: func-tests unit-tests
@@ -61,3 +64,15 @@ doc: clean-doc
 # clean the doc directory
 clean-doc:
 	rm -rf ${DOC_DIR}
+
+# create plant UML file
+createUML: compile
+	java -jar lib/plantuml-dep-cli-1.4.0.jar -b src/ -dp "^renderer.(model|gui|controller).*" -o $(UML_DIR)/ClassDiagramWithoutMembers.puml
+	java -cp $(CLASSPATH) renderer.doc.CreateClassDiagram -dp "^renderer.(model|gui|controller).*"
+
+# draw plant UML File 
+drawUML:
+	export PLANT_LIMIT_SIZE=8192
+	java -jar lib/plantuml-1.2025.3.jar net.sourceforge.plantuml.ant.PlantUmlTask $(UML_DIR)
+
+create-drawUML:createUML drawUML

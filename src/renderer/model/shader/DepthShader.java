@@ -12,6 +12,10 @@ import renderer.model.shader.colormap.ColorMapFactory;
  */
 public class DepthShader extends Shader {
 
+    /**
+     * Tolerance to considere a point nearer than the near point and farest than
+     * the far point.
+     */
     private static final double EPSILON = 1E-8;
 
     /**
@@ -34,8 +38,6 @@ public class DepthShader extends Shader {
      */
     private ColorMap colorMap;
 
-
-
     /**
      * Creates a DepthShader.
      */
@@ -45,6 +47,7 @@ public class DepthShader extends Shader {
 
     /**
      * Creates a DepthShader with the given colorMap.
+     * 
      * @param initColorMap the init color map
      */
     public DepthShader(final ColorMap initColorMap) {
@@ -82,6 +85,7 @@ public class DepthShader extends Shader {
             far = depth;
         }
     }
+
     @Override
     public void init(final Renderer renderer, final ImageWrapper screen) {
         super.init(renderer, screen);
@@ -103,7 +107,7 @@ public class DepthShader extends Shader {
      * @return the color in the color gradient
      */
     private Color getColorFor(final double depth) {
-        if (depth - near < - EPSILON || depth - far > EPSILON) {
+        if (depth - near < -EPSILON || depth - far > EPSILON) {
             return Color.RED;
         }
 

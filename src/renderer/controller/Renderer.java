@@ -420,9 +420,6 @@ public final class Renderer {
                 final Shader newShader = optionalShader.get();
                 setShader(newShader);
                 setTexture(texture);
-                /**
-                 * Wether a TextureShader has to combine colors in render.
-                 */
                 setCombineWithBaseColor(combineColorState);
                 return true;
             } else {
@@ -433,7 +430,6 @@ public final class Renderer {
     /**
      * Set the parameter combine with base color of the Texture shader.
      * @param selected the new value
-     * @return wether the operation is a success
      */
     public void setCombineWithBaseColor(final boolean selected) {
         if (!(shader instanceof TextureShader)) {

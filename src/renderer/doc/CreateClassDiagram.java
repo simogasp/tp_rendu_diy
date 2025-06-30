@@ -11,31 +11,37 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-
 /**
- * This Class create a plantUML diagram file in FILE_ENDPOINT with fields and method.
- * This class need to tmp.puml file generate from the plantUML Dependancy jar to get
+ * This Class create a plantUML diagram file in FILE_ENDPOINT with fields and
+ * method.
+ * This class need to tmp.puml file generate from the plantUML Dependancy jar to
+ * get
  * the links between Classes.
+ *
  * @author tlebobe
  */
-public class CreateClassDiagram {
+public final class CreateClassDiagram {
+
+    /**
+     * The UML directory.
+     */
+    private static final String UML = "doc/uml/";
 
     /**
      * The output file name.
      */
-    private static final String FILE_ENDPOINT = "doc/uml/classDiagram.puml";
+    private static final String FILE_ENDPOINT = UML + "classDiagram.puml";
 
     /**
-     * The dependant file name
+     * The dependant file name.
      */
-    private static final String SIMPLEFILE_ENDPOINT =
-        "doc/uml/ClassDiagramWithoutMembers.puml";
+    private static final String SIMPLEFILE_ENDPOINT = UML
+            + "ClassDiagramWithoutMembers.puml";
 
     /**
      * the buffer size of read.
      */
     private static final int BUFFER_SIZE = 1024;
-
 
     /**
      * The list of files to visit.
@@ -54,13 +60,14 @@ public class CreateClassDiagram {
 
     /**
      * Creates a ClassDiagram with a regex.
+     *
      * @param regex the regex
      */
     private CreateClassDiagram(final String regex) {
         this.regex = regex;
 
         // set up outpout file
-        final File doc = new File("doc"); 
+        final File doc = new File("doc");
         doc.mkdir();
         final File uml = new File("doc/uml");
         uml.mkdir();
@@ -83,6 +90,7 @@ public class CreateClassDiagram {
 
     /**
      * Writes the link it founds in the dependant file in the output file.
+     *
      * @throws IOException if an error is raised.
      */
     private void makeLink() throws IOException {
@@ -118,16 +126,16 @@ public class CreateClassDiagram {
 
         // add hard way the agragation link between lighting and light
         outputFile.write("renderer.model.light.Lighting "
-            + "*-- renderer.model.light.Light\n");
+                + "*-- renderer.model.light.Light\n");
 
-        
-            outputFile.flush();
-            outputFile.write("@enduml\n");
-            outputFile.flush();
+        outputFile.flush();
+        outputFile.write("@enduml\n");
+        outputFile.flush();
     }
 
     /**
      * Handles the recursive visit of a directory.
+     *
      * @param dir the directory to visit.
      */
     private void visitDirectory(final File dir) {
@@ -138,6 +146,7 @@ public class CreateClassDiagram {
 
     /**
      * Compute the class scan and creation with their members.
+     *
      * @throws IOException if an error is raised
      */
     private void compute() throws IOException {
@@ -149,10 +158,10 @@ public class CreateClassDiagram {
 
         // starting path
         final String endpoint = "build/cls/renderer/";
-        
+
         // root file
         final File root = new File(endpoint);
-        
+
         // handle it
         visitDirectory(root);
 
@@ -172,6 +181,7 @@ public class CreateClassDiagram {
 
     /**
      * Handles a class file.
+     *
      * @param thefile the file visited
      * @throws IOException if an error is raised
      */
@@ -214,7 +224,7 @@ public class CreateClassDiagram {
                 }
             }
             out += class1.getName() + " {\n";
-            
+
             // handles fields
             for (final Field field : class1.getDeclaredFields()) {
                 out += "\t";
@@ -261,7 +271,7 @@ public class CreateClassDiagram {
                     out += "{static} ";
                 }
                 out += method.getName() + "(";
-                Iterator<Class<?>> it = Arrays.asList(method.getParameterTypes()).iterator();
+                final Iterator<Class<?>> it = Arrays.asList(method.getParameterTypes()).iterator();
                 while (it.hasNext()) {
                     out += it.next().getSimpleName();
                     if (it.hasNext()) {
@@ -281,6 +291,7 @@ public class CreateClassDiagram {
 
     /**
      * Main entry point to create class diagram.
+     *
      * @param args possibly the regex of class to considere
      * @throws IOException if error is raised
      */
@@ -296,10 +307,11 @@ public class CreateClassDiagram {
 
     /**
      * Returns the usage strings.
+     *
      * @return the usage as string.
      */
     private static String usage() {
         return "usage :\n"
-            + "\t-dp regex" + "\t" + "to define a regex of the classes to considere.";
+                + "\t-dp regex" + "\t" + "to define a regex of the classes to considere.";
     }
 }

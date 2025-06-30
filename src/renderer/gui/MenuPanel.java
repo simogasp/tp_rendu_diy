@@ -279,8 +279,8 @@ public class MenuPanel extends JPanel {
     }
 
     /**
-     * return the list of path from data which finished by .jpg
-     * 
+     * return the list of path from data which finished by `.jpg`.
+     *
      * @return a array of String
      */
     private String[] getAvailableTexture() {

@@ -44,7 +44,7 @@ option menu.
 
 ### Render Button
 
-It will update the view panel.
+It will update the view panel. Normally this button is useless. The view panel auto update when changing parameters.
 
 ## MakeFile
 
@@ -55,23 +55,10 @@ Use the following command to build the project:
 ```bash
 make
 ```
-
-### Clean
-
-it compiles all the sources and places them in the `build` folder.
+or
 
 ```bash
-make clean
-```
-
-cleans the `build` folder.
-
-### Tests
-
-To run the tests use the following command:
-
-```bash
-make tests
+make all
 ```
 
 ### Run
@@ -81,6 +68,72 @@ To run the project you can use the following command:
 ```bash
 make run
 ```
+
+### Clean
+
+It compiles all the sources and places them in the `build` folder.
+
+```bash
+make clean
+```
+
+cleans the `build` folder.
+
+### Generate Class Diagram
+
+To generate the [PlantUML](https://plantuml.com/class-diagram) file only do **twice**:
+
+```bash
+make createUML
+```
+
+To generate the [PlantUML](https://plantuml.com/class-diagram) file and get the png of it **three times**:
+
+```bash
+make create-drawUML
+```
+
+The class diagram can be a little big, to hide fields you can add :
+```
+hide fields
+```
+in the `doc/uml/ClassDiagram.puml` file.
+
+To hide methods you can add :
+```
+hide methods
+```
+
+to hide both, you can add :
+```
+hide members
+```
+
+and then you can run :
+```sh
+make drawUML
+```
+
+
+
+
+
+### Generate JavaDoc
+
+To generate the JavaDoc, do :
+```bash
+make doc
+```
+
+
+### Tests
+
+To run the tests use the following command:
+
+```bash
+make tests
+```
+
 
 ## Ant
 
@@ -131,6 +184,7 @@ To run the project you can use the following command:
 ```bash
 ant run
 ```
+
 
 ### Generate ClassDiagram
 
@@ -192,13 +246,13 @@ ant compile-test
 
 ### Clean
 
-it compiles all the sources and places them in the `bin/cls` folder.
+it compiles all the sources and places them in the `build/cls` folder.
 
 ```bash
 ant clean
 ```
 
-cleans the `bin` folder.
+cleans the `build` folder and the tests reports directory   .
 
 ### Tests
 
