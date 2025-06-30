@@ -47,7 +47,7 @@ public class TextureShader extends Shader {
      * Set the texture to use for shading.
      *
      * @param path the path to the texture image
-     * @return wether the operation is a success
+     * @return whether the operation is a success
      */
     public boolean setTexture(String path) {
         try {
@@ -119,8 +119,8 @@ public class TextureShader extends Shader {
 
 
     /**
-     * Gets wether the color has to be combine with the base color.
-     * @return wether the color has to be combine with the base color
+     * Gets whether the color has to be combined with the base color.
+     * @return whether the color has to be combined with the base color
      */
     public boolean getCombineWithBaseColor() {
         return combineWithBaseColor;

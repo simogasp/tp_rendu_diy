@@ -69,13 +69,13 @@ public final class Renderer {
     /** Whether lighting is enabled. */
     private boolean lightingEnabled;
 
-    /** Wether the normals are drawn. */
+    /** Whether the normals are drawn. */
     private boolean normalsRendered;
 
-    /** Wether the image is renderWired. */
+    /** Whether the image is renderWired. */
     private boolean wiredRendered;
 
-    /** Wether the image is renderSolid. */
+    /** Whether the image is renderSolid. */
     private boolean solidRendered;
 
     /**
@@ -84,7 +84,7 @@ public final class Renderer {
     private String texture;
 
     /**
-     * Wether a TextureShader has to combine colors in render.
+     * Whether a TextureShader has to combine colors in render.
      */
     private boolean combineColorState;
 
@@ -310,7 +310,7 @@ public final class Renderer {
     }
 
     /**
-     * Sets wether the normals shoud be drawn.
+     * Sets whether the normals shoud be drawn.
      *
      * @param normalsRendered the normals shoud be normalsRendered
      */
@@ -319,7 +319,7 @@ public final class Renderer {
     }
 
     /**
-     * Sets wether the wireFrameRender should be done.
+     * Sets whether the wireFrameRender should be done.
      *
      * @param wiredRendered the new value
      */
@@ -328,7 +328,7 @@ public final class Renderer {
     }
 
     /**
-     * Sets wether the solidRender should be done.
+     * Sets whether the solidRender should be done.
      *
      * @param solidRendered the new value
      */
@@ -412,7 +412,7 @@ public final class Renderer {
     /**
      * Sets the shader to a instance of the given shader value.
      * @param shaderSelected the name of a implemantation of Shader
-     * @return wether the operation is successfull
+     * @return whether the operation is successfull
      */
     public boolean setShader(final String shaderSelected) {
         final Optional<Shader> optionalShader = ShaderFactory.create(shaderSelected);
@@ -441,7 +441,7 @@ public final class Renderer {
     /**
      * Set the texture from the file given.
      * @param path the path of the file
-     * @return wether the operation as been correctely made.
+     * @return whether the operation as been correctely made.
      */
     public boolean setTexture(final String path) {
         if (path == null) {
