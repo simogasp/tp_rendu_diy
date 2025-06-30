@@ -132,6 +132,22 @@ To run the project you can use the following command:
 ant run
 ```
 
+### Generate ClassDiagram
+
+To generate the [PlantUML](https://plantuml.com/class-diagram) file only do :
+
+```bash
+ant createUML
+```
+
+To generate the [PlantUML](https://plantuml.com/class-diagram) file and get the png of it :
+
+```bash
+export PLANTUML_LIMIT_SIZE=8192
+ant createUML
+```
+
+
 ### Generate JavaDoc
 
 To genrate JavaDoc of the project do:

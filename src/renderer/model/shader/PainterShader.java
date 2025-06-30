@@ -2,8 +2,6 @@ package renderer.model.shader;
 
 import renderer.controller.ImageWrapper;
 import renderer.controller.Renderer;
-import renderer.model.DepthBuffer;
-import renderer.model.Fragment;
 
 /**
  * Simple shader that just copy the interpolated color to the screen,

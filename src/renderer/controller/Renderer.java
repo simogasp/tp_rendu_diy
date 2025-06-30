@@ -2,14 +2,15 @@ package renderer.controller;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.Optional;
 
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
-import renderer.model.Fragment;
-import renderer.model.Mesh;
-import renderer.model.Scene;
-import renderer.model.Transformation;
+import renderer.model.shader.Fragment;
+import renderer.model.camera.Transformation;
 import renderer.model.light.Lighting;
+import renderer.model.mesh.Mesh;
+import renderer.model.mesh.Scene;
 import renderer.model.rasterizer.PerspectiveCorrectRasterizer;
 import renderer.model.rasterizer.Rasterizer;
 import renderer.model.shader.Shader;
@@ -87,6 +88,9 @@ public final class Renderer {
      * @throws IOException if files doesn't exist
      */
     public Renderer() throws IOException {
+        // set the shader Factory up
+        ShaderFactory.init();
+
         // creates a lighting
         lighting = new Lighting();
 
@@ -405,5 +409,15 @@ public final class Renderer {
 
             rasterizer.rasterizeFace(v1, v2, v3);
         }
+    }
+
+    public boolean setShader(String shaderSelected) {
+        final Optional<Shader> optionalShader = ShaderFactory.create(shaderSelected);
+            if (optionalShader.isPresent()) {
+                setShader(optionalShader.get());
+                return true;
+            } else {
+                return false;
+            }
     }
 }

@@ -2,7 +2,7 @@ package renderer.model.rasterizer;
 
 import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;
-import renderer.model.Fragment;
+import renderer.model.shader.Fragment;
 import renderer.model.shader.Shader;
 import renderer.algebra.Vector;
 

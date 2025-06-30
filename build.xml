@@ -13,21 +13,64 @@
 	<property name="doc" location="doc" />
 	<property name="functional" location="${test}/functional" />
 	<property name="unit" location="${test}/unit" />
+	<property name="uml" location="${doc}/uml" />
 
 	<description>
-	A "Do It Yourself" renderer.
+		A "Do It Yourself" renderer.
 
-This is a simple rendering engine made in Java.
+		This is a simple rendering engine made in Java.
 	</description>
 
 
 	<taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
 		classpath="${lib}/checkstyle-10.25.0-all.jar" />
 
+	<taskdef name="plantuml"
+		classname="net.sourceforge.plantuml.ant.PlantUmlTask"
+		classpath="lib/plantuml-1.2025.3.jar"
+	/>
+
 	<path id="libraries">
 		<files includes="${lib}/hamcrest-2.2.jar" />
 		<files includes="${lib}/junit-4.13.2.jar" />
 	</path>
+
+
+	<!-- traitement des fichiers du répertoire ./src -->
+	<target name="plantuml" description="Draw the diagramme in doc/uml." depends="createuml">
+		<plantuml dir="${uml}"
+		verbose="true"
+		overwrite="true"
+		output="${uml}"
+		>
+	</plantuml>
+</target>
+	<target name="createuml" description="Create the umlplantfile." depends="compile">
+		<mkdir dir="${uml}" />
+		<java jar="lib/plantuml-dep-cli-1.4.0.jar"
+			fork="true"
+			failonerror="true"
+			maxmemory="128m">
+			<classpath>
+				<pathelement location="dist/test.jar" />
+				<pathelement path="${java.class.path}" />
+			</classpath>
+			<arg value="-b" />
+			<arg value="src/" />
+			<arg value="-dp" />
+			<arg value="^renderer.(model|gui|controller).*" />
+			<arg value="-o" />
+			<arg value="${uml}/ClassDiagramWithoutMembers.puml" />
+			<arg value="-v" />
+		</java>
+		<java classname="renderer.doc.CreateClassDiagram">
+			<classpath>
+				<pathelement path="${classes}" />
+			</classpath>
+			<arg value="-dp" />
+			<arg value="^renderer.(model|gui|controller).*" />
+		</java>
+	</target>
 
 
 	<!-- target to compile the sources. -->
@@ -61,7 +104,7 @@ This is a simple rendering engine made in Java.
 		</java>
 		<input message="Press Return key to exit ..." />
 	</target>
-	
+
 	<!-- target to generate javadoc. -->
 	<target name="doc" depends="clean-doc" description="Update the doc, create if doesn't exists.">
 		<mkdir dir="${doc}" />
@@ -69,7 +112,7 @@ This is a simple rendering engine made in Java.
 		</javadoc>
 	</target>
 
-	
+
 	<!-- target to clean javadoc. -->
 	<target name="clean-doc" description="Clean the doc directory.">
 		<delete dir="${doc}" />
@@ -90,7 +133,8 @@ This is a simple rendering engine made in Java.
 
 	<!-- target to run fonctionnal tests. -->
 	<target
-		name="func-tests" depends="compile-test" description="Run Functionnal Test. Writes the result in tests/reports.">
+		name="func-tests" depends="compile-test"
+		description="Run Functionnal Test. Writes the result in tests/reports.">
 
 		<echo message="Running functional tests ..." />
 
@@ -110,7 +154,8 @@ This is a simple rendering engine made in Java.
 
 	<!-- target to run unit tests. -->
 	<target
-		name="unit-tests" depends="compile-test" description="Run units Tests. Writes the results in tests/reports.">
+		name="unit-tests" depends="compile-test"
+		description="Run units Tests. Writes the results in tests/reports.">
 
 		<echo message="Running unit tests ..." />
 
@@ -140,7 +185,6 @@ This is a simple rendering engine made in Java.
 	</target>
 
 
-
 	<!-- Checkstyle part. -->
 	<!-- Download it with this target. -->
 	<target name="dl-checkstyle" description="Download a checkstyle jar in lib.">
@@ -148,7 +192,7 @@ This is a simple rendering engine made in Java.
 			src="https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.25.0/checkstyle-10.25.0-all.jar"
 			dest="${lib}/checkstyle-10.25.0-all.jar" />
 	</target>
-	
+
 	<!-- Execution of checkstyle -->
 	<target name="checkstyle" description="Make a CheckStyle review.">
 		<checkstyle config="checkstyle.xml">

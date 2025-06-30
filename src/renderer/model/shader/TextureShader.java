@@ -5,9 +5,7 @@ import java.awt.Color;
 import renderer.algebra.MathUtils;
 import renderer.controller.ImageWrapper;
 import renderer.controller.Renderer;
-import renderer.model.DepthBuffer;
-import renderer.model.Fragment;
-import renderer.model.Texture;
+import renderer.model.mesh.Texture;
 
 /**
  * Simple shader that just copy the interpolated color to the screen,

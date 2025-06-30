@@ -3,9 +3,7 @@ package renderer.model.shader;
 import renderer.algebra.Vector;
 import renderer.controller.ImageWrapper;
 import renderer.controller.Renderer;
-import renderer.model.DepthBuffer;
-import renderer.model.Fragment;
-import renderer.model.Transformation;
+import renderer.model.camera.Transformation;
 
 public class NormalMapShader extends Shader {
 

@@ -3,7 +3,6 @@ package renderer.model.shader;
 
 import renderer.controller.ImageWrapper;
 import renderer.controller.Renderer;
-import renderer.model.Fragment;
 
 /**
  * The Shader class is responsible for writing final pixel color

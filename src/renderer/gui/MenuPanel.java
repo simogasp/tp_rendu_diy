@@ -1,15 +1,18 @@
 package renderer.gui;
 
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -17,11 +20,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import renderer.controller.Renderer;
-import renderer.model.shader.DepthShader;
-import renderer.model.shader.NormalMapShader;
-import renderer.model.shader.PainterShader;
-import renderer.model.shader.SimpleShader;
-import renderer.model.shader.TextureShader;
+import renderer.controller.ShaderFactory;
 
 public class MenuPanel extends JPanel {
 
@@ -98,29 +97,9 @@ public class MenuPanel extends JPanel {
     private final JTextField filenameTextField;
 
     /**
-     * The shader selection group.
+     * The shader combo box.
      */
-    private final ButtonGroup shaderGroup;
-    /**
-     * The simple shader selection button.
-     */
-    private final JRadioButton simpleShader;
-    /**
-     * The painter shader selection button.
-     */
-    private final JRadioButton painterShader;
-    /**
-     * The texture shader selection button.
-     */
-    private final JRadioButton textureShader;
-    /**
-     * The depth shader selection button.
-     */
-    private final JRadioButton depthShader;
-    /**
-     * The normal shader selection button.
-     */
-    private final JRadioButton normalShader;
+    private final JComboBox<String> shaderComboBox;
 
     /**
      * The draw wire frame check box.
@@ -152,6 +131,8 @@ public class MenuPanel extends JPanel {
      */
     private final JCheckBox lightingCheckBox;
 
+    // ===================================================================================
+    // controller part
     /**
      * The renderer used to make a render.
      */
@@ -174,6 +155,7 @@ public class MenuPanel extends JPanel {
             // should not be reach
             e.printStackTrace();
             tmp = null;
+            ShaderFactory.init();
         }
         render = tmp;
 
@@ -197,7 +179,6 @@ public class MenuPanel extends JPanel {
         // create a tab
         insetsCheckBox.left = TAB_SIZE_PIXEL;
 
-
         // fill the panel
         // add a title
         constraints.gridx = 0;
@@ -218,21 +199,14 @@ public class MenuPanel extends JPanel {
         // set up the buttons
         meshRadioConfiguration();
 
-
         // add a subtitle
         constraints.gridy++;
         add(new JLabel("Shader"), constraints);
 
-        // Shader Radio
-        shaderGroup = new ButtonGroup();
-        simpleShader = new JRadioButton("Simple");
-        painterShader = new JRadioButton("Painter");
-        textureShader = new JRadioButton("Texture");
-        depthShader = new JRadioButton("Depth");
-        normalShader = new JRadioButton("Normal Map");
-        // set up the buttons
-        shaderRadioConfiguration();
-
+        // shader ComboBox
+        shaderComboBox = new JComboBox<>(ShaderFactory.getShaderSetAsStringArray());
+        shaderComboBoxConfiguration();
+        
         // add a subtitle
         constraints.gridy++;
         add(new JLabel("Render"), constraints);
@@ -269,7 +243,7 @@ public class MenuPanel extends JPanel {
         // set up the buttons
         optionConfiguration();
 
-        //add a update button (useless normally)
+        // add a update button (useless normally)
         constraints.gridy++;
         final JButton but = new JButton("Render");
         add(but, constraints);
@@ -279,6 +253,23 @@ public class MenuPanel extends JPanel {
 
         // start configuration
         setConfiguration();
+    }
+
+    private void shaderComboBoxConfiguration() {
+        constraints.gridy++;
+        shaderComboBox.addActionListener(e -> {
+            final String shaderSelected = (String) shaderComboBox.getSelectedItem();
+            if (!render.setShader(shaderSelected)) {
+                System.out.println("ERROR");
+                JOptionPane.showMessageDialog(filenameTextField,
+                        "Error : creating the shader using the Factory.",
+                        "Shader creation failed",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            
+            updateRender();
+        });
+        add(shaderComboBox, constraints);
     }
 
     /**
@@ -377,80 +368,6 @@ public class MenuPanel extends JPanel {
         add(filenameTextField, constraints);
     }
 
-    /**
-     * Set up the shader button group.
-     */
-    private void shaderRadioConfiguration() {
-        // simple shader
-        simpleShader.setMargin(insetsRadio);
-        constraints.gridy++;
-        simpleShader.addItemListener(e -> {
-            if (!simpleShader.isSelected()) {
-                return;
-            }
-            render.setShader(new SimpleShader());
-            updateRender();
-        });
-        add(simpleShader, constraints);
-        shaderGroup.add(simpleShader);
-
-        // painter shader
-        painterShader.setMargin(insetsRadio);
-        constraints.gridy++;
-        painterShader.addItemListener(e -> {
-            if (!painterShader.isSelected()) {
-                return;
-            }
-            render.setShader(new PainterShader());
-            updateRender();
-
-        });
-        add(painterShader, constraints);
-        shaderGroup.add(painterShader);
-
-        // texture shader
-        textureShader.setMargin(insetsRadio);
-        constraints.gridy++;
-        textureShader.addItemListener(e -> {
-            if (!textureShader.isSelected()) {
-                return;
-            }
-            final TextureShader texShader = new TextureShader();
-            texShader.setTexture("data/brick.jpg");
-            render.setShader(texShader);
-            updateRender();
-
-        });
-        add(textureShader, constraints);
-        shaderGroup.add(textureShader);
-
-        // depth shader
-        depthShader.setMargin(insetsRadio);
-        constraints.gridy++;
-        depthShader.addItemListener(e -> {
-            if (!depthShader.isSelected()) {
-                return;
-            }
-            render.setShader(new DepthShader());
-            updateRender();
-        });
-        add(depthShader, constraints);
-        shaderGroup.add(depthShader);
-
-        // normal shader
-        normalShader.setMargin(insetsRadio);
-        constraints.gridy++;
-        normalShader.addActionListener(e -> {
-            if (!normalShader.isSelected()) {
-                return;
-            }
-            render.setShader(new NormalMapShader());
-            updateRender();
-        });
-        add(normalShader, constraints);
-        shaderGroup.add(normalShader);
-
-    }
 
     /**
      * Set up the render button group.
@@ -548,7 +465,7 @@ public class MenuPanel extends JPanel {
         // set the start configuration
         simpleRasterizer.setSelected(SELECTED);
         cube.setSelected(SELECTED);
-        simpleShader.setSelected(SELECTED);
+        shaderComboBox.setSelectedIndex(0);
         drawWireframeCheckBox.setSelected(SELECTED);
     }
 
@@ -556,6 +473,5 @@ public class MenuPanel extends JPanel {
      * Update the render.
      */
     private void updateRender() {
-        renderPanel.setImage(render.render());
-    }
+        renderPanel.setImage(render.render());    }
 }

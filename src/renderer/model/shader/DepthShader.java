@@ -4,8 +4,6 @@ import java.awt.Color;
 
 import renderer.controller.ImageWrapper;
 import renderer.controller.Renderer;
-import renderer.model.DepthBuffer;
-import renderer.model.Fragment;
 import renderer.model.shader.colormap.ColorMap;
 import renderer.model.shader.colormap.ColorMapFactory;
 
@@ -13,6 +11,8 @@ import renderer.model.shader.colormap.ColorMapFactory;
  * Shader color the model in function of the depth of the surface.
  */
 public class DepthShader extends Shader {
+
+    private static final double EPSILON = 1E-8;
 
     /**
      * Represents the minimal Depth of the Model.
@@ -102,7 +102,8 @@ public class DepthShader extends Shader {
      * @return the color in the color gradient
      */
     private Color getColorFor(final double depth) {
-        if (depth < near || depth > far) {
+        if (depth - near < - EPSILON || depth - far > EPSILON) {
+            System.out.println("depth =" + depth + " " + "near = " + near);
             return Color.RED;
         }
 

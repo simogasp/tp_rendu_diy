@@ -3,8 +3,8 @@ package renderer.controller;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import renderer.model.Fragment;
-import renderer.model.Scene;
+import renderer.model.shader.Fragment;
+import renderer.model.mesh.Scene;
 import renderer.model.rasterizer.Rasterizer;
 import renderer.model.shader.Shader;
 import renderer.model.shader.TextureShader;

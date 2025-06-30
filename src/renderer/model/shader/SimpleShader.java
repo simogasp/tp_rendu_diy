@@ -1,7 +1,5 @@
 package renderer.model.shader;
 
-import renderer.model.Fragment;
-
 /**
  * Simple shader that just copy the interpolated color to the screen.
  * @author cdehais

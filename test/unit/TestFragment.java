@@ -7,7 +7,7 @@ import static org.junit.Assert.assertThrows;
 import java.awt.Color;
 
 import renderer.algebra.Vector;
-import renderer.model.Fragment;
+import renderer.model.shader.Fragment;
 
 /**
  * Unit tests for the Fragment class.
