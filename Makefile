@@ -72,7 +72,7 @@ createUML: compile
 
 # draw plant UML File 
 drawUML:
-	export PLANT_LIMIT_SIZE=8192
+	export PLANTUML_LIMIT_SIZE=8192
 	java -jar lib/plantuml-1.2025.3.jar net.sourceforge.plantuml.ant.PlantUmlTask $(UML_DIR)
 
 create-drawUML:createUML drawUML
