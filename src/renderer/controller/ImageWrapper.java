@@ -3,8 +3,8 @@ package renderer.controller;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import renderer.model.shader.Fragment;
-import renderer.model.mesh.Scene;
+import renderer.core.shader.Fragment;
+import renderer.core.mesh.Scene;
 
 public class ImageWrapper extends BufferedImage {
 

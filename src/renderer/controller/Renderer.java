@@ -6,15 +6,15 @@ import java.util.Optional;
 
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
-import renderer.model.shader.Fragment;
-import renderer.model.camera.Transformation;
-import renderer.model.light.Lighting;
-import renderer.model.mesh.Mesh;
-import renderer.model.mesh.Scene;
-import renderer.model.rasterizer.PerspectiveCorrectRasterizer;
-import renderer.model.rasterizer.Rasterizer;
-import renderer.model.shader.Shader;
-import renderer.model.shader.TextureShader;
+import renderer.core.shader.Fragment;
+import renderer.core.camera.Transformation;
+import renderer.core.light.Lighting;
+import renderer.core.mesh.Mesh;
+import renderer.core.mesh.Scene;
+import renderer.core.rasterizer.PerspectiveCorrectRasterizer;
+import renderer.core.rasterizer.Rasterizer;
+import renderer.core.shader.Shader;
+import renderer.core.shader.TextureShader;
 
 /**
  * The Renderer class drives the rendering pipeline: read in a scene, projects

@@ -1,4 +1,4 @@
-package renderer.model.mesh;
+package renderer.core.mesh;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

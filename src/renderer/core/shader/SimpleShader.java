@@ -1,4 +1,4 @@
-package renderer.model.shader;
+package renderer.core.shader;
 
 /**
  * Simple shader that just copy the interpolated color to the screen.

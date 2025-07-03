@@ -1,11 +1,11 @@
-package renderer.model.shader;
+package renderer.core.shader;
 
 import java.awt.Color;
 
 import renderer.controller.ImageWrapper;
 import renderer.controller.Renderer;
-import renderer.model.shader.colormap.ColorMap;
-import renderer.model.shader.colormap.ColorMapFactory;
+import renderer.core.shader.colormap.ColorMap;
+import renderer.core.shader.colormap.ColorMapFactory;
 
 /**
  * Shader color the model in function of the depth of the surface.

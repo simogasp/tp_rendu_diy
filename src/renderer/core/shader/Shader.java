@@ -1,4 +1,4 @@
-package renderer.model.shader;
+package renderer.core.shader;
 
 
 import renderer.controller.ImageWrapper;

@@ -1,11 +1,11 @@
-package renderer.model.shader;
+package renderer.core.shader;
 
 import java.awt.Color;
 
 import renderer.algebra.MathUtils;
 import renderer.controller.ImageWrapper;
 import renderer.controller.Renderer;
-import renderer.model.mesh.Texture;
+import renderer.core.mesh.Texture;
 
 /**
  * Simple shader that just copy the interpolated color to the screen,

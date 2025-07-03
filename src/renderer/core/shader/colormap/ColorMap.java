@@ -1,4 +1,4 @@
-package renderer.model.shader.colormap;
+package renderer.core.shader.colormap;
 
 import java.awt.Color;
 

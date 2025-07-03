@@ -1,4 +1,4 @@
-package renderer.model.camera;
+package renderer.core.camera;
 
 import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;

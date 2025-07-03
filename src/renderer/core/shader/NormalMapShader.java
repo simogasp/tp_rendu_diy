@@ -1,9 +1,9 @@
-package renderer.model.shader;
+package renderer.core.shader;
 
 import renderer.algebra.Vector;
 import renderer.controller.ImageWrapper;
 import renderer.controller.Renderer;
-import renderer.model.camera.Transformation;
+import renderer.core.camera.Transformation;
 
 public class NormalMapShader extends Shader {
 

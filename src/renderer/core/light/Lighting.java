@@ -1,4 +1,4 @@
-package renderer.model.light;
+package renderer.core.light;
 
 import java.util.LinkedList;
 import java.util.List;

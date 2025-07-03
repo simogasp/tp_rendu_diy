@@ -1,9 +1,9 @@
 import org.junit.Test;
 
-import renderer.model.shader.Fragment;
+import renderer.core.shader.Fragment;
 import renderer.controller.ImageWrapper;
-import renderer.model.rasterizer.Rasterizer;
-import renderer.model.shader.Shader;
+import renderer.core.rasterizer.Rasterizer;
+import renderer.core.shader.Shader;
 
 /**
  * Test class for the Rasterizer class

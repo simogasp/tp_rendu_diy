@@ -1,4 +1,4 @@
-package renderer.model.mesh;
+package renderer.core.mesh;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

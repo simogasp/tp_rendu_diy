@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import renderer.model.shader.Shader;
+import renderer.core.shader.Shader;
 
 @SuppressWarnings("unchecked")
 public final class ShaderFactory {
