@@ -13,7 +13,7 @@ import renderer.model.shader.colormap.ColorMapFactory;
 public class DepthShader extends Shader {
 
     /**
-     * Tolerance to considere a point nearer than the near point and farest than
+     * Tolerance to consider a point nearer than the near point and farthest than
      * the far point.
      */
     private static final double EPSILON = 1E-8;

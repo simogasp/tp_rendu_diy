@@ -1,9 +1,14 @@
 package renderer.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,9 +31,32 @@ public final class ShaderFactory {
      * Shader abstract class.
      */
     public static void init() {
-        // Récupére les noms de fichiers
-        String[] files = (new File("build/cls/renderer/model/shader/")).list();
-        // Vérifions qu'ils implantent la bonne interface
+        // Getthe classloader
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        // the package name in which the ShadeFactory is
+        String packageName = Shader.class.getPackage().getName();
+        String path = packageName.replace('.', '/');
+
+        // get all resources with that path --> it should be just one directory
+        Enumeration<URL> resources = null;
+        try {
+            resources = classLoader.getResources(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // some annoying boilerplate code
+        List<File> dirs = new ArrayList<>();
+
+        while (resources.hasMoreElements()) {
+            URL resource = resources.nextElement();
+            dirs.add(new File(resource.getFile()));
+        }
+        // dirs now should contain a single directory (even if it is a list) where the
+        // .class for Shader are
+        
+        String[] files = dirs.getFirst().list();
         for (int i = 0; i < files.length; i++) {
             Class<? extends Shader> shader;
             if (files[i].endsWith(".class")) {
@@ -39,7 +67,7 @@ public final class ShaderFactory {
                     e.printStackTrace();
                     shader = null;
                 }
-                if ((shader != null) && (Shader.class.isAssignableFrom(shader))) {
+                if ((shader != null) && (shader.getSuperclass() == Shader.class)) {
                     SHADER_SET.add(shader);
                 }
             }

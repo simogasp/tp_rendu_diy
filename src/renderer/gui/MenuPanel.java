@@ -56,6 +56,11 @@ public class MenuPanel extends JPanel {
     private static final int TAB_SIZE_PIXEL = 30;
 
     /**
+     * A Disabled constant.
+     */
+    private static final boolean DISABLED = false;
+
+    /**
      * The render panel of the app.
      */
     private final RenderPanel renderPanel;
@@ -224,7 +229,11 @@ public class MenuPanel extends JPanel {
         constraints.gridy++;
         add(new JLabel("Texture"), constraints);
 
-        textureComboBox = new JComboBox<>(getAvailableTexture());
+        String[] availableTexture = getAvailableTexture();
+        textureComboBox = new JComboBox<>(availableTexture);
+        if (availableTexture.length == 0) {
+            textureComboBox.setEnabled(DISABLED);
+        }
         textureConfiguration();
 
         // add a subtitle
@@ -287,11 +296,16 @@ public class MenuPanel extends JPanel {
         final Set<String> tmp = new HashSet<>();
         String endpoint = "data/";
         File data = new File(endpoint);
-        for (String file : data.list()) {
+
+        String[] fileList = data.list();
+        if (fileList == null) {
+            return new String[0];
+        }
+
+        for (String file : fileList) {
             if (file.endsWith(".jpg")) {
                 tmp.add(file);
             }
-
         }
 
         // transform to array

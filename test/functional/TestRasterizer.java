@@ -31,6 +31,7 @@ public class TestRasterizer {
 
         TestShader shader = new TestShader();
         ImageWrapper screen = new ImageWrapper();
+        shader.init(null, screen);
         Rasterizer rasterizer = new Rasterizer(shader);
 
         System.out.println("Rasterizing edge");
