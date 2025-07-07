@@ -614,7 +614,7 @@ public class MenuPanel extends JPanel {
         cube.setSelected(SELECTED);
         shaderComboBox.setSelectedItem("SimpleShader");
         textureComboBox.setSelectedItem("brick.jpg");
-        drawWireframeRadio.setSelected(SELECTED);
+        drawVertexRadio.setSelected(SELECTED);
     }
 
     /**
