@@ -32,6 +32,12 @@ public class ImageWrapper extends BufferedImage {
      */
     public ImageWrapper(Scene scene) {
         super(scene.getScreenW(), scene.getScreenH(), BufferedImage.TYPE_3BYTE_BGR);
+        for (int x = 0; x < scene.getScreenW(); x++) {
+            for (int y = 0; y < scene.getScreenH(); y++) {
+                // the back is dark grey
+                this.setRGB(x, y, 0x333333);
+            }
+        }
     }
 
     /**

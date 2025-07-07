@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
+import renderer.controller.ColorMapFactory.Maps;
+import renderer.core.shader.DepthShader;
 import renderer.core.shader.Fragment;
 import renderer.core.camera.Transformation;
 import renderer.core.light.Lighting;
@@ -43,7 +45,7 @@ public final class Renderer {
     private static final String DEFAULT_FILENAME = "data/example0.scene";
 
     /** The devider of the normal length. */
-    private static final double DIVIDER = 50;
+    private static final double DIVIDER = 100;
 
     /** The length of the normal. */
     private static double normalLength;
@@ -72,10 +74,13 @@ public final class Renderer {
     /** Whether the normals are drawn. */
     private boolean normalsRendered;
 
-    /** Whether the image is renderWired. */
+    /** Whether the image contains vertex. */
+    private boolean vertexRendered;
+
+    /** Whether the image contains edges. */
     private boolean wiredRendered;
 
-    /** Whether the image is renderSolid. */
+    /** Whether the image contains faces. */
     private boolean solidRendered;
 
     /**
@@ -231,16 +236,24 @@ public final class Renderer {
         // returned image
         final ImageWrapper res = new ImageWrapper(scene);
 
-        // intialize the shader
+        // intialize the shader with the Image Wrapper
         shader.init(this, res);
 
-        // wireframe rendering
+        if (vertexRendered) {
+            // render vertices if needed
+            renderVertices();
+        }
+
         if (wiredRendered) {
+            // render edges if needed
             renderWireframe();
         }
         if (solidRendered) {
+            // render faces if needed
             renderSolid();
         }
+
+        // render the normals if needed
         if (normalsRendered) {
             renderNormal();
         }
@@ -368,10 +381,9 @@ public final class Renderer {
             }
         }
 
-        // The length of the normal is approximately equal to 1/50 of the minimal
+        // The length of the normal is approximately equal to 1/100 of the diagonal
         // length of the bounding box
-        normalLength = Math.min(Math.min(maxX - minX, maxY - minY), maxZ - minZ)
-                / DIVIDER;
+        normalLength = (new Vector(maxX - minX, maxY - minY, maxZ - minZ)).norm() / DIVIDER;
     }
 
     /**
@@ -387,6 +399,16 @@ public final class Renderer {
                 final Fragment v2 = fragment[faces[i + ((j + 1) % 3)]];
                 rasterizer.rasterizeEdge(v1, v2);
             }
+        }
+    }
+
+    /**
+     * Renders the vertices of the mesh.
+     */
+    private void renderVertices() {
+        final Fragment[] fragment = projectVertices();
+        for (Fragment vertex : fragment) {
+            rasterizer.rasterizeVertex(vertex);
         }
     }
 
@@ -411,24 +433,26 @@ public final class Renderer {
 
     /**
      * Sets the shader to a instance of the given shader value.
+     * 
      * @param shaderSelected the name of a implemantation of Shader
      * @return whether the operation is successfull
      */
     public boolean setShader(final String shaderSelected) {
         final Optional<Shader> optionalShader = ShaderFactory.create(shaderSelected);
-            if (optionalShader.isPresent()) {
-                final Shader newShader = optionalShader.get();
-                setShader(newShader);
-                setTexture(texture);
-                setCombineWithBaseColor(combineColorState);
-                return true;
-            } else {
-                return false;
-            }
+        if (optionalShader.isPresent()) {
+            final Shader newShader = optionalShader.get();
+            setShader(newShader);
+            setTexture(texture);
+            setCombineWithBaseColor(combineColorState);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
      * Set the parameter combine with base color of the Texture shader.
+     * 
      * @param selected the new value
      */
     public void setCombineWithBaseColor(final boolean selected) {
@@ -440,6 +464,7 @@ public final class Renderer {
 
     /**
      * Set the texture from the file given.
+     * 
      * @param path the path of the file
      * @return whether the operation as been correctely made.
      */
@@ -452,5 +477,20 @@ public final class Renderer {
             return true;
         }
         return ((TextureShader) shader).setTexture(path);
+    }
+
+    /**
+     * Sets the Vertex render on te given value.
+     * @param selected the new value.
+     */
+    public void setVertexRendered(boolean selected) {
+        vertexRendered = selected;
+    }
+
+    public void setColorMap(Maps map) {
+        if (shader instanceof DepthShader) {
+            final DepthShader depthShader = (DepthShader) shader;
+            depthShader.setColorMap(map);
+        }
     }
 }

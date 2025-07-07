@@ -1,6 +1,8 @@
-package renderer.core.shader.colormap;
+package renderer.controller;
 
 import java.awt.Color;
+
+import renderer.core.shader.colormap.ColorMap;
 
 /**
  * Factory to build ColorMap.

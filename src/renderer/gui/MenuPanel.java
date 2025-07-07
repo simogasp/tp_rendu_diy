@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import renderer.controller.ColorMapFactory;
 import renderer.controller.Renderer;
 import renderer.controller.ShaderFactory;
 
@@ -104,6 +105,11 @@ public class MenuPanel extends JPanel {
     private final JTextField filenameTextField;
 
     /**
+     * The ColorMap selection comboBox.
+     */
+    private final JComboBox<ColorMapFactory.Maps> colorMapComboBox;
+    
+    /**
      * The texture ComboBox Input.
      */
     private final JComboBox<String> textureComboBox;
@@ -114,13 +120,23 @@ public class MenuPanel extends JPanel {
     private final JComboBox<String> shaderComboBox;
 
     /**
-     * The draw wire frame check box.
+     * The render radio button group.
      */
-    private final JCheckBox drawWireframeCheckBox;
+    private final ButtonGroup renderGroup;
+
     /**
-     * The draw solid check box.
+     * The draw vertex radio button.
      */
-    private final JCheckBox drawSolidCheckBox;
+    private final JRadioButton drawVertexRadio;
+
+    /**
+     * The draw wire frame radio button.
+     */
+    private final JRadioButton drawWireframeRadio;
+    /**
+     * The draw solid radio button.
+     */
+    private final JRadioButton drawSolidRadio;
     /**
      * The rasterizer group button.
      */
@@ -223,6 +239,16 @@ public class MenuPanel extends JPanel {
         shaderComboBox = new JComboBox<>(ShaderFactory.getShaderSetAsStringArray());
         shaderComboBoxConfiguration();
 
+        // DepthShader ColorMap
+
+        // add a subtitle
+        constraints.gridy++;
+        add(new JLabel("Depth Shader Color Map"), constraints);
+
+        // Combo box
+        colorMapComboBox = new JComboBox<>(ColorMapFactory.Maps.values());
+        colorMapConfiguration();
+
         // Texture Part
 
         // add a subtitle
@@ -240,11 +266,15 @@ public class MenuPanel extends JPanel {
         constraints.gridy++;
         add(new JLabel("Render"), constraints);
 
-        // check box to draw the normals
-        drawWireframeCheckBox = new JCheckBox("Draw wireframe");
+        renderGroup = new ButtonGroup();
+        // radio button to draw the normals
+        drawVertexRadio = new JRadioButton("Draw vertices");
 
-        // check box to enable the lighting
-        drawSolidCheckBox = new JCheckBox("Draw solid");
+        // radio button to draw the normals
+        drawWireframeRadio = new JRadioButton("Draw wireframe");
+
+        // radio button to enable the lighting
+        drawSolidRadio = new JRadioButton("Draw solid");
 
         // set up the buttons
         renderConfiguration();
@@ -276,15 +306,29 @@ public class MenuPanel extends JPanel {
         optionConfiguration();
 
         // add a update button (useless normally)
-        constraints.gridy++;
-        final JButton but = new JButton("Render");
-        add(but, constraints);
-        but.addActionListener(e -> {
-            updateRender();
-        });
+        // constraints.gridy++;
+        // final JButton but = new JButton("Render");
+        // add(but, constraints);
+        // but.addActionListener(e -> {
+        //     updateRender();
+        // });
 
         // start configuration
         setConfiguration();
+    }
+
+    /**
+     * Sets the color Map part up.
+     */
+    private void colorMapConfiguration() {
+        colorMapComboBox.setSelectedItem(ColorMapFactory.Maps.VERIDIS);
+        colorMapComboBox.addItemListener(e -> {
+            ColorMapFactory.Maps map = (ColorMapFactory.Maps) colorMapComboBox.getSelectedItem();
+            render.setColorMap(map);
+            updateRender();
+        });
+        constraints.gridy++;
+        add(colorMapComboBox, constraints);
     }
 
     /**
@@ -344,7 +388,8 @@ public class MenuPanel extends JPanel {
                         "Shader creation failed",
                         JOptionPane.ERROR_MESSAGE);
             }
-
+            textureComboBox.setEnabled(shaderSelected.contains("Texture"));
+            colorMapComboBox.setEnabled(shaderSelected.contains("Depth"));
             updateRender();
         });
         add(shaderComboBox, constraints);
@@ -451,25 +496,40 @@ public class MenuPanel extends JPanel {
      */
     private void renderConfiguration() {
         // remove the border on the component
-        drawWireframeCheckBox.setMargin(insetsCheckBox);
+        drawVertexRadio.setMargin(insetsRadio);
         constraints.gridy++;
-        add(drawWireframeCheckBox, constraints);
+        add(drawVertexRadio, constraints);
+
 
         // remove the border on the component
-        drawSolidCheckBox.setMargin(insetsCheckBox);
+        drawWireframeRadio.setMargin(insetsRadio);
         constraints.gridy++;
-        add(drawSolidCheckBox, constraints);
+        add(drawWireframeRadio, constraints);
+
+        // remove the border on the component
+        drawSolidRadio.setMargin(insetsRadio);
+        constraints.gridy++;
+        add(drawSolidRadio, constraints);
+
+        drawVertexRadio.addItemListener(e -> {
+            render.setVertexRendered(drawVertexRadio.isSelected());
+            updateRender();
+        });
 
         // add the interdependant Item listener
-        drawWireframeCheckBox.addItemListener(e -> {
-            render.setWiredRendered(drawWireframeCheckBox.isSelected());
+        drawWireframeRadio.addItemListener(e -> {
+            render.setWiredRendered(drawWireframeRadio.isSelected());
             updateRender();
         });
 
-        drawSolidCheckBox.addItemListener(e -> {
-            render.setSolidRendered(drawSolidCheckBox.isSelected());
+        drawSolidRadio.addItemListener(e -> {
+            render.setSolidRendered(drawSolidRadio.isSelected());
             updateRender();
         });
+
+        renderGroup.add(drawVertexRadio);
+        renderGroup.add(drawWireframeRadio);
+        renderGroup.add(drawSolidRadio);
 
     }
 
@@ -554,7 +614,7 @@ public class MenuPanel extends JPanel {
         cube.setSelected(SELECTED);
         shaderComboBox.setSelectedItem("SimpleShader");
         textureComboBox.setSelectedItem("brick.jpg");
-        drawWireframeCheckBox.setSelected(SELECTED);
+        drawWireframeRadio.setSelected(SELECTED);
     }
 
     /**

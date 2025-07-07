@@ -93,6 +93,29 @@ public class Rasterizer {
         f.setPosition(f.getY(), f.getX());
     }
 
+
+    /**
+     * Rasterizes a vertex on the screen.
+     * @param v the fragment drawn
+     */
+    public void rasterizeVertex(final Fragment v) {
+
+        int x1 = v.getX();
+        int y1 = v.getY();
+
+        // For now : just display the vertices
+        Fragment f = new Fragment(0, 0);
+        final int size = 2;
+        for (int i = 0; i < v.getNumAttributes(); i++) {
+            f.setAttribute(i, v.getAttribute(i));
+        }
+        for (int i = -size; i <= size; i++) {
+            for (int j = -size; j <= size; j++) {
+                f.setPosition(x1 + i, y1 + j);
+                shader.shade(f);
+            }
+        }
+    }
     /**
      * Rasterizes the edge between the projected vectors v1 and v2.
      * Generates Fragment's and calls the Shader::shade() method on each of them.
@@ -109,21 +132,10 @@ public class Rasterizer {
         int x2 = v2.getX();
         int y2 = v2.getY();
 
-        // For now : just display the vertices
-        Fragment f = new Fragment(0, 0);
-        final int size = 2;
-        for (int i = 0; i < v1.getNumAttributes(); i++) {
-            f.setAttribute(i, v1.getAttribute(i));
-        }
-        for (int i = -size; i <= size; i++) {
-            for (int j = -size; j <= size; j++) {
-                f.setPosition(x1 + i, y1 + j);
-                shader.shade(f);
-            }
-        }
+        
 
         // Uncomment the following block of code for drawing the wireframe
-        // int numAttributes = v1.getNumAttributes (); //<??
+        // int numAttributes = v1.getNumAttributes ();
         Fragment fragment = new Fragment(0, 0);
 
         boolean sym = (Math.abs(y2 - y1) > Math.abs(x2 - x1));
@@ -180,7 +192,7 @@ public class Rasterizer {
                 y += ystep;
                 err -= dx;
             }
-        } //>??
+        }
     }
 
     /**
@@ -207,9 +219,9 @@ public class Rasterizer {
      * @param v3 the third vertex of the triangle
      * @return the barycentric coordinates matrix of the triangle
      */
-    protected static Matrix makeBarycentricCoordsMatrix(Fragment v1,
-            Fragment v2,
-            Fragment v3) {
+    protected static Matrix makeBarycentricCoordsMatrix(final Fragment v1,
+            final Fragment v2,
+            final Fragment v3) {
         final int squareSize = 3;
         Matrix cMat = new Matrix(squareSize, squareSize);
 
@@ -241,7 +253,7 @@ public class Rasterizer {
      * @param v3 the third vertex of the triangle
      * @throws SizeMismatchException if the size of the Fragment is not correct.
      */
-    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3)
+    public void rasterizeFace(final Fragment v1, final Fragment v2, final Fragment v3)
             throws SizeMismatchException {
 
         final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
@@ -253,8 +265,10 @@ public class Rasterizer {
         final int ymin = Math.min(v1.getY(), Math.min(v2.getY(), v3.getY()));
         final int xmax = Math.max(v1.getX(), Math.max(v2.getX(), v3.getX()));
         final int ymax = Math.max(v1.getY(), Math.max(v2.getY(), v3.getY()));
-
-        Fragment fragment = new Fragment(0, 0);
+        
+        final double EPSILON = (new Vector(ymax - ymin, xmax - xmin)).norm() / 1e6;
+        // final double EPSILON = 1/10;
+        final Fragment fragment = new Fragment(0, 0);
         final int numAttributes = fragment.getNumAttributes();
 
         for (int x = xmin; x <= xmax; x++) {
@@ -266,9 +280,9 @@ public class Rasterizer {
 
                     final Vector v = new Vector(1.0, (double) x, (double) y);
                     final Vector bar = cMat.multiply(v);
-                    if ((bar.get(0) >= 0.0)
-                            && (bar.get(1) >= 0.0)
-                            && (bar.get(2) >= 0.0)) {
+                    if ((bar.get(0) >= - EPSILON)
+                            && (bar.get(1) >= - EPSILON)
+                            && (bar.get(2) >= - EPSILON)) {
                         for (int i = 0; i < numAttributes; i++) {
                             fragment.setAttribute(i, bar.get(0) * v1.getAttribute(i)
                                     + bar.get(1) * v2.getAttribute(i)

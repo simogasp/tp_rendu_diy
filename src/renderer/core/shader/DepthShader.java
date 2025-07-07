@@ -2,10 +2,11 @@ package renderer.core.shader;
 
 import java.awt.Color;
 
+import renderer.controller.ColorMapFactory;
+import renderer.controller.ColorMapFactory.Maps;
 import renderer.controller.ImageWrapper;
 import renderer.controller.Renderer;
 import renderer.core.shader.colormap.ColorMap;
-import renderer.core.shader.colormap.ColorMapFactory;
 
 /**
  * Shader color the model in function of the depth of the surface.
@@ -138,5 +139,9 @@ public class DepthShader extends Shader {
         final int g = (int) (c1.getGreen() * (1 - alpha) + c2.getGreen() * alpha);
         final int b = (int) (c1.getBlue() * (1 - alpha) + c2.getBlue() * alpha);
         return new Color(r, g, b);
+    }
+
+    public void setColorMap(Maps map) {
+        colorMap = ColorMapFactory.create(map);
     }
 }
