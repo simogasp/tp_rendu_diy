@@ -1,10 +1,11 @@
 package renderer.core.rasterizer;
 
 import renderer.algebra.Matrix;
+import renderer.algebra.Vector;
+import renderer.algebra.MathUtils;
 import renderer.algebra.SizeMismatchException;
 import renderer.core.shader.Fragment;
 import renderer.core.shader.Shader;
-import renderer.algebra.Vector;
 
 /**
  * The Rasterizer class is responsible for the discretization of geometric
@@ -267,7 +268,6 @@ public class Rasterizer {
         final int ymax = Math.max(v1.getY(), Math.max(v2.getY(), v3.getY()));
         
         final double EPSILON = (new Vector(ymax - ymin, xmax - xmin)).norm() / 1e6;
-        // final double EPSILON = 1/10;
         final Fragment fragment = new Fragment(0, 0);
         final int numAttributes = fragment.getNumAttributes();
 
@@ -284,9 +284,15 @@ public class Rasterizer {
                             && (bar.get(1) >= - EPSILON)
                             && (bar.get(2) >= - EPSILON)) {
                         for (int i = 0; i < numAttributes; i++) {
-                            fragment.setAttribute(i, bar.get(0) * v1.getAttribute(i)
-                                    + bar.get(1) * v2.getAttribute(i)
-                                    + bar.get(2) * v3.getAttribute(i));
+                            if ( 1 <= i && i <= 3){   
+                                fragment.setAttribute(i, MathUtils.clamp(bar.get(0) * v1.getAttribute(i)
+                                        + bar.get(1) * v2.getAttribute(i)
+                                        + bar.get(2) * v3.getAttribute(i), 0., 1.));
+                            } else {
+                                fragment.setAttribute(i, bar.get(0) * v1.getAttribute(i)
+                                        + bar.get(1) * v2.getAttribute(i)
+                                        + bar.get(2) * v3.getAttribute(i));
+                            } 
                         }
                         shader.shade(fragment);
                     }
