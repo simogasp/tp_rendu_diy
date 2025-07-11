@@ -23,6 +23,14 @@ You can choose differents shader to render the model in the shader menu.
 
 ![ShaderMenu](./data/screenshots/Shader_menu.png)
 
+Selecting The DepthShader enabled the DepthShaderColorMap selection to switch the color map used to render the model with a depthShader.
+
+![DepthColorMap](./data/screenshots/ShaderColorMap_menu.png)
+
+Selecting the TextureShader enabled the Texture menu to switch the menu availabled in the `data` folder when starting the application.
+
+![TextureMenu](./data/screenshots/Shader_Texture_menu.png)
+
 ### Render
 
 You can choose what you want the GUI to render in the render menu.
@@ -42,9 +50,6 @@ option menu.
 
 ![OptionMenu](./data/screenshots/Option_menu.png)
 
-### Render Button
-
-It will update the view panel. Normally this button is useless. The view panel auto update when changing parameters.
 
 ## MakeFile
 
@@ -112,7 +117,7 @@ You can compile the project using Ant version 1.10.14 and later
 ([download here](https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.15-bin.tar.gz)).
 
 You can also install ant package as any other package by the command on your
-personal computer:
+**personal computer**:
 
 ```bash
 sudo snap install ant --stable --classic
