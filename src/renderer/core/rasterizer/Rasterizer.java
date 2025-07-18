@@ -285,7 +285,7 @@ public class Rasterizer {
                         for (int i = 0; i < numAttributes; i++) {
                             if (1 <= i && i <= 3) {
                                 // color between 0 and 1;
-                                fragment.setAttribute(i, Math.clamp(bar.get(0) * v1.getAttribute(i)
+                                fragment.setAttribute(i, MathUtils.clamp(bar.get(0) * v1.getAttribute(i)
                                         + bar.get(1) * v2.getAttribute(i)
                                         + bar.get(2) * v3.getAttribute(i), 0., 1.));
                             } else {
