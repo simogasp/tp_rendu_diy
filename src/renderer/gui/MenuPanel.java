@@ -5,23 +5,25 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import renderer.Renderer;
-import renderer.shader.DepthShader;
-import renderer.shader.NormalMapShader;
-import renderer.shader.PainterShader;
-import renderer.shader.SimpleShader;
-import renderer.shader.TextureShader;
+import renderer.controller.ColorMapFactory;
+import renderer.controller.Renderer;
+import renderer.controller.ShaderFactory;
 
 public class MenuPanel extends JPanel {
 
@@ -53,6 +55,11 @@ public class MenuPanel extends JPanel {
      * The shift of the button.
      */
     private static final int TAB_SIZE_PIXEL = 30;
+
+    /**
+     * A Disabled constant.
+     */
+    private static final boolean DISABLED = false;
 
     /**
      * The render panel of the app.
@@ -98,38 +105,38 @@ public class MenuPanel extends JPanel {
     private final JTextField filenameTextField;
 
     /**
-     * The shader selection group.
+     * The ColorMap selection comboBox.
      */
-    private final ButtonGroup shaderGroup;
+    private final JComboBox<ColorMapFactory.Maps> colorMapComboBox;
+    
     /**
-     * The simple shader selection button.
+     * The texture ComboBox Input.
      */
-    private final JRadioButton simpleShader;
-    /**
-     * The painter shader selection button.
-     */
-    private final JRadioButton painterShader;
-    /**
-     * The texture shader selection button.
-     */
-    private final JRadioButton textureShader;
-    /**
-     * The depth shader selection button.
-     */
-    private final JRadioButton depthShader;
-    /**
-     * The normal shader selection button.
-     */
-    private final JRadioButton normalShader;
+    private final JComboBox<String> textureComboBox;
 
     /**
-     * The draw wire frame check box.
+     * The shader combo box.
      */
-    private final JCheckBox drawWireframeCheckBox;
+    private final JComboBox<String> shaderComboBox;
+
     /**
-     * The draw solid check box.
+     * The render radio button group.
      */
-    private final JCheckBox drawSolidCheckBox;
+    private final ButtonGroup renderGroup;
+
+    /**
+     * The draw vertex radio button.
+     */
+    private final JRadioButton drawVertexRadio;
+
+    /**
+     * The draw wire frame radio button.
+     */
+    private final JRadioButton drawWireframeRadio;
+    /**
+     * The draw solid radio button.
+     */
+    private final JRadioButton drawSolidRadio;
     /**
      * The rasterizer group button.
      */
@@ -151,11 +158,17 @@ public class MenuPanel extends JPanel {
      * The lighting option check box.
      */
     private final JCheckBox lightingCheckBox;
+    /**
+     * The combine texture with color check box.
+     */
+    private final JCheckBox combineColorCheckBox;
 
+    // ===================================================================================
+    // controller part
     /**
      * The renderer used to make a render.
      */
-    private final Renderer renderer;
+    private final Renderer render;
 
     /**
      * Creates a MenuPanel from a RenderPanel.
@@ -163,14 +176,30 @@ public class MenuPanel extends JPanel {
      * @param renderPanel the render panel
      */
     public MenuPanel(final RenderPanel renderPanel) {
+        // set up the panel
         super(IS_DOUBLE_BUFFERED);
-        this.renderer = new Renderer();
+
+        // set up the renderer
+        Renderer tmp;
+        try {
+            tmp = new Renderer();
+        } catch (IOException e) {
+            // should not be reach
+            e.printStackTrace();
+            tmp = null;
+            ShaderFactory.init();
+        }
+        render = tmp;
+
+        // set up the renderPanel
         this.renderPanel = renderPanel;
-        renderer.setScreen(renderPanel);
+
         // add a grid bag layout
         setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
+
+        // set up the button insets
 
         // radio insets
         insetsRadio = new JButton().getInsets();
@@ -182,11 +211,14 @@ public class MenuPanel extends JPanel {
         // create a tab
         insetsCheckBox.left = TAB_SIZE_PIXEL;
 
+        // fill the panel
+        // add a title
         constraints.gridx = 0;
         constraints.gridy++;
         add(new JLabel("MENU"), constraints);
 
         // mesh radio
+        // add a subtitle
         constraints.gridy++;
         add(new JLabel("Filename"), constraints);
         meshGroup = new ButtonGroup();
@@ -196,39 +228,68 @@ public class MenuPanel extends JPanel {
         texture = new JRadioButton("Texture");
 
         filenameTextField = new JTextField();
+        // set up the buttons
         meshRadioConfiguration();
 
+        // add a subtitle
         constraints.gridy++;
         add(new JLabel("Shader"), constraints);
 
-        // Shader Radio
-        shaderGroup = new ButtonGroup();
-        simpleShader = new JRadioButton("Simple");
-        painterShader = new JRadioButton("Painter");
-        textureShader = new JRadioButton("Texture");
-        depthShader = new JRadioButton("Depth");
-        normalShader = new JRadioButton("Normal Map");
-        shaderRadioConfiguration();
+        // shader ComboBox
+        shaderComboBox = new JComboBox<>(ShaderFactory.getShaderSetAsStringArray());
+        shaderComboBoxConfiguration();
 
+        // DepthShader ColorMap
+
+        // add a subtitle
+        constraints.gridy++;
+        add(new JLabel("Depth Shader Color Map"), constraints);
+
+        // Combo box
+        colorMapComboBox = new JComboBox<>(ColorMapFactory.Maps.values());
+        colorMapConfiguration();
+
+        // Texture Part
+
+        // add a subtitle
+        constraints.gridy++;
+        add(new JLabel("Texture"), constraints);
+
+        String[] availableTexture = getAvailableTexture();
+        textureComboBox = new JComboBox<>(availableTexture);
+        if (availableTexture.length == 0) {
+            textureComboBox.setEnabled(DISABLED);
+        }
+        textureConfiguration();
+
+        // add a subtitle
         constraints.gridy++;
         add(new JLabel("Render"), constraints);
 
-        // check box to draw the normals
-        drawWireframeCheckBox = new JCheckBox("Draw wireframe");
+        renderGroup = new ButtonGroup();
+        // radio button to draw the normals
+        drawVertexRadio = new JRadioButton("Draw vertices");
 
-        // check box to enable the lighting
-        drawSolidCheckBox = new JCheckBox("Draw solid");
+        // radio button to draw the normals
+        drawWireframeRadio = new JRadioButton("Draw wireframe");
 
+        // radio button to enable the lighting
+        drawSolidRadio = new JRadioButton("Draw solid");
+
+        // set up the buttons
         renderConfiguration();
 
+        // add a subtitle
         constraints.gridy++;
         add(new JLabel("Rasterizer"), constraints);
+
         rasterizerGroup = new ButtonGroup();
         simpleRasterizer = new JRadioButton("Rasterizer");
         persperctiveRasterizer = new JRadioButton("Perspective Rasterizer");
-
+        // set up the buttons
         rasterizerConfiguration();
 
+        // add a subtitle
         constraints.gridy++;
         add(new JLabel("Option"), constraints);
 
@@ -236,19 +297,102 @@ public class MenuPanel extends JPanel {
         drawNormalCheckBox = new JCheckBox("Draw normals");
 
         // check box to enable the lighting
-        lightingCheckBox = new JCheckBox("lighting");
+        lightingCheckBox = new JCheckBox("Lighting");
 
+        // check box to combine texture and origin color
+        combineColorCheckBox = new JCheckBox("Combine color with texture");
+
+        // set up the buttons
         optionConfiguration();
 
-        constraints.gridy++;
-        final JButton but = new JButton("Render");
-        add(but, constraints);
-        but.addActionListener(e -> {
-            updateRender();
-        });
+        // add a update button (useless normally)
+        // constraints.gridy++;
+        // final JButton but = new JButton("Render");
+        // add(but, constraints);
+        // but.addActionListener(e -> {
+        //     updateRender();
+        // });
 
         // start configuration
         setConfiguration();
+    }
+
+    /**
+     * Sets the color Map part up.
+     */
+    private void colorMapConfiguration() {
+        colorMapComboBox.setSelectedItem(ColorMapFactory.Maps.VERIDIS);
+        colorMapComboBox.addItemListener(e -> {
+            ColorMapFactory.Maps map = (ColorMapFactory.Maps) colorMapComboBox.getSelectedItem();
+            render.setColorMap(map);
+            updateRender();
+        });
+        constraints.gridy++;
+        add(colorMapComboBox, constraints);
+    }
+
+    /**
+     * return the list of path from data which finished by `.jpg`.
+     *
+     * @return a array of String
+     */
+    private String[] getAvailableTexture() {
+        final Set<String> tmp = new HashSet<>();
+        String endpoint = "data/";
+        File data = new File(endpoint);
+
+        String[] fileList = data.list();
+        if (fileList == null) {
+            return new String[0];
+        }
+
+        for (String file : fileList) {
+            if (file.endsWith(".jpg")) {
+                tmp.add(file);
+            }
+        }
+
+        // transform to array
+        final String[] res = new String[tmp.size()];
+        Iterator<String> it = tmp.iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            res[i++] = it.next();
+        }
+        return res;
+    }
+
+    private void textureConfiguration() {
+        constraints.gridy++;
+        textureComboBox.addActionListener(e -> {
+            final String textureSelected = "data/"
+                    + (String) textureComboBox.getSelectedItem();
+            if (!render.setTexture(textureSelected)) {
+                JOptionPane.showMessageDialog(textureComboBox,
+                        "Error : Texture could not been correctly loaded.",
+                        "Texture Loading",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            updateRender();
+        });
+        add(textureComboBox, constraints);
+    }
+
+    private void shaderComboBoxConfiguration() {
+        constraints.gridy++;
+        shaderComboBox.addActionListener(e -> {
+            final String shaderSelected = (String) shaderComboBox.getSelectedItem();
+            if (!render.setShader(shaderSelected)) {
+                JOptionPane.showMessageDialog(shaderComboBox,
+                        "Error : creating the shader using the Factory.",
+                        "Shader creation failed",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            textureComboBox.setEnabled(shaderSelected.contains("Texture"));
+            colorMapComboBox.setEnabled(shaderSelected.contains("Depth"));
+            updateRender();
+        });
+        add(shaderComboBox, constraints);
     }
 
     /**
@@ -265,7 +409,7 @@ public class MenuPanel extends JPanel {
                 return;
             }
             try {
-                renderer.init(CUBE_ENDPOINT);
+                render.setScene(CUBE_ENDPOINT);
             } catch (final IOException e1) {
                 // should not be reach
                 e1.printStackTrace();
@@ -283,7 +427,7 @@ public class MenuPanel extends JPanel {
                 return;
             }
             try {
-                renderer.init(RABBIT_ENDPOINT);
+                render.setScene(RABBIT_ENDPOINT);
             } catch (final IOException e1) {
                 // should not be reach
                 e1.printStackTrace();
@@ -301,7 +445,7 @@ public class MenuPanel extends JPanel {
                 return;
             }
             try {
-                renderer.init(SUZANNE_ENDPOINT);
+                render.setScene(SUZANNE_ENDPOINT);
             } catch (final IOException e1) {
                 // should not be reach
                 e1.printStackTrace();
@@ -319,7 +463,7 @@ public class MenuPanel extends JPanel {
                 return;
             }
             try {
-                renderer.init(TEXTURE_ENDPOINT);
+                render.setScene(TEXTURE_ENDPOINT);
             } catch (final IOException e1) {
                 // should not be reach
                 e1.printStackTrace();
@@ -335,7 +479,7 @@ public class MenuPanel extends JPanel {
         constraints.gridy++;
         filenameTextField.addActionListener(e -> {
             try {
-                renderer.init("data/" + filenameTextField.getText());
+                render.setScene("data/" + filenameTextField.getText());
             } catch (final IOException e1) {
                 JOptionPane.showMessageDialog(filenameTextField,
                         e1.getMessage(),
@@ -348,102 +492,44 @@ public class MenuPanel extends JPanel {
     }
 
     /**
-     * Set up the shader button group.
-     */
-    private void shaderRadioConfiguration() {
-        // simple shader
-        simpleShader.setMargin(insetsRadio);
-        constraints.gridy++;
-        simpleShader.addItemListener(e -> {
-            if (!simpleShader.isSelected()) {
-                return;
-            }
-            renderer.setShader(new SimpleShader(renderPanel));
-            updateRender();
-        });
-        add(simpleShader, constraints);
-        shaderGroup.add(simpleShader);
-
-        // painter shader
-        painterShader.setMargin(insetsRadio);
-        constraints.gridy++;
-        painterShader.addItemListener(e -> {
-            if (!painterShader.isSelected()) {
-                return;
-            }
-            renderer.setShader(new PainterShader(renderPanel));
-            updateRender();
-
-        });
-        add(painterShader, constraints);
-        shaderGroup.add(painterShader);
-
-        // texture shader
-        textureShader.setMargin(insetsRadio);
-        constraints.gridy++;
-        textureShader.addItemListener(e -> {
-            if (!textureShader.isSelected()) {
-                return;
-            }
-            final TextureShader texShader = new TextureShader(renderPanel);
-            texShader.setTexture("data/brick.jpg");
-            renderer.setShader(texShader);
-            updateRender();
-
-        });
-        add(textureShader, constraints);
-        shaderGroup.add(textureShader);
-
-        // depth shader
-        depthShader.setMargin(insetsRadio);
-        constraints.gridy++;
-        depthShader.addItemListener(e -> {
-            if (!depthShader.isSelected()) {
-                return;
-            }
-            renderer.setShader(new DepthShader(renderPanel));
-            updateRender();
-        });
-        add(depthShader, constraints);
-        shaderGroup.add(depthShader);
-
-        // normal shader
-        normalShader.setMargin(insetsRadio);
-        constraints.gridy++;
-        normalShader.addActionListener(e -> {
-            if (!normalShader.isSelected()) {
-                return;
-            }
-            renderer.setShader(new NormalMapShader(renderPanel, renderer.getXform()));
-            updateRender();
-        });
-        add(normalShader, constraints);
-        shaderGroup.add(normalShader);
-
-    }
-
-    /**
      * Set up the render button group.
      */
     private void renderConfiguration() {
         // remove the border on the component
-        drawWireframeCheckBox.setMargin(insetsCheckBox);
+        drawVertexRadio.setMargin(insetsRadio);
         constraints.gridy++;
-        add(drawWireframeCheckBox, constraints);
+        add(drawVertexRadio, constraints);
+
 
         // remove the border on the component
-        drawSolidCheckBox.setMargin(insetsCheckBox);
+        drawWireframeRadio.setMargin(insetsRadio);
         constraints.gridy++;
-        add(drawSolidCheckBox, constraints);
+        add(drawWireframeRadio, constraints);
+
+        // remove the border on the component
+        drawSolidRadio.setMargin(insetsRadio);
+        constraints.gridy++;
+        add(drawSolidRadio, constraints);
+
+        drawVertexRadio.addItemListener(e -> {
+            render.setVertexRendered(drawVertexRadio.isSelected());
+            updateRender();
+        });
 
         // add the interdependant Item listener
-        drawWireframeCheckBox.addItemListener(e -> {
+        drawWireframeRadio.addItemListener(e -> {
+            render.setWiredRendered(drawWireframeRadio.isSelected());
             updateRender();
         });
 
-        drawSolidCheckBox.addItemListener(e -> {
+        drawSolidRadio.addItemListener(e -> {
+            render.setSolidRendered(drawSolidRadio.isSelected());
             updateRender();
         });
+
+        renderGroup.add(drawVertexRadio);
+        renderGroup.add(drawWireframeRadio);
+        renderGroup.add(drawSolidRadio);
 
     }
 
@@ -455,10 +541,11 @@ public class MenuPanel extends JPanel {
         // rasterizer
         simpleRasterizer.setMargin(insetsRadio);
         constraints.gridy++;
-        simpleRasterizer.addActionListener(e -> {
+        simpleRasterizer.addItemListener(e -> {
             if (!simpleRasterizer.isSelected()) {
                 return;
             }
+            render.setRasterizer();
             updateRender();
         });
         add(simpleRasterizer, constraints);
@@ -467,10 +554,11 @@ public class MenuPanel extends JPanel {
         // rasterizer
         persperctiveRasterizer.setMargin(insetsRadio);
         constraints.gridy++;
-        persperctiveRasterizer.addActionListener(e -> {
+        persperctiveRasterizer.addItemListener(e -> {
             if (!persperctiveRasterizer.isSelected()) {
                 return;
             }
+            render.setPerpectiveCorrectRasterizer();
             updateRender();
         });
         add(persperctiveRasterizer, constraints);
@@ -484,9 +572,7 @@ public class MenuPanel extends JPanel {
     private void optionConfiguration() {
         drawNormalCheckBox.addItemListener(new ItemListener() {
             public void itemStateChanged(final ItemEvent e) {
-                System.out.println(drawNormalCheckBox.isSelected()
-                        ? "Should draw normal"
-                        : "should not draw normals");
+                render.setNormalsRendered(drawNormalCheckBox.isSelected());
                 updateRender();
             }
         });
@@ -498,14 +584,25 @@ public class MenuPanel extends JPanel {
 
         lightingCheckBox.addItemListener(new ItemListener() {
             public void itemStateChanged(final ItemEvent e) {
+                render.setLightingEnabled(lightingCheckBox.isSelected());
                 updateRender();
             }
         });
+
         // remove the border on the component
         lightingCheckBox.setMargin(insetsCheckBox);
         constraints.gridy++;
         add(lightingCheckBox, constraints);
 
+        combineColorCheckBox.addItemListener(e -> {
+            render.setCombineWithBaseColor(combineColorCheckBox.isSelected());
+            updateRender();
+        });
+
+        // remove the border on the component
+        combineColorCheckBox.setMargin(insetsCheckBox);
+        constraints.gridy++;
+        add(combineColorCheckBox, constraints);
     }
 
     /**
@@ -513,34 +610,17 @@ public class MenuPanel extends JPanel {
      */
     private void setConfiguration() {
         // set the start configuration
-        cube.setSelected(SELECTED);
-        simpleShader.setSelected(SELECTED);
-        drawWireframeCheckBox.setSelected(SELECTED);
         simpleRasterizer.setSelected(SELECTED);
+        cube.setSelected(SELECTED);
+        shaderComboBox.setSelectedItem("SimpleShader");
+        textureComboBox.setSelectedItem("brick.jpg");
+        drawVertexRadio.setSelected(SELECTED);
     }
 
     /**
      * Update the render.
      */
     private void updateRender() {
-        renderPanel.clear();
-        if (simpleRasterizer.isSelected()) {
-            renderer.setRasterizer();
-        } else {
-            renderer.setPerpectiveRasterizer();
-        }
-        renderer.resetShader();
-        renderer.initShader();
-        renderer.setLightingEnabled(lightingCheckBox.isSelected());
-        if (drawNormalCheckBox.isSelected()) {
-            System.out.println("Should print Normal");
-        }
-        if (drawSolidCheckBox.isSelected()) {
-            renderer.renderSolid();
-        }
-        if (drawWireframeCheckBox.isSelected()) {
-            renderer.renderWireframe();
-        }
-        renderPanel.repaint();
+        renderPanel.setImage(render.render());
     }
 }

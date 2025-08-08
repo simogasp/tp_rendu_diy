@@ -23,6 +23,14 @@ You can choose differents shader to render the model in the shader menu.
 
 ![ShaderMenu](./data/screenshots/Shader_menu.png)
 
+Selecting The DepthShader enabled the DepthShaderColorMap selection to switch the color map used to render the model with a depthShader.
+
+![DepthColorMap](./data/screenshots/ShaderColorMap_menu.png)
+
+Selecting the TextureShader enabled the Texture menu to switch the menu availabled in the `data` folder when starting the application.
+
+![TextureMenu](./data/screenshots/Shader_Texture_menu.png)
+
 ### Render
 
 You can choose what you want the GUI to render in the render menu.
@@ -42,9 +50,6 @@ option menu.
 
 ![OptionMenu](./data/screenshots/Option_menu.png)
 
-### Render Button
-
-It will update the view panel.
 
 ## MakeFile
 
@@ -55,23 +60,10 @@ Use the following command to build the project:
 ```bash
 make
 ```
-
-### Clean
-
-it compiles all the sources and places them in the `build` folder.
+or
 
 ```bash
-make clean
-```
-
-cleans the `build` folder.
-
-### Tests
-
-To run the tests use the following command:
-
-```bash
-make tests
+make all
 ```
 
 ### Run
@@ -81,6 +73,34 @@ To run the project you can use the following command:
 ```bash
 make run
 ```
+
+### Clean
+
+It compiles all the sources and places them in the `build` folder.
+
+```bash
+make clean
+```
+
+cleans the `build` folder.
+
+
+### Generate JavaDoc
+
+To generate the JavaDoc, do :
+```bash
+make doc
+```
+
+
+### Tests
+
+To run the tests use the following command:
+
+```bash
+make tests
+```
+
 
 ## Ant
 
@@ -97,7 +117,7 @@ You can compile the project using Ant version 1.10.14 and later
 ([download here](https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.15-bin.tar.gz)).
 
 You can also install ant package as any other package by the command on your
-personal computer:
+**personal computer**:
 
 ```bash
 sudo snap install ant --stable --classic
@@ -154,13 +174,13 @@ ant compile-test
 
 ### Clean
 
-it compiles all the sources and places them in the `bin/cls` folder.
+it compiles all the sources and places them in the `build/cls` folder.
 
 ```bash
 ant clean
 ```
 
-cleans the `bin` folder.
+cleans the `build` folder and the tests reports directory   .
 
 ### Tests
 

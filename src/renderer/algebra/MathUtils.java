@@ -3,7 +3,7 @@ package renderer.algebra;
 /**
  * The MathUtils class provides utility methods for mathematical operations.
  */
-public final class MathUtils {
+public final class  MathUtils {
 
     /**
      * The max value on 8 bits.

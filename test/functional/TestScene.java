@@ -1,7 +1,8 @@
 import org.junit.Test;
 
-import renderer.Scene;
 import renderer.algebra.Vector;
+import renderer.core.mesh.Scene;
+
 
 /**
  * Test class from the Scene class.

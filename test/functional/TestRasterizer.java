@@ -1,9 +1,9 @@
 import org.junit.Test;
 
-import renderer.Fragment;
-import renderer.gui.RenderPanel;
-import renderer.rasterizer.Rasterizer;
-import renderer.shader.Shader;
+import renderer.core.shader.Fragment;
+import renderer.controller.ImageWrapper;
+import renderer.core.rasterizer.Rasterizer;
+import renderer.core.shader.Shader;
 
 /**
  * Test class for the Rasterizer class
@@ -14,8 +14,8 @@ public class TestRasterizer {
 
     static class TestShader extends Shader {
 
-        public TestShader(RenderPanel screen) {
-            super(screen);
+        public TestShader() {
+            super();
         }
 
         public void shade(Fragment fragment) {
@@ -29,7 +29,9 @@ public class TestRasterizer {
 
         System.out.println("OFF\n# Test Start");
 
-        TestShader shader = new TestShader(new RenderPanel(null, 256, 256));
+        TestShader shader = new TestShader();
+        ImageWrapper screen = new ImageWrapper();
+        shader.init(null, screen);
         Rasterizer rasterizer = new Rasterizer(shader);
 
         System.out.println("Rasterizing edge");
