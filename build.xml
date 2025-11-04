@@ -1,4 +1,4 @@
-<project name="Renderer" default="compile" basedir=".">
+<project name="Renderer" default="compile" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">
 
 	<property name="java" location="src" />
 	<property name="bin" location="build" />
@@ -29,6 +29,11 @@
 		classname="net.sourceforge.plantuml.ant.PlantUmlTask"
 		classpath="lib/plantuml-1.2025.3.jar"
 	/>
+
+	<!-- Add JaCoCo taskdef for coverage report -->
+	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+		<classpath path="${lib}/jacocoant.jar"/>
+	</taskdef>
 
 	<path id="libraries">
 		<files includes="${lib}/hamcrest-2.2.jar" />
@@ -206,6 +211,54 @@
 			<fileset dir="${java}" />
 			<formatter type="plain" />
 		</checkstyle>
+	</target>
+
+	<!-- Coverage target -->
+	<target name="coverage" depends="compile-test" description="Run tests with coverage">
+		<mkdir dir="${bin}/coverage"/>
+		
+		<!-- Run all tests with JaCoCo agent -->
+		<jacoco:coverage destfile="${bin}/coverage/jacoco.exec">
+			<junit printsummary="yes" fork="yes" haltonfailure="no" failureproperty="tests.failed">
+				<classpath>
+					<files includes="${lib}/hamcrest-2.2.jar" />
+					<files includes="${lib}/junit-4.13.2.jar" />
+					<pathelement path="${classes}" />
+					<pathelement path="${testsoutput}" />
+				</classpath>
+				<formatter type="plain" />
+					
+				<!-- Run unit tests -->
+				<batchtest fork="yes" todir="${reports}">
+					<fileset dir="${unit}" />
+				</batchtest>
+			</junit>
+		</jacoco:coverage>
+		
+		<!-- Generate HTML report -->
+		<jacoco:report>
+			<executiondata>
+				<file file="${bin}/coverage/jacoco.exec"/>
+			</executiondata>
+			
+			<structure name="Renderer Project">
+				<classfiles>
+					<fileset dir="${classes}"/>
+				</classfiles>
+				<sourcefiles encoding="UTF-8">
+					<fileset dir="${java}"/>
+				</sourcefiles>
+			</structure>
+			
+			<html destdir="${bin}/coverage/report"/>
+			<xml destfile="${bin}/coverage/report.xml"/>
+			<csv destfile="${bin}/coverage/report.csv"/>
+		</jacoco:report>
+		
+		<echo message="Coverage report generated at: ${bin}/coverage/report/index.html"/>
+		
+		<!-- Fail the build if tests failed -->
+		<fail if="tests.failed" message="Some tests failed. Check the reports."/>
 	</target>
 
 </project>
