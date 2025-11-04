@@ -70,7 +70,7 @@ public class ImageWrapperTest {
 
     /**
      * Sets up test fixtures before each test.
-     * 
+     *
      * @throws IOException if scene file cannot be loaded
      */
     @Before
