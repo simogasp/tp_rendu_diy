@@ -39,11 +39,26 @@ jobs:
       - name: Run unit tests
         run: make unit-tests
 
+      - name: Run coverage
+        run: make coverage
+
+      # upload coverage report artifact to codecov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./build/coverage/report.xml
+          flags: ${{ runner.os }}
+          name: ${{ runner.os }}-coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Build with ant
         run: ant compile
 
       - name: Run unit tests with ant
         run: ant unit-tests
+
+      - name: Run coverage with ant
+        run: ant coverage
 
       # - name: Checkstyle
       #   run: ant dl-checkstyle && ant checkstyle
