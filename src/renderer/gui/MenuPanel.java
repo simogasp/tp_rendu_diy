@@ -108,7 +108,7 @@ public class MenuPanel extends JPanel {
      * The ColorMap selection comboBox.
      */
     private final JComboBox<ColorMapFactory.Maps> colorMapComboBox;
-    
+
     /**
      * The texture ComboBox Input.
      */
@@ -323,7 +323,8 @@ public class MenuPanel extends JPanel {
     private void colorMapConfiguration() {
         colorMapComboBox.setSelectedItem(ColorMapFactory.Maps.VERIDIS);
         colorMapComboBox.addItemListener(e -> {
-            ColorMapFactory.Maps map = (ColorMapFactory.Maps) colorMapComboBox.getSelectedItem();
+            ColorMapFactory.Maps map =
+                    (ColorMapFactory.Maps) colorMapComboBox.getSelectedItem();
             render.setColorMap(map);
             updateRender();
         });
