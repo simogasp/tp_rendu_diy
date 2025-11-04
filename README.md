@@ -50,7 +50,6 @@ option menu.
 
 ![OptionMenu](./data/screenshots/Option_menu.png)
 
-
 ## MakeFile
 
 ### Build
@@ -60,6 +59,7 @@ Use the following command to build the project:
 ```bash
 make
 ```
+
 or
 
 ```bash
@@ -84,14 +84,13 @@ make clean
 
 cleans the `build` folder.
 
-
 ### Generate JavaDoc
 
 To generate the JavaDoc, do :
+
 ```bash
 make doc
 ```
-
 
 ### Tests
 
@@ -100,7 +99,6 @@ To run the tests use the following command:
 ```bash
 make tests
 ```
-
 
 ## Ant
 
@@ -126,6 +124,7 @@ sudo snap install ant --stable --classic
 ### Show help in terminal
 
 To a small description of the available task in ant, do:
+
 ```bash
 ant -projecthelp
 ```

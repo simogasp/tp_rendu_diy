@@ -23,26 +23,30 @@ make create-drawUML
 ```
 
 The class diagram can be a little big, to hide fields you can add :
-```
+
+```none
 hide fields
 ```
+
 in the `doc/uml/ClassDiagram.puml` file.
 
 To hide methods you can add :
-```
+
+```none
 hide methods
 ```
 
 to hide both, you can add :
-```
+
+```none
 hide members
 ```
 
 and then you can run :
+
 ```sh
 make drawUML
 ```
-
 
 ### Generate ClassDiagram with Ant
 
@@ -60,23 +64,31 @@ ant create-plantUML
 ```
 
 The class diagram can be a little big, to hide fields you can add :
-```
+
+```none
 hide fields
 ```
+
 in the `doc/uml/Class Diagram.puml` file.
 
 To hide methods you can add :
-```
+
+```none
 hide methods
 ```
 
 to hide both, you can add :
+
+```none
+hide members
 ```
+
+```none
 hide members
 ```
 
 and then you can run :
+
 ```sh
 ant plantUML
 ```
-
