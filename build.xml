@@ -1,4 +1,4 @@
-<project name="Renderer" default="compile" basedir=".">
+<project name="Renderer" default="compile" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">
 
 	<property name="java" location="src" />
 	<property name="bin" location="build" />
@@ -215,22 +215,30 @@
 
 	<!-- Coverage target -->
 	<target name="coverage" depends="compile-test" description="Run tests with coverage">
-		<mkdir dir="${build}/coverage"/>
+		<mkdir dir="${bin}/coverage"/>
 		
-		<!-- Run tests with JaCoCo agent -->
-		<jacoco:coverage destfile="${build}/coverage/jacoco.exec">
-			<java classname="test.functional.TestRasterizer" fork="true" failonerror="true">
+		<!-- Run all tests with JaCoCo agent -->
+		<jacoco:coverage destfile="${bin}/coverage/jacoco.exec">
+			<junit printsummary="yes" fork="yes" haltonfailure="no" failureproperty="tests.failed">
 				<classpath>
-					<pathelement path="${classes}"/>
-					<path refid="libraries"/>
+					<files includes="${lib}/hamcrest-2.2.jar" />
+					<files includes="${lib}/junit-4.13.2.jar" />
+					<pathelement path="${classes}" />
+					<pathelement path="${testsoutput}" />
 				</classpath>
-			</java>
+				<formatter type="plain" />
+					
+				<!-- Run unit tests -->
+				<batchtest fork="yes" todir="${reports}">
+					<fileset dir="${unit}" />
+				</batchtest>
+			</junit>
 		</jacoco:coverage>
 		
 		<!-- Generate HTML report -->
 		<jacoco:report>
 			<executiondata>
-				<file file="${build}/coverage/jacoco.exec"/>
+				<file file="${bin}/coverage/jacoco.exec"/>
 			</executiondata>
 			
 			<structure name="Renderer Project">
@@ -242,11 +250,15 @@
 				</sourcefiles>
 			</structure>
 			
-			<html destdir="${build}/coverage/report"/>
-			<xml destfile="${build}/coverage/report.xml"/>
+			<html destdir="${bin}/coverage/report"/>
+			<xml destfile="${bin}/coverage/report.xml"/>
+			<csv destfile="${bin}/coverage/report.csv"/>
 		</jacoco:report>
 		
-		<echo message="Coverage report generated at: ${build}/coverage/report/index.html"/>
+		<echo message="Coverage report generated at: ${bin}/coverage/report/index.html"/>
+		
+		<!-- Fail the build if tests failed -->
+		<fail if="tests.failed" message="Some tests failed. Check the reports."/>
 	</target>
 
 </project>
