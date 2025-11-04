@@ -30,6 +30,11 @@
 		classpath="lib/plantuml-1.2025.3.jar"
 	/>
 
+	<!-- Add JaCoCo taskdef for coverage report -->
+	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+		<classpath path="${lib}/jacocoant.jar"/>
+	</taskdef>
+
 	<path id="libraries">
 		<files includes="${lib}/hamcrest-2.2.jar" />
 		<files includes="${lib}/junit-4.13.2.jar" />
@@ -206,6 +211,42 @@
 			<fileset dir="${java}" />
 			<formatter type="plain" />
 		</checkstyle>
+	</target>
+
+	<!-- Coverage target -->
+	<target name="coverage" depends="compile-test" description="Run tests with coverage">
+		<mkdir dir="${build}/coverage"/>
+		
+		<!-- Run tests with JaCoCo agent -->
+		<jacoco:coverage destfile="${build}/coverage/jacoco.exec">
+			<java classname="test.functional.TestRasterizer" fork="true" failonerror="true">
+				<classpath>
+					<pathelement path="${classes}"/>
+					<path refid="libraries"/>
+				</classpath>
+			</java>
+		</jacoco:coverage>
+		
+		<!-- Generate HTML report -->
+		<jacoco:report>
+			<executiondata>
+				<file file="${build}/coverage/jacoco.exec"/>
+			</executiondata>
+			
+			<structure name="Renderer Project">
+				<classfiles>
+					<fileset dir="${classes}"/>
+				</classfiles>
+				<sourcefiles encoding="UTF-8">
+					<fileset dir="${java}"/>
+				</sourcefiles>
+			</structure>
+			
+			<html destdir="${build}/coverage/report"/>
+			<xml destfile="${build}/coverage/report.xml"/>
+		</jacoco:report>
+		
+		<echo message="Coverage report generated at: ${build}/coverage/report/index.html"/>
 	</target>
 
 </project>
