@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -69,6 +70,7 @@ public class ImageWrapperTest {
 
     /**
      * Sets up test fixtures before each test.
+     * 
      * @throws IOException if scene file cannot be loaded
      */
     @Before
@@ -227,12 +229,18 @@ public class ImageWrapperTest {
     @Test
     public void testSetPixelBothCoordinatesOutOfBounds() {
         Color red = Color.RED;
-        // This should be silently ignored (clipped)
-        defaultWrapper.setPixel(-1, -1, red);
         int width = defaultWrapper.getWidth();
         int height = defaultWrapper.getHeight();
-        defaultWrapper.setPixel(width, height, red);
-        // No exception should be thrown
+
+        // These should be silently ignored (clipped), not throw exceptions
+        try {
+            defaultWrapper.setPixel(-1, -1, red);
+            defaultWrapper.setPixel(width, height, red);
+            // If we reach here, no exception was thrown (expected behavior)
+        } catch (Exception e) {
+            fail("setPixel should not throw exception for out-of-bounds coordinates: "
+                    + e.getMessage());
+        }
     }
 
     /**
@@ -241,7 +249,7 @@ public class ImageWrapperTest {
     @Test
     public void testSetPixelVariousColors() {
         Color[] colors = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW,
-                          Color.CYAN, Color.MAGENTA, Color.WHITE, Color.BLACK};
+                Color.CYAN, Color.MAGENTA, Color.WHITE, Color.BLACK};
         for (int i = 0; i < colors.length; i++) {
             int coord = i * COLOR_ARRAY_STEP;
             defaultWrapper.setPixel(coord, coord, colors[i]);
@@ -424,12 +432,12 @@ public class ImageWrapperTest {
     @Test
     public void testSetPixelRespectsClipping() {
         Fragment[] clippedFragments = {
-            new Fragment(-1, TEST_COORD),
-            new Fragment(TEST_COORD, -1),
-            new Fragment(defaultWrapper.getWidth(), TEST_COORD),
-            new Fragment(TEST_COORD, defaultWrapper.getHeight()),
-            new Fragment(SMALL_NEG_COORD, SMALL_NEG_COORD),
-            new Fragment(LARGE_COORD, LARGE_COORD)
+                new Fragment(-1, TEST_COORD),
+                new Fragment(TEST_COORD, -1),
+                new Fragment(defaultWrapper.getWidth(), TEST_COORD),
+                new Fragment(TEST_COORD, defaultWrapper.getHeight()),
+                new Fragment(SMALL_NEG_COORD, SMALL_NEG_COORD),
+                new Fragment(LARGE_COORD, LARGE_COORD)
         };
 
         for (Fragment fragment : clippedFragments) {
@@ -507,6 +515,12 @@ public class ImageWrapperTest {
     @Test(timeout = TEST_TIMEOUT)
     public void testPerformanceManyPixelOperations() {
         // Should complete within 5 seconds
+        int lastX = 0;
+        int lastY = 0;
+        int lastR = 0;
+        int lastG = 0;
+        int lastB = 0;
+
         for (int i = 0; i < TEST_ITERATIONS; i++) {
             int x = i % defaultWrapper.getWidth();
             int y = (i / defaultWrapper.getWidth()) % defaultWrapper.getHeight();
@@ -514,7 +528,22 @@ public class ImageWrapperTest {
             int g = (i * 2) % COLOR_MOD;
             int b = (i * 2 + 1) % COLOR_MOD;
             defaultWrapper.setPixel(x, y, new Color(r, g, b));
+
+            // Remember last values
+            lastX = x;
+            lastY = y;
+            lastR = r;
+            lastG = g;
+            lastB = b;
         }
+
+        // Verify the last pixel was set correctly
+        // Use getRGB() which returns ARGB (signed int with alpha channel)
+        Color expectedColor = new Color(lastR, lastG, lastB);
+        int actualRgb = defaultWrapper.getRGB(lastX, lastY);
+        int expectedRgb = expectedColor.getRGB();
+        assertEquals("Last pixel should be set correctly",
+                expectedRgb, actualRgb);
     }
 
     /**
