@@ -185,22 +185,37 @@ public class TestMatrix {
     @Test
     public void testMultiplySquareMatrices() {
         final Matrix m1 = new Matrix("m1", 2, 2);
-        m1.set(0, 0, 1.0);
-        m1.set(0, 1, 2.0);
-        m1.set(1, 0, 3.0);
-        m1.set(1, 1, 4.0);
+        final double[][] m1InputValues = {
+            {1.0, 2.0},
+            {3.0, 4.0}
+        };
+        for (int i = 0; i < m1.getNRows(); ++i) {
+            for (int j = 0; j < m1.getNCols(); ++j) {
+                m1.set(i, j, m1InputValues[i][j]);
+            }
+        }
 
         final Matrix m2 = new Matrix("m2", 2, 2);
-        m2.set(0, 0, 2.0);
-        m2.set(0, 1, 0.0);
-        m2.set(1, 0, 1.0);
-        m2.set(1, 1, 2.0);
+        final double[][] m2InputValues = {
+            {2.0, 0.0},
+            {1.0, 2.0}
+        };
+        for (int i = 0; i < m2.getNRows(); ++i) {
+            for (int j = 0; j < m2.getNCols(); ++j) {
+                m2.set(i, j, m2InputValues[i][j]);
+            }
+        }
 
         final Matrix result = m1.multiply(m2);
-        assertEquals(4.0, result.get(0, 0), EPSILON);
-        assertEquals(4.0, result.get(0, 1), EPSILON);
-        assertEquals(10.0, result.get(1, 0), EPSILON);
-        assertEquals(8.0, result.get(1, 1), EPSILON);
+        final double[][] expectedValues = {
+            {4.0, 4.0},
+            {10.0, 8.0}
+        };
+        for (int i = 0; i < expectedValues.length; i++) {
+            for (int j = 0; j < expectedValues[i].length; j++) {
+                assertEquals(expectedValues[i][j], result.get(i, j), EPSILON);
+            }
+        }
     }
 
     /**
@@ -209,21 +224,28 @@ public class TestMatrix {
      */
     @Test
     public void testMultiplyRectangularMatrices() {
+        final double[][] m1InputValues = {
+            {1.0, 2.0, 3.0},
+            {4.0, 5.0, 6.0}
+        };
         final Matrix m1 = new Matrix("m1", 2, 3);
-        m1.set(0, 0, 1.0);
-        m1.set(0, 1, 2.0);
-        m1.set(0, 2, 3.0);
-        m1.set(1, 0, 4.0);
-        m1.set(1, 1, 5.0);
-        m1.set(1, 2, 6.0);
+        for (int i = 0; i < m1.getNRows(); ++i) {
+            for (int j = 0; j < m1.getNCols(); ++j) {
+                m1.set(i, j, m1InputValues[i][j]);
+            }
+        }
 
         final Matrix m2 = new Matrix("m2", 3, 2);
-        m2.set(0, 0, 7.0);
-        m2.set(0, 1, 8.0);
-        m2.set(1, 0, 9.0);
-        m2.set(1, 1, 10.0);
-        m2.set(2, 0, 11.0);
-        m2.set(2, 1, 12.0);
+        final double[][] m2InputValues = {
+            {7.0, 8.0},
+            {9.0, 10.0},
+            {11.0, 12.0}
+        };
+        for (int i = 0; i < m2.getNRows(); ++i) {
+            for (int j = 0; j < m2.getNCols(); ++j) {
+                m2.set(i, j, m2InputValues[i][j]);
+            }
+        }
 
         final Matrix result = m1.multiply(m2);
         final double[][] expectedValues = {
@@ -497,7 +519,7 @@ public class TestMatrix {
         for (int i = 0; i < matrixSize; i++) {
             for (int j = 0; j < matrixSize; j++) {
                 m1.set(i, j, value++ + i * m1.getNCols() + j);
-                m2.set(i, j, - i * m2.getNCols() - j);
+                m2.set(i, j, -i * m2.getNCols() - j);
             }
         }
 
@@ -527,7 +549,7 @@ public class TestMatrix {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 m1.set(i, j, value++ + i * m1.getNCols() + j);
-                m2.set(i, j, - i * m2.getNCols() - j);
+                m2.set(i, j, -i * m2.getNCols() - j);
             }
         }
 
@@ -536,7 +558,7 @@ public class TestMatrix {
         // verify the size of the matrices
         assertEquals(res.getNCols(), m1.getNCols());
         assertEquals(res.getNRows(), m1.getNRows());
-        
+
         // verify the values of the matrix
         value = 1;
         for (int i = 0; i < rows; i++) {
@@ -571,7 +593,7 @@ public class TestMatrix {
         for (int i = 0; i < matrixSize; i++) {
             for (int j = 0; j < matrixSize; j++) {
                 m1.set(i, j, value++ + i * m1.getNCols() + j);
-                m2.set(i, j, + i * m2.getNCols() + j);
+                m2.set(i, j, i * m2.getNCols() + j);
             }
         }
 
@@ -588,6 +610,9 @@ public class TestMatrix {
         }
     }
 
+    /**
+     * Test the subtraction of two rectangular matrix.
+     */
     @Test
     public void testSubtractInvalidSize() {
         final Matrix m1 = new Matrix(1, 3);
