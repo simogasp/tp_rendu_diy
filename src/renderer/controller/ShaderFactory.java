@@ -55,7 +55,7 @@ public final class ShaderFactory {
         }
         // dirs now should contain a single directory (even if it is a list) where the
         // .class for Shader are
-        
+
         String[] files = dirs.get(0).list();
         for (int i = 0; i < files.length; i++) {
             Class<? extends Shader> shader;
