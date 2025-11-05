@@ -8,7 +8,7 @@ import renderer.core.shader.Shader;
 
 /**
  * The PerspectiveCorrectRasterizer class extends Rasterizer to perform
- * Persepctive Correct interpolation
+ * Perspective Correct interpolation
  * of attributes.
  *
  * @author cdehais
@@ -65,7 +65,8 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
                             + bar.get(1) / v2.getDepth()
                             + bar.get(2) / v3.getDepth();
                     for (int i = 0; i < numAttributes; i++) {
-                        final double aOverZ = bar.get(0) * v1.getAttribute(i) / v1.getDepth()
+                        final double aOverZ =
+                                bar.get(0) * v1.getAttribute(i) / v1.getDepth()
                                 + bar.get(1) * v2.getAttribute(i) / v2.getDepth()
                                 + bar.get(2) * v3.getAttribute(i) / v3.getDepth();
 
