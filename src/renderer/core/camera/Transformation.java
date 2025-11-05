@@ -28,9 +28,13 @@ public class Transformation {
      * Creates a new Transformation object.
      */
     public Transformation() {
-        worldToCamera = Matrix.createIdentity("W2C", 4);
-        projection = new Matrix("P", 3, 4);
-        calibration = Matrix.createIdentity("K", 3);
+        final int w2cDim = 4;
+        worldToCamera = Matrix.createIdentity("W2C", w2cDim);
+        final int projRows = 3;
+        final int projCols = 4;
+        projection = new Matrix("P", projRows, projCols);
+        final int calibDim = 3;
+        calibration = Matrix.createIdentity("K", calibDim);
     }
 
     /**
@@ -69,9 +73,11 @@ public class Transformation {
             System.out.println(m);
             System.out.println(mEye);
 
-            worldToCamera.set(0, 3, t.get(0));
-            worldToCamera.set(1, 3, t.get(1));
-            worldToCamera.set(2, 3, t.get(2)); //>!!
+            final int lastCol = 3;
+            final int rows = 3;
+            for (int i = 0; i < rows; i++) {
+                worldToCamera.set(i, lastCol, t.get(i));
+            } //>!!
 
         } catch (Exception e) {
             e.printStackTrace();
