@@ -116,19 +116,20 @@ public class TestVector {
 
         // square root of the sum of integer squares from 1 to vectorSize
 
-        final double expectedValue = Math.sqrt(vectorSize * (vectorSize + 1) * (2 * vectorSize + 1) / 6);
+        final double expectedValue =
+                Math.sqrt(vectorSize * (vectorSize + 1) * (2 * vectorSize + 1) / 6);
 
         double value = 1;
         for (int i = 0; i < vectorSize; i++) {
             v.set(i, value++);
         }
-        
+
         assertEquals(expectedValue, v.norm(), EPSILON);
 
     }
 
     /**
-     * Test the normalization of a vector
+     * Test the normalization of a vector.
      */
     @Test
     public void testNormalization() {
@@ -143,12 +144,13 @@ public class TestVector {
         }
 
         final Vector nv = v.normalize();
-        
+
         // v and nv are the same object.
         assertFalse("v == nv should be false", v == nv);
 
         for (int i = 0; i < vectorSize; i++) {
-            assertEquals("error for " + i + "-th component", expectedValue, nv.get(i), EPSILON);
+            assertEquals("error for " + i + "-th component",
+                                expectedValue, nv.get(i), EPSILON);
         }
 
     }
@@ -161,7 +163,7 @@ public class TestVector {
         final int vectorSize = 6;
         final Vector v = new Vector(VECTOR_NAME, vectorSize);
         final Vector nv = v.zeros();
-        
+
         // v and nv are the same object.
         assertTrue(v == nv);
         for (int i = 0; i < vectorSize; i++) {
@@ -177,7 +179,7 @@ public class TestVector {
         final int vectorSize = 6;
         final Vector v = new Vector(VECTOR_NAME, vectorSize);
         final Vector nv = v.ones();
-        
+
         // v and nv are the same object.
         assertTrue(v == nv);
         for (int i = 0; i < vectorSize; i++) {

@@ -48,7 +48,7 @@ public class DepthShader extends Shader {
 
     /**
      * Creates a DepthShader with the given colorMap.
-     * 
+     *
      * @param initColorMap the init color map
      */
     public DepthShader(final ColorMap initColorMap) {
@@ -141,6 +141,11 @@ public class DepthShader extends Shader {
         return new Color(r, g, b);
     }
 
+    /**
+     * Sets the color map.
+     *
+     * @param map the new color map
+     */
     public void setColorMap(Maps map) {
         colorMap = ColorMapFactory.create(map);
     }

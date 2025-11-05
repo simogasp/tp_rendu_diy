@@ -14,9 +14,14 @@ public class ImageWrapper extends BufferedImage {
     private static final int DEFAULT_WIDTH = 100;
 
     /**
-     * Defalut height of a screen (For test).
+     * Default height of a screen (For test).
      */
     private static final int DEFAULT_HEIGHT = 100;
+
+    /**
+     * Background color of the image.
+     */
+    private static final int BACKGROUND_COLOR = 0x333333;
 
     /**
      * Creates a default ImageWrapper for test.
@@ -35,7 +40,7 @@ public class ImageWrapper extends BufferedImage {
         for (int x = 0; x < scene.getScreenW(); x++) {
             for (int y = 0; y < scene.getScreenH(); y++) {
                 // the back is dark grey
-                this.setRGB(x, y, 0x333333);
+                this.setRGB(x, y, BACKGROUND_COLOR);
             }
         }
     }
