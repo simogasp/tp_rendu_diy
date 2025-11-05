@@ -29,6 +29,40 @@ public class TestMatrix {
     private static final String INVALID_MATRIX_NAME = "invalidMatrix";
 
     /**
+     * Helper method to create and populate a matrix from a 2D array.
+     * @param name the name of the matrix
+     * @param values the values to populate the matrix with
+     * @return the populated matrix
+     */
+    private Matrix createMatrixFromArray(String name, double[][] values) {
+        final Matrix matrix = new Matrix(name, values.length, values[0].length);
+        for (int i = 0; i < values.length; i++) {
+            for (int j = 0; j < values[i].length; j++) {
+                matrix.set(i, j, values[i][j]);
+            }
+        }
+        return matrix;
+    }
+
+    /**
+     * Helper method to verify matrix values against expected values.
+     * @param expected the expected values
+     * @param actual the actual matrix
+     */
+    private void assertMatrixEquals(double[][] expected, Matrix actual) {
+        assertEquals("Matrix row count mismatch",
+                expected.length, actual.getNRows());
+        assertEquals("Matrix column count mismatch",
+                expected[0].length, actual.getNCols());
+        for (int i = 0; i < expected.length; i++) {
+            for (int j = 0; j < expected[i].length; j++) {
+                assertEquals("Value mismatch at [" + i + "][" + j + "]",
+                        expected[i][j], actual.get(i, j), EPSILON);
+            }
+        }
+    }
+
+    /**
      * Test the creation of a Matrix.
      */
     @Test
@@ -180,84 +214,53 @@ public class TestMatrix {
 
     /**
      * Test the multiplication of two square matrices.
-     * @throws SizeMismatchException
      */
     @Test
     public void testMultiplySquareMatrices() {
-        final Matrix m1 = new Matrix("m1", 2, 2);
-        final double[][] m1InputValues = {
+        final double[][] m1Values = {
             {1.0, 2.0},
             {3.0, 4.0}
         };
-        for (int i = 0; i < m1.getNRows(); ++i) {
-            for (int j = 0; j < m1.getNCols(); ++j) {
-                m1.set(i, j, m1InputValues[i][j]);
-            }
-        }
-
-        final Matrix m2 = new Matrix("m2", 2, 2);
-        final double[][] m2InputValues = {
+        final double[][] m2Values = {
             {2.0, 0.0},
             {1.0, 2.0}
         };
-        for (int i = 0; i < m2.getNRows(); ++i) {
-            for (int j = 0; j < m2.getNCols(); ++j) {
-                m2.set(i, j, m2InputValues[i][j]);
-            }
-        }
-
-        final Matrix result = m1.multiply(m2);
         final double[][] expectedValues = {
             {4.0, 4.0},
             {10.0, 8.0}
         };
-        for (int i = 0; i < expectedValues.length; i++) {
-            for (int j = 0; j < expectedValues[i].length; j++) {
-                assertEquals(expectedValues[i][j], result.get(i, j), EPSILON);
-            }
-        }
+
+        final Matrix m1 = createMatrixFromArray("m1", m1Values);
+        final Matrix m2 = createMatrixFromArray("m2", m2Values);
+        final Matrix result = m1.multiply(m2);
+
+        assertMatrixEquals(expectedValues, result);
     }
 
     /**
      * Test the multiplication of two rectangular matrices.
-     * @throws SizeMismatchException
      */
     @Test
     public void testMultiplyRectangularMatrices() {
-        final double[][] m1InputValues = {
+        final double[][] m1Values = {
             {1.0, 2.0, 3.0},
             {4.0, 5.0, 6.0}
         };
-        final Matrix m1 = new Matrix("m1", 2, 3);
-        for (int i = 0; i < m1.getNRows(); ++i) {
-            for (int j = 0; j < m1.getNCols(); ++j) {
-                m1.set(i, j, m1InputValues[i][j]);
-            }
-        }
-
-        final Matrix m2 = new Matrix("m2", 3, 2);
-        final double[][] m2InputValues = {
+        final double[][] m2Values = {
             {7.0, 8.0},
             {9.0, 10.0},
             {11.0, 12.0}
         };
-        for (int i = 0; i < m2.getNRows(); ++i) {
-            for (int j = 0; j < m2.getNCols(); ++j) {
-                m2.set(i, j, m2InputValues[i][j]);
-            }
-        }
-
-        final Matrix result = m1.multiply(m2);
         final double[][] expectedValues = {
             {58.0, 64.0},
             {139.0, 154.0}
         };
 
-        for (int i = 0; i < expectedValues.length; i++) {
-            for (int j = 0; j < expectedValues[i].length; j++) {
-                assertEquals(expectedValues[i][j], result.get(i, j), EPSILON);
-            }
-        }
+        final Matrix m1 = createMatrixFromArray("m1", m1Values);
+        final Matrix m2 = createMatrixFromArray("m2", m2Values);
+        final Matrix result = m1.multiply(m2);
+
+        assertMatrixEquals(expectedValues, result);
     }
 
     /**
@@ -512,60 +515,55 @@ public class TestMatrix {
      */
     @Test
     public void testAddSquaredMatrix() {
-        final int matrixSize = 4;
-        final Matrix m1 = new Matrix("m1", matrixSize, matrixSize);
-        final Matrix m2 = new Matrix("m2", matrixSize, matrixSize);
-        double value = 1;
-        for (int i = 0; i < matrixSize; i++) {
-            for (int j = 0; j < matrixSize; j++) {
-                m1.set(i, j, value++ + i * m1.getNCols() + j);
-                m2.set(i, j, -i * m2.getNCols() - j);
-            }
-        }
+        final double[][] m1Values = {
+            {1.0, 2.0, 3.0},
+            {4.0, 5.0, 6.0},
+            {7.0, 8.0, 9.0}
+        };
+        final double[][] m2Values = {
+            {9.0, 8.0, 7.0},
+            {6.0, 5.0, 4.0},
+            {3.0, 2.0, 1.0}
+        };
+        final double[][] expectedValues = {
+            {10.0, 10.0, 10.0},
+            {10.0, 10.0, 10.0},
+            {10.0, 10.0, 10.0}
+        };
 
+        final Matrix m1 = createMatrixFromArray("m1", m1Values);
+        final Matrix m2 = createMatrixFromArray("m2", m2Values);
         final Matrix res = m1.add(m2);
-        // verify the size of the matrices
-        assertEquals(res.getNCols(), m1.getNCols());
-        assertEquals(res.getNRows(), m1.getNRows());
-        // verify the values of the matrix
-        value = 1;
-        for (int i = 0; i < matrixSize; i++) {
-            for (int j = 0; j < matrixSize; j++) {
-                assertEquals(value++, res.get(i, j), EPSILON);
-            }
-        }
+
+        assertMatrixEquals(expectedValues, res);
     }
 
     /**
-     * Test the addition of two squares Matrices.
+     * Test the addition of two rectangular Matrices.
      */
     @Test
     public void testAddRectangleMatrix() {
-        final int rows = 4;
-        final int cols = 2;
-        final Matrix m1 = new Matrix("m1", rows, cols);
-        final Matrix m2 = new Matrix("m2", rows, cols);
-        double value = 1;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                m1.set(i, j, value++ + i * m1.getNCols() + j);
-                m2.set(i, j, -i * m2.getNCols() - j);
-            }
-        }
+        final double[][] m1Values = {
+            {1.0, 2.0},
+            {3.0, 4.0},
+            {5.0, 6.0}
+        };
+        final double[][] m2Values = {
+            {2.0, 3.0},
+            {4.0, 5.0},
+            {6.0, 7.0}
+        };
+        final double[][] expectedValues = {
+            {3.0, 5.0},
+            {7.0, 9.0},
+            {11.0, 13.0}
+        };
 
+        final Matrix m1 = createMatrixFromArray("m1", m1Values);
+        final Matrix m2 = createMatrixFromArray("m2", m2Values);
         final Matrix res = m1.add(m2);
 
-        // verify the size of the matrices
-        assertEquals(res.getNCols(), m1.getNCols());
-        assertEquals(res.getNRows(), m1.getNRows());
-
-        // verify the values of the matrix
-        value = 1;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                assertEquals(value++, res.get(i, j), EPSILON);
-            }
-        }
+        assertMatrixEquals(expectedValues, res);
     }
 
     /**
@@ -585,29 +583,27 @@ public class TestMatrix {
      */
     @Test
     public void testSubtractSquaresMatrix() {
-        final int matrixSize = 4;
-        final Matrix m1 = new Matrix("m1", matrixSize, matrixSize);
-        final Matrix m2 = new Matrix("m2", matrixSize, matrixSize);
-        double value = 1;
+        final double[][] m1Values = {
+            {10.0, 8.0, 6.0},
+            {4.0, 2.0, 0.0},
+            {9.0, 7.0, 5.0}
+        };
+        final double[][] m2Values = {
+            {1.0, 2.0, 3.0},
+            {4.0, 5.0, 6.0},
+            {7.0, 8.0, 9.0}
+        };
+        final double[][] expectedValues = {
+            {9.0, 6.0, 3.0},
+            {0.0, -3.0, -6.0},
+            {2.0, -1.0, -4.0}
+        };
 
-        for (int i = 0; i < matrixSize; i++) {
-            for (int j = 0; j < matrixSize; j++) {
-                m1.set(i, j, value++ + i * m1.getNCols() + j);
-                m2.set(i, j, i * m2.getNCols() + j);
-            }
-        }
-
+        final Matrix m1 = createMatrixFromArray("m1", m1Values);
+        final Matrix m2 = createMatrixFromArray("m2", m2Values);
         final Matrix res = m1.subtract(m2);
-        // verify the size of the matrix
-        assertEquals(res.getNCols(), m1.getNCols());
-        assertEquals(res.getNRows(), m1.getNRows());
-        // verify the values of the matrix
-        value = 1;
-        for (int i = 0; i < matrixSize; i++) {
-            for (int j = 0; j < matrixSize; j++) {
-                assertEquals(value++, res.get(i, j), EPSILON);
-            }
-        }
+
+        assertMatrixEquals(expectedValues, res);
     }
 
     /**
