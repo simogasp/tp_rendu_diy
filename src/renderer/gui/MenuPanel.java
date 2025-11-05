@@ -559,7 +559,7 @@ public class MenuPanel extends JPanel {
             if (!persperctiveRasterizer.isSelected()) {
                 return;
             }
-            render.setPerpectiveCorrectRasterizer();
+            render.setPerspectiveCorrectRasterizer();
             updateRender();
         });
         add(persperctiveRasterizer, constraints);

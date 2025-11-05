@@ -206,9 +206,9 @@ public final class Renderer {
     }
 
     /**
-     * Sets the rasterizer with a PerpectiveCorrectRasterizer.
+     * Sets the rasterizer with a PerspectiveCorrectRasterizer.
      */
-    public void setPerpectiveCorrectRasterizer() {
+    public void setPerspectiveCorrectRasterizer() {
         if (!(this.rasterizer instanceof PerspectiveCorrectRasterizer)) {
             this.rasterizer = new PerspectiveCorrectRasterizer(shader);
         }
