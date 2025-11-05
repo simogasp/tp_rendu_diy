@@ -1,3 +1,5 @@
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 
 import renderer.algebra.Vector;
@@ -6,30 +8,58 @@ import renderer.core.mesh.Scene;
 
 /**
  * Test class from the Scene class.
- * 
+ *
  * @author: cdehais
  */
 public class TestScene {
 
+    /**
+     * Print an array of doubles.
+     * This method is used to print the source coordinates and material properties.
+     * @param title the title to print before the array
+     * @param array the array of doubles to print
+     */
+    private void printArray(String title, double[] array) {
+        StringBuilder sb = new StringBuilder();
+        if (title != null) {
+            sb.append(title).append(": ");
+        }
+        for (double v : array) {
+            sb.append(v).append(" ");
+        }
+        System.out.println(sb.toString().trim());
+    }
+
+    /**
+     * Test the Scene class.
+     * This test reads a scene file and prints out the parameters.
+     * The scene file is expected to be in the "data" directory.
+     */
     @Test
     public void test() throws Exception {
 
         Scene scene = new Scene("data/example1.scene");
-        String mesh_filename = scene.getMeshFileName();
-        Vector cameraPosition = scene.getCameraPosition();
-        Vector cameraLookAt = scene.getCameraLookAt();
-        Vector cameraUp = scene.getCameraUp();
+        final String meshFilename = scene.getMeshFileName();
+        assertNotNull(meshFilename);
+        final Vector cameraPosition = scene.getCameraPosition();
+        assertNotNull(cameraPosition);
+        final Vector cameraLookAt = scene.getCameraLookAt();
+        assertNotNull(cameraLookAt);
+        final Vector cameraUp = scene.getCameraUp();
+        assertNotNull(cameraUp);
         // double cameraXLimit = scene.getCameraXLimit ();
-        double cameraFocal = scene.getCameraFocal();
-        int screenW = scene.getScreenW();
-        int screenH = scene.getScreenH();
-        double ambientI = scene.getAmbientI();
-        double sourceI = scene.getSourceI();
-        double[] sourceCoord = scene.getSourceCoord();
-        double[] material = scene.getMaterial();
+        final double cameraFocal = scene.getCameraFocal();
+        final int screenW = scene.getScreenW();
+        final int screenH = scene.getScreenH();
+        final double ambientI = scene.getAmbientI();
+        final double sourceI = scene.getSourceI();
+        final double[] sourceCoord = scene.getSourceCoord();
+        assertNotNull(sourceCoord);
+        final double[] material = scene.getMaterial();
+        assertNotNull(material);
 
         System.out.println("# Test output");
-        System.out.println(mesh_filename);
+        System.out.println(meshFilename);
 
         System.out.println(cameraPosition);
         System.out.println(cameraLookAt);
@@ -43,16 +73,8 @@ public class TestScene {
         System.out.println("Light ambient: " + ambientI);
         System.out.println("Light ambient: " + sourceI);
 
-        System.out.println(sourceCoord[0] + " " +
-                sourceCoord[1] + " " +
-                sourceCoord[2] + " " +
-                sourceCoord[3]);
-
-        System.out.println(material[0] + " " +
-                material[1] + " " +
-                material[2] + " " +
-                material[3]);
-
+        printArray("Source coordinates", sourceCoord);
+        printArray("Material properties", material);
     }
 
 }
