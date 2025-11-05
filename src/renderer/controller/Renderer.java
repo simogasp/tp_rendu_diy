@@ -236,7 +236,7 @@ public final class Renderer {
         // returned image
         final ImageWrapper res = new ImageWrapper(scene);
 
-        // intialize the shader with the Image Wrapper
+        // initialize the shader with the Image Wrapper
         shader.init(this, res);
 
         if (vertexRendered) {
@@ -323,9 +323,9 @@ public final class Renderer {
     }
 
     /**
-     * Sets whether the normals shoud be drawn.
+     * Sets whether the normals should be drawn.
      *
-     * @param normalsRendered the normals shoud be normalsRendered
+     * @param normalsRendered the normals should be normalsRendered
      */
     public void setNormalsRendered(final boolean normalsRendered) {
         this.normalsRendered = normalsRendered;
@@ -433,9 +433,9 @@ public final class Renderer {
 
     /**
      * Sets the shader to a instance of the given shader value.
-     * 
-     * @param shaderSelected the name of a implemantation of Shader
-     * @return whether the operation is successfull
+     *
+     * @param shaderSelected the name of a implementation of Shader
+     * @return whether the operation is successful
      */
     public boolean setShader(final String shaderSelected) {
         final Optional<Shader> optionalShader = ShaderFactory.create(shaderSelected);
@@ -452,7 +452,7 @@ public final class Renderer {
 
     /**
      * Set the parameter combine with base color of the Texture shader.
-     * 
+     *
      * @param selected the new value
      */
     public void setCombineWithBaseColor(final boolean selected) {
@@ -464,9 +464,9 @@ public final class Renderer {
 
     /**
      * Set the texture from the file given.
-     * 
+     *
      * @param path the path of the file
-     * @return whether the operation as been correctely made.
+     * @return whether the operation as been correctly made.
      */
     public boolean setTexture(final String path) {
         if (path == null) {
@@ -481,12 +481,18 @@ public final class Renderer {
 
     /**
      * Sets the Vertex render on te given value.
+     *
      * @param selected the new value.
      */
     public void setVertexRendered(boolean selected) {
         vertexRendered = selected;
     }
 
+    /**
+     * Sets the color map for depth shader.
+     *
+     * @param map the new colormap to use.
+     */
     public void setColorMap(Maps map) {
         if (shader instanceof DepthShader) {
             final DepthShader depthShader = (DepthShader) shader;
