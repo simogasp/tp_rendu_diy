@@ -51,6 +51,7 @@ public final class ColorMapFactory {
      *
      * @return an array of Color
      */
+    @SuppressWarnings("checkstyle:methodlength")
     private static Color[] buildMagma() {
         final Color[] res = {
                 new Color(0.001462f, 0.000466f, 0.013866f),
@@ -318,6 +319,7 @@ public final class ColorMapFactory {
      *
      * @return an array of colors.
      */
+    @SuppressWarnings("checkstyle:methodlength")
     private static Color[] buildViridis() {
         // data from
         // https://github.com/matplotlib/matplotlib/blob/
