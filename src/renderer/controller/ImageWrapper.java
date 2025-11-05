@@ -14,7 +14,7 @@ public class ImageWrapper extends BufferedImage {
     private static final int DEFAULT_WIDTH = 100;
 
     /**
-     * Defalut height of a screen (For test).
+     * Default height of a screen (For test).
      */
     private static final int DEFAULT_HEIGHT = 100;
 
