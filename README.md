@@ -10,7 +10,7 @@ The GUI provides tools to render the scene.
 
 ### Model
 
-You can choose the model to render in the filname part of the menu. If you have
+You can choose the model to render in the filename part of the menu. If you have
 another `file.scene` which you want to render using this App, you can also copy
 the file in the `data/` dir and write his basename in the Text Field "With
 another scene file".
@@ -19,7 +19,7 @@ another scene file".
 
 ### Shader
 
-You can choose differents shader to render the model in the shader menu.
+You can choose different shader to render the model in the shader menu.
 
 ![ShaderMenu](./data/screenshots/Shader_menu.png)
 
@@ -27,7 +27,7 @@ Selecting The DepthShader enabled the DepthShaderColorMap selection to switch th
 
 ![DepthColorMap](./data/screenshots/ShaderColorMap_menu.png)
 
-Selecting the TextureShader enabled the Texture menu to switch the menu availabled in the `data` folder when starting the application.
+Selecting the TextureShader enabled the Texture menu to switch the menu available in the `data` folder when starting the application.
 
 ![TextureMenu](./data/screenshots/Shader_Texture_menu.png)
 
@@ -153,7 +153,7 @@ ant run
 
 ### Generate JavaDoc
 
-To genrate JavaDoc of the project do:
+To generate JavaDoc of the project do:
 
 ```bash
 ant doc
@@ -191,7 +191,7 @@ ant test
 
 The test reports will be written in the dir `test/reports/`.
 
-To run fonctionnal Tests:
+To run functional Tests:
 
 ```bash
 ant func-tests
