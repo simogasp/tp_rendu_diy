@@ -141,12 +141,14 @@ public class DepthShader extends Shader {
         return new Color(r, g, b);
     }
 
-    /**
-     * Sets the color map.
-     *
-     * @param map the new color map
-     */
+    @Override
     public void setColorMap(Maps map) {
-        colorMap = ColorMapFactory.create(map);
+        // Actual implementation
+       colorMap = ColorMapFactory.create(map);
+    }
+
+    @Override
+    public boolean supportsColorMap() {
+        return true;
     }
 }

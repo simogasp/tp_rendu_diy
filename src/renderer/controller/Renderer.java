@@ -7,7 +7,6 @@ import java.util.Optional;
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
 import renderer.controller.ColorMapFactory.Maps;
-import renderer.core.shader.DepthShader;
 import renderer.core.shader.Fragment;
 import renderer.core.camera.Transformation;
 import renderer.core.light.Lighting;
@@ -494,9 +493,8 @@ public final class Renderer {
      * @param map the new colormap to use.
      */
     public void setColorMap(Maps map) {
-        if (shader instanceof DepthShader) {
-            final DepthShader depthShader = (DepthShader) shader;
-            depthShader.setColorMap(map);
+        if (shader.supportsColorMap()) {
+            shader.setColorMap(map);
         }
     }
 }

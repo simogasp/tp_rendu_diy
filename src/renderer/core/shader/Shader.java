@@ -1,6 +1,6 @@
 package renderer.core.shader;
 
-
+import renderer.controller.ColorMapFactory.Maps;
 import renderer.controller.ImageWrapper;
 import renderer.controller.Renderer;
 
@@ -52,5 +52,24 @@ public abstract class Shader {
      */
     public void init(final Renderer renderer, final ImageWrapper newScreen) {
         screen = newScreen;
+    }
+
+    /**
+     * Sets the color map for shaders that support it.
+     * Default implementation does nothing.
+     *
+     * @param map the color map to use
+     */
+    public void setColorMap(Maps map) {
+        // Default: do nothing
+    }
+
+    /**
+     * Indicates whether this shader supports color mapping.
+     *
+     * @return true if the shader supports color maps, false otherwise
+     */
+    public boolean supportsColorMap() {
+        return false;
     }
 }
