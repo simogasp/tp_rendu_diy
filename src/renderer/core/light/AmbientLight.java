@@ -3,7 +3,7 @@ package renderer.core.light;
 import renderer.algebra.Vector;
 
 /**
- * This Class represents a ambiant light.
+ * This Class represents an ambient light.
  */
 public class AmbientLight extends Light {
 
