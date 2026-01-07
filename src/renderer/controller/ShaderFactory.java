@@ -31,7 +31,7 @@ public final class ShaderFactory {
      * Shader abstract class.
      */
     public static void init() {
-        // Getthe classloader
+        // Get the classloader
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         // the package name in which the ShadeFactory is
         String packageName = Shader.class.getPackage().getName();
@@ -88,7 +88,7 @@ public final class ShaderFactory {
      * Create a instance of the given shaderName and return it if it is a success.
      * If the shaderName isn't in the ShaderSet, returns a empty Optional.
      *
-     * @param shaderName the name of the shader we want to instanciate.
+     * @param shaderName the name of the shader we want to instantiate.
      * @return a optional of Shader
      */
     public static Optional<Shader> create(String shaderName) {
