@@ -27,6 +27,42 @@ import renderer.core.shader.TextureShader;
  */
 public class ShaderFactoryTest {
 
+    // ==================== Test Constants ====================
+
+    /**
+     * Flag to control whether optional shaders (DepthShader,
+     * NormalMapShader) are expected to be present.
+     * Set to false for student versions where these shaders are not
+     * provided.
+     */
+    private static final boolean EXPECT_OPTIONAL_SHADERS = false; //!!
+    //++  private static final boolean EXPECT_OPTIONAL_SHADERS = true;
+
+    /**
+     * Minimum expected number of shader implementations.
+     * When optional shaders are expected: 3 required shaders.
+     * When optional shaders are NOT expected: relaxed to 2 to allow
+     * for variations.
+     */
+    private static final int MIN_EXPECTED_SHADERS =
+            EXPECT_OPTIONAL_SHADERS ? 3 : 2;
+
+    /** Number of threads for concurrency test. */
+    private static final int NUM_THREADS = 10;
+
+    /** Timeout for concurrency test in milliseconds. */
+    private static final int CONCURRENCY_TEST_TIMEOUT = 5000;
+
+    /** Invalid shader names for edge case testing. */
+    private static final String[] INVALID_SHADER_NAMES = {null, "",
+            "   ", "Invalid", "123Shader", "Simple-Shader",
+            "Simple.Shader",
+            "renderer.core.shader.SimpleShader"};
+
+    /** List of known shader implementations. */
+    private static final ExpectedShader[] EXPECTED_SHADERS =
+            buildExpectedShaders();
+
     // ==================== Test Data Structures ====================
 
     /**
@@ -131,42 +167,6 @@ public class ShaderFactoryTest {
         }
     }
 
-    // ==================== Test Constants ====================
-
-    /**
-     * Flag to control whether optional shaders (DepthShader,
-     * NormalMapShader) are expected to be present.
-     * Set to false for student versions where these shaders are not
-     * provided.
-     */
-    private static final boolean EXPECT_OPTIONAL_SHADERS = false; //!!
-    //++  private static final boolean EXPECT_OPTIONAL_SHADERS = true;
-
-    /**
-     * Minimum expected number of shader implementations.
-     * When optional shaders are expected: 3 required shaders.
-     * When optional shaders are NOT expected: relaxed to 2 to allow
-     * for variations.
-     */
-    private static final int MIN_EXPECTED_SHADERS =
-            EXPECT_OPTIONAL_SHADERS ? 3 : 2;
-
-    /** Number of threads for concurrency test. */
-    private static final int NUM_THREADS = 10;
-
-    /** Timeout for concurrency test in milliseconds. */
-    private static final int CONCURRENCY_TEST_TIMEOUT = 5000;
-
-    /** Expected number of shader implementations discovered. */
-    private static final int EXPECTED_SHADER_COUNT = 5;
-
-    /** Number of partial shader names for partial match test. */
-    private static final int PARTIAL_NAMES_COUNT = 5;
-
-    /** List of known shader implementations. */
-    private static final ExpectedShader[] EXPECTED_SHADERS =
-            buildExpectedShaders();
-
     /**
      * Builds the expected shaders array, including optional shaders
      * only if EXPECT_OPTIONAL_SHADERS is true.
@@ -175,7 +175,7 @@ public class ShaderFactoryTest {
     private static ExpectedShader[] buildExpectedShaders() {
         final java.util.List<ExpectedShader> shaders =
                 new java.util.ArrayList<>();
-        
+
         // Required shaders
         shaders.add(new ExpectedShader("SimpleShader",
                 SimpleShader.class));
@@ -297,12 +297,6 @@ public class ShaderFactoryTest {
         }
         return false;
     }
-
-    /** Invalid shader names for edge case testing. */
-    private static final String[] INVALID_SHADER_NAMES = {null, "",
-            "   ", "Invalid", "123Shader", "Simple-Shader",
-            "Simple.Shader",
-            "renderer.core.shader.SimpleShader"};
 
     // ==================== Setup ====================
 
