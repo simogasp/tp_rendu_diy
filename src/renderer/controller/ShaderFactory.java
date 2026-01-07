@@ -56,20 +56,30 @@ public final class ShaderFactory {
         // dirs now should contain a single directory (even if it is a list) where the
         // .class for Shader are
 
-        String[] files = dirs.get(0).list();
-        for (int i = 0; i < files.length; i++) {
+        System.out.println("Scanning " + packageName + " for Shader implementations...");
+        final String[] files = dirs.get(0).list();
+        for (String file : files) {
+            //System.out.println("Found file: " + files[i]);
             Class<? extends Shader> shader;
-            if (files[i].endsWith(".class")) {
-                String classname = files[i].substring(0, files[i].length() - 6);
-                try {
-                    shader = (Class<Shader>) Class.forName(Shader.class.getPackage().getName() + "." + classname);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                    shader = null;
-                }
-                if ((shader != null) && (shader.getSuperclass() == Shader.class)) {
+            if (!file.endsWith(".class")) {
+                System.out.println("Skipping non .class file: " + file);
+                continue;
+            }
+            String classname = file.substring(0, file.lastIndexOf("."));
+            try {
+                final String shaderPackageName = Shader.class.getPackage().getName();
+                final String fullClassName = shaderPackageName + "." + classname;
+                shader = (Class<Shader>) Class.forName(fullClassName);
+                if (shader.getSuperclass() == Shader.class) {
                     SHADER_SET.add(shader);
+                    System.out.println("Found Shader implementation: " + classname);
                 }
+                else {
+                    System.out.println("Class " + classname + " does not extend Shader");
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                shader = null;
             }
         }
     }
