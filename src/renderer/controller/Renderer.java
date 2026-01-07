@@ -7,7 +7,6 @@ import java.util.Optional;
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
 import renderer.controller.ColorMapFactory.Maps;
-import renderer.core.shader.DepthShader;
 import renderer.core.shader.Fragment;
 import renderer.core.camera.Transformation;
 import renderer.core.light.Lighting;
@@ -44,7 +43,7 @@ public final class Renderer {
      */
     private static final String DEFAULT_FILENAME = "data/example0.scene";
 
-    /** The devider of the normal length. */
+    /** The divider of the normal length. */
     private static final double DIVIDER = 100;
 
     /** The length of the normal. */
@@ -494,9 +493,8 @@ public final class Renderer {
      * @param map the new colormap to use.
      */
     public void setColorMap(Maps map) {
-        if (shader instanceof DepthShader) {
-            final DepthShader depthShader = (DepthShader) shader;
-            depthShader.setColorMap(map);
+        if (shader.supportsColorMap()) {
+            shader.setColorMap(map);
         }
     }
 }

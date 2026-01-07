@@ -21,7 +21,7 @@ public abstract class Light {
     }
 
     /**
-     * get the Intensity of the light.
+     * Get the Intensity of the light.
      *
      * @return the intensity
      */

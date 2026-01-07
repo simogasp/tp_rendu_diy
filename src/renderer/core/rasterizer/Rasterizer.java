@@ -96,7 +96,7 @@ public class Rasterizer {
 
     /**
      * Rasterizes a vertex on the screen.
-     * 
+     *
      * @param v the fragment drawn
      */
     public void rasterizeVertex(final Fragment v) {

@@ -38,6 +38,7 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
 
     files_to_copy = [
         "Makefile",
+        "checkstyle.xml",
         "README.md"
     ]
     logger.info(f"Copying files to {dest_name}")
@@ -45,35 +46,57 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
         shutil.copy(file, dest_name)
 
     logger.info(f"Copying directories in {dest_name}")
+    # shutil.copytree(".vscode", os.path.join(dest_name, ".vscode"))
     shutil.copytree("data", os.path.join(dest_name, "data"))
     shutil.copytree("test", os.path.join(dest_name, "test"))
     shutil.copytree("src", os.path.join(dest_name, "src"))
     shutil.copytree("lib", os.path.join(dest_name, "lib"))
 
     studentify_dir = os.path.join(tempfile.gettempdir(), "tpt")
+    # Define trusted repository URL as a constant
+    STUDENTIFY_REPO = "https://github.com/simogasp/studentipy.git"
+    
     logger.info(f"Cloning studentify.py to {studentify_dir}")
-    subprocess.check_call(["git", "clone", "https://github.com/simogasp/studentipy.git", studentify_dir])
+    # Use absolute path to git command and validate the directory path
+    studentify_dir_abs = os.path.abspath(studentify_dir)
+    subprocess.check_call([
+        "/usr/bin/git", 
+        "clone", 
+        STUDENTIFY_REPO, 
+        studentify_dir_abs
+    ])
 
-    files_to_studentify = ["src/DepthBuffer.java",
-                           "src/Lighting.java",
-                           "src/Mesh.java",
-                           "src/Rasterizer.java",
-                           "src/Renderer.java",
-                           "src/Texture.java",
-                           "src/TextureShader.java",
-                           "src/Transformation.java"]
+    files_to_studentify = ["src/renderer/core/light/Lighting.java",
+                           "src/renderer/core/mesh/Mesh.java",
+                           "src/renderer/core/mesh/Texture.java",
+                           "src/renderer/core/rasterizer/Rasterizer.java",
+                           "src/renderer/controller/Renderer.java",
+                           "src/renderer/core/shader/DepthBuffer.java",
+                           "src/renderer/core/shader/TextureShader.java",
+                           "src/renderer/core/camera/Transformation.java",
+                           "test/unit/controller/ShaderFactoryTest.java"]
     for file in files_to_studentify:
-        file_cpp = os.path.join(dest_name, file)
-        logger.info(f"Applying studentify to {file_cpp}")
+        file_path = os.path.join(dest_name, file)
+        logger.info(f"Applying studentify to {file_path}")
         subprocess.check_call(
-            ["python3", os.path.join(studentify_dir, "studentify.py"), file_cpp, "-o", file_cpp, "--force"])
+            ["python3", os.path.join(studentify_dir, "studentify.py"), file_path, "-o", file_path, "--force"])
+        
+    # remove Depth and Normal shader implementations
+    files_to_remove = [
+        "src/renderer/core/shader/DepthShader.java",
+        "src/renderer/core/shader/NormalMapShader.java"
+    ]
+    for file in files_to_remove:
+        file_path = os.path.join(dest_name, file)
+        logger.info(f"Removing {file_path}")
+        os.remove(file_path)
 
     logger.info("Removing studentify.py")
     shutil.rmtree(studentify_dir)
 
     if not skip_packaging:
         logger.info(f"Generating archive {archive_name}.zip in {working_dir}")
-        with zipfile.ZipFile(os.path.join(working_dir, f"{archive_name}.zip"), "w") as zip_file:
+        with zipfile.ZipFile(os.path.join(working_dir, f"{archive_name}.zip"), "w", compression=zipfile.ZIP_BZIP2) as zip_file:
             for root, dirs, files in os.walk(dest_name):
                 for file in files:
                     zip_file.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), dest_name))

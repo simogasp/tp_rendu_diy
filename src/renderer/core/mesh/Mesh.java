@@ -152,7 +152,7 @@ public class Mesh {
         final int numFaceElements = VERTICES_PER_FACE * getNumFaces();
         for (int i = 0; i < numFaceElements; i += VERTICES_PER_FACE) {
             //++ // TODO
-            //++ Vector n = new Vector();
+            //++ Vector n = new Vector(3);
             final Vector a = vertices[faces[i]]; //<!!
             final Vector b = vertices[faces[i + 1]];
             final Vector c = vertices[faces[i + 2]];
