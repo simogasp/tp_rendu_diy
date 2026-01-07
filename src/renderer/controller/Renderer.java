@@ -44,7 +44,7 @@ public final class Renderer {
      */
     private static final String DEFAULT_FILENAME = "data/example0.scene";
 
-    /** The devider of the normal length. */
+    /** The divider of the normal length. */
     private static final double DIVIDER = 100;
 
     /** The length of the normal. */
