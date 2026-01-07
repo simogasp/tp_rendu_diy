@@ -53,8 +53,18 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
     shutil.copytree("lib", os.path.join(dest_name, "lib"))
 
     studentify_dir = os.path.join(tempfile.gettempdir(), "tpt")
+    # Define trusted repository URL as a constant
+    STUDENTIFY_REPO = "https://github.com/simogasp/studentipy.git"
+    
     logger.info(f"Cloning studentify.py to {studentify_dir}")
-    subprocess.check_call(["git", "clone", "https://github.com/simogasp/studentipy.git", studentify_dir])
+    # Use absolute path to git command and validate the directory path
+    studentify_dir_abs = os.path.abspath(studentify_dir)
+    subprocess.check_call([
+        "/usr/bin/git", 
+        "clone", 
+        STUDENTIFY_REPO, 
+        studentify_dir_abs
+    ])
 
     files_to_studentify = ["src/renderer/core/light/Lighting.java",
                            "src/renderer/core/mesh/Mesh.java",
