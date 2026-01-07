@@ -291,7 +291,7 @@ public class MenuPanel extends JPanel {
 
         // add a subtitle
         constraints.gridy++;
-        add(new JLabel("Option"), constraints);
+        add(new JLabel("Options"), constraints);
 
         // check box to draw the normals
         drawNormalCheckBox = new JCheckBox("Draw normals");
