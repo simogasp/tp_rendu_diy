@@ -75,10 +75,20 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
                            "src/renderer/core/shader/TextureShader.java",
                            "src/renderer/core/camera/Transformation.java"]
     for file in files_to_studentify:
-        file_cpp = os.path.join(dest_name, file)
-        logger.info(f"Applying studentify to {file_cpp}")
+        file_path = os.path.join(dest_name, file)
+        logger.info(f"Applying studentify to {file_path}")
         subprocess.check_call(
-            ["python3", os.path.join(studentify_dir, "studentify.py"), file_cpp, "-o", file_cpp, "--force"])
+            ["python3", os.path.join(studentify_dir, "studentify.py"), file_path, "-o", file_path, "--force"])
+        
+    # remove Depth and Normal shader implementations
+    files_to_remove = [
+        "src/renderer/core/shader/DepthShader.java",
+        "src/renderer/core/shader/NormalMapShader.java"
+    ]
+    for file in files_to_remove:
+        file_path = os.path.join(dest_name, file)
+        logger.info(f"Removing {file_path}")
+        os.remove(file_path)
 
     logger.info("Removing studentify.py")
     shutil.rmtree(studentify_dir)
