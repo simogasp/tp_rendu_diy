@@ -73,7 +73,8 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
                            "src/renderer/controller/Renderer.java",
                            "src/renderer/core/shader/DepthBuffer.java",
                            "src/renderer/core/shader/TextureShader.java",
-                           "src/renderer/core/camera/Transformation.java"]
+                           "src/renderer/core/camera/Transformation.java",
+                           "test/unit/controller/ShaderFactoryTest.java"]
     for file in files_to_studentify:
         file_path = os.path.join(dest_name, file)
         logger.info(f"Applying studentify to {file_path}")
