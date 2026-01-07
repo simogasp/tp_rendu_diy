@@ -183,7 +183,7 @@ public class ShaderFactoryTest {
                 PainterShader.class));
         shaders.add(new ExpectedShader("TextureShader",
                 TextureShader.class));
-        
+
         // Optional shaders - only add if expected and available
         if (EXPECT_OPTIONAL_SHADERS) {
             try {
@@ -196,7 +196,7 @@ public class ShaderFactoryTest {
                 System.out.println(
                         "DepthShader not found (optional, skipping)");
             }
-            
+
             try {
                 final Class<? extends Shader> normalMapShaderClass =
                         Class.forName(
@@ -209,7 +209,7 @@ public class ShaderFactoryTest {
                         "NormalMapShader not found (optional, skipping)");
             }
         }
-        
+
         return shaders.toArray(new ExpectedShader[shaders.size()]);
     }
 
@@ -221,7 +221,7 @@ public class ShaderFactoryTest {
     private static ShaderTestCase[] getCreationTestCases() {
         final java.util.List<ShaderTestCase> testCases =
                 new java.util.ArrayList<>();
-        
+
         // Required shaders
         testCases.add(new ShaderTestCase("SimpleShader",
                 SimpleShader.class, true, "Valid SimpleShader creation"));
@@ -231,7 +231,7 @@ public class ShaderFactoryTest {
         testCases.add(new ShaderTestCase("TextureShader",
                 TextureShader.class, true,
                 "Valid TextureShader creation"));
-        
+
         // Optional shaders - only add if expected and available
         if (EXPECT_OPTIONAL_SHADERS) {
             try {
@@ -246,7 +246,7 @@ public class ShaderFactoryTest {
             } catch (ClassNotFoundException | NoClassDefFoundError e) {
                 // DepthShader not available, skip
             }
-            
+
             try {
                 final Class<? extends Shader> normalMapShaderClass =
                         Class.forName(
@@ -261,7 +261,7 @@ public class ShaderFactoryTest {
                 // NormalMapShader not available, skip
             }
         }
-        
+
         // Negative test cases
         testCases.add(new ShaderTestCase("NonExistentShader", null, false,
                 "Non-existent shader should return empty Optional"));
@@ -277,7 +277,7 @@ public class ShaderFactoryTest {
                 "Name with trailing space should not match"));
         testCases.add(new ShaderTestCase(" SimpleShader", null, false,
                 "Name with leading space should not match"));
-        
+
         return testCases.toArray(
                 new ShaderTestCase[testCases.size()]);
     }
@@ -353,7 +353,7 @@ public class ShaderFactoryTest {
         for (ExpectedShader expected : EXPECTED_SHADERS) {
             final boolean isDiscovered = discoveredNames.contains(
                     expected.getSimpleName());
-            
+
             if (expected.isOptional()) {
                 if (isDiscovered) {
                     assertTrue("Optional shader class should be in set",
