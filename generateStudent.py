@@ -38,6 +38,7 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
 
     files_to_copy = [
         "Makefile",
+        "checkstyle.xml",
         "README.md"
     ]
     logger.info(f"Copying files to {dest_name}")
@@ -45,6 +46,7 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
         shutil.copy(file, dest_name)
 
     logger.info(f"Copying directories in {dest_name}")
+    # shutil.copytree(".vscode", os.path.join(dest_name, ".vscode"))
     shutil.copytree("data", os.path.join(dest_name, "data"))
     shutil.copytree("test", os.path.join(dest_name, "test"))
     shutil.copytree("src", os.path.join(dest_name, "src"))
@@ -54,14 +56,14 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
     logger.info(f"Cloning studentify.py to {studentify_dir}")
     subprocess.check_call(["git", "clone", "https://github.com/simogasp/studentipy.git", studentify_dir])
 
-    files_to_studentify = ["src/DepthBuffer.java",
-                           "src/Lighting.java",
-                           "src/Mesh.java",
-                           "src/Rasterizer.java",
-                           "src/Renderer.java",
-                           "src/Texture.java",
-                           "src/TextureShader.java",
-                           "src/Transformation.java"]
+    files_to_studentify = ["src/renderer/core/light/Lighting.java",
+                           "src/renderer/core/mesh/Mesh.java",
+                           "src/renderer/core/mesh/Texture.java",
+                           "src/renderer/core/rasterizer/Rasterizer.java",
+                           "src/renderer/controller/Renderer.java",
+                           "src/renderer/core/shader/DepthBuffer.java",
+                           "src/renderer/core/shader/TextureShader.java",
+                           "src/renderer/core/camera/Transformation.java"]
     for file in files_to_studentify:
         file_cpp = os.path.join(dest_name, file)
         logger.info(f"Applying studentify to {file_cpp}")
