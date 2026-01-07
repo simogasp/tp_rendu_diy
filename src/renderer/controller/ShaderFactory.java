@@ -73,8 +73,7 @@ public final class ShaderFactory {
                 if (shader.getSuperclass() == Shader.class) {
                     SHADER_SET.add(shader);
                     System.out.println("Found Shader implementation: " + classname);
-                }
-                else {
+                } else {
                     System.out.println("Class " + classname + " does not extend Shader");
                 }
             } catch (ClassNotFoundException e) {
