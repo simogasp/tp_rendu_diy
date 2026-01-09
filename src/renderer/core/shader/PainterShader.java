@@ -16,13 +16,6 @@ public class PainterShader extends Shader {
     private DepthBuffer depth;
 
     /**
-     * Creates a PainterShader with the given screen.
-     */
-    public PainterShader() {
-        super();
-    }
-
-    /**
      * Shade the fragment, taking the depth of the fragment into account.
      * @param fragment the fragment to shade
      */

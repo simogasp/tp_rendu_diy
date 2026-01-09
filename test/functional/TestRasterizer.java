@@ -14,9 +14,6 @@ public class TestRasterizer {
 
     static class TestShader extends Shader {
 
-        TestShader() {
-            super();
-        }
 
         @Override
         public void shade(Fragment fragment) {

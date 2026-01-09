@@ -7,13 +7,6 @@ package renderer.core.shader;
 public class SimpleShader extends Shader {
 
     /**
-     * Creates a SimpleShader.
-     */
-    public SimpleShader() {
-        super();
-    }
-
-    /**
      * Shade the fragment.
      * @param fragment the fragment to shade
      */
