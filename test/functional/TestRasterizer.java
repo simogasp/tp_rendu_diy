@@ -6,8 +6,8 @@ import renderer.core.rasterizer.Rasterizer;
 import renderer.core.shader.Shader;
 
 /**
- * Test class for the Rasterizer class
- * 
+ * Test class for the Rasterizer class.
+ *
  * @author: cdehais
  */
 public class TestRasterizer {
@@ -30,6 +30,10 @@ public class TestRasterizer {
         }
     }
 
+    /**
+     * Test rasterizing an edge.
+     * @throws Exception
+     */
     @Test
     public void test() throws Exception {
 
