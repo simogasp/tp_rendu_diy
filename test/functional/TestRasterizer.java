@@ -45,10 +45,16 @@ public class TestRasterizer {
         Rasterizer rasterizer = new Rasterizer(shader);
 
         System.out.println("Rasterizing edge");
-        Fragment v1 = new Fragment(0, 20);
-        v1.setColor(0, 0, 0);
-        Fragment v2 = new Fragment(5, -35);
-        v2.setColor((float) 50 / 255, (float) 100 / 255, 0);
+
+        final int[] fragment1Coords = {0, 20};
+        final int[] fragment2Coords = {5, -35};
+        final float[] blackColor = {0, 0, 0};
+        final float[] greenColor = {50f / 255, 100f / 255, 0};
+
+        Fragment v1 = new Fragment(fragment1Coords[0], fragment1Coords[1]);
+        v1.setColor(blackColor[0], blackColor[1], blackColor[2]);
+        Fragment v2 = new Fragment(fragment2Coords[0], fragment2Coords[1]);
+        v2.setColor(greenColor[0], greenColor[1], greenColor[2]);
 
         rasterizer.rasterizeEdge(v1, v2);
     }
