@@ -203,7 +203,7 @@ To run unit Tests:
 ant unit-tests
 ```
 
-### verify the CheckStyle
+### Verify the CheckStyle
 
 To verify checkstyle on the project if you have checkstyle in lib:
 
