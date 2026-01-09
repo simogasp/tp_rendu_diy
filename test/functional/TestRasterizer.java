@@ -14,13 +14,19 @@ public class TestRasterizer {
 
     static class TestShader extends Shader {
 
-        public TestShader() {
+        TestShader() {
             super();
         }
 
+        @Override
         public void shade(Fragment fragment) {
-            System.out.println("  fragment: (" + fragment.getX() + ", " + fragment.getY() + ")"
+            System.out.println(
+                "  fragment: (" + fragment.getX() + ", " + fragment.getY() + ")"
                     + " - color = (" + fragment.getColor() + ")");
+        }
+        @Override
+        public void reset() {
+            // Nothing to reset
         }
     }
 

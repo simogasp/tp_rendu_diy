@@ -76,6 +76,7 @@ public class TextureShader extends Shader {
      *
      * @param fragment the fragment to shade
      */
+    @Override
     public void shade(Fragment fragment) {
         if (!depth.testFragment(fragment)) {
             return;
@@ -113,6 +114,7 @@ public class TextureShader extends Shader {
     /**
      * Reset the shader.
      */
+    @Override
     public void reset() {
         depth.clear();
     }
