@@ -8,7 +8,10 @@ import renderer.algebra.Vector;
 
 public class TestAlgebra {
 
-
+    /**
+     * Test various algebra operations.
+     * @throws Exception
+     */
     @Test
     public void test() throws Exception {
 
