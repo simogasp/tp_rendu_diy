@@ -4,12 +4,16 @@ import renderer.algebra.Vector;
 import renderer.core.mesh.Mesh;
 
 /**
- * Test class for the Mesh class
- * 
+ * Test class for the Mesh class.
+ *
  * @author: cdehais based on gmorin, smondet
  */
 public class TestMesh {
 
+    /**
+     * Test loading a mesh from an OFF file.
+     * @throws Exception
+     */
     @Test
     public void test() throws Exception {
 

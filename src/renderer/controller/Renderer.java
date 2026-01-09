@@ -36,6 +36,11 @@ public final class Renderer {
             throw new RuntimeException("Any Shader has been set.");
         }
 
+        @Override
+        public void reset() {
+            // Nothing to reset
+        }
+
     }
 
     /**

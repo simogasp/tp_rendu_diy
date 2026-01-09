@@ -27,8 +27,7 @@ public abstract class Shader {
     /**
      * Common entry point to ree-initialize the shader.
      */
-    public void reset() {
-    }
+    public abstract void reset();
 
     /**
      * Computes the fragment color and write the result to the screen.

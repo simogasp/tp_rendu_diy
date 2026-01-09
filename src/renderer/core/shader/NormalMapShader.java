@@ -22,13 +22,6 @@ public class NormalMapShader extends Shader {
      */
     private Transformation xform;
 
-    /**
-     * Creates a NormalMapShader with the given screen.
-     */
-    public NormalMapShader() {
-        super();
-    }
-
     @Override
     public void reset() {
         this.depthBuffer.clear();
