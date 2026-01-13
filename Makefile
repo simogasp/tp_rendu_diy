@@ -123,7 +123,7 @@ clean-doc:
 # create plant UML file
 createUML: compile
 	java -jar lib/plantuml-dep-cli-1.4.0.jar -b src/ -dp "^renderer.(model|gui|controller).*" -o $(UML_DIR)/ClassDiagramWithoutMembers.puml
-	java -cp $(CLASSPATH) renderer.doc.CreateClassDiagram -dp "^renderer.(model|gui|controller).*"
+	java -cp $(CLASSPATH) renderer.doc.CreateClassDiagram -dp "^renderer.(core|gui|controller).*"
 
 # draw plant UML File 
 drawUML:
