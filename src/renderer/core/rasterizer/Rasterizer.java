@@ -283,12 +283,15 @@ public class Rasterizer {
                             && (bar.get(1) >= -EPSILON)
                             && (bar.get(2) >= -EPSILON)) {
                         for (int i = 0; i < numAttributes; i++) {
-                            if (1 <= i && i <= 3) {
-                                // color between 0 and 1;
-                                fragment.setAttribute(i, MathUtils.clamp(bar.get(0) * v1.getAttribute(i)
+                            // for the color attribute (index ranging from R to B)
+                            if (i >= Fragment.COLOR_R && i <= Fragment.COLOR_B) {
+                                // clamp the color between 0 and 1;
+                                fragment.setAttribute(i, MathUtils.clamp(
+                                        bar.get(0) * v1.getAttribute(i)
                                         + bar.get(1) * v2.getAttribute(i)
                                         + bar.get(2) * v3.getAttribute(i), 0., 1.));
                             } else {
+                                // for all the other attributes take the interpolated value
                                 fragment.setAttribute(i, bar.get(0) * v1.getAttribute(i)
                                         + bar.get(1) * v2.getAttribute(i)
                                         + bar.get(2) * v3.getAttribute(i));
