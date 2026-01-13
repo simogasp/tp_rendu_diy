@@ -275,30 +275,30 @@ public class Rasterizer {
 
                 // setup position now to allow early clipping
                 fragment.setPosition(x, y);
-                if (!shader.isClipped(fragment)) {
-
-                    final Vector v = new Vector(1.0, (double) x, (double) y);
-                    final Vector bar = cMat.multiply(v);
-                    if ((bar.get(0) >= -EPSILON)
-                            && (bar.get(1) >= -EPSILON)
-                            && (bar.get(2) >= -EPSILON)) {
-                        for (int i = 0; i < numAttributes; i++) {
-                            // for the color attribute (index ranging from R to B)
-                            if (i >= Fragment.COLOR_R && i <= Fragment.COLOR_B) {
-                                // clamp the color between 0 and 1;
-                                fragment.setAttribute(i, MathUtils.clamp(
-                                        bar.get(0) * v1.getAttribute(i)
-                                        + bar.get(1) * v2.getAttribute(i)
-                                        + bar.get(2) * v3.getAttribute(i), 0., 1.));
-                            } else {
-                                // for all the other attributes take the interpolated value
-                                fragment.setAttribute(i, bar.get(0) * v1.getAttribute(i)
-                                        + bar.get(1) * v2.getAttribute(i)
-                                        + bar.get(2) * v3.getAttribute(i));
-                            }
+                if (shader.isClipped(fragment)) {
+                    continue;
+                }
+                final Vector v = new Vector(1.0, (double) x, (double) y);
+                final Vector bar = cMat.multiply(v);
+                if ((bar.get(0) >= -EPSILON)
+                        && (bar.get(1) >= -EPSILON)
+                        && (bar.get(2) >= -EPSILON)) {
+                    for (int i = 0; i < numAttributes; i++) {
+                        // for the color attribute (index ranging from R to B)
+                        if (i >= Fragment.COLOR_R && i <= Fragment.COLOR_B) {
+                            // clamp the color between 0 and 1;
+                            fragment.setAttribute(i, MathUtils.clamp(
+                                    bar.get(0) * v1.getAttribute(i)
+                                    + bar.get(1) * v2.getAttribute(i)
+                                    + bar.get(2) * v3.getAttribute(i), 0., 1.));
+                        } else {
+                            // for all the other attributes take the interpolated value
+                            fragment.setAttribute(i, bar.get(0) * v1.getAttribute(i)
+                                    + bar.get(1) * v2.getAttribute(i)
+                                    + bar.get(2) * v3.getAttribute(i));
                         }
-                        shader.shade(fragment);
                     }
+                    shader.shade(fragment);
                 }
             }
         }
