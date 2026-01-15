@@ -46,6 +46,7 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
 
         Fragment fragment = new Fragment(0, 0);
         final int numAttributes = fragment.getNumAttributes();
+        final double epsilon = (new Vector(ymax - ymin, xmax - xmin)).norm() / 1e6;
 
         for (int x = xmin; x <= xmax; x++) {
             for (int y = ymin; y <= ymax; y++) {
@@ -58,9 +59,9 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
 
                 final Vector v = new Vector(1.0, (double) x, (double) y);
                 final Vector bar = cMat.multiply(v);
-                if ((bar.get(0) >= 0.0)
-                        && (bar.get(1) >= 0.0)
-                        && (bar.get(2) >= 0.0)) {
+                if ((bar.get(0) >= -epsilon)
+                        && (bar.get(1) >= -epsilon)
+                        && (bar.get(2) >= -epsilon)) {
                     final double oneOverZ = bar.get(0) / v1.getDepth()
                             + bar.get(1) / v2.getDepth()
                             + bar.get(2) / v3.getDepth();
