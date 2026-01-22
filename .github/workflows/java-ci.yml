@@ -74,3 +74,10 @@ jobs:
       - name: Run doc
         run: make doc
 
+      # test the generation of the student code with generateStudent.py
+      - name: Test student code generation
+        run: |
+          ./generateStudent.py --skip-cleaning --skip-packaging --archive-name tp_diy -w ./dist
+          cd ./dist/tp_diy/
+          make
+          make unit-tests
