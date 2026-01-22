@@ -1,5 +1,6 @@
 package renderer.core.rasterizer;
 
+import renderer.algebra.MathUtils;
 import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
@@ -46,6 +47,7 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
 
         Fragment fragment = new Fragment(0, 0);
         final int numAttributes = fragment.getNumAttributes();
+        final double eps = (new Vector(ymax - ymin, xmax - xmin)).norm() / 1e6;
 
         for (int x = xmin; x <= xmax; x++) {
             for (int y = ymin; y <= ymax; y++) {
@@ -58,22 +60,31 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
 
                 final Vector v = new Vector(1.0, (double) x, (double) y);
                 final Vector bar = cMat.multiply(v);
-                if ((bar.get(0) >= 0.0)
-                        && (bar.get(1) >= 0.0)
-                        && (bar.get(2) >= 0.0)) {
-                    final double oneOverZ = bar.get(0) / v1.getDepth()
-                            + bar.get(1) / v2.getDepth()
-                            + bar.get(2) / v3.getDepth();
-                    for (int i = 0; i < numAttributes; i++) {
-                        final double aOverZ =
-                                bar.get(0) * v1.getAttribute(i) / v1.getDepth()
-                                + bar.get(1) * v2.getAttribute(i) / v2.getDepth()
-                                + bar.get(2) * v3.getAttribute(i) / v3.getDepth();
-
-                        fragment.setAttribute(i, aOverZ / oneOverZ);
-                    }
-                    shader.shade(fragment);
+                // skip the fragment if outside the triangle
+                if ((bar.get(0) < -eps) || (bar.get(1) < -eps) || (bar.get(2) < -eps)) {
+                    continue;
                 }
+
+                // weighting factor for perspective correct interpolation
+                final double oneOverZ = bar.get(0) / v1.getDepth()
+                                        + bar.get(1) / v2.getDepth()
+                                        + bar.get(2) / v3.getDepth();
+
+                for (int i = 0; i < numAttributes; ++i) {
+                    final double aOverZ = bar.get(0) * v1.getAttribute(i) / v1.getDepth()
+                                        + bar.get(1) * v2.getAttribute(i) / v2.getDepth()
+                                        + bar.get(2) * v3.getAttribute(i) / v3.getDepth();
+
+                    // interpolate the attributes
+                    double interpolated = aOverZ / oneOverZ;
+                    // for the color attribute (indices ranging from COLOR_R to COLOR_B)
+                    if (i >= Fragment.COLOR_R && i <= Fragment.COLOR_B) {
+                        // clamp the color between 0 and 1;
+                        interpolated = MathUtils.clamp(interpolated, 0., 1.);
+                    }
+                    fragment.setAttribute(i, interpolated);
+                }
+                shader.shade(fragment);
             }
         }
     }

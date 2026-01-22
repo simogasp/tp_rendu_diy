@@ -46,7 +46,7 @@ public class TestMesh {
 
         /*
          * System.out.println("vertices after change of basis: ") ;
-         * 
+         *
          * for (int i = 0 ; i < vertices.length / 3 ; i++ ){
          * System.out.println(
          * vertices[ 3 * i + 0 ] + " " +

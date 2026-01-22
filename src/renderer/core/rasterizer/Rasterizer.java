@@ -266,7 +266,8 @@ public class Rasterizer {
         final int xmax = Math.max(v1.getX(), Math.max(v2.getX(), v3.getX()));
         final int ymax = Math.max(v1.getY(), Math.max(v2.getY(), v3.getY()));
 
-        final double EPSILON = (new Vector(ymax - ymin, xmax - xmin)).norm() / 1e6;
+        // small epsilon to avoid numerical issues on the edges
+        final double eps = (new Vector(ymax - ymin, xmax - xmin)).norm() / 1e6;
         final Fragment fragment = new Fragment(0, 0);
         final int numAttributes = fragment.getNumAttributes();
 
@@ -275,28 +276,30 @@ public class Rasterizer {
 
                 // setup position now to allow early clipping
                 fragment.setPosition(x, y);
-                if (!shader.isClipped(fragment)) {
-
-                    final Vector v = new Vector(1.0, (double) x, (double) y);
-                    final Vector bar = cMat.multiply(v);
-                    if ((bar.get(0) >= -EPSILON)
-                            && (bar.get(1) >= -EPSILON)
-                            && (bar.get(2) >= -EPSILON)) {
-                        for (int i = 0; i < numAttributes; i++) {
-                            if (1 <= i && i <= 3) {
-                                // color between 0 and 1;
-                                fragment.setAttribute(i, MathUtils.clamp(bar.get(0) * v1.getAttribute(i)
-                                        + bar.get(1) * v2.getAttribute(i)
-                                        + bar.get(2) * v3.getAttribute(i), 0., 1.));
-                            } else {
-                                fragment.setAttribute(i, bar.get(0) * v1.getAttribute(i)
-                                        + bar.get(1) * v2.getAttribute(i)
-                                        + bar.get(2) * v3.getAttribute(i));
-                            }
-                        }
-                        shader.shade(fragment);
-                    }
+                if (shader.isClipped(fragment)) {
+                    continue;
                 }
+                final Vector v = new Vector(1.0, (double) x, (double) y);
+                final Vector bar = cMat.multiply(v);
+                // skip the fragment if outside the triangle
+                if ((bar.get(0) < -eps) || (bar.get(1) < -eps) || (bar.get(2) < -eps)) {
+                    continue;
+                }
+                for (int i = 0; i < numAttributes; ++i) {
+                    // get the attributes in a vector
+                    final Vector vecAtt = new Vector(v1.getAttribute(i),
+                                                    v2.getAttribute(i),
+                                                    v3.getAttribute(i));
+                    // interpolate the attributes
+                    double interpolated = bar.dot(vecAtt);
+                    // for the color attribute (indices ranging from COLOR_R to COLOR_B)
+                    if (i >= Fragment.COLOR_R && i <= Fragment.COLOR_B) {
+                        // clamp the color between 0 and 1;
+                        interpolated = MathUtils.clamp(interpolated, 0., 1.);
+                    }
+                    fragment.setAttribute(i, interpolated);
+                }
+                shader.shade(fragment);
             }
         }
         //>!!

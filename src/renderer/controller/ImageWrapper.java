@@ -24,10 +24,10 @@ public class ImageWrapper extends BufferedImage {
     private static final int BACKGROUND_COLOR = 0x333333;
 
     /**
-     * Creates a default ImageWrapper for test.
+     * Creates a default ImageWrapper for test with the default width and height.
      */
     public ImageWrapper() {
-        super(DEFAULT_WIDTH, DEFAULT_HEIGHT, BufferedImage.TYPE_3BYTE_BGR);
+        this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
     /**
@@ -36,13 +36,17 @@ public class ImageWrapper extends BufferedImage {
      * @param scene the scene of the image
      */
     public ImageWrapper(Scene scene) {
-        super(scene.getScreenW(), scene.getScreenH(), BufferedImage.TYPE_3BYTE_BGR);
-        for (int x = 0; x < scene.getScreenW(); x++) {
-            for (int y = 0; y < scene.getScreenH(); y++) {
-                // the back is dark grey
-                this.setRGB(x, y, BACKGROUND_COLOR);
-            }
-        }
+        this(scene.getScreenW(), scene.getScreenH());
+    }
+
+    /**
+     * Creates a Image wrapper with the given width and height.
+     * @param width the width of the image
+     * @param height the height of the image
+     */
+    public ImageWrapper(int width, int height) {
+        super(width, height, BufferedImage.TYPE_3BYTE_BGR);
+        init();
     }
 
     /**
@@ -68,5 +72,17 @@ public class ImageWrapper extends BufferedImage {
     public boolean isClipped(Fragment fragment) {
         return ((fragment.getX() < 0) || (fragment.getX() >= super.getWidth())
                 || (fragment.getY() < 0) || (fragment.getY() >= super.getHeight()));
+    }
+
+    /**
+     * Initializes the image with the background color.
+     */
+    private void init() {
+        for (int x = 0; x < getWidth(); ++x) {
+            for (int y = 0; y < getHeight(); ++y) {
+                // the back is dark grey
+                this.setRGB(x, y, BACKGROUND_COLOR);
+            }
+        }
     }
 }
