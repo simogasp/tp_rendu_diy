@@ -71,5 +71,6 @@ jobs:
       # - name: Checkstyle
       #   run: ant dl-checkstyle && ant checkstyle
 
-    #   - name: Run doc
-    #     run: make doc
+      - name: Run doc
+        run: make doc
+
