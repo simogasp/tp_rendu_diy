@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Removed
+
+## [v2025.1] - 2025-06-10
+
+### Added
+
 - added makefile
 - add the calibration matrix
 - added README.md
@@ -29,5 +39,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fixed a bug in the transposition, it was not copying the data correctly
 - proper initialization of the matrices calibration and worldToCamera as an identity matrix
 - fixed a potential bug when checking the dimensions of the matrices when creating a new matrix, now checking that both of them are strictly positive
-
-### Removed
