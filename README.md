@@ -6,93 +6,44 @@ This is a simple rendering engine made in Java.
 
 ## The GUI
 
-The GUI provides tools to render the scene.
+The graphical interface allows to choose different models, shaders,
+rasterizers and options to render the scene.
 
-### Model
+![Suzanne](./data/screenshots/gui_explanation.png)
 
-You can choose the model to render in the filename part of the menu. If you have
-another `file.scene` which you want to render using this App, you can also copy
-the file in the `data/` dir and write his basename in the Text Field "With
-another scene file".
+You can choose the model to render in the filename part of the menu. If you have another `file.scene` which you want to render using this App, you can also copy the file in the `data/` dir and write his basename in the Text Field "With another scene file".
 
-![ModelMenu](./data/screenshots/Filename_menu.png)
-
-### Shader
-
-You can choose different shader to render the model in the shader menu.
-
-![ShaderMenu](./data/screenshots/Shader_menu.png)
-
-Selecting The DepthShader enabled the DepthShaderColorMap selection to switch the color map used to render the model with a depthShader.
-
-![DepthColorMap](./data/screenshots/ShaderColorMap_menu.png)
+You can choose different shaders to render the model in the shader menu.
+If you add your own shader class extending the `Shader` abstract class, it will be automatically listed in the shader menu after recompiling the project.
 
 Selecting the TextureShader enabled the Texture menu to switch the menu available in the `data` folder when starting the application.
 
 ![TextureMenu](./data/screenshots/Shader_Texture_menu.png)
 
-### Render
+You can select the type of rendering in the Render menu: wireframe, vertex or face rendering.
 
-You can choose what you want the GUI to render in the render menu.
+Finally, in the option menu, you can enable and disable options such as rendering using the lighting and drawing the normals of each vertex.
 
-![RenderMenu](./data/screenshots/Render_menu.png)
+## Build
 
-### Rasterizer
-
-You can choose what rasterizer you want the GUI to use in the Rasterizer menu.
-
-![RasterizerMenu](./data/screenshots/Rasterizer_menu.png)
-
-### Options
-
-You can enable and disable options such as light and drawn of normals in the
-option menu.
-
-![OptionMenu](./data/screenshots/Option_menu.png)
-
-## MakeFile
-
-### Build
-
-Use the following command to build the project:
+To build the project use:
 
 ```bash
 make
 ```
 
-or
-
-```bash
-make all
-```
-
-### Run
-
-To run the project you can use the following command:
+To run the project use:
 
 ```bash
 make run
 ```
 
-### Clean
-
-It compiles all the sources and places them in the `build` folder.
+All the compiled classes are placed in the `build` folder.
+To clean the project use:
 
 ```bash
 make clean
 ```
-
-cleans the `build` folder.
-
-### Generate JavaDoc
-
-To generate the JavaDoc, do :
-
-```bash
-make doc
-```
-
-### Tests
 
 To run the tests use the following command:
 
@@ -100,127 +51,4 @@ To run the tests use the following command:
 make tests
 ```
 
-## Ant
-
-### Version to use
-
-#### Java 17 and below
-
-You can compile the project using Ant version 1.10.7 (already on ENSEEIHT's
-computer).
-
-#### All Java
-
-You can compile the project using Ant version 1.10.14 and later
-([download here](https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.15-bin.tar.gz)).
-
-You can also install ant package as any other package by the command on your
-**personal computer**:
-
-```bash
-sudo snap install ant --stable --classic
-```
-
-### Show help in terminal
-
-To a small description of the available task in ant, do:
-
-```bash
-ant -projecthelp
-```
-
-### Build
-
-Use the following command to build the project:
-
-```bash
-ant
-```
-
-or
-
-```bash
-ant compile
-```
-
-### Run
-
-To run the project you can use the following command:
-
-```bash
-ant run
-```
-
-### Generate JavaDoc
-
-To generate JavaDoc of the project do:
-
-```bash
-ant doc
-```
-
-To clean JavaDoc
-
-```bash
-ant clean-doc
-```
-
-### Build Tests
-
-```bash
-ant compile-test
-```
-
-### Clean
-
-it compiles all the sources and places them in the `build/cls` folder.
-
-```bash
-ant clean
-```
-
-cleans the `build` folder and the tests reports directory   .
-
-### Tests
-
-To run all tests use the following command:
-
-```bash
-ant test
-```
-
-The test reports will be written in the dir `test/reports/`.
-
-To run functional Tests:
-
-```bash
-ant func-tests
-```
-
-To run unit Tests:
-
-```bash
-ant unit-tests
-```
-
-### Verify the CheckStyle
-
-To verify checkstyle on the project if you have checkstyle in lib:
-
-```bash
-ant checkstyle
-```
-
-To download the lib:
-
-```bash
-ant dl-checkstyle
-```
-
-### Make a jar
-
-To make a jar of the project do:
-
-```bash
-ant jar
-```
+For a complete description of the build system see [BUILD.md](BUILD.md).
