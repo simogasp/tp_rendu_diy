@@ -39,7 +39,8 @@ def main(working_dir: str, archive_name: str, skip_cleaning: bool = False, skip_
     files_to_copy = [
         "Makefile",
         "checkstyle.xml",
-        "README.md"
+        "README.md",
+        "BUILD.md"
     ]
     logger.info(f"Copying files to {dest_name}")
     for file in files_to_copy:
