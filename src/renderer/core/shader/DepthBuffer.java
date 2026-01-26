@@ -47,6 +47,17 @@ public class DepthBuffer {
     }
 
     /**
+     * Checks if the fragment coordinates are within the buffer bounds.
+     *
+     * @param f the fragment to check
+     * @return true if coordinates are valid, false otherwise
+     */
+    private boolean isWithinBounds(Fragment f) {
+        return f.getX() >= 0 && f.getX() < width
+            && f.getY() >= 0 && f.getY() < height;
+    }
+
+    /**
      * Test if a fragment passes the DepthBuffer test, i.e. is the fragment the
      * closest at its position.
      *
@@ -54,8 +65,7 @@ public class DepthBuffer {
      * @return true if the fragment passes the test, false otherwise
      */
     public boolean testFragment(Fragment f) {
-        if ((f.getX() >= 0) && (f.getX() < width) && (f.getY() >= 0)
-                && (f.getY() < height)) {
+        if (isWithinBounds(f)) {
             return (buffer.get(f.getY(), f.getX()) > f.getDepth()); //++ // TODO
             //++ return false;
         } else {
@@ -69,9 +79,8 @@ public class DepthBuffer {
      * @param f the fragment to write
      */
     public void writeFragment(Fragment f) {
-        if ((f.getX() >= 0) && (f.getX() < width) && (f.getY() >= 0)
-                && (f.getY() < height)) {
-            buffer.set(f.getY(), f.getX(), f.getAttribute(0)); //++ // TODO
+        if (isWithinBounds(f)) {
+            buffer.set(f.getY(), f.getX(), f.getDepth()); //++ // TODO
         }
     }
 
