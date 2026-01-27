@@ -42,7 +42,7 @@ public final class ColorMapFactory {
             case MAGMA:
                 return new ColorMap(buildMagma());
             default:
-                throw new RuntimeException(name + " is unknown as a colormap.");
+                throw new IllegalArgumentException(name + " is unknown as a colormap.");
         }
     }
 

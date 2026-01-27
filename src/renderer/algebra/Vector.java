@@ -310,7 +310,7 @@ public class Vector extends Matrix implements Cloneable {
      */
     public void set(double... values) {
         if (values.length != this.values.length) {
-            throw new RuntimeException("the number of values given has not "
+            throw new IllegalArgumentException("the number of values given has not "
                     + "the same number as the size of the vector.");
         }
         for (int i = 0; i < values.length; i++) {
@@ -322,11 +322,11 @@ public class Vector extends Matrix implements Cloneable {
      * Gets the X component (the first element) of the vector.
      *
      * @return the value at index 0
-     * @throws RuntimeException if the vector size is less than 1
+     * @throws IllegalArgumentException if the vector size is less than 1
      */
     public double getX() {
         if (size() < 1) {
-            throw new RuntimeException("There is no X component the size has"
+            throw new IllegalArgumentException("There is no X component the size has"
                     + " to be more than 1 but here the size is " + size() + ".");
         }
         return values[0];
@@ -336,11 +336,11 @@ public class Vector extends Matrix implements Cloneable {
      * Gets the Y component (the second element) of the vector.
      *
      * @return the value at index 1
-     * @throws RuntimeException if the vector size is less than 2
+     * @throws IllegalArgumentException if the vector size is less than 2
      */
     public double getY() {
         if (size() < 2) {
-            throw new RuntimeException("There is no Y component the size has"
+            throw new IllegalArgumentException("There is no Y component the size has"
                     + " to be more than 2 but here the size is " + size() + ".");
         }
         return values[1];
@@ -350,11 +350,11 @@ public class Vector extends Matrix implements Cloneable {
      * Gets the Z component (the third element) of the vector.
      *
      * @return the value at index 2
-     * @throws RuntimeException if the vector size is less than 3
+     * @throws IllegalArgumentException if the vector size is less than 3
      */
     public double getZ() {
         if (size() < DIM_Z) {
-            throw new RuntimeException("There is no Z component the size has "
+            throw new IllegalArgumentException("There is no Z component the size has "
                     + "to be more than 3 but here the size is " + size() + ".");
         }
         return values[2];
