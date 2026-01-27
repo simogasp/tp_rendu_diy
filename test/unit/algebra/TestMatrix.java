@@ -545,7 +545,7 @@ public class TestMatrix {
         final Matrix res = m1.add(m2);
 
         assertMatrixEquals(expectedValues, res);
-        
+    
         // Verify immutability - original matrices unchanged
         assertMatrixEquals(m1Values, m1);
         assertMatrixEquals(m2Values, m2);

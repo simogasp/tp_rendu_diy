@@ -88,7 +88,7 @@ public class TestVector {
         for (int i = 0; i < vectorSize; i++) {
             originalValues[i] = v.get(i);
         }
-        
+
         final Vector nv = v.scale(scale);
         
         // Verify result is correct
