@@ -128,7 +128,7 @@ public class Vector extends Matrix implements Cloneable {
     public Vector normalize() {
         final double norm = norm();
         if (norm > 0) {
-            return scale(1. / norm());
+            return scale(1. / norm);
         } else {
             return new Vector(this.size());
         }
