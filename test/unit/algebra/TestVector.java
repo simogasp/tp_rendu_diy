@@ -72,6 +72,7 @@ public class TestVector {
 
     /**
      * Test the scaling of a Vector.
+     * Verifies that scale() returns a new vector and doesn't modify the original.
      */
     @Test
     public void testScale() {
@@ -81,9 +82,25 @@ public class TestVector {
         for (int i = 0; i < vectorSize; i++) {
             v.set(i, i + 1.0);
         }
+        
+        // Store original values to verify immutability
+        final double[] originalValues = new double[vectorSize];
+        for (int i = 0; i < vectorSize; i++) {
+            originalValues[i] = v.get(i);
+        }
+        
         final Vector nv = v.scale(scale);
+        
+        // Verify result is correct
         for (int i = 0; i < vectorSize; i++) {
             assertEquals((i + 1.0) * scale, nv.get(i), EPSILON);
+        }
+        
+        // Verify original vector is unchanged (immutability)
+        assertFalse("scale() should return a new vector", v == nv);
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals("Original vector should not be modified",
+                        originalValues[i], v.get(i), EPSILON);
         }
     }
 
@@ -130,6 +147,7 @@ public class TestVector {
 
     /**
      * Test the normalization of a vector.
+     * Verifies that normalize() returns a new vector and doesn't modify the original.
      */
     @Test
     public void testNormalization() {
@@ -145,12 +163,19 @@ public class TestVector {
 
         final Vector nv = v.normalize();
 
-        // v and nv are the same object.
+        // Verify normalize returns a new object
         assertFalse("v == nv should be false", v == nv);
 
+        // Verify normalized result is correct
         for (int i = 0; i < vectorSize; i++) {
             assertEquals("error for " + i + "-th component",
                                 expectedValue, nv.get(i), EPSILON);
+        }
+
+        // Verify original vector is unchanged (immutability)
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals("Original vector component " + i + " should be unchanged",
+                        value, v.get(i), EPSILON);
         }
 
     }
@@ -188,7 +213,72 @@ public class TestVector {
     }
 
     /**
+     * Test Vector addition and verify immutability.
+     */
+    @Test
+    public void testAdd() {
+        final int vectorSize = 4;
+        final double[] v1Values = {1.0, 2.0, 3.0, 4.0};
+        final double[] v2Values = {5.0, 6.0, 7.0, 8.0};
+        final double[] expectedValues = {6.0, 8.0, 10.0, 12.0};
+        
+        final Vector v1 = new Vector("v1", v1Values);
+        final Vector v2 = new Vector("v2", v2Values);
+        
+        final Vector result = v1.add(v2);
+        
+        // Verify result is correct
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals("Result component " + i + " should match",
+                        expectedValues[i], result.get(i), EPSILON);
+        }
+        
+        // Verify immutability - original vectors unchanged
+        assertFalse("add() should return a new vector", v1 == result);
+        assertFalse("add() should return a new vector", v2 == result);
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals("v1 should not be modified",
+                        v1Values[i], v1.get(i), EPSILON);
+            assertEquals("v2 should not be modified",
+                        v2Values[i], v2.get(i), EPSILON);
+        }
+    }
+
+    /**
+     * Test Vector subtraction and verify immutability.
+     */
+    @Test
+    public void testSubtract() {
+        final int vectorSize = 4;
+        final double[] v1Values = {10.0, 8.0, 6.0, 4.0};
+        final double[] v2Values = {1.0, 2.0, 3.0, 4.0};
+        final double[] expectedValues = {9.0, 6.0, 3.0, 0.0};
+        
+        final Vector v1 = new Vector("v1", v1Values);
+        final Vector v2 = new Vector("v2", v2Values);
+        
+        final Vector result = v1.subtract(v2);
+        
+        // Verify result is correct
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals("Result component " + i + " should match",
+                        expectedValues[i], result.get(i), EPSILON);
+        }
+        
+        // Verify immutability - original vectors unchanged
+        assertFalse("subtract() should return a new vector", v1 == result);
+        assertFalse("subtract() should return a new vector", v2 == result);
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals("v1 should not be modified",
+                        v1Values[i], v1.get(i), EPSILON);
+            assertEquals("v2 should not be modified",
+                        v2Values[i], v2.get(i), EPSILON);
+        }
+    }
+
+    /**
      * Test the normalization of a vector with zero norm.
+     * Verifies that normalize() returns a new vector even for zero vectors.
      */
     @Test
     public void testNormalizeZeroVector() {
@@ -196,12 +286,28 @@ public class TestVector {
         final Vector v = new Vector(vectorSize);
         // All elements are 0 by default
 
+        // Store original values
+        final double[] originalValues = new double[vectorSize];
+        for (int i = 0; i < vectorSize; i++) {
+            originalValues[i] = v.get(i);
+        }
+
         final Vector nv = v.normalize();
 
-        // Should return a zero vector
+        // Verify normalize returns a new object (not the same reference)
+        assertFalse("normalize() should return a new vector, not modify the original",
+                   v == nv);
+
+        // Verify normalized result is zero vector
         for (int i = 0; i < vectorSize; i++) {
             assertEquals("Component " + i + " should be 0",
                          0.0, nv.get(i), EPSILON);
+        }
+
+        // Verify original vector is unchanged (immutability)
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals("Original vector component " + i + " should be unchanged",
+                        originalValues[i], v.get(i), EPSILON);
         }
     }
 
