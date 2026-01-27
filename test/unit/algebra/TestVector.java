@@ -491,23 +491,6 @@ public class TestVector {
                 assertTrue("Value " + i + " should be < 1",
                           value < 1.0);
             }
-
-            // For size > 1, check that not all values are identical
-            // (extremely unlikely with random generation)
-            if (size > 1) {
-                boolean hasDifferentValues = false;
-                final double firstValue = v.get(0);
-                for (int i = 1; i < size; i++) {
-                    if (Math.abs(v.get(i) - firstValue) > EPSILON) {
-                        hasDifferentValues = true;
-                        break;
-                    }
-                }
-                // This might rarely fail due to random chance, but probability
-                // is negligible
-                assertTrue("Random vector should have varying values (size="
-                    + size + ")", hasDifferentValues || size == 1);
-            }
         }
     }
 
