@@ -32,15 +32,6 @@ public class GUIApp extends JFrame {
     private static final int MENU_MARGIN = 50;
 
     /**
-     * The main entry point.
-     *
-     * @param args useless here
-     */
-    public static void main(String[] args) {
-        new GUIApp();
-    }
-
-    /**
      * The panel for the render.
      */
     private final RenderPanel renderPanel;
@@ -117,5 +108,14 @@ public class GUIApp extends JFrame {
                     Math.max(renderPanel.getHeight(),
                             menuPanel.getHeight() + MENU_MARGIN)));
         }
+    }
+
+    /**
+     * The main entry point.
+     *
+     * @param args useless here
+     */
+    public static void main(String[] args) {
+        new GUIApp();
     }
 }

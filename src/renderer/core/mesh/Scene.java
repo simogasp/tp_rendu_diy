@@ -18,21 +18,6 @@ import renderer.algebra.Vector;
  */
 public class Scene {
 
-    /**
-     * Parses a line of the files.
-     * @param in the input reader
-     * @return the next lines
-     * @throws IOException
-     */
-    private static String nextLine(BufferedReader in) throws IOException {
-        String r = in.readLine();
-
-        while (r.matches("(\\s*#.*)|(\\s*$)")) {
-            r = in.readLine();
-        }
-        return r;
-    }
-
     /**The mesh filename. */
     private String meshFilename;
     /**
@@ -127,6 +112,21 @@ public class Scene {
         for (int i = 0; i < material.length; i++) {
             material[i] = Double.parseDouble(sar[i]);
         }
+    }
+
+    /**
+     * Parses a line of the files.
+     * @param in the input reader
+     * @return the next lines
+     * @throws IOException
+     */
+    private static String nextLine(BufferedReader in) throws IOException {
+        String r = in.readLine();
+
+        while (r.matches("(\\s*#.*)|(\\s*$)")) {
+            r = in.readLine();
+        }
+        return r;
     }
 
     /**

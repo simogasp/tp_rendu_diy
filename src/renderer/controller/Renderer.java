@@ -25,24 +25,6 @@ import renderer.core.shader.TextureShader;
  */
 public final class Renderer {
 
-    private static final class DefaultShader extends Shader {
-
-        private DefaultShader() {
-            super();
-        }
-
-        @Override
-        public void shade(final Fragment fragment) {
-            throw new IllegalArgumentException("Any Shader has been set.");
-        }
-
-        @Override
-        public void reset() {
-            // Nothing to reset
-        }
-
-    }
-
     /**
      * The default scene filename.
      */
@@ -96,6 +78,27 @@ public final class Renderer {
      * Whether a TextureShader has to combine colors in render.
      */
     private boolean combineColorState;
+
+    /**
+     * A default shader that throws an exception when used.
+     */
+    private static final class DefaultShader extends Shader {
+
+        private DefaultShader() {
+            super();
+        }
+
+        @Override
+        public void shade(final Fragment fragment) {
+            throw new IllegalArgumentException("Any Shader has been set.");
+        }
+
+        @Override
+        public void reset() {
+            // Nothing to reset
+        }
+
+    }
 
     /**
      * Creates a renderer, a controller with default values.
