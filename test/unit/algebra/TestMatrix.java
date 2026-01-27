@@ -214,6 +214,7 @@ public class TestMatrix {
 
     /**
      * Test the multiplication of two square matrices.
+     * Verifies that multiply() returns a new matrix and doesn't modify the originals.
      */
     @Test
     public void testMultiplySquareMatrices() {
@@ -235,6 +236,10 @@ public class TestMatrix {
         final Matrix result = m1.multiply(m2);
 
         assertMatrixEquals(expectedValues, result);
+
+        // Verify immutability - original matrices unchanged
+        assertMatrixEquals(m1Values, m1);
+        assertMatrixEquals(m2Values, m2);
     }
 
     /**
@@ -319,13 +324,16 @@ public class TestMatrix {
      * Test setting the column values with an invalid vector size.
      * @throws IllegalArgumentException
      */
+    @Test
     public void testSetColInvalidVectorSize() {
         final int sizeMat = 3;
         final Matrix matrix = new Matrix(sizeMat, sizeMat);
         final Vector vector = new Vector(2); // Invalid size
 
-        assertThrows(IllegalArgumentException.class, () ->
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
             matrix.setCol(1, vector));
+
+        assertEquals("Vector size does not match matrix size", exception.getMessage());
     }
 
     /**
@@ -512,6 +520,7 @@ public class TestMatrix {
 
     /**
      * Test the addition of two squares Matrices.
+     * Verifies that add() returns a new matrix and doesn't modify the originals.
      */
     @Test
     public void testAddSquaredMatrix() {
@@ -536,6 +545,10 @@ public class TestMatrix {
         final Matrix res = m1.add(m2);
 
         assertMatrixEquals(expectedValues, res);
+
+        // Verify immutability - original matrices unchanged
+        assertMatrixEquals(m1Values, m1);
+        assertMatrixEquals(m2Values, m2);
     }
 
     /**
@@ -567,19 +580,37 @@ public class TestMatrix {
     }
 
     /**
-     * Test the addition of two matrices with different size.
+     * Test the addition of two matrices with different sizes.
+     * Tests all branches of the size mismatch condition.
      */
     @Test
     public void testAddInvalidSize() {
-        final Matrix m1 = new Matrix(1, 3);
-        final Matrix m2 = new Matrix(3,  4);
-        assertThrows(SizeMismatchException.class, ()
-            -> m1.add(m2));
+        // Test structure: {m1Rows, m1Cols, m2Rows, m2Cols}
+        final int[][] testCases = {
+            {2, 3, 2, 4},  // Same rows, different columns
+            {2, 3, 3, 3},  // Different rows, same columns
+            {2, 3, 3, 4},  // Different rows and columns
+            {3, 2, 2, 3}   // Completely mismatched
+        };
+
+        for (int i = 0; i < testCases.length; i++) {
+            final int[] testCase = testCases[i];
+            final int rows1 = 0;
+            final int cols1 = 1;
+            final int rows2 = 2;
+            final int cols2 = 3;
+            final Matrix m1 = new Matrix("m1", testCase[rows1], testCase[cols1]);
+            final Matrix m2 = new Matrix("m2", testCase[rows2], testCase[cols2]);
+
+            assertThrows("Test case " + i + " should throw SizeMismatchException",
+                        SizeMismatchException.class, () -> m1.add(m2));
+        }
     }
 
 
     /**
      * Test the subtraction of two squares matrix.
+     * Verifies that subtract() returns a new matrix and doesn't modify the originals.
      */
     @Test
     public void testSubtractSquaresMatrix() {
@@ -604,18 +635,166 @@ public class TestMatrix {
         final Matrix res = m1.subtract(m2);
 
         assertMatrixEquals(expectedValues, res);
+
+        // Verify immutability - original matrices unchanged
+        assertMatrixEquals(m1Values, m1);
+        assertMatrixEquals(m2Values, m2);
     }
 
     /**
-     * Test the subtraction of two rectangular matrix.
+     * Test the subtraction of two matrices with different sizes.
+     * Tests all branches of the size mismatch condition.
      */
     @Test
     public void testSubtractInvalidSize() {
-        final Matrix m1 = new Matrix(1, 3);
-        final Matrix m2 = new Matrix(3,  4);
-        assertThrows(SizeMismatchException.class, ()
-            -> m1.subtract(m2));
+        // Test structure: {m1Rows, m1Cols, m2Rows, m2Cols}
+        final int[][] testCases = {
+            {2, 3, 2, 4},  // Same rows, different columns
+            {2, 3, 3, 3},  // Different rows, same columns
+            {2, 3, 3, 4},  // Different rows and columns
+            {3, 2, 2, 3}   // Completely mismatched
+        };
+
+        for (int i = 0; i < testCases.length; i++) {
+            final int[] testCase = testCases[i];
+            final int rows1 = 0;
+            final int cols1 = 1;
+            final int rows2 = 2;
+            final int cols2 = 3;
+            final Matrix m1 = new Matrix("m1", testCase[rows1], testCase[cols1]);
+            final Matrix m2 = new Matrix("m2", testCase[rows2], testCase[cols2]);
+
+            assertThrows("Test case " + i + " should throw SizeMismatchException",
+                        SizeMismatchException.class, () -> m1.subtract(m2));
+        }
     }
 
+    /**
+     * Test Matrix scale() and verify immutability.
+     */
+    @Test
+    public void testScale() {
+        final double[][] matrixValues = {
+            {1.0, 2.0, 3.0},
+            {4.0, 5.0, 6.0}
+        };
+        final double scaleFactor = 2.5;
+        final double[][] expectedValues = {
+            {2.5, 5.0, 7.5},
+            {10.0, 12.5, 15.0}
+        };
 
+        final Matrix m = createMatrixFromArray("test", matrixValues);
+        final Matrix scaled = m.scale(scaleFactor);
+
+        // Verify result is correct
+        assertMatrixEquals(expectedValues, scaled);
+
+        // Verify immutability - original matrix unchanged
+        assertMatrixEquals(matrixValues, m);
+    }
+
+    /**
+     * Test Matrix transpose() and verify immutability.
+     */
+    @Test
+    public void testTransposeImmutability() {
+        final double[][] matrixValues = {
+            {1.0, 2.0, 3.0},
+            {4.0, 5.0, 6.0}
+        };
+        final double[][] expectedTransposed = {
+            {1.0, 4.0},
+            {2.0, 5.0},
+            {3.0, 6.0}
+        };
+
+        final Matrix m = createMatrixFromArray("test", matrixValues);
+        final Matrix transposed = m.transpose();
+
+        // Verify result is correct
+        assertMatrixEquals(expectedTransposed, transposed);
+
+        // Verify immutability - original matrix unchanged
+        assertMatrixEquals(matrixValues, m);
+    }
+
+    /**
+     * Test getSubMatrix with valid parameters.
+     */
+    @Test
+    public void testGetSubMatrixValid() {
+        final double[][] matrixValues = {
+            {1.0, 2.0, 3.0, 4.0},
+            {5.0, 6.0, 7.0, 8.0},
+            {9.0, 10.0, 11.0, 12.0},
+            {13.0, 14.0, 15.0, 16.0}
+        };
+        final Matrix matrix = createMatrixFromArray("original", matrixValues);
+
+        // Test structure: {offsetRow, offsetCol, numRows, numCols, expected values}
+        final Object[][] testCases = {
+            {0, 0, 2, 2, new double[][]{{1.0, 2.0}, {5.0, 6.0}}},      // Top-left
+            {2, 2, 2, 2, new double[][]{{11.0, 12.0}, {15.0, 16.0}}},  // Bottom-right
+            {1, 1, 2, 2, new double[][]{{6.0, 7.0}, {10.0, 11.0}}},    // Center
+            {0, 0, 4, 4, matrixValues},                                 // Entire matrix
+            {1, 0, 1, 4, new double[][]{{5.0, 6.0, 7.0, 8.0}}}         // Single row
+        };
+
+        for (int i = 0; i < testCases.length; i++) {
+            final Object[] testCase = testCases[i];
+            final int offsetRow = (Integer) testCase[0];
+            final int offsetCol = (Integer) testCase[1];
+            final int numRows = (Integer) testCase[2];
+            final int numCols = (Integer) testCase[3];
+            final double[][] expected = (double[][]) testCase[4];
+
+            final Matrix subMatrix = matrix.getSubMatrix(offsetRow, offsetCol,
+                numRows, numCols);
+            assertMatrixEquals(expected, subMatrix);
+        }
+    }
+
+    /**
+     * Test getSubMatrix with invalid parameters.
+     * Tests all exception conditions: negative offsets, invalid sizes, and out of bounds.
+     */
+    @Test
+    public void testGetSubMatrixInvalid() {
+        final int matrixRows = 4;
+        final int matrixCols = 4;
+        final Matrix matrix = new Matrix("test", matrixRows, matrixCols);
+
+        // Test structure: {offsetRow, offsetCol, numRows, numCols, description}
+        final Object[][] testCases = {
+            {-1, 0, 2, 2, "Negative offsetRow"},
+            {0, -1, 2, 2, "Negative offsetCol"},
+            {0, 0, 0, 2, "Zero numRows"},
+            {0, 0, 2, 0, "Zero numCols"},
+            {0, 0, -1, 2, "Negative numRows"},
+            {0, 0, 2, -1, "Negative numCols"},
+            {3, 0, 2, 2, "offsetRow + numRows exceeds bounds"},
+            {0, 3, 2, 2, "offsetCol + numCols exceeds bounds"},
+            {2, 2, 3, 3, "Both exceed bounds"},
+            {4, 0, 1, 1, "offsetRow equals matrix rows"},
+            {0, 4, 1, 1, "offsetCol equals matrix cols"}
+        };
+
+        for (int i = 0; i < testCases.length; i++) {
+            final Object[] testCase = testCases[i];
+            final int offsetRow = (Integer) testCase[0];
+            final int offsetCol = (Integer) testCase[1];
+            final int numRows = (Integer) testCase[2];
+            final int numCols = (Integer) testCase[3];
+            final String description = (String) testCase[4];
+
+            Exception exception = assertThrows(
+                description + " should throw IllegalArgumentException",
+                IllegalArgumentException.class,
+                () -> matrix.getSubMatrix(offsetRow, offsetCol, numRows, numCols)
+            );
+
+            assertEquals("Invalid submatrix", exception.getMessage());
+        }
+    }
 }

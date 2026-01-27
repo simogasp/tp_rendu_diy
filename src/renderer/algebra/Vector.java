@@ -26,11 +26,13 @@ public class Vector extends Matrix implements Cloneable {
     private static final int DIM_Z = 3;
 
     /**
-     * Creates a random vector of size nRows x nCols.
+     * Creates a random vector of the specified size.
+     * Each element is filled with a random value between 0.0 (inclusive) and
+     * 1.0 (exclusive).
      *
      * @param name  the name of the vector
-     * @param nRows number of rows
-     * @return the nRows vector named `name` filled with random values
+     * @param nRows the size of the vector (must be strictly positive)
+     * @return a new vector of size {@code nRows} filled with random values
      * @throws IllegalArgumentException if the vector dimension is invalid
      */
     public static Vector createRandom(final String name, final int nRows)
@@ -77,9 +79,9 @@ public class Vector extends Matrix implements Cloneable {
     }
 
     /**
-     * Creates a vector by a copy of anoter vector.
+     * Creates a vector by copying another vector.
      *
-     * @param v the vector to copy.
+     * @param v the vector to copy
      * @throws IllegalArgumentException if the size is not strictly positive
      */
     public Vector(final Vector v) {
@@ -90,10 +92,10 @@ public class Vector extends Matrix implements Cloneable {
     }
 
     /**
-     * Creates a vector from his name and values.
+     * Creates a named vector from the given values.
      *
      * @param name   the name of the vector
-     * @param values the values
+     * @param values the values to initialize the vector with
      */
     public Vector(final String name, final double... values) {
         this(name, values.length);
@@ -103,9 +105,9 @@ public class Vector extends Matrix implements Cloneable {
     }
 
     /**
-     * Compute the norm of the vector.
+     * Computes the Euclidean norm (L2 norm) of the vector.
      *
-     * @return the norm of the vector
+     * @return the Euclidean norm of the vector (always non-negative)
      */
     public final double norm() {
         double r = 0.0;
@@ -118,24 +120,26 @@ public class Vector extends Matrix implements Cloneable {
     }
 
     /**
-     * Returns this Vector normalize. Be careful this method modify it.
-     * If the norm is 0, returns 0 vector.
+     * Returns a normalized vector.
+     * This method does NOT modify the current vector.
+     * If the norm is 0, returns a new zero vector of the same size.
      *
-     * @return the normalized vector
+     * @return a new Vector that is the normalized version of this vector
      */
     public Vector normalize() {
         final double norm = norm();
         if (norm > 0) {
-            return scale(1. / norm());
+            return scale(1. / norm);
         } else {
-            return zeros();
+            return new Vector(this.size());
         }
     }
 
     /**
      * Returns the homogeneous representation of the Vector.
+     * This method does NOT modify the current vector.
      *
-     * @return the same vector with an additional 1.0 at the end.
+     * @return a new Vector with the same elements plus an additional 1.0 at the end
      */
     public Vector homogeneous() {
         double[] h = new double[nRows + 1];
@@ -145,22 +149,22 @@ public class Vector extends Matrix implements Cloneable {
     }
 
     /**
-     * Computes the vector dot product between the Vector and another Vector.
-     * Both must be the same size.
+     * Computes the dot product (scalar product) between this vector and another vector.
+     * Both vectors must have the same size.
      *
-     * @param v the Vector to compute the dot product with
-     * @return the dot product of the two Vectors
-     * @throws SizeMismatchException if the two Vectors are not the same size
+     * @param v the vector to compute the dot product with
+     * @return the dot product (a scalar value)
+     * @throws SizeMismatchException if the two vectors are not the same size
      */
     public double dot(final Vector v) {
         return transpose().multiply(v).get(0, 0);
     }
 
     /**
-     * Returns a string representation of the Vector.
-     * Using Matlab compatible output for easy debugging.
+     * Returns a string representation of the vector in MATLAB-compatible format.
+     * The format is: "name = [v0, v1, ..., vn]';"
      *
-     * @return the string representation of the Vector
+     * @return a MATLAB-compatible string representation of the vector
      */
     public String toString() {
         StringBuilder str = new StringBuilder(name + " = [");
@@ -175,7 +179,8 @@ public class Vector extends Matrix implements Cloneable {
     }
 
     /**
-     * Sets the @i-th coordinate to the given value @value.
+     * Sets the i-th coordinate to the given value.
+     * This method MODIFIES the current vector.
      *
      * @param i     the index of the coordinate to set
      * @param value the value to set the coordinate to
@@ -185,9 +190,10 @@ public class Vector extends Matrix implements Cloneable {
     }
 
     /**
-     * Sets all elements of the vector to 0 and return it.
+     * Sets all elements of the vector to 0.
+     * This method MODIFIES the current vector.
      *
-     * @return this vector full of 0
+     * @return this vector (modified) filled with zeros
      */
     public Vector zeros() {
         for (int i = 0; i < nRows; i++) {
@@ -198,8 +204,9 @@ public class Vector extends Matrix implements Cloneable {
 
     /**
      * Sets all elements of the vector to 1.
+     * This method MODIFIES the current vector.
      *
-     * @return this vector full of 1
+     * @return this vector (modified) filled with ones
      */
     public Vector ones() {
         for (int i = 0; i < nRows; i++) {
@@ -229,10 +236,11 @@ public class Vector extends Matrix implements Cloneable {
 
     /**
      * Clamps the values of the Vector between the given minimum and maximum.
+     * This method MODIFIES the current vector.
      *
      * @param min the minimum value
      * @param max the maximum value
-     * @return this vector clamped
+     * @return this vector (modified) with clamped values
      */
     public Vector clamp(final double min, final double max) {
         for (int i = 0; i < nRows; i++) {
@@ -243,46 +251,47 @@ public class Vector extends Matrix implements Cloneable {
 
     /**
      * Vector/Vector subtraction : this - v.
+     * This method does NOT modify the current vector or the operand.
      *
-     * @param v the vector to subtract with
-     * @return the resulting vector
-     * @throws SizeMismatchException if the vector sizes do not match for
-     *                               subtraction.
+     * @param v the vector to subtract
+     * @return a new Vector containing the result of this - v
+     * @throws SizeMismatchException if the vector sizes do not match for subtraction
      */
     public Vector subtract(Vector v) {
         return new Vector(super.subtract(v).values);
     }
 
     /**
-     * Vector scaling : fv.
+     * Vector scaling : f * this.
+     * This method does NOT modify the current vector.
      *
-     * @param f the scalar
-     * @return the resulting vector
+     * @param f the scalar to multiply by
+     * @return a new Vector containing the result of f * this
      */
     public Vector scale(double f) {
         return new Vector(super.scale(f).values);
     }
 
     /**
-     * Vector/Vector subtraction : this + v.
+     * Vector/Vector addition : this + v.
+     * This method does NOT modify the current vector or the operand.
      *
-     * @param v the vector to addition with
-     * @return the resulting vector
-     * @throws SizeMismatchException if the vector sizes do not match for
-     *                               subtraction.
+     * @param v the vector to add
+     * @return a new Vector containing the result of this + v
+     * @throws SizeMismatchException if the vector sizes do not match for addition
      */
     public Vector add(Vector v) {
         return new Vector(super.add(v).values);
     }
 
     /**
-     * Returns the cross product : thix /\ v. this operation is only possible in
-     * dimension 3.
+     * Returns the cross product : this × v.
+     * This operation is only possible in dimension 3.
+     * This method does NOT modify the current vector or the operand.
      *
-     * @param v the vector to cross product with
-     * @return the resulting vector
-     * @throws SizeMismatchException if the vector sizes do not match for cross
-     *                               product.
+     * @param v the vector to compute cross product with
+     * @return a new Vector containing the result of this × v
+     * @throws SizeMismatchException if the vector sizes do not match for cross product
      */
     public Vector cross(Vector v) {
         final Vector res = new Vector(3);
@@ -294,9 +303,10 @@ public class Vector extends Matrix implements Cloneable {
 
     /**
      * Set the values of the vector.
+     * This method MODIFIES the current vector.
      *
-     * @param values the values (can be a double[] or doubles
-     *               values separated by a comma).
+     * @param values the values (can be a double[] or doubles values separated by a comma)
+     * @throws RuntimeException if the number of values does not match the vector size
      */
     public void set(double... values) {
         if (values.length != this.values.length) {
@@ -309,9 +319,10 @@ public class Vector extends Matrix implements Cloneable {
     }
 
     /**
-     * Gets the X components ie. the first values of a vector.
+     * Gets the X component (the first element) of the vector.
      *
-     * @return the first values of a vector
+     * @return the value at index 0
+     * @throws RuntimeException if the vector size is less than 1
      */
     public double getX() {
         if (size() < 1) {
@@ -322,9 +333,10 @@ public class Vector extends Matrix implements Cloneable {
     }
 
     /**
-     * Gets the Y components ie. the second values of a vector.
+     * Gets the Y component (the second element) of the vector.
      *
-     * @return the second values of a vector
+     * @return the value at index 1
+     * @throws RuntimeException if the vector size is less than 2
      */
     public double getY() {
         if (size() < 2) {
@@ -335,9 +347,10 @@ public class Vector extends Matrix implements Cloneable {
     }
 
     /**
-     * Gets the Z components ie. the third values of a vector.
+     * Gets the Z component (the third element) of the vector.
      *
-     * @return the third values of a vector
+     * @return the value at index 2
+     * @throws RuntimeException if the vector size is less than 3
      */
     public double getZ() {
         if (size() < DIM_Z) {
@@ -347,17 +360,24 @@ public class Vector extends Matrix implements Cloneable {
         return values[2];
     }
 
+    /**
+     * Creates and returns a copy of this vector.
+     *
+     * @return a new Vector that is a copy of this vector
+     * @throws CloneNotSupportedException (never thrown in this implementation)
+     */
     @Override
     protected Vector clone() throws CloneNotSupportedException {
         return new Vector(this);
     }
 
     /**
-     * Return The subvector from start with numberOfComponent components.
+     * Return a subvector from start with numberOfComponent components.
+     * This method does NOT modify the current vector.
      *
      * @param start             the start index
-     * @param numberOfComponent the number of component
-     * @return the subvector
+     * @param numberOfComponent the number of components
+     * @return a new Vector containing the extracted subvector
      */
     public Vector getSubVector(final int start, final int numberOfComponent) {
         final Matrix subVector = super.getSubMatrix(start, 0, numberOfComponent, 1);

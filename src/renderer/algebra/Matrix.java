@@ -65,10 +65,11 @@ public class Matrix {
     }
 
     /**
-     * Creates an identity matrix of size @size and name "I"+size (e.g. I3 for a 3x3
-     * identity matrix)
-     * @param size the size of the identity matrix
-     * @return the identity matrix of size @size
+     * Creates an identity matrix of the given size with name "I"+size (e.g., "I3"
+     * for a 3x3 identity matrix).
+     *
+     * @param size the size of the identity matrix (number of rows and columns)
+     * @return a new identity matrix of size {@code size x size}
      * @throws IllegalArgumentException if the matrix dimensions are invalid
      */
     public static final Matrix createIdentity(final int size)
@@ -78,10 +79,11 @@ public class Matrix {
     }
 
     /**
-     * Creates an identity matrix of the given size.
+     * Creates an identity matrix of the given size and name.
+     *
      * @param name the name of the matrix
-     * @param size the size of the identity matrix
-     * @return the identity matrix of size @size and name @name
+     * @param size the size of the identity matrix (number of rows and columns)
+     * @return a new identity matrix of size {@code size x size} with the given name
      * @throws IllegalArgumentException if the matrix dimensions are invalid
      */
     public static final Matrix createIdentity(final String name, final int size)
@@ -95,12 +97,14 @@ public class Matrix {
     }
 
     /**
-     * Create a random matrix of size nRows x nCols.
+     * Creates a random matrix of size nRows x nCols.
+     * Each element is filled with a random value between 0.0 (inclusive)
+     * and 1.0 (exclusive).
      *
      * @param name  the name of the matrix
-     * @param nRows number of rows
-     * @param nCols number of columns
-     * @return the nRows x nCols matrix named `name` filled with random values
+     * @param nRows the number of rows (must be strictly positive)
+     * @param nCols the number of columns (must be strictly positive)
+     * @return a new {@code nRows x nCols} matrix filled with random values
      * @throws IllegalArgumentException if the matrix dimensions are invalid
      */
     public static Matrix createRandom(final String name, final int nRows, final int nCols)
@@ -115,14 +119,17 @@ public class Matrix {
     }
 
     /**
-     * Extracts a submatrix of size nRows x nCols with top left corner at
-     * (offsetRow, offsetCol).
-     * @param offsetRow the row offset
-     * @param offsetCol the column offset
-     * @param numRows the number of rows to extract
-     * @param numCols the number of columns to extract
-     * @return the submatrix of size nRows x nCols
-     * @throws IllegalArgumentException if the submatrix the dimensions are invalid
+     * Extracts a submatrix of size {@code numRows x numCols} with top-left corner at
+     * position {@code (offsetRow, offsetCol)}.
+     * This method does NOT modify the current matrix.
+     *
+     * @param offsetRow the starting row index (0-based)
+     * @param offsetCol the starting column index (0-based)
+     * @param numRows the number of rows to extract (must be at least 1)
+     * @param numCols the number of columns to extract (must be at least 1)
+     * @return a new Matrix containing the extracted {@code numRows x numCols} submatrix
+     * @throws IllegalArgumentException if the submatrix dimensions are invalid or extend
+     * beyond the matrix bounds
      */
     public Matrix getSubMatrix(final int offsetRow, final int offsetCol,
             final int numRows, final int numCols)
@@ -146,7 +153,9 @@ public class Matrix {
 
     /**
      * Get the transposed matrix.
-     * @return the transposed matrix
+     * This method does NOT modify the current matrix.
+     *
+     * @return a new Matrix that is the transpose of this matrix
      */
     public final Matrix transpose() {
         final Matrix trans = new Matrix(this.nCols, this.nRows);
@@ -160,8 +169,10 @@ public class Matrix {
 
     /**
      * Matrix/Matrix multiplication.
+     * This method does NOT modify the current matrix or the operand.
+     *
      * @param m the matrix to multiply with
-     * @return the resulting matrix
+     * @return a new Matrix containing the result of this * m
      * @throws SizeMismatchException if the matrix sizes do not match for multiplication
      */
     public final Matrix multiply(final Matrix m) throws SizeMismatchException {
@@ -185,8 +196,10 @@ public class Matrix {
 
     /**
      * Matrix/Vector multiplication.
+     * This method does NOT modify the current matrix or the operand.
+     *
      * @param v the vector to multiply with
-     * @return the resulting matrix
+     * @return a new Vector containing the result of this * v
      * @throws SizeMismatchException if the matrix sizes do not match for multiplication
      */
     public final Vector multiply(final Vector v) throws SizeMismatchException {
@@ -196,9 +209,11 @@ public class Matrix {
 
     /**
      * Matrix/Matrix addition.
-     * @param m the matrix to addition with
-     * @return the resulting matrix
-     * @throws SizeMismatchException if the matrix sizes do not match for multiplication
+     * This method does NOT modify the current matrix or the operand.
+     *
+     * @param m the matrix to add with
+     * @return a new Matrix containing the result of this + m
+     * @throws SizeMismatchException if the matrix sizes do not match for addition
      */
     public final Matrix add(final Matrix m) throws SizeMismatchException {
         if (nCols != m.nCols || nRows != m.nRows) {
@@ -217,9 +232,11 @@ public class Matrix {
     }
 
     /**
-     * Matrix/Matrix subtraction : this - other.
-     * @param m the matrix to subtract with
-     * @return the resulting matrix
+     * Matrix/Matrix subtraction : this - m.
+     * This method does NOT modify the current matrix or the operand.
+     *
+     * @param m the matrix to subtract
+     * @return a new Matrix containing the result of this - m
      * @throws SizeMismatchException if the matrix sizes do not match for subtraction
      */
     public final Matrix subtract(final Matrix m) throws SizeMismatchException {
@@ -241,7 +258,9 @@ public class Matrix {
 
 
     /**
-     * Sets the element on row @i and column @j to the given value @value.
+     * Sets the element on row i and column j to the given value.
+     * This method MODIFIES the current matrix.
+     *
      * @param i the row index
      * @param j the column index
      * @param value the value to set
@@ -251,9 +270,13 @@ public class Matrix {
     }
 
     /**
-     * Sets the i-th column of in the matrix to the given vector.
-     * @param i the column index
-     * @param v the vector to set
+     * Sets the i-th column in the matrix to the given vector.
+     * This method MODIFIES the current matrix.
+     *
+     * @param i the column index (0-based)
+     * @param v the vector to set (its size must match the number of rows)
+     * @throws IllegalArgumentException if the vector size does not match the number of
+     * rows or if the column index is invalid
      */
     public void setCol(final int i, final Vector v) {
         // check if the vector has the right size
@@ -272,9 +295,11 @@ public class Matrix {
 
     /**
      * Get the elements of the i-th column of the matrix as a vector.
-     * @param i the column
-     * @return the vector
-     * @throws IllegalArgumentException if the vector cannot be created
+     * This method does NOT modify the current matrix.
+     *
+     * @param i the column index
+     * @return a new Vector containing the elements of column i
+     * @throws IllegalArgumentException if the column index is invalid
      */
     public final Vector getCol(final int i) {
         // check if the column index is valid
@@ -290,9 +315,13 @@ public class Matrix {
     }
 
     /**
-     * Sets the i-th row of in the matrix to the given vector.
-     * @param i the row index
-     * @param v the vector to set
+     * Sets the i-th row in the matrix to the given vector.
+     * This method MODIFIES the current matrix.
+     *
+     * @param i the row index (0-based)
+     * @param v the vector to set (its size must match the number of columns)
+     * @throws IllegalArgumentException if the vector size does not match the number of
+     * columns or if the row index is invalid
      */
     public void setRow(final int i, final Vector v) {
         // check if the vector has the right size
@@ -310,10 +339,12 @@ public class Matrix {
     }
 
     /**
-     * Get the elements of the i-th row of the matrix as a vector.
-     * @param i the row
-     * @return the vector
-     * @throws IllegalArgumentException if the vector cannot be created
+     * Get a copy of the elements of the i-th row of the matrix as a vector.
+     * This method does NOT modify the current matrix.
+     *
+     * @param i the row index
+     * @return a new Vector containing the elements of row i
+     * @throws IllegalArgumentException if the row index is invalid
      */
     public final Vector getRow(final int i) {
         // check if the row index is valid
@@ -329,10 +360,11 @@ public class Matrix {
     }
 
     /**
-     * Gets the element on row i and column j.
-     * @param i the row index
-     * @param j the column index
-     * @return the element at row i and column j
+     * Gets the element at the specified position.
+     *
+     * @param i the row index (0-based)
+     * @param j the column index (0-based)
+     * @return the element at position {@code (i, j)}
      */
     public final double get(final int i, final int j) {
         return values[i * nCols + j];
@@ -340,6 +372,8 @@ public class Matrix {
 
     /**
      * Sets the matrix name.
+     * This method MODIFIES the current matrix.
+     *
      * @param name the name of the matrix
      */
     public void setName(final String name) {
@@ -398,8 +432,10 @@ public class Matrix {
 
     /**
      * Multiplies the Matrix by the given constant.
-     * @param f the constant to multiply the Vector by
-     * @return the resulting matrix.
+     * This method does NOT modify the current matrix.
+     *
+     * @param f the constant to multiply the matrix by
+     * @return a new Matrix containing the result of this * f
      */
     public Matrix scale(final double f) {
         final Matrix res = new Matrix(nRows, nCols);
