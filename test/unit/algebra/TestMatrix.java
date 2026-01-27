@@ -214,6 +214,7 @@ public class TestMatrix {
 
     /**
      * Test the multiplication of two square matrices.
+     * Verifies that multiply() returns a new matrix and doesn't modify the originals.
      */
     @Test
     public void testMultiplySquareMatrices() {
@@ -235,6 +236,10 @@ public class TestMatrix {
         final Matrix result = m1.multiply(m2);
 
         assertMatrixEquals(expectedValues, result);
+        
+        // Verify immutability - original matrices unchanged
+        assertMatrixEquals(m1Values, m1);
+        assertMatrixEquals(m2Values, m2);
     }
 
     /**
@@ -515,6 +520,7 @@ public class TestMatrix {
 
     /**
      * Test the addition of two squares Matrices.
+     * Verifies that add() returns a new matrix and doesn't modify the originals.
      */
     @Test
     public void testAddSquaredMatrix() {
@@ -539,6 +545,10 @@ public class TestMatrix {
         final Matrix res = m1.add(m2);
 
         assertMatrixEquals(expectedValues, res);
+        
+        // Verify immutability - original matrices unchanged
+        assertMatrixEquals(m1Values, m1);
+        assertMatrixEquals(m2Values, m2);
     }
 
     /**
@@ -600,6 +610,7 @@ public class TestMatrix {
 
     /**
      * Test the subtraction of two squares matrix.
+     * Verifies that subtract() returns a new matrix and doesn't modify the originals.
      */
     @Test
     public void testSubtractSquaresMatrix() {
@@ -624,6 +635,10 @@ public class TestMatrix {
         final Matrix res = m1.subtract(m2);
 
         assertMatrixEquals(expectedValues, res);
+        
+        // Verify immutability - original matrices unchanged
+        assertMatrixEquals(m1Values, m1);
+        assertMatrixEquals(m2Values, m2);
     }
 
     /**
@@ -652,6 +667,56 @@ public class TestMatrix {
             assertThrows("Test case " + i + " should throw SizeMismatchException",
                         SizeMismatchException.class, () -> m1.subtract(m2));
         }
+    }
+
+    /**
+     * Test Matrix scale() and verify immutability.
+     */
+    @Test
+    public void testScale() {
+        final double[][] matrixValues = {
+            {1.0, 2.0, 3.0},
+            {4.0, 5.0, 6.0}
+        };
+        final double scaleFactor = 2.5;
+        final double[][] expectedValues = {
+            {2.5, 5.0, 7.5},
+            {10.0, 12.5, 15.0}
+        };
+        
+        final Matrix m = createMatrixFromArray("test", matrixValues);
+        final Matrix scaled = m.scale(scaleFactor);
+        
+        // Verify result is correct
+        assertMatrixEquals(expectedValues, scaled);
+        
+        // Verify immutability - original matrix unchanged
+        assertMatrixEquals(matrixValues, m);
+    }
+
+    /**
+     * Test Matrix transpose() and verify immutability.
+     */
+    @Test
+    public void testTransposeImmutability() {
+        final double[][] matrixValues = {
+            {1.0, 2.0, 3.0},
+            {4.0, 5.0, 6.0}
+        };
+        final double[][] expectedTransposed = {
+            {1.0, 4.0},
+            {2.0, 5.0},
+            {3.0, 6.0}
+        };
+        
+        final Matrix m = createMatrixFromArray("test", matrixValues);
+        final Matrix transposed = m.transpose();
+        
+        // Verify result is correct
+        assertMatrixEquals(expectedTransposed, transposed);
+        
+        // Verify immutability - original matrix unchanged
+        assertMatrixEquals(matrixValues, m);
     }
 
     /**
