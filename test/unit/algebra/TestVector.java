@@ -90,12 +90,12 @@ public class TestVector {
         }
 
         final Vector nv = v.scale(scale);
-        
+
         // Verify result is correct
         for (int i = 0; i < vectorSize; i++) {
             assertEquals((i + 1.0) * scale, nv.get(i), EPSILON);
         }
-        
+
         // Verify original vector is unchanged (immutability)
         assertFalse("scale() should return a new vector", v == nv);
         for (int i = 0; i < vectorSize; i++) {
@@ -221,18 +221,18 @@ public class TestVector {
         final double[] v1Values = {1.0, 2.0, 3.0, 4.0};
         final double[] v2Values = {5.0, 6.0, 7.0, 8.0};
         final double[] expectedValues = {6.0, 8.0, 10.0, 12.0};
-        
+
         final Vector v1 = new Vector("v1", v1Values);
         final Vector v2 = new Vector("v2", v2Values);
-        
+
         final Vector result = v1.add(v2);
-        
+
         // Verify result is correct
         for (int i = 0; i < vectorSize; i++) {
             assertEquals("Result component " + i + " should match",
                         expectedValues[i], result.get(i), EPSILON);
         }
-        
+
         // Verify immutability - original vectors unchanged
         assertFalse("add() should return a new vector", v1 == result);
         assertFalse("add() should return a new vector", v2 == result);
@@ -253,18 +253,18 @@ public class TestVector {
         final double[] v1Values = {10.0, 8.0, 6.0, 4.0};
         final double[] v2Values = {1.0, 2.0, 3.0, 4.0};
         final double[] expectedValues = {9.0, 6.0, 3.0, 0.0};
-        
+
         final Vector v1 = new Vector("v1", v1Values);
         final Vector v2 = new Vector("v2", v2Values);
-        
+
         final Vector result = v1.subtract(v2);
-        
+
         // Verify result is correct
         for (int i = 0; i < vectorSize; i++) {
             assertEquals("Result component " + i + " should match",
                         expectedValues[i], result.get(i), EPSILON);
         }
-        
+
         // Verify immutability - original vectors unchanged
         assertFalse("subtract() should return a new vector", v1 == result);
         assertFalse("subtract() should return a new vector", v2 == result);

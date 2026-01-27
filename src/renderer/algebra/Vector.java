@@ -27,7 +27,8 @@ public class Vector extends Matrix implements Cloneable {
 
     /**
      * Creates a random vector of the specified size.
-     * Each element is filled with a random value between 0.0 (inclusive) and 1.0 (exclusive).
+     * Each element is filled with a random value between 0.0 (inclusive) and
+     * 1.0 (exclusive).
      *
      * @param name  the name of the vector
      * @param nRows the size of the vector (must be strictly positive)

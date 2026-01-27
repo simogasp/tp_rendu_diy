@@ -320,8 +320,8 @@ public class Matrix {
      *
      * @param i the row index (0-based)
      * @param v the vector to set (its size must match the number of columns)
-     * @throws IllegalArgumentException if the vector size does not match the number of columns
-     *                                  or if the row index is invalid
+     * @throws IllegalArgumentException if the vector size does not match the number of
+     * columns or if the row index is invalid
      */
     public void setRow(final int i, final Vector v) {
         // check if the vector has the right size
