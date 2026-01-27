@@ -65,8 +65,8 @@ public class Matrix {
     }
 
     /**
-     * Creates an identity matrix of the given size with name "I"+size (e.g., "I3" for a 3x3
-     * identity matrix).
+     * Creates an identity matrix of the given size with name "I"+size (e.g., "I3" 
+     * for a 3x3 identity matrix).
      *
      * @param size the size of the identity matrix (number of rows and columns)
      * @return a new identity matrix of size {@code size x size}
@@ -80,7 +80,7 @@ public class Matrix {
 
     /**
      * Creates an identity matrix of the given size and name.
-     * 
+     *
      * @param name the name of the matrix
      * @param size the size of the identity matrix (number of rows and columns)
      * @return a new identity matrix of size {@code size x size} with the given name
@@ -98,7 +98,8 @@ public class Matrix {
 
     /**
      * Creates a random matrix of size nRows x nCols.
-     * Each element is filled with a random value between 0.0 (inclusive) and 1.0 (exclusive).
+     * Each element is filled with a random value between 0.0 (inclusive) 
+     * and 1.0 (exclusive).
      *
      * @param name  the name of the matrix
      * @param nRows the number of rows (must be strictly positive)
@@ -127,7 +128,8 @@ public class Matrix {
      * @param numRows the number of rows to extract (must be at least 1)
      * @param numCols the number of columns to extract (must be at least 1)
      * @return a new Matrix containing the extracted {@code numRows x numCols} submatrix
-     * @throws IllegalArgumentException if the submatrix dimensions are invalid or extend beyond the matrix bounds
+     * @throws IllegalArgumentException if the submatrix dimensions are invalid or extend 
+     * beyond the matrix bounds
      */
     public Matrix getSubMatrix(final int offsetRow, final int offsetCol,
             final int numRows, final int numCols)
@@ -273,8 +275,8 @@ public class Matrix {
      *
      * @param i the column index (0-based)
      * @param v the vector to set (its size must match the number of rows)
-     * @throws IllegalArgumentException if the vector size does not match the number of rows
-     *                                  or if the column index is invalid
+     * @throws IllegalArgumentException if the vector size does not match the number of 
+     * rows or if the column index is invalid
      */
     public void setCol(final int i, final Vector v) {
         // check if the vector has the right size

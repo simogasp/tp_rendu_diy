@@ -236,7 +236,7 @@ public class TestMatrix {
         final Matrix result = m1.multiply(m2);
 
         assertMatrixEquals(expectedValues, result);
-        
+
         // Verify immutability - original matrices unchanged
         assertMatrixEquals(m1Values, m1);
         assertMatrixEquals(m2Values, m2);

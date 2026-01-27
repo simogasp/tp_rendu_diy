@@ -82,7 +82,7 @@ public class TestVector {
         for (int i = 0; i < vectorSize; i++) {
             v.set(i, i + 1.0);
         }
-        
+
         // Store original values to verify immutability
         final double[] originalValues = new double[vectorSize];
         for (int i = 0; i < vectorSize; i++) {
