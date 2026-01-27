@@ -33,7 +33,7 @@ public final class Renderer {
 
         @Override
         public void shade(final Fragment fragment) {
-            throw new RuntimeException("Any Shader has been set.");
+            throw new IllegalArgumentException("Any Shader has been set.");
         }
 
         @Override

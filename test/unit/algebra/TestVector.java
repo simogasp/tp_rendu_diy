@@ -555,21 +555,21 @@ public class TestVector {
     /**
      * Test getZ method throws exception for vector with size < 3.
      */
-    @Test(expected = RuntimeException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testGetZInvalidSizeTwo() {
         final Vector v = new Vector(2);  // Size 2, no Z component
-        v.getZ();  // Should throw RuntimeException
-        fail("Expected RuntimeException for vector with size < 3");
+        v.getZ();  // Should throw IllegalArgumentException
+        fail("Expected IllegalArgumentException for vector with size < 3");
     }
 
     /**
      * Test getZ method throws exception for vector with size 1.
      */
-    @Test(expected = RuntimeException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testGetZInvalidSizeOne() {
         final Vector v = new Vector(1);  // Size 1, no Z component
-        v.getZ();  // Should throw RuntimeException
-        fail("Expected RuntimeException for vector with size < 3");
+        v.getZ();  // Should throw IllegalArgumentException
+        fail("Expected IllegalArgumentException for vector with size < 3");
     }
 
     /**
@@ -592,23 +592,23 @@ public class TestVector {
     /**
      * Test set(double...) method throws exception for size mismatch.
      */
-    @Test(expected = RuntimeException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testSetVariableArgsSizeMismatch() {
         final Vector v = new Vector(3);
         final double value = 3.0;
         v.set(value, value, value, value);  // 4 values for size 3 vector
-        fail("Expected RuntimeException for size mismatch");
+        fail("Expected IllegalArgumentException for size mismatch");
     }
 
     /**
      * Test set(double...) method throws exception for too few values.
      */
-    @Test(expected = RuntimeException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testSetVariableArgsTooFewValues() {
         final Vector v = new Vector(5);
         final double value = 3.0;
         v.set(value, value);  // 2 values for size 5 vector
-        fail("Expected RuntimeException for size mismatch");
+        fail("Expected IllegalArgumentException for size mismatch");
     }
 
     /**
