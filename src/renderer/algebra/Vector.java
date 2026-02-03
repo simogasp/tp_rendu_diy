@@ -364,10 +364,9 @@ public class Vector extends Matrix implements Cloneable {
      * Creates and returns a copy of this vector.
      *
      * @return a new Vector that is a copy of this vector
-     * @throws CloneNotSupportedException (never thrown in this implementation)
      */
     @Override
-    protected Vector clone() throws CloneNotSupportedException {
+    protected Vector clone() {
         return new Vector(this);
     }
 
