@@ -83,8 +83,8 @@ def contains_special_markers(filename: str, markers: list) -> bool:
         filename (str): The path to the file to check. Can be an absolute
                        or relative path.
         markers (list, optional): A list of marker strings to search for.
-                                 If None, uses SPECIAL_MARKERS_COMPACT and
-                                 SPECIAL_MARKERS_SPACED combined.
+                                 If None, uses STUDENT_TOKENS and
+                                 BAD_STUDENT_TOKENS combined.
                                  Defaults to None.
 
     Returns:
@@ -98,7 +98,7 @@ def contains_special_markers(filename: str, markers: list) -> bool:
     Example:
         >>> contains_special_markers("src/MyClass.java")
         True
-        >>> contains_special_markers("README.md", markers=SPECIAL_MARKERS_COMPACT)
+        >>> contains_special_markers("README.md", markers=STUDENT_TOKENS)
         False
         >>> contains_special_markers("code.java", markers=["//!!", "// ++"])
         True
@@ -181,8 +181,8 @@ def clean_workspace(directory: str) -> None:
                 denied, directory in use).
 
     Example:
-        >>> remove_directory_if_exists("/tmp/my_temp_folder")
-        >>> remove_directory_if_exists("build/output")
+        >>> clean_workspace("/tmp/my_temp_folder")
+        >>> clean_workspace("build/output")
     """
     if os.path.exists(directory):
         try:
