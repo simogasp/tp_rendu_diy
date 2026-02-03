@@ -125,9 +125,10 @@ def are_files_identical(file1: str, file2: str) -> bool:
     """
     Check if two text files have exactly the same content.
 
-    This function reads two files and compares their contents byte-by-byte
-    to determine if they are identical. The comparison is case-sensitive
-    and includes all whitespace and formatting.
+    This function reads two text files and compares their contents
+    character-by-character to determine if they are identical. The
+    comparison is case-sensitive and includes all whitespace and
+    formatting.
 
     Args:
         file1 (str): The path to the first file to compare.
