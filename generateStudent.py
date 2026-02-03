@@ -279,7 +279,8 @@ def main(working_dir: str, studentify_dir: str, archive_name: str, skip_cleaning
                            "src/renderer/core/shader/DepthBuffer.java",
                            "src/renderer/core/shader/TextureShader.java",
                            "src/renderer/core/camera/Transformation.java",
-                           # this is not a todo but to avoid testing the shaders we are not giving to the students
+                           # this is not a file the student needs to change
+                           # it contains a switch to disable some tests for the student version for the shaders we do not provide
                            "test/unit/controller/ShaderFactoryTest.java"]
     for file in files_to_studentify:
         file_path = os.path.join(dest_name, file)
