@@ -82,10 +82,7 @@ def contains_special_markers(filename: str, markers: list) -> bool:
     Args:
         filename (str): The path to the file to check. Can be an absolute
                        or relative path.
-        markers (list, optional): A list of marker strings to search for.
-                                 If None, uses STUDENT_TOKENS and
-                                 BAD_STUDENT_TOKENS combined.
-                                 Defaults to None.
+        markers (list): A list of marker strings to search for.
 
     Returns:
         bool: True if any of the special markers is found in the file,
