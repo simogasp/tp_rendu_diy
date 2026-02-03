@@ -308,14 +308,14 @@ def main(working_dir: str, studentify_dir: str, archive_name: str, skip_cleaning
         logger.info(f"Removing {file_path}")
         os.remove(file_path)
 
-    logger.info("Removing studentify.py")
-    shutil.rmtree(studentify_dir)
-
     # check that all the java files in src and test do not contain any special markers
     logger.info("Verifying that no special markers are left in the code")
     all_markers = STUDENT_TOKENS + BAD_STUDENT_TOKENS
     verify_no_markers_in_directory(os.path.join(dest_name, "src"), all_markers, studentify_dir)
     verify_no_markers_in_directory(os.path.join(dest_name, "test"), all_markers, studentify_dir)
+
+    logger.info("Removing studentify.py")
+    shutil.rmtree(studentify_dir)
 
     if not skip_packaging:
         logger.info(f"Generating archive {archive_name}.zip in {working_dir}")
