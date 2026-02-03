@@ -345,6 +345,7 @@ public class TestVector {
 
     /**
      * Test clamp method with various scenarios.
+     * Verifies that clamp() returns a new vector and doesn't modify the original.
      */
     @Test
     public void testClamp() {
@@ -360,17 +361,32 @@ public class TestVector {
         final double[] expectedValues = testCases[1];
 
         final Vector v = new Vector(inputValues);
+
+        // Store original values to verify immutability
+        final double[] originalValues = new double[inputValues.length];
+        for (int i = 0; i < inputValues.length; i++) {
+            originalValues[i] = v.get(i);
+        }
+
         final Vector clamped = v.clamp(min, max);
 
-        // Check all values are clamped correctly
+        // Verify result is correct
         for (int i = 0; i < inputValues.length; i++) {
             assertEquals("Component " + i + " should be clamped",
                         expectedValues[i], clamped.get(i), EPSILON);
+        }
+
+        // Verify immutability - clamp returns new vector and doesn't modify original
+        assertFalse("clamp() should return a new vector", v == clamped);
+        for (int i = 0; i < inputValues.length; i++) {
+            assertEquals("Original vector should not be modified",
+                        originalValues[i], v.get(i), EPSILON);
         }
     }
 
     /**
      * Test clamp with edge cases.
+     * Verifies that clamp() returns a new vector and doesn't modify the original.
      */
     @Test
     public void testClampEdgeCases() {
@@ -380,19 +396,44 @@ public class TestVector {
         // Set all values to 0
         v.zeros();
 
-        // Clamp with range that includes 0
-        v.clamp(-1.0, 1.0);
+        // Store original values
+        final double[] originalValues = new double[vectorSize];
         for (int i = 0; i < vectorSize; i++) {
-            assertEquals(0.0, v.get(i), EPSILON);
+            originalValues[i] = v.get(i);
+        }
+
+        // Clamp with range that includes 0
+        final Vector clamped = v.clamp(-1.0, 1.0);
+
+        // Verify result is correct
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals(0.0, clamped.get(i), EPSILON);
+        }
+
+        // Verify immutability
+        assertFalse("clamp() should return a new vector", v == clamped);
+        for (int i = 0; i < vectorSize; i++) {
+            assertEquals("Original vector should not be modified",
+                        originalValues[i], v.get(i), EPSILON);
         }
 
         // Test with equal min and max
         final Vector v2 = new Vector(5.0, 10.0, 15.0);
+        final double[] v2OriginalValues = {5.0, 10.0, 15.0};
         final double clampValue = 10.0;
         final Vector v2clamped = v2.clamp(clampValue, clampValue);
+
+        // Verify result is correct
         for (int i = 0; i < v2.size(); i++) {
             assertEquals("All values should be clamped to 10.0",
                         clampValue, v2clamped.get(i), EPSILON);
+        }
+
+        // Verify immutability
+        assertFalse("clamp() should return a new vector", v2 == v2clamped);
+        for (int i = 0; i < v2.size(); i++) {
+            assertEquals("Original vector should not be modified",
+                        v2OriginalValues[i], v2.get(i), EPSILON);
         }
     }
 
