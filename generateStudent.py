@@ -108,7 +108,7 @@ def contains_special_markers(filename: str, markers: list) -> bool:
             content = file.read()
             for marker in markers:
                 if marker in content:
-                    # log the found marker with the line number
+                    # log the first occurrence of the found marker with the line number
                     line_number = content.count('\n', 0, content.find(marker)) + 1
                     logger.info(f"Found marker '{marker}' in file '{filename}' at line {line_number}")
                     return True
