@@ -15,13 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added the class `CreateClassesDiagram` to generate the UML class diagram in plantUML format from the code
 - added Ant build file `build.xml` to have a cross-platform build system (makefile is still there)
 - added more junit tests
-- added github actions ci to build, run unit tests and generate the documentation automatically on each push and pull request
+- added github actions ci to build, run unit tests, generate the student version, and generate the documentation automatically on each push and pull request
 
 ### Changed
 
 - reorganized the code in sub-packages: shader, rasterizer, lighting, texture, transformation, gui
 - extract the vertex rasterization from `rasterizeEdge()` in a separate method `rasterizeVertex()` (there is no need to uncomment the code now as the GUI enables to switch between wireframe and vertex rendering)
 - `Vector` inherits from `Matrix`.
+- improved the generateStudent.py script to better check that no special markers are left in the code before generating the student archive and that the files for students are different from the original ones.
 
 ### Fixed
 
