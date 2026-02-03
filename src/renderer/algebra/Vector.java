@@ -236,17 +236,18 @@ public class Vector extends Matrix implements Cloneable {
 
     /**
      * Clamps the values of the Vector between the given minimum and maximum.
-     * This method MODIFIES the current vector.
+     * This method does NOT modify the current vector.
      *
      * @param min the minimum value
      * @param max the maximum value
-     * @return this vector (modified) with clamped values
+     * @return a copy of this vector with clamped values
      */
     public Vector clamp(final double min, final double max) {
+        Vector copy = this.clone();
         for (int i = 0; i < nRows; i++) {
-            values[i] = MathUtils.clamp(values[i], min, max);
+            copy.values[i] = MathUtils.clamp(copy.values[i], min, max);
         }
-        return this;
+        return copy;
     }
 
     /**
@@ -364,10 +365,9 @@ public class Vector extends Matrix implements Cloneable {
      * Creates and returns a copy of this vector.
      *
      * @return a new Vector that is a copy of this vector
-     * @throws CloneNotSupportedException (never thrown in this implementation)
      */
     @Override
-    protected Vector clone() throws CloneNotSupportedException {
+    protected Vector clone() {
         return new Vector(this);
     }
 
