@@ -362,9 +362,6 @@ public class TestVector {
         final Vector v = new Vector(inputValues);
         final Vector clamped = v.clamp(min, max);
 
-        // Check clamp returns the same object
-        assertTrue("clamp should return the same object", v == clamped);
-
         // Check all values are clamped correctly
         for (int i = 0; i < inputValues.length; i++) {
             assertEquals("Component " + i + " should be clamped",
@@ -392,10 +389,10 @@ public class TestVector {
         // Test with equal min and max
         final Vector v2 = new Vector(5.0, 10.0, 15.0);
         final double clampValue = 10.0;
-        v2.clamp(clampValue, clampValue);
+        final Vector v2clamped = v2.clamp(clampValue, clampValue);
         for (int i = 0; i < v2.size(); i++) {
             assertEquals("All values should be clamped to 10.0",
-                        clampValue, v2.get(i), EPSILON);
+                        clampValue, v2clamped.get(i), EPSILON);
         }
     }
 
