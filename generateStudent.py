@@ -312,6 +312,7 @@ def main(working_dir: str, studentify_dir: str, archive_name: str, skip_cleaning
     shutil.rmtree(studentify_dir)
 
     # check that all the java files in src and test do not contain any special markers
+    logger.info("Verifying that no special markers are left in the code")
     all_markers = STUDENT_TOKENS + BAD_STUDENT_TOKENS
     verify_no_markers_in_directory(os.path.join(dest_name, "src"), all_markers, studentify_dir)
     verify_no_markers_in_directory(os.path.join(dest_name, "test"), all_markers, studentify_dir)
