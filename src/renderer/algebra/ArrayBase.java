@@ -172,10 +172,6 @@ public abstract class ArrayBase {
      * @return the sum of all elements
      */
     protected final double sumValues() {
-        double sum = 0.0;
-        for (double v : values) {
-            sum += v;
-        }
-        return sum;
+        return java.util.stream.DoubleStream.of(values).sum();
     }
 }
