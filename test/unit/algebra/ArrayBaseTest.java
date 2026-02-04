@@ -137,6 +137,15 @@ public class ArrayBaseTest {
         }
 
         /**
+         * Public wrapper for copyValues to enable testing.
+         *
+         * @param source the source array
+         */
+        void testCopyValues(final double[] source) {
+            copyValues(source);
+        }
+
+        /**
          * Gets the internal values array for testing.
          *
          * @return a copy of the values array
@@ -669,5 +678,206 @@ public class ArrayBaseTest {
         for (int i = 0; i < DEFAULT_SIZE; i++) {
             assertEquals(0.0 * preciseValue, dest[i], EPSILON);
         }
+    }
+
+    /**
+     * Test copyValues copies all elements correctly.
+     */
+    @Test
+    public void copyValues_validSource_copiesAllElements() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE];
+
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            source[i] = i + TEST_VALUE;
+        }
+
+        arr.testCopyValues(source);
+
+        final double[] result = arr.getValuesCopy();
+        assertArrayEquals(source, result, EPSILON);
+    }
+
+    /**
+     * Test copyValues does not modify source array.
+     */
+    @Test
+    public void copyValues_validSource_doesNotModifySource() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE];
+        final double[] sourceCopy = new double[DEFAULT_SIZE];
+
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            source[i] = i + TEST_VALUE_2;
+            sourceCopy[i] = i + TEST_VALUE_2;
+        }
+
+        arr.testCopyValues(source);
+
+        assertArrayEquals(sourceCopy, source, EPSILON);
+    }
+
+    /**
+     * Test copyValues with source size larger than destination.
+     */
+    @Test
+    public void copyValues_largerSourceSize_throwsException() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final int largerSize = DEFAULT_SIZE + 1;
+        final double[] source = new double[largerSize];
+
+        try {
+            arr.testCopyValues(source);
+            fail("Should throw IllegalArgumentException for larger source size");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Source array size must match destination size",
+                        e.getMessage());
+        }
+    }
+
+    /**
+     * Test copyValues with source size smaller than destination.
+     */
+    @Test
+    public void copyValues_smallerSourceSize_throwsException() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final int smallerSize = DEFAULT_SIZE - 1;
+        final double[] source = new double[smallerSize];
+
+        try {
+            arr.testCopyValues(source);
+            fail("Should throw IllegalArgumentException for smaller source size");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Source array size must match destination size",
+                        e.getMessage());
+        }
+    }
+
+    /**
+     * Test copyValues with zero values.
+     */
+    @Test
+    public void copyValues_zeroValues_copiesZeros() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE];
+
+        arr.testCopyValues(source);
+
+        final double[] result = arr.getValuesCopy();
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            assertEquals(0.0, result[i], EPSILON);
+        }
+    }
+
+    /**
+     * Test copyValues with negative values.
+     */
+    @Test
+    public void copyValues_negativeValues_copiesNegatives() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE];
+        final double negativeValue = -5.5;
+
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            source[i] = negativeValue - i;
+        }
+
+        arr.testCopyValues(source);
+
+        final double[] result = arr.getValuesCopy();
+        assertArrayEquals(source, result, EPSILON);
+    }
+
+    /**
+     * Test copyValues with mixed positive and negative values.
+     */
+    @Test
+    public void copyValues_mixedValues_copiesAllValues() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE];
+
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            source[i] = (i % 2 == 0) ? i + TEST_VALUE : -(i + TEST_VALUE);
+        }
+
+        arr.testCopyValues(source);
+
+        final double[] result = arr.getValuesCopy();
+        assertArrayEquals(source, result, EPSILON);
+    }
+
+    /**
+     * Test copyValues replaces existing values.
+     */
+    @Test
+    public void copyValues_existingValues_replacesWithNewValues() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] initialSource = new double[DEFAULT_SIZE];
+        final double[] newSource = new double[DEFAULT_SIZE];
+        final double initialValue = 1.0;
+        final double newValue = 10.0;
+
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            initialSource[i] = initialValue;
+            newSource[i] = newValue;
+        }
+
+        arr.testCopyValues(initialSource);
+        arr.testCopyValues(newSource);
+
+        final double[] result = arr.getValuesCopy();
+        assertArrayEquals(newSource, result, EPSILON);
+    }
+
+    /**
+     * Test copyValues with single element array.
+     */
+    @Test
+    public void copyValues_singleElement_copiesSingleValue() {
+        final TestArrayBase arr = new TestArrayBase(SMALL_SIZE);
+        final double[] source = new double[SMALL_SIZE];
+        source[0] = TEST_VALUE;
+
+        arr.testCopyValues(source);
+
+        final double[] result = arr.getValuesCopy();
+        assertEquals(TEST_VALUE, result[0], EPSILON);
+    }
+
+    /**
+     * Test copyValues with large array.
+     */
+    @Test
+    public void copyValues_largeArray_copiesAllElements() {
+        final TestArrayBase arr = new TestArrayBase(LARGE_SIZE);
+        final double[] source = new double[LARGE_SIZE];
+
+        for (int i = 0; i < LARGE_SIZE; i++) {
+            source[i] = i * TEST_VALUE;
+        }
+
+        arr.testCopyValues(source);
+
+        final double[] result = arr.getValuesCopy();
+        assertArrayEquals(source, result, EPSILON);
+    }
+
+    /**
+     * Test copyValues preserves precision.
+     */
+    @Test
+    public void copyValues_preciseValues_preservesPrecision() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE];
+        final double preciseValue = 1.234567890123456;
+
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            source[i] = preciseValue + i * 0.1;
+        }
+
+        arr.testCopyValues(source);
+
+        final double[] result = arr.getValuesCopy();
+        assertArrayEquals(source, result, EPSILON);
     }
 }
