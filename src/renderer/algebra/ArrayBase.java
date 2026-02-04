@@ -80,6 +80,40 @@ public abstract class ArrayBase {
     }
 
     /**
+     * Sets the value at a specific index.
+     * This is a pure array operation.
+     *
+     * @param index the index
+     * @param value the value to set
+     */
+    protected final void setValue(final int index, final double value) {
+        values[index] = value;
+    }
+
+    /**
+     * Gets the value at a specific index.
+     * This is a pure array operation.
+     *
+     * @param index the index
+     * @return the value at the specified index
+     */
+    protected final double getValue(final int index) {
+        return values[index];
+    }
+
+    /**
+     * Sets all elements to a specific value.
+     * This is a pure array operation.
+     *
+     * @param value the value to set
+     */
+    protected final void setAll(final double value) {
+        for (int i = 0; i < values.length; i++) {
+            values[i] = value;
+        }
+    }
+
+    /**
      * Copies values from a source array into the internal storage.
      * This is a pure array operation.
      *
