@@ -146,6 +146,18 @@ public class ArrayBaseTest {
         }
 
         /**
+         * Public wrapper for copyValues with start and length to enable testing.
+         *
+         * @param source the source array
+         * @param start the starting index in the source array
+         * @param length the number of elements to copy
+         */
+        void testCopyValuesWithStartAndLength(final double[] source,
+                final int start, final int length) {
+            copyValues(source, start, length);
+        }
+
+        /**
          * Public wrapper for multiplyValues to enable testing.
          *
          * @param other the other array
@@ -1652,6 +1664,323 @@ public class ArrayBaseTest {
         final double[] values = arr.getValuesCopy();
         for (int i = 0; i < DEFAULT_SIZE; i++) {
             assertEquals(preciseValue, values[i], EPSILON);
+        }
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength copies from middle of source.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthFromMiddle() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final int sourceSize = 10;
+        final double[] source = new double[sourceSize];
+        final int start = 2;
+        final int length = DEFAULT_SIZE;
+
+        for (int i = 0; i < sourceSize; i++) {
+            source[i] = i + TEST_VALUE;
+        }
+
+        arr.testCopyValuesWithStartAndLength(source, start, length);
+
+        final double[] result = arr.getValuesCopy();
+        for (int i = 0; i < length; i++) {
+            assertEquals(source[start + i], result[i], EPSILON);
+        }
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength copies from start of source.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthFromStart() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE + 2];
+        final int start = 0;
+        final int length = DEFAULT_SIZE;
+
+        for (int i = 0; i < source.length; i++) {
+            source[i] = i + TEST_VALUE;
+        }
+
+        arr.testCopyValuesWithStartAndLength(source, start, length);
+
+        final double[] result = arr.getValuesCopy();
+        for (int i = 0; i < length; i++) {
+            assertEquals(source[i], result[i], EPSILON);
+        }
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength copies partial array.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthPartialCopy() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE];
+        final int start = 1;
+        final int length = 3;
+
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            source[i] = i + TEST_VALUE;
+        }
+
+        arr.testCopyValuesWithStartAndLength(source, start, length);
+
+        final double[] result = arr.getValuesCopy();
+        for (int i = 0; i < length; i++) {
+            assertEquals(source[start + i], result[i], EPSILON);
+        }
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength does not modify source.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthDoesNotModifySource() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE + 2];
+        final double[] sourceCopy = new double[DEFAULT_SIZE + 2];
+        final int start = 1;
+        final int length = DEFAULT_SIZE;
+
+        for (int i = 0; i < source.length; i++) {
+            source[i] = i + TEST_VALUE_2;
+            sourceCopy[i] = i + TEST_VALUE_2;
+        }
+
+        arr.testCopyValuesWithStartAndLength(source, start, length);
+
+        assertArrayEquals(sourceCopy, source, EPSILON);
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength with negative start.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthNegativeStartThrowsException() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE + 2];
+        final int negativeStart = -1;
+        final int length = DEFAULT_SIZE;
+
+        try {
+            arr.testCopyValuesWithStartAndLength(source, negativeStart, length);
+            fail("Should throw IllegalArgumentException for negative start");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Invalid start or length for copy operation",
+                        e.getMessage());
+        }
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength with negative length.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthNegativeLengthThrowsException() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE + 2];
+        final int start = 0;
+        final int negativeLength = -1;
+
+        try {
+            arr.testCopyValuesWithStartAndLength(source, start, negativeLength);
+            fail("Should throw IllegalArgumentException for negative length");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Invalid start or length for copy operation",
+                        e.getMessage());
+        }
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength with length exceeding destination.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthLengthExceedsDestination() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE * 2];
+        final int start = 0;
+        final int tooLargeLength = DEFAULT_SIZE + 1;
+
+        try {
+            arr.testCopyValuesWithStartAndLength(source, start, tooLargeLength);
+            fail("Should throw IllegalArgumentException for length exceeding destination");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Invalid start or length for copy operation",
+                        e.getMessage());
+        }
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength with start plus length exceeding source.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthExceedingSource() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE];
+        final int start = 2;
+        final int length = DEFAULT_SIZE;
+
+        try {
+            arr.testCopyValuesWithStartAndLength(source, start, length);
+            fail("Should throw IllegalArgumentException for exceeding source bounds");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Invalid start or length for copy operation",
+                        e.getMessage());
+        }
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength with start at end of source.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthStartAtSourceEnd() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE];
+        final int start = DEFAULT_SIZE;
+        final int length = 1;
+
+        try {
+            arr.testCopyValuesWithStartAndLength(source, start, length);
+            fail("Should throw IllegalArgumentException for start at source end");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Invalid start or length for copy operation",
+                        e.getMessage());
+        }
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength with zero length.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthZeroLength() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE];
+        final int start = 0;
+        final int zeroLength = 0;
+
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            arr.testSetValue(i, TEST_VALUE);
+        }
+
+        final double[] originalValues = arr.getValuesCopy();
+        arr.testCopyValuesWithStartAndLength(source, start, zeroLength);
+
+        assertArrayEquals(originalValues, arr.getValuesCopy(), EPSILON);
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength with single element.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthSingleElement() {
+        final TestArrayBase arr = new TestArrayBase(SMALL_SIZE);
+        final double[] source = new double[DEFAULT_SIZE];
+        final int start = 2;
+        final int length = 1;
+
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            source[i] = i + TEST_VALUE;
+        }
+
+        arr.testCopyValuesWithStartAndLength(source, start, length);
+
+        final double[] result = arr.getValuesCopy();
+        assertEquals(source[start], result[0], EPSILON);
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength with large source array.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthLargeSource() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[LARGE_SIZE];
+        final int start = 50;
+        final int length = DEFAULT_SIZE;
+
+        for (int i = 0; i < LARGE_SIZE; i++) {
+            source[i] = i * TEST_VALUE;
+        }
+
+        arr.testCopyValuesWithStartAndLength(source, start, length);
+
+        final double[] result = arr.getValuesCopy();
+        for (int i = 0; i < length; i++) {
+            assertEquals(source[start + i], result[i], EPSILON);
+        }
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength with negative values.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthNegativeValues() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE + 2];
+        final int start = 1;
+        final int length = DEFAULT_SIZE;
+        final double negativeValue = -7.5;
+
+        for (int i = 0; i < source.length; i++) {
+            source[i] = negativeValue - i;
+        }
+
+        arr.testCopyValuesWithStartAndLength(source, start, length);
+
+        final double[] result = arr.getValuesCopy();
+        for (int i = 0; i < length; i++) {
+            assertEquals(source[start + i], result[i], EPSILON);
+        }
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength preserves precision.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthPreservesPrecision() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE + 2];
+        final int start = 1;
+        final int length = DEFAULT_SIZE;
+        final double preciseValue = 1.234567890123456;
+
+        for (int i = 0; i < source.length; i++) {
+            source[i] = preciseValue + i * 0.1;
+        }
+
+        arr.testCopyValuesWithStartAndLength(source, start, length);
+
+        final double[] result = arr.getValuesCopy();
+        for (int i = 0; i < length; i++) {
+            assertEquals(source[start + i], result[i], EPSILON);
+        }
+    }
+
+    /**
+     * Test copyValuesWithStartAndLength replaces existing values.
+     */
+    @Test
+    public void testCopyValuesWithStartAndLengthReplacesExisting() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] source = new double[DEFAULT_SIZE + 2];
+        final int start = 1;
+        final int length = DEFAULT_SIZE;
+
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            arr.testSetValue(i, i * TEST_VALUE);
+        }
+
+        for (int i = 0; i < source.length; i++) {
+            source[i] = i + TEST_VALUE_2;
+        }
+
+        arr.testCopyValuesWithStartAndLength(source, start, length);
+
+        final double[] result = arr.getValuesCopy();
+        for (int i = 0; i < length; i++) {
+            assertEquals(source[start + i], result[i], EPSILON);
         }
     }
 }
