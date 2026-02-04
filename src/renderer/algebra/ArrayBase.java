@@ -108,9 +108,7 @@ public abstract class ArrayBase {
      * @param value the value to set
      */
     protected final void setAll(final double value) {
-        for (int i = 0; i < values.length; i++) {
-            values[i] = value;
-        }
+        java.util.Arrays.fill(values, value);
     }
 
     /**
