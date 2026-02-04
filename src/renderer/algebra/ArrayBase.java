@@ -80,6 +80,21 @@ public abstract class ArrayBase {
     }
 
     /**
+     * Copies values from a source array into the internal storage.
+     * This is a pure array operation.
+     *
+     * @param source the source array
+     * @throws IllegalArgumentException if source size doesn't match
+     */
+    protected final void copyValues(final double[] source) {
+        if (values.length != source.length) {
+            throw new IllegalArgumentException(
+                "Source array size must match destination size");
+        }
+        System.arraycopy(source, 0, values, 0, values.length);
+    }
+
+    /**
      * Scales all elements by a constant factor directly into a destination array.
      * This is a pure array operation.
      *
