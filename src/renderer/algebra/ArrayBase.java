@@ -164,4 +164,18 @@ public abstract class ArrayBase {
             dest[i] = values[i] * other[i];
         }
     }
+
+    /**
+     * Computes the sum of all elements.
+     * This is a pure array operation.
+     *
+     * @return the sum of all elements
+     */
+    protected final double sumValues() {
+        double sum = 0.0;
+        for (double v : values) {
+            sum += v;
+        }
+        return sum;
+    }
 }
