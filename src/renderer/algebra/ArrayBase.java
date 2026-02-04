@@ -147,4 +147,21 @@ public abstract class ArrayBase {
             dest[i] = values[i] - other[i];
         }
     }
+    /**
+     * Element-wise multiplication of two arrays directly into a destination array.
+     * This is a pure array operation.
+     *
+     * @param other the other array
+     * @param dest the destination array
+     * @throws IllegalArgumentException if sizes don't match
+     */
+    protected final void multiplyValues(final double[] other, final double[] dest) {
+        if (values.length != other.length || values.length != dest.length) {
+            throw new IllegalArgumentException(
+                "All arrays must have the same size");
+        }
+        for (int i = 0; i < values.length; i++) {
+            dest[i] = values[i] * other[i];
+        }
+    }
 }
