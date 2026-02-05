@@ -54,6 +54,16 @@ public abstract class ArrayBase {
     }
 
     /**
+     * Gets a string representation of the dimensions of this object.
+     * Subclasses should override to provide meaningful dimension info.
+     *
+     * @return a string describing the dimensions
+     */
+    public String getDimensionString() {
+        return String.valueOf(size());
+    }
+
+    /**
      * Gets the name.
      *
      * @return the name
