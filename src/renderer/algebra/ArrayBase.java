@@ -64,6 +64,17 @@ public abstract class ArrayBase {
     }
 
     /**
+     * Fills the internal array with random values between 0.0 (inclusive)
+     * and 1.0 (exclusive).
+     * This is a pure array operation.
+     */
+    protected final void fillRandom() {
+        for (int i = 0; i < values.length; i++) {
+            values[i] = Math.random();
+        }
+    }
+
+    /**
      * Gets the name.
      *
      * @return the name
