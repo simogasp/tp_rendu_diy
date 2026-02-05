@@ -80,6 +80,33 @@ public abstract class ArrayBase {
     }
 
     /**
+     * Validates that all arrays have the same size for binary operations.
+     *
+     * @param other the other operand array
+     * @param dest the destination array
+     * @throws IllegalArgumentException if sizes don't match
+     */
+    private void validateBinaryOperationSizes(final double[] other, final double[] dest) {
+        if (values.length != other.length || values.length != dest.length) {
+            throw new IllegalArgumentException(
+                "All arrays must have the same size");
+        }
+    }
+
+    /**
+     * Validates that destination array has the correct size.
+     *
+     * @param dest the destination array
+     * @throws IllegalArgumentException if size doesn't match
+     */
+    private void validateDestinationSize(final double[] dest) {
+        if (values.length != dest.length) {
+            throw new IllegalArgumentException(
+                "Destination array size must match source size");
+        }
+    }
+
+    /**
      * Sets the value at a specific index.
      * This is a pure array operation.
      *
@@ -160,10 +187,7 @@ public abstract class ArrayBase {
      * @throws IllegalArgumentException if destination size doesn't match
      */
     protected final void scaleValues(final double factor, final double[] dest) {
-        if (values.length != dest.length) {
-            throw new IllegalArgumentException(
-                "Destination array size must match source size");
-        }
+        validateDestinationSize(dest);
         for (int i = 0; i < values.length; i++) {
             dest[i] = values[i] * factor;
         }
@@ -178,10 +202,7 @@ public abstract class ArrayBase {
      * @throws IllegalArgumentException if sizes don't match
      */
     protected final void addValues(final double[] other, final double[] dest) {
-        if (values.length != other.length || values.length != dest.length) {
-            throw new IllegalArgumentException(
-                "All arrays must have the same size");
-        }
+        validateBinaryOperationSizes(other, dest);
         for (int i = 0; i < values.length; i++) {
             dest[i] = values[i] + other[i];
         }
@@ -196,14 +217,12 @@ public abstract class ArrayBase {
      * @throws IllegalArgumentException if sizes don't match
      */
     protected final void subtractValues(final double[] other, final double[] dest) {
-        if (values.length != other.length || values.length != dest.length) {
-            throw new IllegalArgumentException(
-                "All arrays must have the same size");
-        }
+        validateBinaryOperationSizes(other, dest);
         for (int i = 0; i < values.length; i++) {
             dest[i] = values[i] - other[i];
         }
     }
+
     /**
      * Element-wise multiplication of two arrays directly into a destination array.
      * This is a pure array operation.
@@ -213,10 +232,7 @@ public abstract class ArrayBase {
      * @throws IllegalArgumentException if sizes don't match
      */
     protected final void multiplyValues(final double[] other, final double[] dest) {
-        if (values.length != other.length || values.length != dest.length) {
-            throw new IllegalArgumentException(
-                "All arrays must have the same size");
-        }
+        validateBinaryOperationSizes(other, dest);
         for (int i = 0; i < values.length; i++) {
             dest[i] = values[i] * other[i];
         }
