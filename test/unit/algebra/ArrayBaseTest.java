@@ -79,6 +79,11 @@ public class ArrayBaseTest {
     private static final double TEST_VALUE_2 = 2.5;
 
     /**
+     * Test array base object.
+     */
+    private TestArrayBase arrayBase;
+
+    /**
      * Concrete implementation of ArrayBase for testing purposes.
      * Uses Vector as the underlying implementation.
      */
@@ -233,11 +238,6 @@ public class ArrayBaseTest {
             fillRandom();
         }
     }
-
-    /**
-     * Test array base object.
-     */
-    private TestArrayBase arrayBase;
 
     /**
      * Sets up test fixtures before each test.
