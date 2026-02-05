@@ -362,13 +362,13 @@ public class Vector extends ArrayBase implements Cloneable {
      * Validates that the vector has at least the specified minimum size.
      *
      * @param minSize the minimum required size
-     * @param componentName the name of the component being accessed (for error message)
+     * @param compName the name of the component being accessed (for error message)
      * @throws IllegalArgumentException if the vector size is less than minSize
      */
-    private void validateMinimumSize(final int minSize, final String componentName) {
+    private void validateMinimumSize(final int minSize, final String compName) {
         if (size() < minSize) {
             throw new IllegalArgumentException(
-                "There is no " + componentName + " component, the size has to be at least "
+                "There is no " + compName + " component, the size has to be at least "
                 + minSize + " but here the size is " + size() + ".");
         }
     }
