@@ -33,7 +33,7 @@ public abstract class ArrayBase {
         this.name = name;
     }
 
-        /**
+    /**
      * Constructor for subclasses.
      *
      * @param size the total number of elements
