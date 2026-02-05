@@ -188,6 +188,15 @@ public class ArrayBaseTest {
         }
 
         /**
+         * Public wrapper for getValues to enable testing.
+         *
+         * @return the internal values array reference
+         */
+        double[] testGetValues() {
+            return getValues();
+        }
+
+        /**
          * Public wrapper for setValue to enable testing.
          *
          * @param index the index
@@ -1981,6 +1990,185 @@ public class ArrayBaseTest {
         final double[] result = arr.getValuesCopy();
         for (int i = 0; i < length; i++) {
             assertEquals(source[start + i], result[i], EPSILON);
+        }
+    }
+
+    /**
+     * Test getValues returns the internal array reference.
+     */
+    @Test
+    public void testGetValuesReturnsInternalArray() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] values1 = arr.testGetValues();
+        final double[] values2 = arr.testGetValues();
+
+        // Verify it's the same reference
+        assertEquals(values1, values2);
+    }
+
+    /**
+     * Test getValues returns array with correct length.
+     */
+    @Test
+    public void testGetValuesReturnsCorrectLength() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] values = arr.testGetValues();
+
+        assertEquals(DEFAULT_SIZE, values.length);
+    }
+
+    /**
+     * Test modifications to getValues result affect internal state.
+     */
+    @Test
+    public void testGetValuesModificationsAffectInternalState() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] values = arr.testGetValues();
+
+        // Modify the returned array
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            values[i] = i + TEST_VALUE;
+        }
+
+        // Verify internal state changed
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            assertEquals(i + TEST_VALUE, arr.testGetValue(i), EPSILON);
+        }
+    }
+
+    /**
+     * Test getValues returns array initialized to zeros.
+     */
+    @Test
+    public void testGetValuesInitializedToZeros() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] values = arr.testGetValues();
+
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            assertEquals(0.0, values[i], EPSILON);
+        }
+    }
+
+    /**
+     * Test getValues after setValue reflects changes.
+     */
+    @Test
+    public void testGetValuesReflectsSetValue() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            arr.testSetValue(i, i * TEST_VALUE);
+        }
+
+        final double[] values = arr.testGetValues();
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            assertEquals(i * TEST_VALUE, values[i], EPSILON);
+        }
+    }
+
+    /**
+     * Test getValues after setAll reflects changes.
+     */
+    @Test
+    public void testGetValuesReflectsSetAll() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        arr.testSetAll(TEST_VALUE);
+
+        final double[] values = arr.testGetValues();
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            assertEquals(TEST_VALUE, values[i], EPSILON);
+        }
+    }
+
+    /**
+     * Test getValues with single element array.
+     */
+    @Test
+    public void testGetValuesSingleElement() {
+        final TestArrayBase arr = new TestArrayBase(SMALL_SIZE);
+        arr.testSetValue(0, TEST_VALUE);
+
+        final double[] values = arr.testGetValues();
+        assertEquals(SMALL_SIZE, values.length);
+        assertEquals(TEST_VALUE, values[0], EPSILON);
+    }
+
+    /**
+     * Test getValues with large array.
+     */
+    @Test
+    public void testGetValuesLargeArray() {
+        final TestArrayBase arr = new TestArrayBase(LARGE_SIZE);
+        final double[] values = arr.testGetValues();
+
+        assertEquals(LARGE_SIZE, values.length);
+    }
+
+    /**
+     * Test getValues returns same reference after copyValues.
+     */
+    @Test
+    public void testGetValuesSameReferenceAfterCopyValues() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] values1 = arr.testGetValues();
+
+        final double[] source = new double[DEFAULT_SIZE];
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            source[i] = i + TEST_VALUE;
+        }
+        arr.testCopyValues(source);
+
+        final double[] values2 = arr.testGetValues();
+        assertEquals(values1, values2);
+    }
+
+    /**
+     * Test getValues reference equality with multiple calls.
+     */
+    @Test
+    public void testGetValuesReferenceEqualityMultipleCalls() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] ref1 = arr.testGetValues();
+        final double[] ref2 = arr.testGetValues();
+        final double[] ref3 = arr.testGetValues();
+
+        assertEquals(ref1, ref2);
+        assertEquals(ref2, ref3);
+        assertEquals(ref1, ref3);
+    }
+
+    /**
+     * Test direct array modification via getValues.
+     */
+    @Test
+    public void testGetValuesDirectModification() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] values = arr.testGetValues();
+        final int testIndex = 2;
+
+        values[testIndex] = TEST_VALUE_2;
+
+        assertEquals(TEST_VALUE_2, arr.testGetValue(testIndex), EPSILON);
+    }
+
+    /**
+     * Test getValues after scaleValues operation.
+     */
+    @Test
+    public void testGetValuesAfterScaleValues() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        final double[] dest = new double[DEFAULT_SIZE];
+
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            arr.testSetValue(i, i + TEST_VALUE);
+        }
+
+        arr.testScaleValues(SCALE_FACTOR, dest);
+        final double[] values = arr.testGetValues();
+
+        // Verify original values unchanged
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            assertEquals(i + TEST_VALUE, values[i], EPSILON);
         }
     }
 }
