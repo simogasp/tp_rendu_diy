@@ -5,6 +5,7 @@ import renderer.algebra.ArrayBase;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
@@ -223,6 +224,13 @@ public class ArrayBaseTest {
          */
         void testSetAll(final double value) {
             setAll(value);
+        }
+
+        /**
+         * Public wrapper for fillRandom to enable testing.
+         */
+        void testFillRandom() {
+            fillRandom();
         }
     }
 
@@ -2197,5 +2205,37 @@ public class ArrayBaseTest {
     public void testGetDimensionStringLargeSize() {
         final TestArrayBase arr = new TestArrayBase(LARGE_SIZE);
         assertEquals("100", arr.getDimensionString());
+    }
+
+    /**
+     * Test fillRandom populates all elements with values.
+     */
+    @Test
+    public void testFillRandomPopulatesAllElements() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        arr.testFillRandom();
+
+        final double[] values = arr.getValuesCopy();
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            // Random values should not be zero (with very high probability)
+            // and should be in range [0.0, 1.0)
+            assertTrue("Element " + i + " should be >= 0.0",
+                      values[i] >= 0.0);
+            assertTrue("Element " + i + " should be < 1.0",
+                      values[i] < 1.0);
+        }
+    }
+
+    /**
+     * Test fillRandom with single element.
+     */
+    @Test
+    public void testFillRandomSingleElement() {
+        final TestArrayBase arr = new TestArrayBase(SMALL_SIZE);
+        arr.testFillRandom();
+
+        final double[] values = arr.getValuesCopy();
+        assertTrue(values[0] >= 0.0);
+        assertTrue(values[0] < 1.0);
     }
 }
