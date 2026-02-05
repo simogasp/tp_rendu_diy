@@ -113,7 +113,8 @@ public abstract class ArrayBase {
 
     /**
      * Copies values from a source array into the internal storage.
-     * Copies from source[start] to source[start + length - 1] into values[0] to values[length - 1].
+     * Copies from source[start] to source[start + length - 1] into values[0]
+     * to values[length - 1].
      * This is a pure array operation.
      *
      * @param source the source array
@@ -121,7 +122,9 @@ public abstract class ArrayBase {
      * @param length the number of elements to copy
      * @throws IllegalArgumentException if start or length are invalid or out of bounds
      */
-    protected final void copyValues(final double[] source, final int start, final int length) {
+    protected final void copyValues(final double[] source,
+                                    final int start,
+                                    final int length) {
         if (start < 0 || length < 0 || length > values.length) {
             throw new IllegalArgumentException(
                 "Invalid start or length for copy operation");
