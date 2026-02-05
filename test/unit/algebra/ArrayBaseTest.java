@@ -2171,4 +2171,31 @@ public class ArrayBaseTest {
             assertEquals(i + TEST_VALUE, values[i], EPSILON);
         }
     }
+
+    /**
+     * Test getDimensionString returns size as string.
+     */
+    @Test
+    public void testGetDimensionStringReturnsSize() {
+        final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
+        assertEquals(String.valueOf(DEFAULT_SIZE), arr.getDimensionString());
+    }
+
+    /**
+     * Test getDimensionString with small size.
+     */
+    @Test
+    public void testGetDimensionStringSmallSize() {
+        final TestArrayBase arr = new TestArrayBase(SMALL_SIZE);
+        assertEquals("1", arr.getDimensionString());
+    }
+
+    /**
+     * Test getDimensionString with large size.
+     */
+    @Test
+    public void testGetDimensionStringLargeSize() {
+        final TestArrayBase arr = new TestArrayBase(LARGE_SIZE);
+        assertEquals("100", arr.getDimensionString());
+    }
 }
