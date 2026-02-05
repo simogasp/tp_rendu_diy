@@ -15,33 +15,13 @@ public class SizeMismatchException extends RuntimeException {
     }
 
     /**
-     * Constructor for SizeMismatchException vectors.
-     * @param v1 first vector
-     * @param v2 second vector
+     * Constructor for SizeMismatchException with array-based objects.
+     * @param a1 first array-based object
+     * @param a2 second array-based object
      */
-    public SizeMismatchException(Vector v1, Vector v2) {
-        super(v1.getName() + "[" + v1.size()
-                + "] != " + v2.getName() + "[" + v2.size() + "]");
-    }
-
-    /**
-     * Constructor for SizeMismatchException when using matrices.
-     * @param m1 first matrix
-     * @param m2 second matrix
-     */
-    public SizeMismatchException(Matrix m1, Matrix m2) {
-        super(m1.getName() + "[*," + m1.nCols + "] != "
-            + m2.getName() + "[" + m2.nRows + ",*]");
-    }
-
-    /**
-     * Constructor for SizeMismatchException when using matrices and vectors.
-     * @param m matrix
-     * @param v vector
-     */
-    public SizeMismatchException(Matrix m, Vector v) {
-        super(m.getName() + "[*," + m.nCols + "] != "
-            + v.getName() + "[" + v.size() + ",*]");
+    public SizeMismatchException(ArrayBase a1, ArrayBase a2) {
+        super(a1.getName() + "[" + a1.getDimensionString()
+                + "] != " + a2.getName() + "[" + a2.getDimensionString() + "]");
     }
 
     /**

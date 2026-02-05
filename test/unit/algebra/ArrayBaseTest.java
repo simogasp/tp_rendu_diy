@@ -937,9 +937,10 @@ public class ArrayBaseTest {
         final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
         final double[] source = new double[DEFAULT_SIZE];
         final double preciseValue = 1.234567890123456;
+        final double increment = 0.1;
 
         for (int i = 0; i < DEFAULT_SIZE; i++) {
-            source[i] = preciseValue + i * 0.1;
+            source[i] = preciseValue + i * increment;
         }
 
         arr.testCopyValues(source);
@@ -1822,7 +1823,8 @@ public class ArrayBaseTest {
 
         try {
             arr.testCopyValuesWithStartAndLength(source, start, tooLargeLength);
-            fail("Should throw IllegalArgumentException for length exceeding destination");
+            fail("Should throw IllegalArgumentException for "
+                    + "length exceeding destination");
         } catch (IllegalArgumentException e) {
             assertEquals("Invalid start or length for copy operation",
                         e.getMessage());
@@ -1962,9 +1964,10 @@ public class ArrayBaseTest {
         final int start = 1;
         final int length = DEFAULT_SIZE;
         final double preciseValue = 1.234567890123456;
+        final double increment = 0.1;
 
         for (int i = 0; i < source.length; i++) {
-            source[i] = preciseValue + i * 0.1;
+            source[i] = preciseValue + i * increment;
         }
 
         arr.testCopyValuesWithStartAndLength(source, start, length);

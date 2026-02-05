@@ -797,4 +797,40 @@ public class TestMatrix {
             assertEquals("Invalid submatrix", exception.getMessage());
         }
     }
+
+    /**
+     * Test getDimensionString returns NxM format.
+     */
+    @Test
+    public void testGetDimensionStringFormat() {
+        final Matrix m = new Matrix(3, 4);
+        assertEquals("3x4", m.getDimensionString());
+    }
+
+    /**
+     * Test getDimensionString with square matrix.
+     */
+    @Test
+    public void testGetDimensionStringSquareMatrix() {
+        final Matrix m = new Matrix(5, 5);
+        assertEquals("5x5", m.getDimensionString());
+    }
+
+    /**
+     * Test getDimensionString with 1x1 matrix.
+     */
+    @Test
+    public void testGetDimensionStringSingleElement() {
+        final Matrix m = new Matrix(1, 1);
+        assertEquals("1x1", m.getDimensionString());
+    }
+
+    /**
+     * Test getDimensionString with large matrix.
+     */
+    @Test
+    public void testGetDimensionStringLargeMatrix() {
+        final Matrix m = new Matrix(100, 200);
+        assertEquals("100x200", m.getDimensionString());
+    }
 }

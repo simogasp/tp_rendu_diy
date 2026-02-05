@@ -7,32 +7,40 @@ package renderer.algebra;
 /**
  * Matrix class.
  */
-public class Matrix {
-
-    /**
-     * The name of the matrix.
-     */
-    protected String name;
-
-    /**
-     * The matrix values.
-     */
-    protected final double[] values;
+public class Matrix extends ArrayBase {
 
     /**
      * The number of rows.
      */
-    protected final int nRows;
+    private final int nRows;
 
     /**
      * The number of columns.
      */
-    protected final int nCols;
+    private final int nCols;
 
     /**
      * The default name of the matrix.
      */
     public static final String DEFAULT_NAME = "M";
+
+    /**
+     * Validates matrix dimensions and computes the total size.
+     *
+     * @param numRows the number of rows
+     * @param numCols the number of columns
+     * @return the total size (numRows * numCols)
+     * @throws IllegalArgumentException if either dimension is not positive
+     */
+    private static int validateAndComputeSize(final int numRows, final int numCols)
+            throws IllegalArgumentException {
+        if (numRows <= 0 || numCols <= 0) {
+            throw new IllegalArgumentException(
+                "Matrix dimensions must be positive: rows=" + numRows
+                + ",cols=" + numCols);
+        }
+        return numRows * numCols;
+    }
 
     /**
      * Creates a named Matrix of size nRows x nCols.
@@ -43,15 +51,9 @@ public class Matrix {
      */
     public Matrix(final String name, final int numRows, final int numCols)
             throws IllegalArgumentException {
-        if (numRows < 1 || numCols < 1) {
-            throw new IllegalArgumentException(
-                "Both matrix dimensions must be strictly positive");
-        }
-        final int size = numRows * numCols;
-        this.values = new double[size];
+        super(name, validateAndComputeSize(numRows, numCols));
         this.nRows = numRows;
         this.nCols = numCols;
-        this.name = name;
     }
 
     /**
@@ -91,7 +93,7 @@ public class Matrix {
         Matrix id = new Matrix(name, size, size);
 
         for (int i = 0; i < size; i++) {
-            id.values[size * i + i] = 1.0;
+            id.set(i, i, 1.0);
         }
         return id;
     }
@@ -110,11 +112,7 @@ public class Matrix {
     public static Matrix createRandom(final String name, final int nRows, final int nCols)
             throws IllegalArgumentException {
         Matrix m = new Matrix(name, nRows, nCols);
-        for (int i = 0; i < nRows; i++) {
-            for (int j = 0; j < nCols; j++) {
-                m.set(i, j, Math.random());
-            }
-        }
+        m.fillRandom();
         return m;
     }
 
@@ -144,7 +142,8 @@ public class Matrix {
 
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
-                sub.set(i, j, this.get(i + offsetRow, j + offsetCol));
+                final var value = this.get(i + offsetRow, j + offsetCol);
+                sub.set(i, j, value);
             }
         }
 
@@ -203,7 +202,8 @@ public class Matrix {
      * @throws SizeMismatchException if the matrix sizes do not match for multiplication
      */
     public final Vector multiply(final Vector v) throws SizeMismatchException {
-        return new Vector(multiply((Matrix) v).values);
+        final var other = v.toMatrix();
+        return new Vector(multiply(other).getValues());
     }
 
 
@@ -216,18 +216,9 @@ public class Matrix {
      * @throws SizeMismatchException if the matrix sizes do not match for addition
      */
     public final Matrix add(final Matrix m) throws SizeMismatchException {
-        if (nCols != m.nCols || nRows != m.nRows) {
-            throw new SizeMismatchException(this, m);
-        }
-
-        final Matrix res = new Matrix(this.nRows, m.nCols);
-
-        for (int i = 0; i < res.nRows; i++) {
-            for (int j = 0; j < res.nCols; j++) {
-                final double value = get(i, j) + m.get(i, j);
-                res.set(i, j, value);
-            }
-        }
+        validateSameDimensions(m);
+        final Matrix res = new Matrix(this.getNRows(), m.getNCols());
+        this.addValues(m.getValues(), res.getValues());
         return res;
     }
 
@@ -240,22 +231,11 @@ public class Matrix {
      * @throws SizeMismatchException if the matrix sizes do not match for subtraction
      */
     public final Matrix subtract(final Matrix m) throws SizeMismatchException {
-        if (nCols != m.nCols || nRows != m.nRows) {
-            throw new SizeMismatchException(name + " is " + nRows + "x" + nCols
-                + " and " + m.name + " is " + m.nRows + "x" + m.nCols);
-        }
-
-        final Matrix res = new Matrix(this.nRows, m.nCols);
-
-        for (int i = 0; i < res.nRows; i++) {
-            for (int j = 0; j < res.nCols; j++) {
-                final double value = get(i, j) - m.get(i, j);
-                res.set(i, j, value);
-            }
-        }
+        validateSameDimensions(m);
+        final Matrix res = new Matrix(this.getNRows(), m.getNCols());
+        this.subtractValues(m.getValues(), res.getValues());
         return res;
     }
-
 
     /**
      * Sets the element on row i and column j to the given value.
@@ -266,7 +246,7 @@ public class Matrix {
      * @param value the value to set
      */
     public void set(final int i, final int j, final double value) {
-        values[i * nCols + j] = value;
+        setValue(i * nCols + j, value);
     }
 
     /**
@@ -279,17 +259,10 @@ public class Matrix {
      * rows or if the column index is invalid
      */
     public void setCol(final int i, final Vector v) {
-        // check if the vector has the right size
-        if (v.size() != nRows) {
-            throw new IllegalArgumentException("Vector size does not match matrix size");
-        }
-        // check if the column index is valid
-        if (i < 0 || i >= nCols) {
-            throw new IllegalArgumentException("Invalid column index");
-        }
-        // set the column
-        for (int j = 0; j < nRows; j++) {
-            values[j * nCols + i] = v.get(j);
+        validateVectorSizeForColumn(v);
+        validateColumnIndex(i);
+        for (int j = 0; j < getNRows(); j++) {
+            set(j, i, v.get(j));
         }
     }
 
@@ -302,14 +275,11 @@ public class Matrix {
      * @throws IllegalArgumentException if the column index is invalid
      */
     public final Vector getCol(final int i) {
-        // check if the column index is valid
-        if (i < 0 || i >= nCols) {
-            throw new IllegalArgumentException("Invalid column index");
-        }
-        // get the column
-        final Vector v = new Vector(nRows);
-        for (int j = 0; j < nRows; j++) {
-            v.set(j, values[j * nCols + i]);
+        validateColumnIndex(i);
+        final Vector v = new Vector(getNRows());
+        for (int j = 0; j < getNRows(); j++) {
+            final var val = get(j, i);
+            v.set(j, val);
         }
         return v;
     }
@@ -324,17 +294,11 @@ public class Matrix {
      * columns or if the row index is invalid
      */
     public void setRow(final int i, final Vector v) {
-        // check if the vector has the right size
-        if (v.size() != nCols) {
-            throw new IllegalArgumentException("Vector size does not match matrix size");
-        }
-        // check if the row index is valid
-        if (i < 0 || i >= nRows) {
-            throw new IllegalArgumentException("Invalid row index");
-        }
-        // set the row
-        for (int j = 0; j < nCols; j++) {
-            values[i * nCols + j] = v.get(j);
+        validateVectorSizeForRow(v);
+        validateRowIndex(i);
+        for (int j = 0; j < getNCols(); j++) {
+            final double value = v.get(j);
+            set(i, j, value);
         }
     }
 
@@ -347,14 +311,11 @@ public class Matrix {
      * @throws IllegalArgumentException if the row index is invalid
      */
     public final Vector getRow(final int i) {
-        // check if the row index is valid
-        if (i < 0 || i >= nRows) {
-            throw new IllegalArgumentException("Invalid row index");
-        }
-        // get the row
-        final Vector v = new Vector(nCols);
-        for (int j = 0; j < nCols; j++) {
-            v.set(j, values[i * nCols + j]);
+        validateRowIndex(i);
+        final Vector v = new Vector(getNCols());
+        for (int j = 0; j < getNCols(); j++) {
+            final var val = get(i, j);
+            v.set(j, val);
         }
         return v;
     }
@@ -367,17 +328,7 @@ public class Matrix {
      * @return the element at position {@code (i, j)}
      */
     public final double get(final int i, final int j) {
-        return values[i * nCols + j];
-    }
-
-    /**
-     * Sets the matrix name.
-     * This method MODIFIES the current matrix.
-     *
-     * @param name the name of the matrix
-     */
-    public void setName(final String name) {
-        this.name = name;
+        return getValue(i * getNCols() + j);
     }
 
     /**
@@ -386,16 +337,16 @@ public class Matrix {
      */
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder(name + " = [");
+        StringBuilder str = new StringBuilder(getName() + " = [");
 
         int spacing = str.length();
-        for (int i = 0; i < nRows; i++) {
+        for (int i = 0; i < getNRows(); i++) {
             if (i > 0) {
                 for (int j = 0; j < spacing; j++) {
                     str.append(" ");
                 }
             }
-            for (int j = 0; j < nCols; j++) {
+            for (int j = 0; j < getNCols(); j++) {
                 str.append(get(i, j) + " ");
             }
             str.append(";\n");
@@ -404,14 +355,6 @@ public class Matrix {
         str.append("];");
 
         return str.toString();
-    }
-
-    /**
-     * Returns the name of the matrix.
-     * @return the name of the matrix
-     */
-    public String getName() {
-        return name;
     }
 
     /**
@@ -430,6 +373,11 @@ public class Matrix {
         return nCols;
     }
 
+    @Override
+    public String getDimensionString() {
+        return nRows + "x" + nCols;
+    }
+
     /**
      * Multiplies the Matrix by the given constant.
      * This method does NOT modify the current matrix.
@@ -438,11 +386,82 @@ public class Matrix {
      * @return a new Matrix containing the result of this * f
      */
     public Matrix scale(final double f) {
-        final Matrix res = new Matrix(nRows, nCols);
-        for (int i = 0; i < values.length; i++) {
-            res.values[i] = values[i] * f;
-        }
+        final Matrix res = new Matrix(getNRows(), getNCols());
+        scaleValues(f, res.getValues());
         return res;
+    }
+
+    /**
+     * Checks if this matrix has the same size as another matrix.
+     *
+     * @param m the matrix to compare with
+     * @return true if this matrix has the same number of rows and columns as m,
+     * false otherwise
+     */
+    private boolean sameSize(final Matrix m) {
+        return getNRows() == m.getNRows() && getNCols() == m.getNCols();
+    }
+
+    /**
+     * Validates that the column index is within valid bounds.
+     *
+     * @param columnIndex the column index to validate
+     * @throws IllegalArgumentException if the column index is invalid
+     */
+    private void validateColumnIndex(final int columnIndex) {
+        if (columnIndex < 0 || columnIndex >= nCols) {
+            throw new IllegalArgumentException("Invalid column index");
+        }
+    }
+
+    /**
+     * Validates that the row index is within valid bounds.
+     *
+     * @param rowIndex the row index to validate
+     * @throws IllegalArgumentException if the row index is invalid
+     */
+    private void validateRowIndex(final int rowIndex) {
+        if (rowIndex < 0 || rowIndex >= nRows) {
+            throw new IllegalArgumentException("Invalid row index");
+        }
+    }
+
+    /**
+     * Validates that a vector has the correct size for a column operation.
+     *
+     * @param v the vector to validate
+     * @throws IllegalArgumentException if the vector size does not match
+     * the number of rows
+     */
+    private void validateVectorSizeForColumn(final Vector v) {
+        if (v.size() != nRows) {
+            throw new IllegalArgumentException("Vector size does not match matrix size");
+        }
+    }
+
+    /**
+     * Validates that a vector has the correct size for a row operation.
+     *
+     * @param v the vector to validate
+     * @throws IllegalArgumentException if the vector size does not match
+     * the number of columns
+     */
+    private void validateVectorSizeForRow(final Vector v) {
+        if (v.size() != nCols) {
+            throw new IllegalArgumentException("Vector size does not match matrix size");
+        }
+    }
+
+    /**
+     * Validates that two matrices have the same dimensions.
+     *
+     * @param other the other matrix to compare with
+     * @throws SizeMismatchException if the matrices have different dimensions
+     */
+    private void validateSameDimensions(final Matrix other) {
+        if (!sameSize(other)) {
+            throw new SizeMismatchException(this, other);
+        }
     }
 
 }

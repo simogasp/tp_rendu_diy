@@ -217,10 +217,10 @@ public class TestVector {
      */
     @Test
     public void testAdd() {
-        final int vectorSize = 4;
         final double[] v1Values = {1.0, 2.0, 3.0, 4.0};
         final double[] v2Values = {5.0, 6.0, 7.0, 8.0};
         final double[] expectedValues = {6.0, 8.0, 10.0, 12.0};
+        final int vectorSize = v1Values.length;
 
         final Vector v1 = new Vector("v1", v1Values);
         final Vector v2 = new Vector("v2", v2Values);
@@ -249,10 +249,10 @@ public class TestVector {
      */
     @Test
     public void testSubtract() {
-        final int vectorSize = 4;
         final double[] v1Values = {10.0, 8.0, 6.0, 4.0};
         final double[] v2Values = {1.0, 2.0, 3.0, 4.0};
         final double[] expectedValues = {9.0, 6.0, 3.0, 0.0};
+        final int vectorSize = v1Values.length;
 
         final Vector v1 = new Vector("v1", v1Values);
         final Vector v2 = new Vector("v2", v2Values);
@@ -662,5 +662,25 @@ public class TestVector {
         assertEquals("X component should match", x, v.getX(), EPSILON);
         assertEquals("Y component should match", y, v.getY(), EPSILON);
         assertEquals("Z component should match", z, v.getZ(), EPSILON);
+    }
+
+    /**
+     * Test getDimensionString returns size as string for Vector.
+     */
+    @Test
+    public void testGetDimensionStringReturnsSize() {
+        final Vector v = new Vector(5);
+        assertEquals("5", v.getDimensionString());
+    }
+
+    /**
+     * Test getDimensionString with different sizes.
+     */
+    @Test
+    public void testGetDimensionStringVariousSizes() {
+        final int[] sizes = {1, 3, 100};
+        for (int size : sizes) {
+            assertEquals(String.valueOf(size), new Vector(size).getDimensionString());
+        }
     }
 }
