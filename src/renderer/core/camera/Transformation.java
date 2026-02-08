@@ -39,9 +39,9 @@ public class Transformation {
 
     /**
      * Sets the lookAt transformation.
-     * @param eye the eye position
-     * @param lookAtPoint the point to look at
-     * @param up the up vector
+     * @param eye a 3D vector representing the eye position
+     * @param lookAtPoint a 3D vector representing the point to look at
+     * @param up a 3D vector representing the up direction
      */
     public void setLookAt(final Vector eye, final Vector lookAtPoint, final Vector up) {
         try {
