@@ -147,8 +147,7 @@ public class Mesh {
         normals = new Vector[vertices.length];
 
         // Compute per face normals and set the vertex normal to the average normals
-        // across faces
-        // to the vertex.
+        // across faces to the vertex.
         final int numFaceElements = VERTICES_PER_FACE * getNumFaces();
         for (int i = 0; i < numFaceElements; i += VERTICES_PER_FACE) {
             //++ // TODO

@@ -4,13 +4,19 @@ title "Class Diagram"
 hide empty members
 package renderer.algebra{
 
+abstract class renderer.algebra.ArrayBase {
++ getName() : String
++ setName() : void
++ size() : int
+}
+
 class renderer.algebra.MathUtils {
 	+ {static} isInRange(Number, Number, Number) : boolean
 	+ {static} clamp() : Comparable
 	- {static} isIntegerType(Number) : boolean
 	- {static} isFloatingType(Number) : boolean
 }
-class renderer.algebra.Vector extends renderer.algebra.Matrix{
+class renderer.algebra.Vector extends renderer.algebra.ArrayBase{
 	+ homogeneous() : Vector
 	+ norm() : double
 	+ clamp(double, double) : Vector
@@ -24,7 +30,7 @@ class renderer.algebra.Vector extends renderer.algebra.Matrix{
 	+ zeros() : Vector
 	+ subtract(Vector) : Vector
 }
-class renderer.algebra.Matrix {
+class renderer.algebra.Matrix extends renderer.algebra.ArrayBase {
 	+ {static} createIdentity(int) : Matrix
 	+ getSubMatrix(int, int, int, int) : Matrix
 	+ transpose() : Matrix

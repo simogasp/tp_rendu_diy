@@ -30,4 +30,4 @@ replay_pid*
 .svn/
 
 dist/
-doc
+/doc
