@@ -107,7 +107,7 @@ public class ImageWrapper extends BufferedImage {
 
     /**
      * Gets the default background color.
-     * 
+     *
      * @return the default background color as an RGB integer
      */
     public static int getDefaultBackgroundColor() {
