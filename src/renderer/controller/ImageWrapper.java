@@ -96,14 +96,12 @@ public class ImageWrapper extends BufferedImage {
 
     /**
      * Initializes the image with the background color.
-     * @param rgb the background color
+     * @param backgroundColorRgb the background color
      */
-    private void init(int rgb) {
-        for (int x = 0; x < getWidth(); ++x) {
-            for (int y = 0; y < getHeight(); ++y) {
-                // init with the background color
-                this.setRGB(x, y, rgb);
-            }
-        }
+    private void init(int backgroundColorRgb) {
+        java.awt.Graphics2D g2d = createGraphics();
+        g2d.setColor(new Color(backgroundColorRgb));
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+        g2d.dispose();
     }
 }
