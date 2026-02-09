@@ -312,10 +312,10 @@ public class TestVector {
     }
 
     /**
-     * Test homogeneous representation of vectors.
+     * Test homogeneous representation of vectors as points.
      */
     @Test
-    public void testHomogeneous() {
+    public void testHomogeneousPoint() {
         // Test data: vector sizes to test
         final int[] testSizes = {2, 3, 4, 5};
 
@@ -325,10 +325,10 @@ public class TestVector {
                 v.set(i, i + 1.0);
             }
 
-            final Vector h = v.homogeneous();
+            final Vector h = v.homogeneousPoint();
 
             // Check size increased by 1
-            assertEquals("Homogeneous vector size should be " + (size + 1),
+            assertEquals("Homogeneous point size should be " + (size + 1),
                         size + 1, h.size());
 
             // Check original components preserved
@@ -337,10 +337,128 @@ public class TestVector {
                             i + 1.0, h.get(i), EPSILON);
             }
 
-            // Check last component is 1.0
-            assertEquals("Last component should be 1.0",
+            // Check last component is 1.0 (point)
+            assertEquals("Last component should be 1.0 for point",
                         1.0, h.get(size), EPSILON);
         }
+    }
+
+    /**
+     * Test homogeneous representation of vectors as directions.
+     */
+    @Test
+    public void testHomogeneousVector() {
+        // Test data: vector sizes to test
+        final int[] testSizes = {2, 3, 4, 5};
+
+        for (int size : testSizes) {
+            final Vector v = new Vector(size);
+            for (int i = 0; i < size; i++) {
+                v.set(i, i + 1.0);
+            }
+
+            final Vector h = v.homogeneousVector();
+
+            // Check size increased by 1
+            assertEquals("Homogeneous direction size should be " + (size + 1),
+                        size + 1, h.size());
+
+            // Check original components preserved
+            for (int i = 0; i < size; i++) {
+                assertEquals("Component " + i + " should be preserved",
+                            i + 1.0, h.get(i), EPSILON);
+            }
+
+            // Check last component is 0.0 (direction)
+            assertEquals("Last component should be 0.0 for direction",
+                        0.0, h.get(size), EPSILON);
+        }
+    }
+
+    /**
+     * Test that homogeneousPoint does not modify original vector.
+     */
+    @Test
+    public void testHomogeneousPointImmutability() {
+        final double[] values = {1.0, 2.0, 3.0};
+        final Vector v = new Vector(values);
+
+        // Store original values
+        final double[] originalValues = new double[values.length];
+        for (int i = 0; i < values.length; i++) {
+            originalValues[i] = v.get(i);
+        }
+
+        final Vector h = v.homogeneousPoint();
+
+        // Verify homogeneousPoint returns a new object
+        assertFalse("homogeneousPoint() should return a new vector", v == h);
+
+        // Verify original vector is unchanged
+        assertEquals("Original vector size should be unchanged",
+                    values.length, v.size());
+        for (int i = 0; i < values.length; i++) {
+            assertEquals("Original vector component " + i + " should be unchanged",
+                        originalValues[i], v.get(i), EPSILON);
+        }
+    }
+
+    /**
+     * Test that homogeneousVector does not modify original vector.
+     */
+    @Test
+    public void testHomogeneousVectorImmutability() {
+        final double[] values = {1.0, 2.0, 3.0};
+        final Vector v = new Vector(values);
+
+        // Store original values
+        final double[] originalValues = new double[values.length];
+        for (int i = 0; i < values.length; i++) {
+            originalValues[i] = v.get(i);
+        }
+
+        final Vector h = v.homogeneousVector();
+
+        // Verify homogeneousVector returns a new object
+        assertFalse("homogeneousVector() should return a new vector", v == h);
+
+        // Verify original vector is unchanged
+        assertEquals("Original vector size should be unchanged",
+                    values.length, v.size());
+        for (int i = 0; i < values.length; i++) {
+            assertEquals("Original vector component " + i + " should be unchanged",
+                        originalValues[i], v.get(i), EPSILON);
+        }
+    }
+
+    /**
+     * Test difference between homogeneousPoint and homogeneousVector.
+     */
+    @Test
+    public void testHomogeneousPointVsHomogeneousVector() {
+        final double[] values = {1.0, 2.0, 3.0};
+        final Vector v = new Vector(values);
+
+        final Vector point = v.homogeneousPoint();
+        final Vector direction = v.homogeneousVector();
+
+        // Both should have same size
+        assertEquals("Point and direction should have same size",
+                    point.size(), direction.size());
+
+        // Both should preserve original components
+        for (int i = 0; i < values.length; i++) {
+            assertEquals("Point component " + i + " should match original",
+                        values[i], point.get(i), EPSILON);
+            assertEquals("Direction component " + i + " should match original",
+                        values[i], direction.get(i), EPSILON);
+        }
+
+        // Last components should differ
+        assertEquals("Point last component should be 1.0",
+                    1.0, point.get(values.length), EPSILON);
+        assertEquals("Direction last component should be 0.0",
+                    0.0, direction.get(values.length), EPSILON);
     }
 
     /**
@@ -681,6 +799,116 @@ public class TestVector {
         final int[] sizes = {1, 3, 100};
         for (int size : sizes) {
             assertEquals(String.valueOf(size), new Vector(size).getDimensionString());
+        }
+    }
+
+    /**
+     * Test cross product with valid 3D vectors.
+     */
+    @Test
+    public void testCrossProductValid() {
+        final Vector v1 = new Vector("v1", 1.0, 0.0, 0.0);
+        final Vector v2 = new Vector("v2", 0.0, 1.0, 0.0);
+
+        final Vector result = v1.cross(v2);
+
+        // i × j = k, so result should be (0, 0, 1)
+        assertEquals(0.0, result.get(0), EPSILON);
+        assertEquals(0.0, result.get(1), EPSILON);
+        assertEquals(1.0, result.get(2), EPSILON);
+
+        // Verify immutability
+        assertFalse("cross() should return a new vector", v1 == result);
+        assertFalse("cross() should return a new vector", v2 == result);
+        assertEquals(1.0, v1.get(0), EPSILON);
+        assertEquals(0.0, v1.get(1), EPSILON);
+        assertEquals(0.0, v1.get(2), EPSILON);
+    }
+
+    /**
+     * Test cross product with another example.
+     */
+    @Test
+    public void testCrossProductExample() {
+        final Vector v1 = new Vector("v1", 2.0, 3.0, 4.0);
+        final Vector v2 = new Vector("v2", 5.0, 6.0, 7.0);
+
+        final Vector result = v1.cross(v2);
+
+        // Expected: (3*7 - 4*6, 4*5 - 2*7, 2*6 - 3*5) = (-3, 6, -3)
+        final double[] expected = {-3.0, 6.0, -3.0};
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals("Component " + i + " should match expected",
+                        expected[i], result.get(i), EPSILON);
+        }
+    }
+
+    /**
+     * Test cross product throws exception when this vector is not 3D.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testCrossProductInvalidSizeThis() {
+        final Vector v1 = new Vector("v1", 2);  // 2D vector
+        final Vector v2 = new Vector("v2", 1.0, 2.0, 3.0);
+
+        v1.cross(v2);
+        fail("Expected IllegalArgumentException for cross product with non-3D vector");
+    }
+
+    /**
+     * Test cross product throws exception when parameter vector is not 3D.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testCrossProductInvalidSizeParameter() {
+        final Vector v1 = new Vector("v1", 1.0, 2.0, 3.0);
+        final Vector v2 = new Vector("v2", 4);  // 4D vector
+
+        v1.cross(v2);
+        fail("Expected IllegalArgumentException for cross product with non-3D vector");
+    }
+
+    /**
+     * Test cross product throws exception when both vectors are not 3D.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testCrossProductInvalidSizeBoth() {
+        final Vector v1 = new Vector("v1", 2);  // 2D vector
+        final Vector v2 = new Vector("v2", 4);  // 4D vector
+
+        v1.cross(v2);
+        fail("Expected IllegalArgumentException for cross product with non-3D vectors");
+    }
+
+    /**
+     * Test cross product anti-commutativity: v1 × v2 = -(v2 × v1).
+     */
+    @Test
+    public void testCrossProductAntiCommutativity() {
+        final Vector v1 = new Vector("v1", 1.0, 2.0, 3.0);
+        final Vector v2 = new Vector("v2", 4.0, 5.0, 6.0);
+
+        final Vector result1 = v1.cross(v2);
+        final Vector result2 = v2.cross(v1);
+
+        // v1 × v2 should equal -(v2 × v1)
+        assertEquals(-result2.get(0), result1.get(0), EPSILON);
+        assertEquals(-result2.get(1), result1.get(1), EPSILON);
+        assertEquals(-result2.get(2), result1.get(2), EPSILON);
+    }
+
+    /**
+     * Test cross product of parallel vectors gives zero vector.
+     */
+    @Test
+    public void testCrossProductParallelVectors() {
+        final Vector v1 = new Vector("v1", 1.0, 2.0, 3.0);
+        final Vector v2 = new Vector("v2", 2.0, 4.0, 6.0);  // v2 = 2 * v1
+
+        final Vector result = v1.cross(v2);
+
+        // Cross product of parallel vectors should be zero vector
+        for (int i = 0; i < result.size(); i++) {
+            assertEquals(0.0, result.get(i), EPSILON);
         }
     }
 }

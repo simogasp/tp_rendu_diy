@@ -16,11 +16,11 @@ public class Transformation {
      */
     private Matrix worldToCamera;
     /**
-     * The projection matrix.
+     * The 3x4 projection matrix.
      */
     private Matrix projection;
     /**
-     * The calibration matrix.
+     * The 3x3 calibration matrix.
      */
     private Matrix calibration;
 
@@ -116,17 +116,18 @@ public class Transformation {
     }
 
     /**
-     * Projects the given homogeneous, 4 dimensional point onto the screen.
+     * Projects the given 3 dimensional point onto the screen.
      * The resulting Vector as its (x,y) coordinates in pixel, and its z coordinate
      * is the depth of the point in the camera coordinate system.
-     * @param p the point to project
-     * @return the projected point
-     * @throws SizeMismatchException if the size of the input vector is not 4
+     * @param p a 3d vector representing a point
+     * @return the projected point as a 3d vector, with (x,y) the pixel
+     * coordinates and z the depth
+     * @throws SizeMismatchException if the size of the input vector is not 3
      */
     public Vector projectPoint(Vector p) throws SizeMismatchException {
         //++ // TODO
         //++ Vector ps = new Vector(3);
-        final Vector pe = worldToCamera.multiply(p); //<!!
+        final Vector pe = worldToCamera.multiply(p.homogeneousPoint()); //<!!
         final Vector ps = calibration.multiply(projection.multiply(pe));
         ps.set(0, ps.get(0) / ps.get(2));
         ps.set(1, ps.get(1) / ps.get(2)); //>!!

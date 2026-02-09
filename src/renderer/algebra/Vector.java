@@ -121,15 +121,36 @@ public class Vector extends ArrayBase implements Cloneable {
     }
 
     /**
-     * Returns the homogeneous representation of the Vector.
+     * Returns the homogeneous representation of the Vector as a point.
      * This method does NOT modify the current vector.
      *
      * @return a new Vector with the same elements plus an additional 1.0 at the end
      */
-    public Vector homogeneous() {
+    public Vector homogeneousPoint() {
+        return homogeneous(1.0);
+    }
+
+    /**
+     * Returns the homogeneous representation of the Vector as a direction.
+     * This method does NOT modify the current vector.
+     *
+     * @return a new Vector with the same elements plus an additional 0.0 at the end
+     */
+    public Vector homogeneousVector() {
+        return homogeneous(0.0);
+    }
+
+    /**
+     * Helper method to create a homogeneous representation with a specified w coordinate.
+     * This method does NOT modify the current vector.
+     *
+     * @param w the value to set as the last coordinate (1.0 for point, 0.0 for direction)
+     * @return a new Vector with the same elements plus the specified w value at the end
+     */
+    private Vector homogeneous(double w) {
         double[] h = new double[size() + 1];
         System.arraycopy(getValues(), 0, h, 0, size());
-        h[size()] = 1.0;
+        h[size()] = w;
         return new Vector(h);
     }
 
@@ -275,10 +296,11 @@ public class Vector extends ArrayBase implements Cloneable {
      *
      * @param v the vector to compute cross product with
      * @return a new Vector containing the result of this × v
-     * @throws SizeMismatchException if the vector sizes do not match for cross product
+     * @throws IllegalArgumentException if either vector is not 3-dimensional
      */
     public Vector cross(Vector v) {
-        //@TODO check size == 3
+        validateCrossProductSize();
+        v.validateCrossProductSize();
         final Vector res = new Vector(3);
         res.set(0, this.get(1) * v.get(2) - this.get(2) * v.get(1));
         res.set(1, this.get(2) * v.get(0) - this.get(0) * v.get(2));
@@ -382,6 +404,19 @@ public class Vector extends ArrayBase implements Cloneable {
     private void validateSameSize(final Vector other) {
         if (this.size() != other.size()) {
             throw new SizeMismatchException(this, other);
+        }
+    }
+
+    /**
+     * Validates that this vector has size 3 (required for cross product).
+     *
+     * @throws IllegalArgumentException if the vector is not 3-dimensional
+     */
+    private void validateCrossProductSize() {
+        if (size() != DIM_Z) {
+            throw new IllegalArgumentException(
+                "Cross product requires 3-dimensional vectors, but vector size is "
+                + size() + ".");
         }
     }
 

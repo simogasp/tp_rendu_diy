@@ -12,7 +12,7 @@
 * [x] maybe re-organize in other subpackages, shader, rasterizer, etc. for each hierarchy of classes
 * [x] remove or better use exceptions / avoid using try/catch for simple things like creating a matrix/vertex, use `IllegalArgumentException` for checking the arguments
 * [x] keep only matrix class, vector and vector3 can be matrices
-* [X] add a `homogeneous()` method
+* [X] add a `homogeneousPoint()` method
 * [x] make some methods return `this` to allow chaining (e.g. `normalize()`) --> be careful with the semantic (sometimes returning the value means that the object is not affected by the method)
 * [x] add a DepthShader that render the object as depth map (useful for debugging)
 * [x] add a NormalShader that render the normals of the object (useful for debugging)
