@@ -37,6 +37,11 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
     public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3)
             throws SizeMismatchException {
 
+        // early exit if the triangle is too small
+        final double minArea = 1e-6;
+        if (Math.abs(triangleArea(v1, v2, v3)) < minArea) {
+            return;
+        }
         final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 
         // iterate over the triangle's bounding box
