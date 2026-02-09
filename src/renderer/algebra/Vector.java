@@ -126,7 +126,7 @@ public class Vector extends ArrayBase implements Cloneable {
      *
      * @return a new Vector with the same elements plus an additional 1.0 at the end
      */
-    public Vector homogeneous() {
+    public Vector homogeneousPoint() {
         double[] h = new double[size() + 1];
         System.arraycopy(getValues(), 0, h, 0, size());
         h[size()] = 1.0;

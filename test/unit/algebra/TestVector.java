@@ -325,7 +325,7 @@ public class TestVector {
                 v.set(i, i + 1.0);
             }
 
-            final Vector h = v.homogeneous();
+            final Vector h = v.homogeneousPoint();
 
             // Check size increased by 1
             assertEquals("Homogeneous vector size should be " + (size + 1),

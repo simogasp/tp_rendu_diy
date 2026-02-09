@@ -17,7 +17,7 @@ class renderer.algebra.MathUtils {
 	- {static} isFloatingType(Number) : boolean
 }
 class renderer.algebra.Vector extends renderer.algebra.ArrayBase{
-	+ homogeneous() : Vector
+	+ homogeneousPoint() : Vector
 	+ norm() : double
 	+ clamp(double, double) : Vector
 	+ cross(Vector) : Vector
