@@ -19,9 +19,9 @@ public class ImageWrapper extends BufferedImage {
     private static final int DEFAULT_HEIGHT = 100;
 
     /**
-     * Background color of the image.
+     * Background color of the image is Zambezi.
      */
-    private static final int BACKGROUND_COLOR = 0x333333;
+    private static final int BACKGROUND_COLOR = 0x5C5C5C;
 
     /**
      * Creates a default ImageWrapper for test with the default width and height.
@@ -80,7 +80,7 @@ public class ImageWrapper extends BufferedImage {
     private void init() {
         for (int x = 0; x < getWidth(); ++x) {
             for (int y = 0; y < getHeight(); ++y) {
-                // the back is dark grey
+                // init with the background color
                 this.setRGB(x, y, BACKGROUND_COLOR);
             }
         }
