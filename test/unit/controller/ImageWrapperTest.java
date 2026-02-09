@@ -32,8 +32,8 @@ public class ImageWrapperTest {
     private static final int TEST_COORD = 50;
     /** Test coordinate value for color array. */
     private static final int COLOR_ARRAY_STEP = 10;
-    /** Background color for image. */
-    private static final int BACKGROUND_COLOR = 0x333333;
+    /** Custom background color for testing (different from default). */
+    private static final int CUSTOM_BACKGROUND_COLOR = 0x333333;
     /** RGB value for test color red component. */
     private static final int TEST_COLOR_R = 123;
     /** RGB value for test color green component. */
@@ -77,7 +77,7 @@ public class ImageWrapperTest {
     public void setUp() throws IOException {
         defaultWrapper = new ImageWrapper();
         testScene = new Scene("data/example0.scene");
-        sceneWrapper = new ImageWrapper(testScene);
+        sceneWrapper = new ImageWrapper(testScene, CUSTOM_BACKGROUND_COLOR);
     }
 
     // ==================== Constructor Tests ====================
@@ -97,6 +97,28 @@ public class ImageWrapperTest {
     }
 
     /**
+     * Tests that default constructor initializes all pixels to default background color.
+     */
+    @Test
+    public void testDefaultConstructorInitializesBackgroundColor() {
+        // Sample a few pixels to verify default background color
+        // getRGB returns ARGB, so we need to mask out the RGB part
+        int expectedRgb = ImageWrapper.getDefaultBackgroundColor() | ALPHA_MASK;
+        assertEquals("Top-left pixel should be default background color",
+                expectedRgb, defaultWrapper.getRGB(0, 0));
+        int centerX = defaultWrapper.getWidth() / 2;
+        int centerY = defaultWrapper.getHeight() / 2;
+        assertEquals("Center pixel should be default background color",
+                expectedRgb,
+                defaultWrapper.getRGB(centerX, centerY));
+        int maxX = defaultWrapper.getWidth() - 1;
+        int maxY = defaultWrapper.getHeight() - 1;
+        assertEquals("Bottom-right pixel should be default background color",
+                expectedRgb,
+                defaultWrapper.getRGB(maxX, maxY));
+    }
+
+    /**
      * Tests the Scene constructor creates an image with scene dimensions.
      */
     @Test
@@ -111,23 +133,23 @@ public class ImageWrapperTest {
     }
 
     /**
-     * Tests that Scene constructor initializes all pixels to background color.
+     * Tests that Scene constructor initializes all pixels to custom background color.
      */
     @Test
     public void testSceneConstructorInitializesBackgroundColor() {
-        // Sample a few pixels to verify background color
+        // Sample a few pixels to verify custom background color
         // getRGB returns ARGB, so we need to mask out the RGB part
-        int expectedRgb = BACKGROUND_COLOR | ALPHA_MASK; // Add full alpha
-        assertEquals("Top-left pixel should be background color",
+        int expectedRgb = CUSTOM_BACKGROUND_COLOR | ALPHA_MASK;
+        assertEquals("Top-left pixel should be custom background color",
                 expectedRgb, sceneWrapper.getRGB(0, 0));
         int centerX = testScene.getScreenW() / 2;
         int centerY = testScene.getScreenH() / 2;
-        assertEquals("Center pixel should be background color",
+        assertEquals("Center pixel should be custom background color",
                 expectedRgb,
                 sceneWrapper.getRGB(centerX, centerY));
         int maxX = testScene.getScreenW() - 1;
         int maxY = testScene.getScreenH() - 1;
-        assertEquals("Bottom-right pixel should be background color",
+        assertEquals("Bottom-right pixel should be custom background color",
                 expectedRgb,
                 sceneWrapper.getRGB(maxX, maxY));
     }
