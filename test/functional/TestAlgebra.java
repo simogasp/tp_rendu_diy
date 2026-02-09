@@ -1,5 +1,6 @@
 
 import org.junit.Test;
+import static org.junit.Assert.fail;
 
 import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;
@@ -22,11 +23,13 @@ public class TestAlgebra {
         v1.setName("up");
         try {
             new Vector(0);
+            fail("Expected exception for zero size vector not thrown");
         } catch (Exception e) {
             System.out.println("Wrong size exception caught OK");
         }
         try {
             new Vector("named", 0);
+            fail("Expected exception for zero size vector not thrown");
         } catch (Exception e) {
             System.out.println("Wrong size exception caught OK");
         }
@@ -51,6 +54,7 @@ public class TestAlgebra {
             u1 = new Vector("u1", 3);
             u2 = new Vector("u2", 4);
             u1.dot(u2);
+            fail("Size mismatch exception not thrown");
         } catch (SizeMismatchException e) {
             System.out.println("Caught exception: " + e);
         }
@@ -81,6 +85,7 @@ public class TestAlgebra {
 
         try {
             new Matrix("M2", 0, 2);
+            fail("Expected exception for zero size matrix not thrown");
         } catch (Exception e) {
             System.out.println("Wrong size exception caught OK");
         }
