@@ -379,7 +379,7 @@ public class TestVector {
      * Test that homogeneousPoint does not modify original vector.
      */
     @Test
-    public void testHomogeneousPoint_immutability() {
+    public void testHomogeneousPointImmutability() {
         final double[] values = {1.0, 2.0, 3.0};
         final Vector v = new Vector(values);
 
@@ -407,7 +407,7 @@ public class TestVector {
      * Test that homogeneousVector does not modify original vector.
      */
     @Test
-    public void testHomogeneousVector_immutability() {
+    public void testHomogeneousVectorImmutability() {
         final double[] values = {1.0, 2.0, 3.0};
         final Vector v = new Vector(values);
 
@@ -435,7 +435,7 @@ public class TestVector {
      * Test difference between homogeneousPoint and homogeneousVector.
      */
     @Test
-    public void testHomogeneousPoint_vs_homogeneousVector() {
+    public void testHomogeneousPointVsHomogeneousVector() {
         final double[] values = {1.0, 2.0, 3.0};
         final Vector v = new Vector(values);
 
@@ -809,14 +809,14 @@ public class TestVector {
     public void testCrossProductValid() {
         final Vector v1 = new Vector("v1", 1.0, 0.0, 0.0);
         final Vector v2 = new Vector("v2", 0.0, 1.0, 0.0);
-        
+
         final Vector result = v1.cross(v2);
-        
+
         // i × j = k, so result should be (0, 0, 1)
         assertEquals(0.0, result.get(0), EPSILON);
         assertEquals(0.0, result.get(1), EPSILON);
         assertEquals(1.0, result.get(2), EPSILON);
-        
+
         // Verify immutability
         assertFalse("cross() should return a new vector", v1 == result);
         assertFalse("cross() should return a new vector", v2 == result);
@@ -832,13 +832,15 @@ public class TestVector {
     public void testCrossProductExample() {
         final Vector v1 = new Vector("v1", 2.0, 3.0, 4.0);
         final Vector v2 = new Vector("v2", 5.0, 6.0, 7.0);
-        
+
         final Vector result = v1.cross(v2);
-        
+
         // Expected: (3*7 - 4*6, 4*5 - 2*7, 2*6 - 3*5) = (-3, 6, -3)
-        assertEquals(-3.0, result.get(0), EPSILON);
-        assertEquals(6.0, result.get(1), EPSILON);
-        assertEquals(-3.0, result.get(2), EPSILON);
+        final double[] expected = {-3.0, 6.0, -3.0};
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals("Component " + i + " should match expected",
+                        expected[i], result.get(i), EPSILON);
+        }
     }
 
     /**
@@ -848,7 +850,7 @@ public class TestVector {
     public void testCrossProductInvalidSizeThis() {
         final Vector v1 = new Vector("v1", 2);  // 2D vector
         final Vector v2 = new Vector("v2", 1.0, 2.0, 3.0);
-        
+
         v1.cross(v2);
         fail("Expected IllegalArgumentException for cross product with non-3D vector");
     }
@@ -860,7 +862,7 @@ public class TestVector {
     public void testCrossProductInvalidSizeParameter() {
         final Vector v1 = new Vector("v1", 1.0, 2.0, 3.0);
         final Vector v2 = new Vector("v2", 4);  // 4D vector
-        
+
         v1.cross(v2);
         fail("Expected IllegalArgumentException for cross product with non-3D vector");
     }
@@ -872,7 +874,7 @@ public class TestVector {
     public void testCrossProductInvalidSizeBoth() {
         final Vector v1 = new Vector("v1", 2);  // 2D vector
         final Vector v2 = new Vector("v2", 4);  // 4D vector
-        
+
         v1.cross(v2);
         fail("Expected IllegalArgumentException for cross product with non-3D vectors");
     }
@@ -884,10 +886,10 @@ public class TestVector {
     public void testCrossProductAntiCommutativity() {
         final Vector v1 = new Vector("v1", 1.0, 2.0, 3.0);
         final Vector v2 = new Vector("v2", 4.0, 5.0, 6.0);
-        
+
         final Vector result1 = v1.cross(v2);
         final Vector result2 = v2.cross(v1);
-        
+
         // v1 × v2 should equal -(v2 × v1)
         assertEquals(-result2.get(0), result1.get(0), EPSILON);
         assertEquals(-result2.get(1), result1.get(1), EPSILON);
@@ -901,12 +903,12 @@ public class TestVector {
     public void testCrossProductParallelVectors() {
         final Vector v1 = new Vector("v1", 1.0, 2.0, 3.0);
         final Vector v2 = new Vector("v2", 2.0, 4.0, 6.0);  // v2 = 2 * v1
-        
+
         final Vector result = v1.cross(v2);
-        
+
         // Cross product of parallel vectors should be zero vector
-        assertEquals(0.0, result.get(0), EPSILON);
-        assertEquals(0.0, result.get(1), EPSILON);
-        assertEquals(0.0, result.get(2), EPSILON);
+        for (int i = 0; i < result.size(); i++) {
+            assertEquals(0.0, result.get(i), EPSILON);
+        }
     }
 }
