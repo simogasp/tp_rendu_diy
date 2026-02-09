@@ -79,9 +79,13 @@ public class Rasterizer {
 
         final int numAttributes = f.getNumAttributes();
         for (int i = 0; i < numAttributes; i++) {
-            f.setAttribute(i,
-                    (1.0 - alpha) * v1.getAttribute(i)
-                            + alpha * v2.getAttribute(i));
+            double interpolated = (1.0 - alpha) * v1.getAttribute(i)
+                    + alpha * v2.getAttribute(i);
+            if (i >= Fragment.COLOR_R && i <= Fragment.COLOR_B) {
+                // clamp the color between 0 and 1;
+                interpolated = MathUtils.clamp(interpolated, 0., 1.);
+            }
+            f.setAttribute(i, interpolated);
         }
     }
 
