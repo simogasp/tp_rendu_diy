@@ -112,9 +112,9 @@ public class Mesh {
             if (en != VERTICES_PER_FACE) {
                 throw new IOException("Non-triangular meshes not supported.");
             }
-            faces[VERTICES_PER_FACE * i + 0] = Integer.parseInt(sar[1]);
-            faces[VERTICES_PER_FACE * i + 1] = Integer.parseInt(sar[2]);
-            faces[VERTICES_PER_FACE * i + 2] = Integer.parseInt(sar[3]);
+            for (int j = 0; j < en; j++) {
+                faces[VERTICES_PER_FACE * i + j] = Integer.parseInt(sar[j + 1]);
+            }
 
         }
         in.close();
