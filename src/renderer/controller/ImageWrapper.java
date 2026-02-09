@@ -21,7 +21,7 @@ public class ImageWrapper extends BufferedImage {
     /**
      * Default background color of the image ({@code 0x5C5C5C}, also known as Zambezi).
      */
-    private static final int BACKGROUND_COLOR = 0x5C5C5C;
+    private static final int DEFAULT_BACKGROUND_COLOR = 0x5C5C5C;
 
     /**
      * Creates a default ImageWrapper for test with the default width and height.
@@ -36,7 +36,7 @@ public class ImageWrapper extends BufferedImage {
      * @param scene the scene of the image
      */
     public ImageWrapper(Scene scene) {
-        this(scene, BACKGROUND_COLOR);
+        this(scene, DEFAULT_BACKGROUND_COLOR);
     }
 
     /**
@@ -55,7 +55,7 @@ public class ImageWrapper extends BufferedImage {
      * @param height the height of the image
      */
     public ImageWrapper(int width, int height) {
-        this(width, height, BACKGROUND_COLOR);
+        this(width, height, DEFAULT_BACKGROUND_COLOR);
     }
 
     /**
@@ -103,5 +103,14 @@ public class ImageWrapper extends BufferedImage {
         g2d.setColor(new Color(backgroundColorRgb));
         g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.dispose();
+    }
+
+    /**
+     * Gets the default background color.
+     * 
+     * @return the default background color as an RGB integer
+     */
+    public static int getDefaultBackgroundColor() {
+        return DEFAULT_BACKGROUND_COLOR;
     }
 }
