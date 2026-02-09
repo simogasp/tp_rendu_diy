@@ -134,8 +134,6 @@ public class Rasterizer {
         int x2 = v2.getX();
         int y2 = v2.getY();
 
-        // Uncomment the following block of code for drawing the wireframe
-        // int numAttributes = v1.getNumAttributes ();
         Fragment fragment = new Fragment(0, 0);
 
         boolean sym = (Math.abs(y2 - y1) > Math.abs(x2 - x1));
