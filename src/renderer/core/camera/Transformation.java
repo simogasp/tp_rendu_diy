@@ -116,7 +116,7 @@ public class Transformation {
     }
 
     /**
-     * Projects the given homogeneous, 3 dimensional point onto the screen.
+     * Projects the given 3 dimensional point onto the screen.
      * The resulting Vector as its (x,y) coordinates in pixel, and its z coordinate
      * is the depth of the point in the camera coordinate system.
      * @param p a 3d vector representing a point
