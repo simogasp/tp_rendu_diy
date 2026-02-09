@@ -19,9 +19,9 @@ public class ImageWrapper extends BufferedImage {
     private static final int DEFAULT_HEIGHT = 100;
 
     /**
-     * Background color of the image.
+     * Default background color of the image ({@code 0x5C5C5C}, also known as Zambezi).
      */
-    private static final int BACKGROUND_COLOR = 0x333333;
+    private static final int DEFAULT_BACKGROUND_COLOR = 0x5C5C5C;
 
     /**
      * Creates a default ImageWrapper for test with the default width and height.
@@ -31,22 +31,42 @@ public class ImageWrapper extends BufferedImage {
     }
 
     /**
-     * Creates a Image wrapper with the image configuration.
+     * Creates an Image wrapper with the image configuration.
      *
      * @param scene the scene of the image
      */
     public ImageWrapper(Scene scene) {
-        this(scene.getScreenW(), scene.getScreenH());
+        this(scene, DEFAULT_BACKGROUND_COLOR);
     }
 
     /**
-     * Creates a Image wrapper with the given width and height.
+     * Creates an Image wrapper with the image configuration.
+     *
+     * @param scene the scene of the image
+     * @param backgroundColor the background color of the image
+     */
+    public ImageWrapper(Scene scene, int backgroundColor) {
+        this(scene.getScreenW(), scene.getScreenH(), backgroundColor);
+    }
+
+    /**
+     * Creates an Image wrapper with the given width and height.
      * @param width the width of the image
      * @param height the height of the image
      */
     public ImageWrapper(int width, int height) {
+        this(width, height, DEFAULT_BACKGROUND_COLOR);
+    }
+
+    /**
+     * Creates an Image wrapper with the given width and height.
+     * @param width the width of the image
+     * @param height the height of the image
+     * @param backgroundColor the background color of the image
+     */
+    public ImageWrapper(int width, int height, int backgroundColor) {
         super(width, height, BufferedImage.TYPE_3BYTE_BGR);
-        init();
+        init(backgroundColor);
     }
 
     /**
@@ -76,13 +96,21 @@ public class ImageWrapper extends BufferedImage {
 
     /**
      * Initializes the image with the background color.
+     * @param backgroundColorRgb the background color
      */
-    private void init() {
-        for (int x = 0; x < getWidth(); ++x) {
-            for (int y = 0; y < getHeight(); ++y) {
-                // the back is dark grey
-                this.setRGB(x, y, BACKGROUND_COLOR);
-            }
-        }
+    private void init(int backgroundColorRgb) {
+        java.awt.Graphics2D g2d = createGraphics();
+        g2d.setColor(new Color(backgroundColorRgb));
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+        g2d.dispose();
+    }
+
+    /**
+     * Gets the default background color.
+     *
+     * @return the default background color as an RGB integer
+     */
+    public static int getDefaultBackgroundColor() {
+        return DEFAULT_BACKGROUND_COLOR;
     }
 }
