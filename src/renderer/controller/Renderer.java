@@ -254,6 +254,7 @@ public final class Renderer {
         if (wiredRendered) {
             // render edges if needed
             renderWireframe();
+            renderVertices();
         }
         if (solidRendered) {
             // render faces if needed
