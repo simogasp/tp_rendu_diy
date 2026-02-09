@@ -84,11 +84,10 @@ public class Mesh {
             r = nextLine(in);
             sar = r.split("\\s+");
 
-            vertices[i] = new Vector("v" + i, 4);
+            vertices[i] = new Vector("v" + i, VERTICES_PER_FACE);
             vertices[i].set(0, Double.parseDouble(sar[0]));
             vertices[i].set(1, Double.parseDouble(sar[1]));
             vertices[i].set(2, Double.parseDouble(sar[2]));
-            vertices[i].set(3, 1.0);
             colors[COLOR_COMPONENTS_PER_VERTEX * i + 0] = Double.parseDouble(sar[3]);
             colors[COLOR_COMPONENTS_PER_VERTEX * i + 1] = Double.parseDouble(sar[4]);
             colors[COLOR_COMPONENTS_PER_VERTEX * i + 2] = Double.parseDouble(sar[5]);
@@ -109,8 +108,8 @@ public class Mesh {
             r = nextLine(in);
             sar = r.split("\\s+");
 
-            int en = Integer.parseInt(sar[0]);
-            if (en != 3) {
+            final int en = Integer.parseInt(sar[0]);
+            if (en != VERTICES_PER_FACE) {
                 throw new IOException("Non-triangular meshes not supported.");
             }
             faces[VERTICES_PER_FACE * i + 0] = Integer.parseInt(sar[1]);

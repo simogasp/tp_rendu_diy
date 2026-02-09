@@ -275,10 +275,11 @@ public class Vector extends ArrayBase implements Cloneable {
      *
      * @param v the vector to compute cross product with
      * @return a new Vector containing the result of this × v
-     * @throws SizeMismatchException if the vector sizes do not match for cross product
+     * @throws IllegalArgumentException if either vector is not 3-dimensional
      */
     public Vector cross(Vector v) {
-        //@TODO check size == 3
+        validateCrossProductSize();
+        v.validateCrossProductSize();
         final Vector res = new Vector(3);
         res.set(0, this.get(1) * v.get(2) - this.get(2) * v.get(1));
         res.set(1, this.get(2) * v.get(0) - this.get(0) * v.get(2));
@@ -382,6 +383,19 @@ public class Vector extends ArrayBase implements Cloneable {
     private void validateSameSize(final Vector other) {
         if (this.size() != other.size()) {
             throw new SizeMismatchException(this, other);
+        }
+    }
+
+    /**
+     * Validates that this vector has size 3 (required for cross product).
+     *
+     * @throws IllegalArgumentException if the vector is not 3-dimensional
+     */
+    private void validateCrossProductSize() {
+        if (size() != DIM_Z) {
+            throw new IllegalArgumentException(
+                "Cross product requires 3-dimensional vectors, but vector size is "
+                + size() + ".");
         }
     }
 

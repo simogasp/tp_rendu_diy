@@ -143,7 +143,7 @@ public final class Renderer {
                     vertex.get(1) + normalLength * normal.get(1),
                     vertex.get(2) + normalLength * normal.get(2));
 
-            final Vector destVectorPoint = xform.projectPoint(destVector.homogeneous());
+            final Vector destVectorPoint = xform.projectPoint(destVector);
 
             int x = (int) Math.round(destVectorPoint.get(0));
             int y = (int) Math.round(destVectorPoint.get(1));
