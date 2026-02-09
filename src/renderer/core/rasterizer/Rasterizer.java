@@ -254,6 +254,10 @@ public class Rasterizer {
     public void rasterizeFace(final Fragment v1, final Fragment v2, final Fragment v3)
             throws SizeMismatchException {
 
+        // early exit if the triangle is too small
+        if(Math.abs(triangleArea(v1, v2, v3)) < 1e-6) {
+            return;
+        }
         final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 
         // iterate over the triangle's bounding box
