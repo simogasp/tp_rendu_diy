@@ -19,7 +19,7 @@ public class ImageWrapper extends BufferedImage {
     private static final int DEFAULT_HEIGHT = 100;
 
     /**
-     * Background color of the image is Zambezi.
+     * Default background color of the image ({@code 0x5C5C5C}, also known as Zambezi).
      */
     private static final int BACKGROUND_COLOR = 0x5C5C5C;
 
