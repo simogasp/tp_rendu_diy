@@ -31,7 +31,7 @@ public class ImageWrapper extends BufferedImage {
     }
 
     /**
-     * Creates a Image wrapper with the image configuration.
+     * Creates an Image wrapper with the image configuration.
      *
      * @param scene the scene of the image
      */
@@ -40,7 +40,7 @@ public class ImageWrapper extends BufferedImage {
     }
 
     /**
-     * Creates a Image wrapper with the image configuration.
+     * Creates an Image wrapper with the image configuration.
      *
      * @param scene the scene of the image
      * @param backgroundColor the background color of the image
@@ -50,7 +50,7 @@ public class ImageWrapper extends BufferedImage {
     }
 
     /**
-     * Creates a Image wrapper with the given width and height.
+     * Creates an Image wrapper with the given width and height.
      * @param width the width of the image
      * @param height the height of the image
      */
@@ -59,7 +59,7 @@ public class ImageWrapper extends BufferedImage {
     }
 
     /**
-     * Creates a Image wrapper with the given width and height.
+     * Creates an Image wrapper with the given width and height.
      * @param width the width of the image
      * @param height the height of the image
      * @param backgroundColor the background color of the image
