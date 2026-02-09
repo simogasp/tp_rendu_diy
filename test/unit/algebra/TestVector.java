@@ -312,10 +312,10 @@ public class TestVector {
     }
 
     /**
-     * Test homogeneous representation of vectors.
+     * Test homogeneous representation of vectors as points.
      */
     @Test
-    public void testHomogeneous() {
+    public void testHomogeneousPoint() {
         // Test data: vector sizes to test
         final int[] testSizes = {2, 3, 4, 5};
 
@@ -328,7 +328,7 @@ public class TestVector {
             final Vector h = v.homogeneousPoint();
 
             // Check size increased by 1
-            assertEquals("Homogeneous vector size should be " + (size + 1),
+            assertEquals("Homogeneous point size should be " + (size + 1),
                         size + 1, h.size());
 
             // Check original components preserved
@@ -337,10 +337,128 @@ public class TestVector {
                             i + 1.0, h.get(i), EPSILON);
             }
 
-            // Check last component is 1.0
-            assertEquals("Last component should be 1.0",
+            // Check last component is 1.0 (point)
+            assertEquals("Last component should be 1.0 for point",
                         1.0, h.get(size), EPSILON);
         }
+    }
+
+    /**
+     * Test homogeneous representation of vectors as directions.
+     */
+    @Test
+    public void testHomogeneousVector() {
+        // Test data: vector sizes to test
+        final int[] testSizes = {2, 3, 4, 5};
+
+        for (int size : testSizes) {
+            final Vector v = new Vector(size);
+            for (int i = 0; i < size; i++) {
+                v.set(i, i + 1.0);
+            }
+
+            final Vector h = v.homogeneousVector();
+
+            // Check size increased by 1
+            assertEquals("Homogeneous direction size should be " + (size + 1),
+                        size + 1, h.size());
+
+            // Check original components preserved
+            for (int i = 0; i < size; i++) {
+                assertEquals("Component " + i + " should be preserved",
+                            i + 1.0, h.get(i), EPSILON);
+            }
+
+            // Check last component is 0.0 (direction)
+            assertEquals("Last component should be 0.0 for direction",
+                        0.0, h.get(size), EPSILON);
+        }
+    }
+
+    /**
+     * Test that homogeneousPoint does not modify original vector.
+     */
+    @Test
+    public void testHomogeneousPoint_immutability() {
+        final double[] values = {1.0, 2.0, 3.0};
+        final Vector v = new Vector(values);
+
+        // Store original values
+        final double[] originalValues = new double[values.length];
+        for (int i = 0; i < values.length; i++) {
+            originalValues[i] = v.get(i);
+        }
+
+        final Vector h = v.homogeneousPoint();
+
+        // Verify homogeneousPoint returns a new object
+        assertFalse("homogeneousPoint() should return a new vector", v == h);
+
+        // Verify original vector is unchanged
+        assertEquals("Original vector size should be unchanged",
+                    values.length, v.size());
+        for (int i = 0; i < values.length; i++) {
+            assertEquals("Original vector component " + i + " should be unchanged",
+                        originalValues[i], v.get(i), EPSILON);
+        }
+    }
+
+    /**
+     * Test that homogeneousVector does not modify original vector.
+     */
+    @Test
+    public void testHomogeneousVector_immutability() {
+        final double[] values = {1.0, 2.0, 3.0};
+        final Vector v = new Vector(values);
+
+        // Store original values
+        final double[] originalValues = new double[values.length];
+        for (int i = 0; i < values.length; i++) {
+            originalValues[i] = v.get(i);
+        }
+
+        final Vector h = v.homogeneousVector();
+
+        // Verify homogeneousVector returns a new object
+        assertFalse("homogeneousVector() should return a new vector", v == h);
+
+        // Verify original vector is unchanged
+        assertEquals("Original vector size should be unchanged",
+                    values.length, v.size());
+        for (int i = 0; i < values.length; i++) {
+            assertEquals("Original vector component " + i + " should be unchanged",
+                        originalValues[i], v.get(i), EPSILON);
+        }
+    }
+
+    /**
+     * Test difference between homogeneousPoint and homogeneousVector.
+     */
+    @Test
+    public void testHomogeneousPoint_vs_homogeneousVector() {
+        final double[] values = {1.0, 2.0, 3.0};
+        final Vector v = new Vector(values);
+
+        final Vector point = v.homogeneousPoint();
+        final Vector direction = v.homogeneousVector();
+
+        // Both should have same size
+        assertEquals("Point and direction should have same size",
+                    point.size(), direction.size());
+
+        // Both should preserve original components
+        for (int i = 0; i < values.length; i++) {
+            assertEquals("Point component " + i + " should match original",
+                        values[i], point.get(i), EPSILON);
+            assertEquals("Direction component " + i + " should match original",
+                        values[i], direction.get(i), EPSILON);
+        }
+
+        // Last components should differ
+        assertEquals("Point last component should be 1.0",
+                    1.0, point.get(values.length), EPSILON);
+        assertEquals("Direction last component should be 0.0",
+                    0.0, direction.get(values.length), EPSILON);
     }
 
     /**

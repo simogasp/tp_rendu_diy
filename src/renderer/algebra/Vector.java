@@ -121,15 +121,36 @@ public class Vector extends ArrayBase implements Cloneable {
     }
 
     /**
-     * Returns the homogeneous representation of the Vector.
+     * Returns the homogeneous representation of the Vector as a point.
      * This method does NOT modify the current vector.
      *
      * @return a new Vector with the same elements plus an additional 1.0 at the end
      */
     public Vector homogeneousPoint() {
+        return homogeneous(1.0);
+    }
+
+    /**
+     * Returns the homogeneous representation of the Vector as a direction.
+     * This method does NOT modify the current vector.
+     *
+     * @return a new Vector with the same elements plus an additional 0.0 at the end
+     */
+    public Vector homogeneousVector() {
+        return homogeneous(0.0);
+    }
+
+    /**
+     * Helper method to create a homogeneous representation with a specified w coordinate.
+     * This method does NOT modify the current vector.
+     *
+     * @param w the value to set as the last coordinate (1.0 for point, 0.0 for direction)
+     * @return a new Vector with the same elements plus the specified w value at the end
+     */
+    private Vector homogeneous(double w) {
         double[] h = new double[size() + 1];
         System.arraycopy(getValues(), 0, h, 0, size());
-        h[size()] = 1.0;
+        h[size()] = w;
         return new Vector(h);
     }
 
