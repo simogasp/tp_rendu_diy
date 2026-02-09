@@ -38,8 +38,9 @@ public class Texture {
 
     /**
      * Samples the texture at texture coordinates (u,v), using nearest neighbor
-     * interpolation
-     * u and v and wrapped around to [0,1].
+     * interpolation.
+     * u and v are normalized with respect to each image dimension and may be greater
+     * than 1 when the texture is repeated over a face.
      * @param u the u texture coordinate
      * @param v the v texture coordinate
      * @return the color of the texture at (u,v)
