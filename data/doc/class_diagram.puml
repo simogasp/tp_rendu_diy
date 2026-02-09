@@ -18,6 +18,7 @@ class renderer.algebra.MathUtils {
 }
 class renderer.algebra.Vector extends renderer.algebra.ArrayBase{
 	+ homogeneousPoint() : Vector
+	+ homogeneousVector() : Vector  
 	+ norm() : double
 	+ clamp(double, double) : Vector
 	+ cross(Vector) : Vector
