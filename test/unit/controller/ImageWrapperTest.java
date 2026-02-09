@@ -33,7 +33,7 @@ public class ImageWrapperTest {
     /** Test coordinate value for color array. */
     private static final int COLOR_ARRAY_STEP = 10;
     /** Background color for image. */
-    private static final int BACKGROUND_COLOR = 0x333333;
+    private static final int BACKGROUND_COLOR = 0x5C5C5C;
     /** RGB value for test color red component. */
     private static final int TEST_COLOR_R = 123;
     /** RGB value for test color green component. */
