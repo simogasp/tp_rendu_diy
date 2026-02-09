@@ -79,9 +79,13 @@ public class Rasterizer {
 
         final int numAttributes = f.getNumAttributes();
         for (int i = 0; i < numAttributes; i++) {
-            f.setAttribute(i,
-                    (1.0 - alpha) * v1.getAttribute(i)
-                            + alpha * v2.getAttribute(i));
+            double interpolated = (1.0 - alpha) * v1.getAttribute(i)
+                    + alpha * v2.getAttribute(i);
+            if (i >= Fragment.COLOR_R && i <= Fragment.COLOR_B) {
+                // clamp the color between 0 and 1;
+                interpolated = MathUtils.clamp(interpolated, 0., 1.);
+            }
+            f.setAttribute(i, interpolated);
         }
     }
 
@@ -134,8 +138,6 @@ public class Rasterizer {
         int x2 = v2.getX();
         int y2 = v2.getY();
 
-        // Uncomment the following block of code for drawing the wireframe
-        // int numAttributes = v1.getNumAttributes ();
         Fragment fragment = new Fragment(0, 0);
 
         boolean sym = (Math.abs(y2 - y1) > Math.abs(x2 - x1));
@@ -256,6 +258,11 @@ public class Rasterizer {
     public void rasterizeFace(final Fragment v1, final Fragment v2, final Fragment v3)
             throws SizeMismatchException {
 
+        // early exit if the triangle is too small
+        final double minArea = 1e-6;
+        if (Math.abs(triangleArea(v1, v2, v3)) < minArea) {
+            return;
+        }
         final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 
         // iterate over the triangle's bounding box
