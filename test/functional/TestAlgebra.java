@@ -24,13 +24,13 @@ public class TestAlgebra {
         try {
             new Vector(0);
             fail("Expected exception for zero size vector not thrown");
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             System.out.println("Wrong size exception caught OK");
         }
         try {
             new Vector("named", 0);
             fail("Expected exception for zero size vector not thrown");
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             System.out.println("Wrong size exception caught OK");
         }
 
@@ -71,7 +71,7 @@ public class TestAlgebra {
         System.out.println("r1 x r2 = " + r);
         System.out.println("norm(" + r.getName() + ") = " + r.norm());
         r = r.normalize();
-        System.out.println("norm(" + r.getName() + ") (after ::normalize()) = " + r.norm());
+        System.out.println("norm(" + r.getName() + ") (after normalize()) = " + r.norm());
 
         // -------------------------------------
         System.out.println("--\n-- Matrix tests\n--");
@@ -86,7 +86,7 @@ public class TestAlgebra {
         try {
             new Matrix("M2", 0, 2);
             fail("Expected exception for zero size matrix not thrown");
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             System.out.println("Wrong size exception caught OK");
         }
 
