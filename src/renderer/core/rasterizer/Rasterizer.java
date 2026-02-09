@@ -259,7 +259,8 @@ public class Rasterizer {
             throws SizeMismatchException {
 
         // early exit if the triangle is too small
-        if(Math.abs(triangleArea(v1, v2, v3)) < 1e-6) {
+        final double minArea = 1e-6;
+        if (Math.abs(triangleArea(v1, v2, v3)) < minArea) {
             return;
         }
         final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
