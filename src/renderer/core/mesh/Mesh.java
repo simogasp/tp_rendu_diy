@@ -17,7 +17,14 @@ public class Mesh {
      * The number of vertices per face.
      */
     private static final int VERTICES_PER_FACE = 3;
-
+    /**
+     * The number of color components per vertex.
+     */
+    private static final int COLOR_COMPONENTS_PER_VERTEX = 3;
+    /**
+     * The dimension of the vertices of the mesh.
+     */
+    private static final int VERTEX_DIMENSION = 3;
     /**
      * The vertices of the mesh.
      */
@@ -30,11 +37,6 @@ public class Mesh {
      * The colors of the vertices of the mesh.
      */
     private double[] colors;
-
-    /**
-     * The number of color components per vertex.
-     */
-    private static final int COLOR_COMPONENTS_PER_VERTEX = 3;
     /**
      * The normals of the vertices of the mesh.
      */
@@ -84,7 +86,7 @@ public class Mesh {
             r = nextLine(in);
             sar = r.split("\\s+");
 
-            vertices[i] = new Vector("v" + i, VERTICES_PER_FACE);
+            vertices[i] = new Vector("v" + i, VERTEX_DIMENSION);
             vertices[i].set(0, Double.parseDouble(sar[0]));
             vertices[i].set(1, Double.parseDouble(sar[1]));
             vertices[i].set(2, Double.parseDouble(sar[2]));
