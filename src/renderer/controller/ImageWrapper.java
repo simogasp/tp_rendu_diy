@@ -45,8 +45,18 @@ public class ImageWrapper extends BufferedImage {
      * @param height the height of the image
      */
     public ImageWrapper(int width, int height) {
+        this(width, height, BACKGROUND_COLOR);
+    }
+
+    /**
+     * Creates a Image wrapper with the given width and height.
+     * @param width the width of the image
+     * @param height the height of the image
+     * @param backgroundColor the background color of the image
+     */
+    public ImageWrapper(int width, int height, int backgroundColor) {
         super(width, height, BufferedImage.TYPE_3BYTE_BGR);
-        init();
+        init(backgroundColor);
     }
 
     /**
@@ -76,12 +86,13 @@ public class ImageWrapper extends BufferedImage {
 
     /**
      * Initializes the image with the background color.
+     * @param rgb the background color
      */
-    private void init() {
+    private void init(int rgb) {
         for (int x = 0; x < getWidth(); ++x) {
             for (int y = 0; y < getHeight(); ++y) {
                 // init with the background color
-                this.setRGB(x, y, BACKGROUND_COLOR);
+                this.setRGB(x, y, rgb);
             }
         }
     }
