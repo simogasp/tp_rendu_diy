@@ -36,7 +36,17 @@ public class ImageWrapper extends BufferedImage {
      * @param scene the scene of the image
      */
     public ImageWrapper(Scene scene) {
-        this(scene.getScreenW(), scene.getScreenH());
+        this(scene, BACKGROUND_COLOR);
+    }
+
+    /**
+     * Creates a Image wrapper with the image configuration.
+     *
+     * @param scene the scene of the image
+     * @param backgroundColor the background color of the image
+     */
+    public ImageWrapper(Scene scene, int backgroundColor) {
+        this(scene.getScreenW(), scene.getScreenH(), backgroundColor);
     }
 
     /**
