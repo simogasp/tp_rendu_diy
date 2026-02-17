@@ -59,7 +59,7 @@ public final class ShaderFactory {
         System.out.println("Scanning " + packageName + " for Shader implementations...");
         final String[] files = dirs.get(0).list();
         for (String file : files) {
-            //System.out.println("Found file: " + files[i]);
+            // System.out.println("Found file: " + file);
             Class<? extends Shader> shader;
             if (!file.endsWith(".class")) {
                 System.out.println("Skipping non .class file: " + file);
