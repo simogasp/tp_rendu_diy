@@ -3,6 +3,7 @@ package renderer.controller;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -51,7 +52,15 @@ public final class ShaderFactory {
 
         while (resources.hasMoreElements()) {
             URL resource = resources.nextElement();
-            dirs.add(new File(resource.getFile()));
+            try {
+                // Convert URL to URI first to properly decode URL-encoded
+                // characters (like %20 for spaces)
+                dirs.add(new File(resource.toURI()));
+            } catch (URISyntaxException e) {
+                System.out.println("[Warning] cannot convert to URI");
+                // Fallback to the old method if URI conversion fails
+                dirs.add(new File(resource.getFile()));
+            }
         }
         // dirs now should contain a single directory (even if it is a list) where the
         // .class for Shader are
