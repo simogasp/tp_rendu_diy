@@ -3,6 +3,8 @@ package renderer.controller;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -32,10 +34,10 @@ public final class ShaderFactory {
      */
     public static void init() {
         // Get the classloader
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         // the package name in which the ShadeFactory is
-        String packageName = Shader.class.getPackage().getName();
-        String path = packageName.replace('.', '/');
+        final String packageName = Shader.class.getPackage().getName();
+        final String path = packageName.replace('.', '/');
 
         // get all resources with that path --> it should be just one directory
         Enumeration<URL> resources = null;
@@ -51,7 +53,17 @@ public final class ShaderFactory {
 
         while (resources.hasMoreElements()) {
             URL resource = resources.nextElement();
-            dirs.add(new File(resource.getFile()));
+            try {
+                final URI uri = resource.toURI();
+                final File dir = new File(uri);
+                dirs.add(dir);
+                System.out.println("Path: " + dir.getAbsolutePath());
+            } catch (URISyntaxException e) {
+                // If we can't convert the URL to URI, something is fundamentally wrong
+                // Wrap in RuntimeException to fail fast
+                throw new RuntimeException(
+                    "Failed to convert shader resource URL to URI: " + resource, e);
+            }
         }
         // dirs now should contain a single directory (even if it is a list) where the
         // .class for Shader are
@@ -59,7 +71,7 @@ public final class ShaderFactory {
         System.out.println("Scanning " + packageName + " for Shader implementations...");
         final String[] files = dirs.get(0).list();
         for (String file : files) {
-            //System.out.println("Found file: " + files[i]);
+            // System.out.println("Found file: " + file);
             Class<? extends Shader> shader;
             if (!file.endsWith(".class")) {
                 System.out.println("Skipping non .class file: " + file);
