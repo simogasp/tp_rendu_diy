@@ -32,10 +32,10 @@ public final class ShaderFactory {
      */
     public static void init() {
         // Get the classloader
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         // the package name in which the ShadeFactory is
-        String packageName = Shader.class.getPackage().getName();
-        String path = packageName.replace('.', '/');
+        final String packageName = Shader.class.getPackage().getName();
+        final String path = packageName.replace('.', '/');
 
         // get all resources with that path --> it should be just one directory
         Enumeration<URL> resources = null;
