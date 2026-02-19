@@ -174,15 +174,6 @@ public class ArrayBaseTest {
         }
 
         /**
-         * Public wrapper for sumValues to enable testing.
-         *
-         * @return the sum of all elements
-         */
-        double testSumValues() {
-            return sumValues();
-        }
-
-        /**
          * Gets the internal values array for testing.
          *
          * @return a copy of the values array
@@ -1226,7 +1217,7 @@ public class ArrayBaseTest {
             expectedSum += value;
         }
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(expectedSum, result, EPSILON);
     }
@@ -1238,7 +1229,7 @@ public class ArrayBaseTest {
     public void testSumValuesZeroValuesReturnsZero() {
         final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(0.0, result, EPSILON);
     }
@@ -1258,7 +1249,7 @@ public class ArrayBaseTest {
             expectedSum += value;
         }
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(expectedSum, result, EPSILON);
     }
@@ -1277,7 +1268,7 @@ public class ArrayBaseTest {
             expectedSum += value;
         }
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(expectedSum, result, EPSILON);
     }
@@ -1294,7 +1285,7 @@ public class ArrayBaseTest {
         }
 
         final double[] originalValues = arr.getValuesCopy();
-        arr.testSumValues();
+        arr.sumValues();
 
         assertArrayEquals(originalValues, arr.getValuesCopy(), EPSILON);
     }
@@ -1307,7 +1298,7 @@ public class ArrayBaseTest {
         final TestArrayBase arr = new TestArrayBase(SMALL_SIZE);
         arr.testSetValue(0, TEST_VALUE);
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(TEST_VALUE, result, EPSILON);
     }
@@ -1326,7 +1317,7 @@ public class ArrayBaseTest {
             expectedSum += value;
         }
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(expectedSum, result, EPSILON);
     }
@@ -1345,7 +1336,7 @@ public class ArrayBaseTest {
             expectedSum += preciseValue;
         }
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(expectedSum, result, EPSILON);
     }
@@ -1365,7 +1356,7 @@ public class ArrayBaseTest {
             arr.testSetValue(i, -TEST_VALUE);
         }
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(0.0, result, EPSILON);
     }
@@ -1384,7 +1375,7 @@ public class ArrayBaseTest {
             expectedSum += value;
         }
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(expectedSum, result, EPSILON);
     }

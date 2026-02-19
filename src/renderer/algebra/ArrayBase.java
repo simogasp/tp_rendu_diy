@@ -265,7 +265,7 @@ public abstract class ArrayBase {
      *
      * @return the sum of all elements
      */
-    protected final double sumValues() {
+    public final double sumValues() {
         return java.util.stream.DoubleStream.of(values).sum();
     }
 }
