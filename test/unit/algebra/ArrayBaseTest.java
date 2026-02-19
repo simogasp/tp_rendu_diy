@@ -174,15 +174,6 @@ public class ArrayBaseTest {
         }
 
         /**
-         * Public wrapper for sumValues to enable testing.
-         *
-         * @return the sum of all elements
-         */
-        double testSumValues() {
-            return sumValues();
-        }
-
-        /**
          * Gets the internal values array for testing.
          *
          * @return a copy of the values array
@@ -220,15 +211,6 @@ public class ArrayBaseTest {
          */
         double testGetValue(final int index) {
             return getValue(index);
-        }
-
-        /**
-         * Public wrapper for setAll to enable testing.
-         *
-         * @param value the value to set
-         */
-        void testSetAll(final double value) {
-            setAll(value);
         }
 
         /**
@@ -1235,7 +1217,7 @@ public class ArrayBaseTest {
             expectedSum += value;
         }
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(expectedSum, result, EPSILON);
     }
@@ -1247,7 +1229,7 @@ public class ArrayBaseTest {
     public void testSumValuesZeroValuesReturnsZero() {
         final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(0.0, result, EPSILON);
     }
@@ -1267,7 +1249,7 @@ public class ArrayBaseTest {
             expectedSum += value;
         }
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(expectedSum, result, EPSILON);
     }
@@ -1286,7 +1268,7 @@ public class ArrayBaseTest {
             expectedSum += value;
         }
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(expectedSum, result, EPSILON);
     }
@@ -1303,7 +1285,7 @@ public class ArrayBaseTest {
         }
 
         final double[] originalValues = arr.getValuesCopy();
-        arr.testSumValues();
+        arr.sumValues();
 
         assertArrayEquals(originalValues, arr.getValuesCopy(), EPSILON);
     }
@@ -1316,7 +1298,7 @@ public class ArrayBaseTest {
         final TestArrayBase arr = new TestArrayBase(SMALL_SIZE);
         arr.testSetValue(0, TEST_VALUE);
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(TEST_VALUE, result, EPSILON);
     }
@@ -1335,7 +1317,7 @@ public class ArrayBaseTest {
             expectedSum += value;
         }
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(expectedSum, result, EPSILON);
     }
@@ -1354,7 +1336,7 @@ public class ArrayBaseTest {
             expectedSum += preciseValue;
         }
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(expectedSum, result, EPSILON);
     }
@@ -1374,7 +1356,7 @@ public class ArrayBaseTest {
             arr.testSetValue(i, -TEST_VALUE);
         }
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(0.0, result, EPSILON);
     }
@@ -1393,7 +1375,7 @@ public class ArrayBaseTest {
             expectedSum += value;
         }
 
-        final double result = arr.testSumValues();
+        final double result = arr.sumValues();
 
         assertEquals(expectedSum, result, EPSILON);
     }
@@ -1581,7 +1563,7 @@ public class ArrayBaseTest {
     public void testSetAllSetsAllElements() {
         final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
 
-        arr.testSetAll(TEST_VALUE);
+        arr.setAll(TEST_VALUE);
 
         final double[] values = arr.getValuesCopy();
         for (int i = 0; i < DEFAULT_SIZE; i++) {
@@ -1599,7 +1581,7 @@ public class ArrayBaseTest {
             arr.testSetValue(i, i + 1.0);
         }
 
-        arr.testSetAll(0.0);
+        arr.setAll(0.0);
 
         final double[] values = arr.getValuesCopy();
         for (int i = 0; i < DEFAULT_SIZE; i++) {
@@ -1615,7 +1597,7 @@ public class ArrayBaseTest {
         final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
         final double negativeValue = -2.5;
 
-        arr.testSetAll(negativeValue);
+        arr.setAll(negativeValue);
 
         final double[] values = arr.getValuesCopy();
         for (int i = 0; i < DEFAULT_SIZE; i++) {
@@ -1633,7 +1615,7 @@ public class ArrayBaseTest {
             arr.testSetValue(i, i * TEST_VALUE);
         }
 
-        arr.testSetAll(TEST_VALUE_2);
+        arr.setAll(TEST_VALUE_2);
 
         final double[] values = arr.getValuesCopy();
         for (int i = 0; i < DEFAULT_SIZE; i++) {
@@ -1648,7 +1630,7 @@ public class ArrayBaseTest {
     public void testSetAllSingleElement() {
         final TestArrayBase arr = new TestArrayBase(SMALL_SIZE);
 
-        arr.testSetAll(TEST_VALUE);
+        arr.setAll(TEST_VALUE);
 
         final double[] values = arr.getValuesCopy();
         assertEquals(TEST_VALUE, values[0], EPSILON);
@@ -1661,7 +1643,7 @@ public class ArrayBaseTest {
     public void testSetAllLargeArray() {
         final TestArrayBase arr = new TestArrayBase(LARGE_SIZE);
 
-        arr.testSetAll(TEST_VALUE);
+        arr.setAll(TEST_VALUE);
 
         final double[] values = arr.getValuesCopy();
         for (int i = 0; i < LARGE_SIZE; i++) {
@@ -1677,7 +1659,7 @@ public class ArrayBaseTest {
         final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
         final double preciseValue = 1.234567890123456;
 
-        arr.testSetAll(preciseValue);
+        arr.setAll(preciseValue);
 
         final double[] values = arr.getValuesCopy();
         for (int i = 0; i < DEFAULT_SIZE; i++) {
@@ -2083,7 +2065,7 @@ public class ArrayBaseTest {
     @Test
     public void testGetValuesReflectsSetAll() {
         final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
-        arr.testSetAll(TEST_VALUE);
+        arr.setAll(TEST_VALUE);
 
         final double[] values = arr.testGetValues();
         for (int i = 0; i < DEFAULT_SIZE; i++) {
