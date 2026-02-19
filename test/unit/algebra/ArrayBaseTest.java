@@ -223,15 +223,6 @@ public class ArrayBaseTest {
         }
 
         /**
-         * Public wrapper for setAll to enable testing.
-         *
-         * @param value the value to set
-         */
-        void testSetAll(final double value) {
-            setAll(value);
-        }
-
-        /**
          * Public wrapper for fillRandom to enable testing.
          */
         void testFillRandom() {
@@ -1581,7 +1572,7 @@ public class ArrayBaseTest {
     public void testSetAllSetsAllElements() {
         final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
 
-        arr.testSetAll(TEST_VALUE);
+        arr.setAll(TEST_VALUE);
 
         final double[] values = arr.getValuesCopy();
         for (int i = 0; i < DEFAULT_SIZE; i++) {
@@ -1599,7 +1590,7 @@ public class ArrayBaseTest {
             arr.testSetValue(i, i + 1.0);
         }
 
-        arr.testSetAll(0.0);
+        arr.setAll(0.0);
 
         final double[] values = arr.getValuesCopy();
         for (int i = 0; i < DEFAULT_SIZE; i++) {
@@ -1615,7 +1606,7 @@ public class ArrayBaseTest {
         final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
         final double negativeValue = -2.5;
 
-        arr.testSetAll(negativeValue);
+        arr.setAll(negativeValue);
 
         final double[] values = arr.getValuesCopy();
         for (int i = 0; i < DEFAULT_SIZE; i++) {
@@ -1633,7 +1624,7 @@ public class ArrayBaseTest {
             arr.testSetValue(i, i * TEST_VALUE);
         }
 
-        arr.testSetAll(TEST_VALUE_2);
+        arr.setAll(TEST_VALUE_2);
 
         final double[] values = arr.getValuesCopy();
         for (int i = 0; i < DEFAULT_SIZE; i++) {
@@ -1648,7 +1639,7 @@ public class ArrayBaseTest {
     public void testSetAllSingleElement() {
         final TestArrayBase arr = new TestArrayBase(SMALL_SIZE);
 
-        arr.testSetAll(TEST_VALUE);
+        arr.setAll(TEST_VALUE);
 
         final double[] values = arr.getValuesCopy();
         assertEquals(TEST_VALUE, values[0], EPSILON);
@@ -1661,7 +1652,7 @@ public class ArrayBaseTest {
     public void testSetAllLargeArray() {
         final TestArrayBase arr = new TestArrayBase(LARGE_SIZE);
 
-        arr.testSetAll(TEST_VALUE);
+        arr.setAll(TEST_VALUE);
 
         final double[] values = arr.getValuesCopy();
         for (int i = 0; i < LARGE_SIZE; i++) {
@@ -1677,7 +1668,7 @@ public class ArrayBaseTest {
         final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
         final double preciseValue = 1.234567890123456;
 
-        arr.testSetAll(preciseValue);
+        arr.setAll(preciseValue);
 
         final double[] values = arr.getValuesCopy();
         for (int i = 0; i < DEFAULT_SIZE; i++) {
@@ -2083,7 +2074,7 @@ public class ArrayBaseTest {
     @Test
     public void testGetValuesReflectsSetAll() {
         final TestArrayBase arr = new TestArrayBase(DEFAULT_SIZE);
-        arr.testSetAll(TEST_VALUE);
+        arr.setAll(TEST_VALUE);
 
         final double[] values = arr.testGetValues();
         for (int i = 0; i < DEFAULT_SIZE; i++) {

@@ -155,7 +155,7 @@ public abstract class ArrayBase {
      *
      * @param value the value to set
      */
-    protected final void setAll(final double value) {
+    public final void setAll(final double value) {
         java.util.Arrays.fill(values, value);
     }
 
