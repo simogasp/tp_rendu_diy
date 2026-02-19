@@ -12,9 +12,11 @@ CLASSPATH = $(CLASSES_DIR):lib/*
 
 # Find all source and test Java files
 SRC_FILES = $(shell find $(SRC_DIR) -name "*.java")
-UNIT_TEST_FILES = $(shell find $(TEST_DIR)/unit -name "*.java")
+UNIT_TEST_FILES = $(shell find $(TEST_DIR)/unit -name "*Test.java")
 FUNCTIONAL_TEST_FILES = $(shell find $(TEST_DIR)/functional -name "*.java")
 ALL_TEST_FILES = $(UNIT_TEST_FILES) $(FUNCTIONAL_TEST_FILES)
+# Include all .java files for compilation (including base classes)
+TEST_COMPILE_FILES = $(shell find $(TEST_DIR)/unit -name "*.java") $(FUNCTIONAL_TEST_FILES)
 
 # Targets
 .PHONY: all clean compile doc clean-doc tests
@@ -29,7 +31,7 @@ clean:
 compile: clean
 	mkdir -p $(BUILD_DIR)
 	mkdir -p $(CLASSES_DIR)
-	javac -d $(CLASSES_DIR) -cp $(CLASSPATH) $(SRC_FILES) $(ALL_TEST_FILES)
+	javac -d $(CLASSES_DIR) -cp $(CLASSPATH) $(SRC_FILES) $(TEST_COMPILE_FILES)
 
 # Run all tests
 tests: func-tests unit-tests
