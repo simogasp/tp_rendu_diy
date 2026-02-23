@@ -22,10 +22,18 @@ public class MathUtilsFloatTest extends BaseMathUtils<Float> {
     private static final float ABOVE_MAX_VALUE = 11.0f;
     /** Epsilon for comparing float values. */
     private static final float EPSILON = 0.001f;
-    /** Value near minimum for epsilon testing. */
-    private static final float NEAR_MIN_VALUE = MIN_VALUE - 1e-7f;
-    /** Value near maximum for epsilon testing. */
-    private static final float NEAR_MAX_VALUE = MAX_VALUE + 1e-7f;
+    /**
+     * Value near minimum for epsilon testing.
+     * This value is FLOAT_EPSILON/10 outside the lower bound to verify that
+     * the isInRange method accepts values within its epsilon tolerance.
+     */
+    private static final float NEAR_MIN_VALUE = MIN_VALUE - MathUtils.FLOAT_EPSILON / 10;
+    /**
+     * Value near maximum for epsilon testing.
+     * This value is FLOAT_EPSILON/10 outside the upper bound to verify that
+     * the isInRange method accepts values within its epsilon tolerance.
+     */
+    private static final float NEAR_MAX_VALUE = MAX_VALUE + MathUtils.FLOAT_EPSILON / 10;
 
     @Override
     protected Float getMinValue() {

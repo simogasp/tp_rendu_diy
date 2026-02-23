@@ -10,6 +10,21 @@ public final class  MathUtils {
      */
     public static final int MAX8INT = 255;
 
+    /**
+     * Epsilon tolerance for double precision floating-point comparisons.
+     * This value accounts for floating-point arithmetic precision errors
+     * in range checking operations.
+     */
+    public static final double DOUBLE_EPSILON = 1e-6;
+
+    /**
+     * Epsilon tolerance for single precision floating-point comparisons.
+     * This value accounts for floating-point arithmetic precision errors
+     * in range checking operations. While float has lower precision than double,
+     * the same epsilon value is used for consistency in the application.
+     */
+    public static final float FLOAT_EPSILON = 1e-6f;
+
     private MathUtils() {
         // Private constructor to prevent instantiation
     }
@@ -130,34 +145,40 @@ public final class  MathUtils {
 
     /**
      * Checks if a double value is in a given range.
+     * Uses an epsilon tolerance to account for floating-point
+     * precision issues, effectively checking if the value is in the range
+     * [min - DOUBLE_EPSILON, max + DOUBLE_EPSILON].
      *
      * @param value the value to check
-     * @param min   the minimum value (inclusive)
-     * @param max   the maximum value (inclusive)
-     * @return true if value is in the range [min, max], false otherwise
+     * @param min   the minimum value (inclusive with epsilon tolerance)
+     * @param max   the maximum value (inclusive with epsilon tolerance)
+     * @return true if value is in the range
+     *         [min - DOUBLE_EPSILON, max + DOUBLE_EPSILON], false otherwise
      */
     public static boolean isInRange(double value, double min, double max) {
         if (min > max) {
             throw new IllegalArgumentException("min must be less than or equal to max");
         }
-        final double eps = 1e-6;
-        return min - eps <= value && value <= max + eps;
+        return min - DOUBLE_EPSILON <= value && value <= max + DOUBLE_EPSILON;
     }
 
     /**
      * Checks if a float value is in a given range.
+     * Uses an epsilon tolerance to account for floating-point
+     * precision issues, effectively checking if the value is in the range
+     * [min - FLOAT_EPSILON, max + FLOAT_EPSILON].
      *
      * @param value the value to check
-     * @param min   the minimum value (inclusive)
-     * @param max   the maximum value (inclusive)
-     * @return true if value is in the range [min, max], false otherwise
+     * @param min   the minimum value (inclusive with epsilon tolerance)
+     * @param max   the maximum value (inclusive with epsilon tolerance)
+     * @return true if value is in the range
+     *         [min - FLOAT_EPSILON, max + FLOAT_EPSILON], false otherwise
      */
     public static boolean isInRange(float value, float min, float max) {
         if (min > max) {
             throw new IllegalArgumentException("min must be less than or equal to max");
         }
-        final float eps = 1e-6f;
-        return min - eps <= value && value <= max + eps;
+        return min - FLOAT_EPSILON <= value && value <= max + FLOAT_EPSILON;
     }
 
 }

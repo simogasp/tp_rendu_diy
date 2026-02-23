@@ -22,10 +22,20 @@ public class MathUtilsDoubleTest extends BaseMathUtils<Double> {
     private static final double ABOVE_MAX_VALUE = 11.0;
     /** Epsilon for comparing double values. */
     private static final double EPSILON = 0.001;
-    /** Value near minimum for epsilon testing. */
-    private static final double NEAR_MIN_VALUE = MIN_VALUE - 1e-7;
-    /** Value near maximum for epsilon testing. */
-    private static final double NEAR_MAX_VALUE = MAX_VALUE + 1e-7;
+    /**
+     * Value near minimum for epsilon testing.
+     * This value is DOUBLE_EPSILON/10 outside the lower bound to verify that
+     * the isInRange method accepts values within its epsilon tolerance.
+     */
+    private static final double NEAR_MIN_VALUE =
+        MIN_VALUE - MathUtils.DOUBLE_EPSILON / 10;
+    /**
+     * Value near maximum for epsilon testing.
+     * This value is DOUBLE_EPSILON/10 outside the upper bound to verify that
+     * the isInRange method accepts values within its epsilon tolerance.
+     */
+    private static final double NEAR_MAX_VALUE =
+        MAX_VALUE + MathUtils.DOUBLE_EPSILON / 10;
 
     @Override
     protected Double getMinValue() {
