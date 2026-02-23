@@ -40,14 +40,9 @@ public final class  MathUtils {
      */
     public static int clamp(int value, int min, int max) {
         if (min > max) {
-            throw new IllegalArgumentException("min must be less than or equal to max");
+            throw new IllegalArgumentException("min " + min + " > " + "max " + max);
         }
-        if (value < min) {
-            return min;
-        } else if (value > max) {
-            return max;
-        }
-        return value;
+        return (int) Math.min(max, Math.max(value, min));
     }
 
     /**
@@ -61,14 +56,9 @@ public final class  MathUtils {
      */
     public static long clamp(long value, long min, long max) {
         if (min > max) {
-            throw new IllegalArgumentException("min must be less than or equal to max");
+            throw new IllegalArgumentException("min " + min + " > " + "max " + max);
         }
-        if (value < min) {
-            return min;
-        } else if (value > max) {
-            return max;
-        }
-        return value;
+        return Math.min(max, Math.max(value, min));
     }
 
     /**
@@ -80,16 +70,31 @@ public final class  MathUtils {
      * @return the clamped value (min if value {@literal <} min,
      *         max if value {@literal >} max, value otherwise)
      */
+    /*
+    * Adapted from OpenJDK java.lang.Math.clamp()
+    * Copyright (c) 2022, Oracle and/or its affiliates.
+    * Licensed under GPLv2 with Classpath Exception.
+    */
     public static double clamp(double value, double min, double max) {
-        if (min > max) {
-            throw new IllegalArgumentException("min must be less than or equal to max");
+        // This unusual condition allows keeping only one branch
+        // on common path when min < max and neither of them is NaN.
+        // If min == max, we should additionally check for +0.0/-0.0 case,
+        // so we're still visiting the if statement.
+        if (!(min < max)) {
+            // min greater than, equal to, or unordered wrt max; NaN values are unordered
+            if (Double.isNaN(min)) {
+                throw new IllegalArgumentException("min is NaN");
+            }
+            if (Double.isNaN(max)) {
+                throw new IllegalArgumentException("max is NaN");
+            }
+            if (Double.compare(min, max) > 0) {
+                throw new IllegalArgumentException("min " + min + " > " + "max " + max);
+            }
+            // Fall-through if min and max are exactly equal (or min = -0.0 and max = +0.0)
+            // and none of them is NaN
         }
-        if (value < min) {
-            return min;
-        } else if (value > max) {
-            return max;
-        }
-        return value;
+        return Math.min(max, Math.max(value, min));
     }
 
     /**
@@ -99,18 +104,32 @@ public final class  MathUtils {
      * @param min   the minimum value
      * @param max   the maximum value
      * @return the clamped value (min if value {@literal <} min,
-     *         max if value {@literal >} max, value otherwise)
+     *         max if value {@literal >} max, value otherwise
      */
+    /* Adapted from OpenJDK java.lang.Math.clamp()
+    * Copyright (c) 2022, Oracle and/or its affiliates.
+    * Licensed under GPLv2 with Classpath Exception.
+    */
     public static float clamp(float value, float min, float max) {
-        if (min > max) {
-            throw new IllegalArgumentException("min must be less than or equal to max");
+        // This unusual condition allows keeping only one branch
+        // on common path when min < max and neither of them is NaN.
+        // If min == max, we should additionally check for +0.0/-0.0 case,
+        // so we're still visiting the if statement.
+        if (!(min < max)) {
+            // min greater than, equal to, or unordered wrt max; NaN values are unordered
+            if (Float.isNaN(min)) {
+                throw new IllegalArgumentException("min is NaN");
+            }
+            if (Float.isNaN(max)) {
+                throw new IllegalArgumentException("max is NaN");
+            }
+            if (Float.compare(min, max) > 0) {
+                throw new IllegalArgumentException("min " + min + " > " + "max " + max);
+            }
+            // Fall-through if min and max are exactly equal (or min = -0.0 and max = +0.0)
+            // and none of them is NaN
         }
-        if (value < min) {
-            return min;
-        } else if (value > max) {
-            return max;
-        }
-        return value;
+        return Math.min(max, Math.max(value, min));
     }
 
     /**
