@@ -159,7 +159,7 @@
 			</classpath>
 			<formatter type="plain" />
 			<batchtest fork="yes" todir="${reports}">
-				<fileset dir="${functional}" />
+				<fileset dir="${functional}" includes="**/*Test.java" />
 			</batchtest>
 		</junit>
 	</target>
@@ -184,7 +184,7 @@
 			</modulepath>
 			<formatter type="plain" />
 			<batchtest fork="yes" todir="${reports}">
-				<fileset dir="${unit}" />
+				<fileset dir="${unit}" includes="**/*Test.java" />
 			</batchtest>
 		</junit>
 
@@ -230,7 +230,7 @@
 					
 				<!-- Run unit tests -->
 				<batchtest fork="yes" todir="${reports}">
-					<fileset dir="${unit}" />
+					<fileset dir="${unit}" includes="**/*Test.java" />
 				</batchtest>
 			</junit>
 		</jacoco:coverage>
