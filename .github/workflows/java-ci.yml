@@ -36,6 +36,9 @@ jobs:
       - name: Build with Makefile
         run: make 
 
+      - name: Run functional tests
+        run: make func-tests
+
       - name: Run unit tests
         run: make unit-tests
 
@@ -62,6 +65,9 @@ jobs:
       - name: Build with ant
         run: ant compile
 
+      - name: Run functional tests with ant
+        run: ant func-tests
+   
       - name: Run unit tests with ant
         run: ant unit-tests
 
