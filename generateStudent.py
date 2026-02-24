@@ -270,7 +270,8 @@ def main(working_dir: str, studentify_dir: str, archive_name: str, skip_cleaning
         studentify_dir_abs
     ])
 
-    files_to_studentify = ["src/renderer/core/light/PointLight.java",
+    files_to_studentify = ["src/renderer/core/light/AmbientLight.java",
+                           "src/renderer/core/light/PointLight.java",
                            "src/renderer/core/mesh/Mesh.java",
                            "src/renderer/core/mesh/Texture.java",
                            "src/renderer/core/rasterizer/Rasterizer.java",
