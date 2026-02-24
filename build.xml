@@ -143,10 +143,10 @@
 		</javac>
 	</target>
 
-	<!-- target to run fonctionnal tests. -->
+	<!-- target to run functional tests. -->
 	<target
 		name="func-tests" depends="compile-test"
-		description="Run Functionnal Test. Writes the result in tests/reports.">
+		description="Run Functional Test. Writes the result in tests/reports.">
 
 		<echo message="Running functional tests ..." />
 
