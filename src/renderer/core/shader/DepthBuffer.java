@@ -1,5 +1,6 @@
 package renderer.core.shader;
 
+import renderer.algebra.MathUtils;
 import renderer.algebra.Matrix;
 
 /**
@@ -12,15 +13,6 @@ public class DepthBuffer {
     private Matrix buffer;
 
     /**
-     * The width the buffer.
-     */
-    private int width;
-    /**
-     * The height the buffer.
-     */
-    private int height;
-
-    /**
      * Constructs a DepthBuffer of size width x height.
      * The buffer is initially cleared.
      *
@@ -29,8 +21,6 @@ public class DepthBuffer {
      */
     public DepthBuffer(int width, int height) {
         buffer = new Matrix(height, width);
-        this.width = width;
-        this.height = height;
         clear();
     }
 
@@ -38,12 +28,7 @@ public class DepthBuffer {
      * Clears the buffer to infinite depth for all fragments.
      */
     public void clear() {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                buffer.set(i, j, Double.POSITIVE_INFINITY);
-            }
-        }
-
+        buffer.setAll(Double.POSITIVE_INFINITY);
     }
 
     /**
@@ -53,8 +38,8 @@ public class DepthBuffer {
      * @return true if coordinates are valid, false otherwise
      */
     private boolean isWithinBounds(Fragment f) {
-        return f.getX() >= 0 && f.getX() < width
-            && f.getY() >= 0 && f.getY() < height;
+        return MathUtils.isInRange(f.getX(), 0, width() - 1)
+            && MathUtils.isInRange(f.getY(), 0, height() - 1);
     }
 
     /**
@@ -91,14 +76,26 @@ public class DepthBuffer {
      * @param nHeight the new height
      */
     public void resize(int nWidth, int nHeight) {
-        if (width == nWidth && height == nHeight) {
-            clear();
-            return;
+        if (width() != nWidth || height() != nHeight) {
+            buffer = new Matrix(nHeight, nWidth);
         }
-        width = nWidth;
-        height = nHeight;
-        buffer = new Matrix(height, width);
         clear();
+    }
+
+    /**
+     * Get the width of the buffer.
+     * @return the width of the buffer
+     */
+    public int width() {
+        return buffer.getNCols();
+    }
+
+    /**
+     * Get the height of the buffer.
+     * @return the height of the buffer
+     */
+    public int height() {
+        return buffer.getNRows();
     }
 
 }
