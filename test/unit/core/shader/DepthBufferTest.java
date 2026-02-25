@@ -392,6 +392,44 @@ public class DepthBufferTest {
         assertTrue(depthBuffer.testFragment(fragment));
     }
 
+    /**
+     * Test resizing only width dimension.
+     */
+    @Test
+    public void testResizeWidthOnly() {
+        final Fragment fragment = new Fragment(X_COORD, Y_COORD);
+        fragment.setDepth(DEPTH_MID);
+        depthBuffer.writeFragment(fragment);
+
+        // Resize only width
+        depthBuffer.resize(NEW_BUFFER_WIDTH, BUFFER_HEIGHT);
+
+        assertEquals(NEW_BUFFER_WIDTH, depthBuffer.width());
+        assertEquals(BUFFER_HEIGHT, depthBuffer.height());
+
+        // Buffer should be cleared
+        assertTrue(depthBuffer.testFragment(fragment));
+    }
+
+    /**
+     * Test resizing only height dimension.
+     */
+    @Test
+    public void testResizeHeightOnly() {
+        final Fragment fragment = new Fragment(X_COORD, Y_COORD);
+        fragment.setDepth(DEPTH_MID);
+        depthBuffer.writeFragment(fragment);
+
+        // Resize only height
+        depthBuffer.resize(BUFFER_WIDTH, NEW_BUFFER_HEIGHT);
+
+        assertEquals(BUFFER_WIDTH, depthBuffer.width());
+        assertEquals(NEW_BUFFER_HEIGHT, depthBuffer.height());
+
+        // Buffer should be cleared
+        assertTrue(depthBuffer.testFragment(fragment));
+    }
+
     // ==================== Width and Height Tests ====================
 
     /**
