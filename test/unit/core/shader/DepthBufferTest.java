@@ -82,6 +82,9 @@ public class DepthBufferTest {
      */
     @Test
     public void testClearSetsAllDepthsToInfinity() {
+        // Explicitly clear the buffer
+        depthBuffer.clear();
+
         final Fragment fragment = new Fragment(X_COORD, Y_COORD);
         fragment.setDepth(DEPTH_MID);
 
