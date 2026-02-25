@@ -18,7 +18,7 @@
 * [x] add a NormalShader that render the normals of the object (useful for debugging)
 * [x] make the UML class diagram and find a way to generate it automatically from the code (better if in plantUML format)
 * [x] add instructions to the `README.md` on how to set up the project with visual studio code installing the pluging for java and the checkstyle
-* [ ] write a test to check that the tags are always there
+* [x] write a test to check that the tags are always there
 
 ## Transformation
 
@@ -31,16 +31,19 @@
 
 ## Rasterizer
 
-* [ ] check why in `Rasterizer.rasterizeEdge()` there are some  cases in which f1 and f2 have the same position (just projection or something else?)
+* [ ] check why in `Rasterizer.rasterizeEdge()` there are some  cases in which f1 and f2 have the same position (just projection or something else?) --> see bug in Bresenham's algorithm
 * [x] resync the `Rasterizer` and `PerspectiveCorrectRasterizer` rasterizeFace()
 
 ## Lighting
 
 * [x] refactor the code creating a Light abstract class and then the others that extend it with a getLightContribution() method that actually computes the contribution of the specific type of light.
+* [ ] add Phong (solution and a way to enable/disable it in the GUI)
 
 ## Texture
 
-* [ ] clarify the javadoc in `sample()` to deal with repetitive textures.
+* [x] clarify the javadoc in `sample()` to deal with repetitive textures.
+
+* [ ] `combineWithBaseColor` is a todo for the students (add to sujet), check if there is a better way to blend the colors than summing them and take the min with the max value
 
 ## Scene
 
@@ -52,6 +55,12 @@
 
 * [x] the light contribution in `Lighting.applyLights()` should always be in the range [0,1] (clamp it)
 
+* [ ] Bresenham's algorithm in `Rasterizer.rasterizeEdge()` is not working properly.
+
+* [x] make the shader factory robust to paths with spaces
+
 ## GUI
 
 * [x] implement a GUI, adding scene navigation, buttons or toggles to enable/disable shaders etc. instead of doing it sequentially in the code
+
+* [ ] move the camera position (and also the light)
