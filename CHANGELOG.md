@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added Ant build file `build.xml` to have a cross-platform build system (makefile is still there)
 - added more junit tests
 - added github actions ci to build, run unit tests, generate the student version, and generate the documentation automatically on each push and pull request
+- `ArrayBase` is now an abstract class to factorize the common code between `Matrix` and `Vector`
 
 ### Changed
 
@@ -51,7 +52,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add the calibration matrix
 - added README.md
 - added junit tests
-- `ArrayBase` is now an abstract class to factorize the common code between `Matrix` and `Vector`
 
 ### Changed
 
