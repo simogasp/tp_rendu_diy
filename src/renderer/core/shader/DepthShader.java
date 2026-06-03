@@ -74,7 +74,7 @@ public class DepthShader extends Shader {
     }
 
     /**
-     * Update the nearest and the farest depth according to the given depth.
+     * Update the nearest and the farthest depth according to the given depth.
      *
      * @param depth the new one
      */
