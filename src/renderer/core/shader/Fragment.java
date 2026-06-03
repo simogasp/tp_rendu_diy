@@ -275,9 +275,7 @@ public class Fragment {
     @Override
     public Fragment clone() {
         final Fragment res = new Fragment(x, y);
-        for (int i = 0; i < attributes.length; i++) {
-            res.attributes[i] = attributes[i];
-        }
+        System.arraycopy(attributes, 0, res.attributes, 0, attributes.length);
         return res;
     }
 
