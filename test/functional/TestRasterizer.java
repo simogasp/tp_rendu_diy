@@ -1,9 +1,12 @@
 import org.junit.Test;
 
+import renderer.core.pipeline.FragmentOutput;
+import renderer.core.pipeline.FragmentShader;
+import renderer.core.pipeline.FragmentShaderStage;
+import renderer.core.pipeline.OutputMerger;
 import renderer.core.pipeline.Rasterizer;
 import renderer.core.shader.Fragment;
 import renderer.controller.ImageWrapper;
-import renderer.core.shader.Shader;
 
 /**
  * Test class for the Rasterizer class.
@@ -12,18 +15,15 @@ import renderer.core.shader.Shader;
  */
 public class TestRasterizer {
 
-    static class TestShader extends Shader {
+    static class TestShader implements FragmentShader {
 
 
         @Override
-        public void shade(Fragment fragment) {
+        public FragmentOutput shade(Fragment fragment) {
             System.out.println(
                 "  fragment: (" + fragment.getX() + ", " + fragment.getY() + ")"
                     + " - color = (" + fragment.getColor() + ")");
-        }
-        @Override
-        public void reset() {
-            // Nothing to reset
+            return new FragmentOutput(fragment.getColor());
         }
     }
 
@@ -38,8 +38,8 @@ public class TestRasterizer {
 
         TestShader shader = new TestShader();
         ImageWrapper screen = new ImageWrapper();
-        shader.init(null, screen);
-        Rasterizer rasterizer = new Rasterizer(shader);
+        FragmentShaderStage fragmentShaderStage = new FragmentShaderStage(shader, new OutputMerger(screen));
+        Rasterizer rasterizer = new Rasterizer(fragmentShaderStage);
 
         System.out.println("Rasterizing edge");
 
