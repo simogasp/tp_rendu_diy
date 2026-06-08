@@ -5,7 +5,6 @@ import renderer.algebra.Vector;
 import renderer.algebra.MathUtils;
 import renderer.algebra.SizeMismatchException;
 import renderer.core.shader.Fragment;
-import renderer.core.shader.Shader;
 
 /**
  * The Rasterizer class is responsible for the discretization of geometric
@@ -24,27 +23,20 @@ public class Rasterizer {
      */
     private static final double MIDDLE_DOUBLE_VALUE = .5;
 
-    /**
-     * The shader used by the Rasterizer.
-     */
-    protected Shader shader;
+    /** The FragmentConsumer to use */
+    protected FragmentConsumer consumer;
 
     /**
      * Creates a Rasterizer with the given Shader.
      *
      * @param shader the shader to use
      */
-    public Rasterizer(Shader shader) {
-        this.shader = shader;
+    public Rasterizer(FragmentConsumer consumer) {
+        this.consumer = consumer;
     }
 
-    /**
-     * Sets the shader of the Rasterizer.
-     *
-     * @param shader the shader to use
-     */
-    public void setShader(Shader shader) {
-        this.shader = shader;
+    public void setConsumer(FragmentConsumer consumer) {
+        this.consumer = consumer;
     }
 
     /**
@@ -109,7 +101,7 @@ public class Rasterizer {
         int y1 = v.getY();
 
         // For now : just display the vertices
-        Fragment f = new Fragment(0, 0);
+        Fragment f = v.clone();;
         final int size = 2;
         for (int i = 0; i < v.getNumAttributes(); i++) {
             f.setAttribute(i, v.getAttribute(i));
@@ -117,7 +109,8 @@ public class Rasterizer {
         for (int i = -size; i <= size; i++) {
             for (int j = -size; j <= size; j++) {
                 f.setPosition(x1 + i, y1 + j);
-                shader.shade(f);
+
+                consumer.consume(f);
             }
         }
     }
@@ -177,23 +170,24 @@ public class Rasterizer {
 
         while (x <= x2) {
 
-            fragment.setPosition(x, y);
-
-            if (!shader.isClipped(fragment)) {
-
-                interpolate2(v1, v2, fragment);
-                if (sym) {
-                    swapXAndY(fragment);
-                }
-                shader.shade(fragment);
+            if (sym) {
+                fragment.setPosition(y, x);
+            } else {
+                fragment.setPosition(x, y);
             }
 
-            x += 1;
-            err = err + dy;
-            if (err > 0) {
+            interpolate2(v1, v2, fragment);
+
+            consumer.consume(fragment.clone());
+
+            err -= dy;
+
+            if (err < 0) {
                 y += ystep;
-                err -= dx;
+                err += dx;
             }
+
+            x++;
         }
     }
 
@@ -255,7 +249,7 @@ public class Rasterizer {
      * @param v3 the third vertex of the triangle
      * @throws SizeMismatchException if the size of the Fragment is not correct.
      */
-    public void rasterizeFace(final Fragment v1, final Fragment v2, final Fragment v3)
+    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3)
             throws SizeMismatchException {
 
         // early exit if the triangle is too small
@@ -281,32 +275,28 @@ public class Rasterizer {
         for (int x = xmin; x <= xmax; x++) {
             for (int y = ymin; y <= ymax; y++) {
 
-                // setup position now to allow early clipping
-                fragment.setPosition(x, y);
-                if (shader.isClipped(fragment)) {
-                    continue;
-                }
-                final Vector v = new Vector(1.0, (double) x, (double) y);
+                final Vector v = new Vector(1.0, x, y);
                 final Vector bar = cMat.multiply(v);
                 // skip the fragment if outside the triangle
-                if ((bar.get(0) < -eps) || (bar.get(1) < -eps) || (bar.get(2) < -eps)) {
+                if (bar.get(0) < -eps || bar.get(1) < -eps || bar.get(2) < -eps) {
                     continue;
                 }
-                for (int i = 0; i < numAttributes; ++i) {
+                fragment.setPosition(x, y);
+                for (int i = 0; i < numAttributes; i++) {
                     // get the attributes in a vector
                     final Vector vecAtt = new Vector(v1.getAttribute(i),
-                                                    v2.getAttribute(i),
-                                                    v3.getAttribute(i));
+                                                     v2.getAttribute(i),
+                                                     v3.getAttribute(i));
                     // interpolate the attributes
                     double interpolated = bar.dot(vecAtt);
                     // for the color attribute (indices ranging from COLOR_R to COLOR_B)
                     if (i >= Fragment.COLOR_R && i <= Fragment.COLOR_B) {
                         // clamp the color between 0 and 1;
-                        interpolated = MathUtils.clamp(interpolated, 0., 1.);
+                        interpolated = MathUtils.clamp(interpolated, 0, 1);
                     }
                     fragment.setAttribute(i, interpolated);
                 }
-                shader.shade(fragment);
+                consumer.consume(fragment.clone());
             }
         }
         //>!!
