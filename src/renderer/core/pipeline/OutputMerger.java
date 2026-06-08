@@ -42,6 +42,11 @@ public class OutputMerger {
 
     public void merge(Fragment fragment, FragmentOutput out) {
 
+        // Check if fragment is clipped (outside screen bounds)
+        if (isClipped(fragment)) {
+            return;
+        }
+        
         int x = fragment.getX();
         int y = fragment.getY();
 
