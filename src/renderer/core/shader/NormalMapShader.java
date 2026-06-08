@@ -3,8 +3,6 @@ package renderer.core.shader;
 import java.awt.Color;
 
 import renderer.algebra.Vector;
-import renderer.core.pipeline.FragmentOutput;
-import renderer.core.pipeline.FragmentShader;
 
 public class NormalMapShader implements FragmentShader {
 

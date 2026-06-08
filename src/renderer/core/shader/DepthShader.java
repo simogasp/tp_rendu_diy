@@ -4,8 +4,6 @@ import java.awt.Color;
 
 import renderer.controller.ColorMapFactory;
 import renderer.controller.ColorMapFactory.Maps;
-import renderer.core.pipeline.FragmentOutput;
-import renderer.core.pipeline.FragmentShader;
 import renderer.core.shader.colormap.ColorMap;
 
 /**

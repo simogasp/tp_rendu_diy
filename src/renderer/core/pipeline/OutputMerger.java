@@ -3,6 +3,7 @@ package renderer.core.pipeline;
 import renderer.controller.ImageWrapper;
 import renderer.core.shader.DepthBuffer;
 import renderer.core.shader.Fragment;
+import renderer.core.shader.FragmentOutput;
 
 /**
  * The OutputMerger class is responsible for the final step of the rendering pipeline.

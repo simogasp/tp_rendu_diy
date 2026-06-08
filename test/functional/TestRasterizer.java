@@ -1,11 +1,11 @@
 import org.junit.Test;
 
-import renderer.core.pipeline.FragmentOutput;
-import renderer.core.pipeline.FragmentShader;
 import renderer.core.pipeline.FragmentShaderStage;
 import renderer.core.pipeline.OutputMerger;
 import renderer.core.pipeline.Rasterizer;
 import renderer.core.shader.Fragment;
+import renderer.core.shader.FragmentShader;
+import renderer.core.shader.FragmentOutput;
 import renderer.controller.ImageWrapper;
 
 /**

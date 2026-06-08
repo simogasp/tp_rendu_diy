@@ -1,6 +1,5 @@
-package renderer.core.pipeline;
+package renderer.core.shader;
 
-import renderer.core.shader.Fragment;
 import renderer.controller.ColorMapFactory.Maps;
 
 public interface FragmentShader {

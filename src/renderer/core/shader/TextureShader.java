@@ -4,8 +4,6 @@ import java.awt.Color;
 
 import renderer.algebra.MathUtils;
 import renderer.core.mesh.Texture;
-import renderer.core.pipeline.FragmentOutput;
-import renderer.core.pipeline.FragmentShader;
 
 /**
  * Simple shader that just copy the interpolated color to the screen,
