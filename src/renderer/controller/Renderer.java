@@ -12,8 +12,8 @@ import renderer.core.camera.Transformation;
 import renderer.core.light.Lighting;
 import renderer.core.mesh.Mesh;
 import renderer.core.mesh.Scene;
-import renderer.core.rasterizer.PerspectiveCorrectRasterizer;
-import renderer.core.rasterizer.Rasterizer;
+import renderer.core.pipeline.PerspectiveCorrectRasterizer;
+import renderer.core.pipeline.Rasterizer;
 import renderer.core.shader.Shader;
 import renderer.core.shader.TextureShader;
 

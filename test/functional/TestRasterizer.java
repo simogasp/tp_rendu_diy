@@ -1,8 +1,8 @@
 import org.junit.Test;
 
+import renderer.core.pipeline.Rasterizer;
 import renderer.core.shader.Fragment;
 import renderer.controller.ImageWrapper;
-import renderer.core.rasterizer.Rasterizer;
 import renderer.core.shader.Shader;
 
 /**

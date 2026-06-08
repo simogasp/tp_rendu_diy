@@ -1,4 +1,4 @@
-package renderer.core.rasterizer;
+package renderer.core.pipeline;
 
 import renderer.algebra.MathUtils;
 import renderer.algebra.Matrix;
