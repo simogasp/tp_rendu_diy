@@ -12,9 +12,12 @@ import renderer.core.camera.Transformation;
 import renderer.core.light.Lighting;
 import renderer.core.mesh.Mesh;
 import renderer.core.mesh.Scene;
+import renderer.core.pipeline.FragmentOutput;
+import renderer.core.pipeline.FragmentShader;
+import renderer.core.pipeline.FragmentShaderStage;
+import renderer.core.pipeline.OutputMerger;
 import renderer.core.pipeline.PerspectiveCorrectRasterizer;
 import renderer.core.pipeline.Rasterizer;
-import renderer.core.shader.Shader;
 import renderer.core.shader.TextureShader;
 
 /**
@@ -45,8 +48,14 @@ public final class Renderer {
     /** The rasterizer. */
     private Rasterizer rasterizer;
 
+    /** The output merger. */
+    private OutputMerger merger;
+
+    /** The fragmentShaderStage */
+    private FragmentShaderStage fragmentShaderStage;
+
     /** The shader. */
-    private Shader shader;
+    private FragmentShader shader;
 
     /** The transformation. */
     private Transformation xform;
@@ -69,6 +78,9 @@ public final class Renderer {
     /** Whether the image contains faces. */
     private boolean solidRendered;
 
+    /** Whether to use perspective-correct rasterization. */
+    private boolean usePerspectiveCorrect;
+
     /**
      * Store the last texture set.
      */
@@ -82,22 +94,14 @@ public final class Renderer {
     /**
      * A default shader that throws an exception when used.
      */
-    private static final class DefaultShader extends Shader {
+    private static final class DefaultShader implements FragmentShader {
 
-        private DefaultShader() {
-            super();
-        }
+        private DefaultShader() {}
 
         @Override
-        public void shade(final Fragment fragment) {
+        public FragmentOutput shade(final Fragment fragment) {
             throw new IllegalArgumentException("Any Shader has been set.");
         }
-
-        @Override
-        public void reset() {
-            // Nothing to reset
-        }
-
     }
 
     /**
@@ -117,13 +121,15 @@ public final class Renderer {
 
         // set a default shader that shouldn't been used.
         shader = new DefaultShader();
-        rasterizer = new Rasterizer(shader);
+        fragmentShaderStage = new FragmentShaderStage(shader, merger);
+        rasterizer = new Rasterizer(fragmentShaderStage);
 
         // draw nothing
         wiredRendered = false;
         solidRendered = false;
         lightingEnabled = false;
         normalsRendered = false;
+        usePerspectiveCorrect = false;
     }
 
     /**
@@ -207,18 +213,14 @@ public final class Renderer {
      * Sets the rasterizer with a Rasterizer.
      */
     public void setRasterizer() {
-        if (this.rasterizer instanceof PerspectiveCorrectRasterizer) {
-            this.rasterizer = new Rasterizer(shader);
-        }
+        this.usePerspectiveCorrect = false;
     }
 
     /**
      * Sets the rasterizer with a PerspectiveCorrectRasterizer.
      */
     public void setPerspectiveCorrectRasterizer() {
-        if (!(this.rasterizer instanceof PerspectiveCorrectRasterizer)) {
-            this.rasterizer = new PerspectiveCorrectRasterizer(shader);
-        }
+        this.usePerspectiveCorrect = true;
     }
 
     /**
@@ -226,9 +228,12 @@ public final class Renderer {
      *
      * @param shader the new shader.
      */
-    public void setShader(final Shader shader) {
+    public void setShader(final FragmentShader shader) {
         this.shader = shader;
-        rasterizer.setShader(shader);
+
+        this.fragmentShaderStage = new FragmentShaderStage(shader, merger);
+
+        this.rasterizer = new Rasterizer(fragmentShaderStage);
     }
 
     /**
@@ -243,8 +248,32 @@ public final class Renderer {
         // returned image
         final ImageWrapper res = new ImageWrapper(scene);
 
-        // initialize the shader with the Image Wrapper
-        shader.init(this, res);
+        merger = new OutputMerger(res);
+
+        fragmentShaderStage = new FragmentShaderStage(shader, merger);
+
+        if (usePerspectiveCorrect) {
+            rasterizer = new PerspectiveCorrectRasterizer(fragmentShaderStage);
+        } else {
+            rasterizer = new Rasterizer(fragmentShaderStage);
+        }
+
+        // Compute scene depth range and inform shader (useful for DepthShader)
+        try {
+            final Fragment[] allFragments = projectVertices();
+            if (allFragments != null && allFragments.length > 0) {
+                double minDepth = Double.POSITIVE_INFINITY;
+                double maxDepth = Double.NEGATIVE_INFINITY;
+                for (Fragment f : allFragments) {
+                    final double d = f.getDepth();
+                    if (d < minDepth) minDepth = d;
+                    if (d > maxDepth) maxDepth = d;
+                }
+                shader.setDepthRange(minDepth, maxDepth);
+            }
+        } catch (Exception e) {
+            // If anything goes wrong computing depths, continue without setting range
+        }
 
         if (vertexRendered) {
             // render vertices if needed
@@ -446,9 +475,9 @@ public final class Renderer {
      * @return whether the operation is successful
      */
     public boolean setShader(final String shaderSelected) {
-        final Optional<Shader> optionalShader = ShaderFactory.create(shaderSelected);
+        final Optional<FragmentShader> optionalShader = ShaderFactory.create(shaderSelected);
         if (optionalShader.isPresent()) {
-            final Shader newShader = optionalShader.get();
+            final FragmentShader newShader = optionalShader.get();
             setShader(newShader);
             setTexture(texture);
             setCombineWithBaseColor(combineColorState);
