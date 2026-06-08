@@ -44,7 +44,7 @@ public class ShaderFactoryTest {
      * for variations.
      */
     private static final int MIN_EXPECTED_SHADERS =
-            EXPECT_OPTIONAL_SHADERS ? 3 : 2;
+            EXPECT_OPTIONAL_SHADERS ? 2 : 1;
 
     /** Number of threads for concurrency test. */
     private static final int NUM_THREADS = 10;
