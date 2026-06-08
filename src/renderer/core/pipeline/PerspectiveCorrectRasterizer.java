@@ -5,7 +5,6 @@ import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
 import renderer.core.shader.Fragment;
-import renderer.core.shader.Shader;
 
 /**
  * The PerspectiveCorrectRasterizer class extends Rasterizer to perform
@@ -17,12 +16,12 @@ import renderer.core.shader.Shader;
 public class PerspectiveCorrectRasterizer extends Rasterizer {
 
     /**
-     * Creates a PerspectiveCorrectRasterizer with the given shader.
+     * Creates a PerspectiveCorrectRasterizer with the given fragment consumer.
      *
-     * @param shader the shader to use
+     * @param consumer the fragment consumer to use
      */
-    public PerspectiveCorrectRasterizer(Shader shader) {
-        super(shader);
+    public PerspectiveCorrectRasterizer(FragmentConsumer consumer) {
+        super(consumer);
     }
 
     /**
@@ -50,46 +49,47 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
         final int xmax = Math.max(v1.getX(), Math.max(v2.getX(), v3.getX()));
         final int ymax = Math.max(v1.getY(), Math.max(v2.getY(), v3.getY()));
 
-        Fragment fragment = new Fragment(0, 0);
+        final Fragment fragment = new Fragment(0, 0);
         final int numAttributes = fragment.getNumAttributes();
         final double eps = (new Vector(ymax - ymin, xmax - xmin)).norm() / 1e6;
 
         for (int x = xmin; x <= xmax; x++) {
             for (int y = ymin; y <= ymax; y++) {
 
-                // setup position now to allow early clipping
                 fragment.setPosition(x, y);
-                if (shader.isClipped(fragment)) {
-                    continue;
-                }
 
                 final Vector v = new Vector(1.0, (double) x, (double) y);
                 final Vector bar = cMat.multiply(v);
                 // skip the fragment if outside the triangle
-                if ((bar.get(0) < -eps) || (bar.get(1) < -eps) || (bar.get(2) < -eps)) {
+                if (bar.get(0) < -eps || bar.get(1) < -eps || bar.get(2) < -eps) {
                     continue;
                 }
 
-                // weighting factor for perspective correct interpolation
-                final double oneOverZ = bar.get(0) / v1.getDepth()
-                                        + bar.get(1) / v2.getDepth()
-                                        + bar.get(2) / v3.getDepth();
+                // perspective correction factor
+                final double w1 = bar.get(0) / v1.getDepth();
+                final double w2 = bar.get(1) / v2.getDepth();
+                final double w3 = bar.get(2) / v3.getDepth();
 
-                for (int i = 0; i < numAttributes; ++i) {
-                    final double aOverZ = bar.get(0) * v1.getAttribute(i) / v1.getDepth()
-                                        + bar.get(1) * v2.getAttribute(i) / v2.getDepth()
-                                        + bar.get(2) * v3.getAttribute(i) / v3.getDepth();
+                // weighting factor for perspective correct interpolation
+                final double oneOverZ = w1 + w2 + w3;
+
+                for (int i = 0; i < numAttributes; i++) {
+
+                    final double a1 = v1.getAttribute(i);
+                    final double a2 = v2.getAttribute(i);
+                    final double a3 = v3.getAttribute(i);
+
+                    final double aOverZ = w1 * a1 + w2 * a2 + w3 * a3;
 
                     // interpolate the attributes
                     double interpolated = aOverZ / oneOverZ;
                     // for the color attribute (indices ranging from COLOR_R to COLOR_B)
                     if (i >= Fragment.COLOR_R && i <= Fragment.COLOR_B) {
-                        // clamp the color between 0 and 1;
-                        interpolated = MathUtils.clamp(interpolated, 0., 1.);
+                        interpolated = MathUtils.clamp(interpolated, 0.0, 1.0);
                     }
                     fragment.setAttribute(i, interpolated);
                 }
-                shader.shade(fragment);
+                consumer.consume(fragment.clone());
             }
         }
     }
