@@ -275,6 +275,7 @@ def main(working_dir: str, studentify_dir: str, archive_name: str, skip_cleaning
                            "src/renderer/core/mesh/Mesh.java",
                            "src/renderer/core/mesh/Texture.java",
                            "src/renderer/core/pipeline/Rasterizer.java",
+                           "src/renderer/core/pipeline/OutputMerger.java",
                            "src/renderer/core/shader/DepthBuffer.java",
                            "src/renderer/core/shader/TextureShader.java",
                            "src/renderer/core/camera/Transformation.java",
