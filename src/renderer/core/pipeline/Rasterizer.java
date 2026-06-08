@@ -8,13 +8,13 @@ import renderer.core.shader.Fragment;
 
 /**
  * The Rasterizer class is responsible for the discretization of geometric
- * primitives
- * (edges and faces) over the screen pixel grid and generates Fragment (pixels
- * with
- * interpolated attributes). Those Fragment are then passed to a Shader object,
+ * primitives (edges and faces) over the screen pixel grid and generates Fragment 
+ * (pixels with interpolated attributes). 
+ * 
+ * Those Fragment are then passed to a FragmentConsumer object,
  * which will produce the final color of the fragment.
  *
- * @author morin, chambon, cdehais
+ * @author morin, chambon, cdehais, kieliszak
  */
 public class Rasterizer {
 
@@ -27,9 +27,9 @@ public class Rasterizer {
     protected FragmentConsumer consumer;
 
     /**
-     * Creates a Rasterizer with the given Shader.
+     * Creates a Rasterizer with the given FragmentConsumer.
      *
-     * @param shader the shader to use
+     * @param consumer the fragment consumer to use
      */
     public Rasterizer(FragmentConsumer consumer) {
         this.consumer = consumer;
