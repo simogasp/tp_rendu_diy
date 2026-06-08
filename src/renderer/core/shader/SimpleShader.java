@@ -1,25 +1,18 @@
 package renderer.core.shader;
 
+import renderer.core.pipeline.FragmentOutput;
+import renderer.core.pipeline.FragmentShader;
+
 /**
- * Simple shader that just copy the interpolated color to the screen.
+ * Simple shader that just copy the interpolated color to the screen,
+ * taking the depth of the fragment into account.
  * @author cdehais
  */
-public class SimpleShader extends Shader {
+public class SimpleShader implements FragmentShader {
 
-    /**
-     * Shade the fragment.
-     * @param fragment the fragment to shade
-     */
     @Override
-    public void shade(Fragment fragment) {
-        screen.setPixel(fragment.getX(), fragment.getY(), fragment.getColor());
-    }
+    public FragmentOutput shade(Fragment fragment) {
 
-    /**
-     * Reset the shader.
-     */
-    @Override
-    public void reset() {
-        // Nothing to reset
+        return new FragmentOutput(fragment.getColor());
     }
 }
