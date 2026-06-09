@@ -15,29 +15,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-## [v2026.1.0]
+## [v2026.1.0] 2026-06-09
 
 ### Added
 
 - added a GUI to show and control the rendering process with different options and scenes.
-- added `DepthShader` that render the object as depth map (not distributed in the student code)
-- added  `NormalShader` that render the normals of the object (not distributed in the student code)
+- added `DepthShader` that renders the object as a depth map (not distributed in the student code)
+- added  `NormalShader` that renders the normals of the object (not distributed in the student code)
 - added the class `CreateClassesDiagram` to generate the UML class diagram in plantUML format from the code
 - added Ant build file `build.xml` to have a cross-platform build system (makefile is still there)
 - added more junit tests
-- added github actions ci to build, run unit tests, generate the student version, and generate the documentation automatically on each push and pull request
+- added GitHub Actions CI to build, run unit tests, generate the student version, and generate the documentation automatically on each push and pull request
 - `ArrayBase` is now an abstract class to factorize the common code between `Matrix` and `Vector`
 
 ### Changed
 
 - reorganized the code in sub-packages: shader, rasterizer, lighting, texture, transformation, gui
-- extract the vertex rasterization from `rasterizeEdge()` in a separate method `rasterizeVertex()` (there is no need to uncomment the code now as the GUI enables to switch between wireframe and vertex rendering)
+- extract the vertex rasterization from `rasterizeEdge()` in a separate method `rasterizeVertex()` (there is no need to uncomment the code now, as the GUI enables switching between wireframe and vertex rendering)
 - `Vector` inherits from `Matrix`.
 - improved the generateStudent.py script to better check that no special markers are left in the code before generating the student archive and that the files for students are different from the original ones.
 
 ### Fixed
 
-- the light contribution in `Lighting.applyLights()` are now clamped in the range [0,1]
+- The light contribution in `Lighting.applyLights()` are now clamped in the range [0,1]
 
 ### Removed
 
