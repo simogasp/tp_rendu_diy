@@ -15,4 +15,7 @@ The python script has some option (check the help with `./generateStudent.py -h`
 - `--skip-cleaning` will keep in the working directory the folder with all the files generated for the student, so you can check them more easily.
 - `--skip-packaging` will skip the creation of the zip file.
 
-> **_NOTE:_**  The script needs to download a repository so you need to have the internet connection active.
+> [!NOTE]
+> The script needs to download a repository so you need to have the internet connection active.
+
+You can check the documentation on how to use the comment tags to hide or replace the code [on the original repository](https://github.com/simogasp/studentipy/blob/master/README.md)

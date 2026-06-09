@@ -1,9 +1,20 @@
 
-import algebra.*;
+import org.junit.Test;
+import static org.junit.Assert.fail;
+
+import renderer.algebra.Matrix;
+import renderer.algebra.SizeMismatchException;
+import renderer.algebra.Vector;
+
 
 public class TestAlgebra {
 
-    public static void test() throws Exception {
+    /**
+     * Test various algebra operations.
+     * @throws Exception
+     */
+    @Test
+    public void test() throws Exception {
 
         System.out.println("Algebra\n# Test Start");
 
@@ -12,12 +23,14 @@ public class TestAlgebra {
         v1.setName("up");
         try {
             new Vector(0);
-        } catch (Exception e) {
+            fail("Expected exception for zero size vector not thrown");
+        } catch (IllegalArgumentException e) {
             System.out.println("Wrong size exception caught OK");
         }
         try {
             new Vector("named", 0);
-        } catch (Exception e) {
+            fail("Expected exception for zero size vector not thrown");
+        } catch (IllegalArgumentException e) {
             System.out.println("Wrong size exception caught OK");
         }
 
@@ -41,14 +54,15 @@ public class TestAlgebra {
             u1 = new Vector("u1", 3);
             u2 = new Vector("u2", 4);
             u1.dot(u2);
+            fail("Size mismatch exception not thrown");
         } catch (SizeMismatchException e) {
             System.out.println("Caught exception: " + e);
         }
 
-        Vector3 r1 = new Vector3("u1", 1.0, 2.0, 3.0);
-        Vector3 r2 = new Vector3("u2", 1.0, 3.0, 0.0);
+        Vector r1 = new Vector("u1", 1.0, 2.0, 3.0);
+        Vector r2 = new Vector("u2", 1.0, 3.0, 1.0);
 
-        Vector3 r = r1.cross(r2);
+        Vector r = r1.cross(r2);
 
         System.out.println(r1);
         System.out.println(r2);
@@ -56,8 +70,8 @@ public class TestAlgebra {
         System.out.println("r1.r2 = " + r1.dot((Vector) r2) + " (as Vector)");
         System.out.println("r1 x r2 = " + r);
         System.out.println("norm(" + r.getName() + ") = " + r.norm());
-        r.normalize();
-        System.out.println("norm(" + r.getName() + ") (after ::normalize()) = " + r.norm());
+        r = r.normalize();
+        System.out.println("norm(" + r.getName() + ") (after normalize()) = " + r.norm());
 
         // -------------------------------------
         System.out.println("--\n-- Matrix tests\n--");
@@ -71,7 +85,8 @@ public class TestAlgebra {
 
         try {
             new Matrix("M2", 0, 2);
-        } catch (Exception e) {
+            fail("Expected exception for zero size matrix not thrown");
+        } catch (IllegalArgumentException e) {
             System.out.println("Wrong size exception caught OK");
         }
 
@@ -94,7 +109,7 @@ public class TestAlgebra {
         System.out.println(M);
 
         M1 = M1.transpose();
-        M1.name = "M1'";
+        M1.setName("M1'");
         System.out.println(M1);
 
         Vector u = new Vector("u", 5);
@@ -118,15 +133,4 @@ public class TestAlgebra {
 
     }
 
-    public static void main(String[] args) {
-
-        try {
-            test();
-            System.out.println("SUCCESS.");
-        } catch (Exception e) {
-            System.out.println("FAIL: " + e);
-            e.printStackTrace();
-        }
-
-    }
 }

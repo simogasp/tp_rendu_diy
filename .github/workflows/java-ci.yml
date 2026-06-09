@@ -1,0 +1,89 @@
+name: Java CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * 1"
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install make
+        run: sudo apt-get update && sudo apt-get install -y make
+
+      - name: Install ant
+        run: sudo snap install ant --stable --classic
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'adopt' # Specify the distribution
+          java-version: '11' # Specify the Java version
+
+      - name: Build with Makefile
+        run: make 
+
+      - name: Run functional tests
+        run: make func-tests
+
+      - name: Run unit tests
+        run: make unit-tests
+
+      - name: Run coverage
+        run: make coverage
+
+      # upload coverage report artifact to codecov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v6
+        with:
+          files: ./build/coverage/report.xml
+          flags: ${{ runner.os }}
+          name: ${{ runner.os }}-coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
+      
+      # upload coverage report artifact to codacy
+      - name: Upload coverage to Codacy
+        uses: codacy/codacy-coverage-reporter-action@v1.3.0
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          language: java
+          coverage-reports: ./build/coverage/report.xml
+
+      - name: Build with ant
+        run: ant compile
+
+      - name: Run functional tests with ant
+        run: ant func-tests
+   
+      - name: Run unit tests with ant
+        run: ant unit-tests
+
+      - name: Run coverage with ant
+        run: ant coverage
+
+      # - name: Checkstyle
+      #   run: ant dl-checkstyle && ant checkstyle
+
+      - name: Run doc
+        run: make doc
+
+      # test the generation of the student code with generateStudent.py
+      - name: Test student code generation
+        run: |
+          ./generateStudent.py --skip-cleaning --skip-packaging --archive-name tp_diy -w ./dist
+          cd ./dist/tp_diy/
+          make
+          make unit-tests

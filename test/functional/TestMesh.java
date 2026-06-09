@@ -1,14 +1,21 @@
+import org.junit.Test;
 
-import algebra.*;
+import renderer.algebra.Vector;
+import renderer.core.mesh.Mesh;
 
 /**
- * Test class for the Mesh class
- * 
+ * Test class for the Mesh class.
+ *
  * @author: cdehais based on gmorin, smondet
  */
 public class TestMesh {
 
-    public static void test() throws Exception {
+    /**
+     * Test loading a mesh from an OFF file.
+     * @throws Exception
+     */
+    @Test
+    public void test() throws Exception {
 
         System.out.println("OFF\n# Test Start");
 
@@ -39,7 +46,7 @@ public class TestMesh {
 
         /*
          * System.out.println("vertices after change of basis: ") ;
-         * 
+         *
          * for (int i = 0 ; i < vertices.length / 3 ; i++ ){
          * System.out.println(
          * vertices[ 3 * i + 0 ] + " " +
@@ -50,15 +57,6 @@ public class TestMesh {
          * colors [ 3 * i + 2 ]);
          * }
          */
-    }
-
-    public static void main(String[] args) {
-        try {
-            test();
-        } catch (Exception e) {
-            System.out.println("EXCEPTION: " + e);
-            e.printStackTrace();
-        }
     }
 
 }

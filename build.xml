@@ -1,0 +1,264 @@
+<project name="Renderer" default="compile" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">
+
+	<property name="java" location="src" />
+	<property name="bin" location="build" />
+	<property name="classes" location="${bin}/cls" />
+	<property name="result" location="${bin}/jar" />
+	<property name="test" location="test" />
+	<property name="testsoutput" location="${bin}/test" />
+	<property name="reports" location="${test}/reports" />
+	<property name="lib" location="lib" />
+	<property name="data" location="data" />
+	<property name="base" location="." />
+	<property name="doc" location="doc" />
+	<property name="functional" location="${test}/functional" />
+	<property name="unit" location="${test}/unit" />
+	<property name="uml" location="${doc}/uml" />
+
+	<description>
+		A "Do It Yourself" renderer.
+
+		This is a simple rendering engine made in Java.
+	</description>
+
+
+	<taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
+		classpath="${lib}/checkstyle-10.25.0-all.jar" />
+
+	<taskdef name="plantuml"
+		classname="net.sourceforge.plantuml.ant.PlantUmlTask"
+		classpath="lib/plantuml-1.2025.3.jar"
+	/>
+
+	<!-- Add JaCoCo taskdef for coverage report -->
+	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+		<classpath path="${lib}/jacocoant.jar"/>
+	</taskdef>
+
+	<path id="libraries">
+		<files includes="${lib}/hamcrest-2.2.jar" />
+		<files includes="${lib}/junit-4.13.2.jar" />
+	</path>
+
+	<target name="drawUML"
+		description="Draw the diagramme in ${uml}.">
+		<plantuml dir="${uml}"
+			overwrite="true"
+			output="${uml}"
+		>
+		</plantuml>
+	</target>
+
+	<target name="create-drawUML"
+		description="Create and draw the diagramme in ${uml}.">
+		<antcall target="createUML" />
+		<antcall target="drawUML" />
+	</target>
+
+	<target name="createUML" description="Create the PlantUML file." depends="compile">
+		<mkdir dir="${uml}" />
+		<java jar="lib/plantuml-dep-cli-1.4.0.jar"
+			fork="true"
+			failonerror="true"
+			maxmemory="128m">
+			<arg value="-b" />
+			<arg value="src/" />
+			<arg value="-dp" />
+			<arg value="^renderer.(model|gui|controller).*" />
+			<arg value="-o" />
+			<arg value="${uml}/ClassDiagramWithoutMembers.puml" />
+		</java>
+		<replace file="${uml}/ClassDiagramWithoutMembers.puml">
+			<replacetoken>@startuml</replacetoken>
+			<replacevalue>@startuml "Class diagram without members"
+				title "Class diagram without members"
+				hide empty members</replacevalue>
+		</replace>
+		<java classname="renderer.doc.CreateClassDiagram">
+			<classpath>
+				<pathelement path="${classes}" />
+			</classpath>
+			<arg value="-dp" />
+			<arg value="^renderer.(model|gui|controller).*" />
+		</java>
+	</target>
+
+
+	<!-- target to compile the sources. -->
+	<target name="compile" description="Compile sources.">
+		<mkdir dir="${classes}" />
+		<javac includeantruntime="false" srcdir="${java}" destdir="${classes}">
+			<classpath refid="libraries" />
+		</javac>
+	</target>
+
+	<!-- target to generate a jar of the project. -->
+	<target name="jar" depends="compile" description="Build a jar file of the project.">
+		<mkdir dir="${result}" />
+		<jar destfile="${result}/App.jar" basedir="${classes}">
+		</jar>
+	</target>
+
+	<!-- target to clean the repository -->
+	<target name="clean" description="Clean the directory.">
+		<delete dir="${bin}" />
+		<delete dir="${doc}" />
+		<delete dir="${reports}" />
+	</target>
+
+	<!-- target to run the application. -->
+	<target name="run" depends="compile" description="Run the application.">
+		<java classname="renderer.gui.GUIApp">
+			<classpath>
+				<pathelement path="${classes}" />
+			</classpath>
+			<arg value="-Djava.security.manager=allow" />
+		</java>
+		<input message="Press Return key to exit ..." />
+	</target>
+
+	<!-- target to generate javadoc. -->
+	<target name="doc" depends="clean-doc" description="Update the doc, create if doesn't exists.">
+		<mkdir dir="${doc}" />
+		<javadoc destdir="${doc}" sourcepath="${java}">
+		</javadoc>
+	</target>
+
+
+	<!-- target to clean javadoc. -->
+	<target name="clean-doc" description="Clean the doc directory.">
+		<delete dir="${doc}" />
+	</target>
+
+	<!-- target to compile tests. -->
+	<target name="compile-test" depends="compile" description="Compile Tests files.">
+		<mkdir dir="${testsoutput}" />
+		<mkdir dir="${reports}" />
+		<javac includeantruntime="false" srcdir="${test}" destdir="${testsoutput}">
+			<classpath>
+				<files includes="${lib}/hamcrest-2.2.jar" />
+				<files includes="${lib}/junit-4.13.2.jar" />
+				<pathelement path="${classes}" />
+			</classpath>
+		</javac>
+	</target>
+
+	<!-- target to run functional tests. -->
+	<target
+		name="func-tests" depends="compile-test"
+		description="Run Functional Test. Writes the result in tests/reports.">
+
+		<echo message="Running functional tests ..." />
+
+		<junit printsummary="yes" fork="yes" haltonfailure="yes">
+			<classpath>
+				<files includes="${lib}/hamcrest-2.2.jar" />
+				<files includes="${lib}/junit-4.13.2.jar" />
+				<pathelement path="${classes}" />
+				<pathelement path="${testsoutput}" />
+			</classpath>
+			<formatter type="plain" />
+			<batchtest fork="yes" todir="${reports}">
+				<fileset dir="${functional}" includes="**/*Test.java" />
+			</batchtest>
+		</junit>
+	</target>
+
+	<!-- target to run unit tests. -->
+	<target
+		name="unit-tests" depends="compile-test"
+		description="Run units Tests. Writes the results in tests/reports.">
+
+		<echo message="Running unit tests ..." />
+
+
+		<junit printsummary="yes" fork="yes" haltonfailure="yes">
+			<classpath>
+				<files includes="${lib}/hamcrest-2.2.jar" />
+				<files includes="${lib}/junit-4.13.2.jar" />
+				<pathelement path="${classes}" />
+				<pathelement path="${testsoutput}" />
+			</classpath>
+			<modulepath>
+				<pathelement path="${unit}:${classes}" />
+			</modulepath>
+			<formatter type="plain" />
+			<batchtest fork="yes" todir="${reports}">
+				<fileset dir="${unit}" includes="**/*Test.java" />
+			</batchtest>
+		</junit>
+
+	</target>
+
+	<!-- Target to run both test -->
+	<target name="test" description="Run tests.">
+		<antcall target="func-tests" />
+		<antcall target="unit-tests" />
+	</target>
+
+
+	<!-- Checkstyle part. -->
+	<!-- Download it with this target. -->
+	<target name="dl-checkstyle" description="Download a checkstyle jar in lib.">
+		<get
+			src="https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.25.0/checkstyle-10.25.0-all.jar"
+			dest="${lib}/checkstyle-10.25.0-all.jar" />
+	</target>
+
+	<!-- Execution of checkstyle -->
+	<target name="checkstyle" description="Make a CheckStyle review.">
+		<checkstyle config="checkstyle.xml">
+			<fileset dir="${java}" />
+			<formatter type="plain" />
+		</checkstyle>
+	</target>
+
+	<!-- Coverage target -->
+	<target name="coverage" depends="compile-test" description="Run tests with coverage">
+		<mkdir dir="${bin}/coverage"/>
+		
+		<!-- Run all tests with JaCoCo agent -->
+		<jacoco:coverage destfile="${bin}/coverage/jacoco.exec">
+			<junit printsummary="yes" fork="yes" haltonfailure="no" failureproperty="tests.failed">
+				<classpath>
+					<files includes="${lib}/hamcrest-2.2.jar" />
+					<files includes="${lib}/junit-4.13.2.jar" />
+					<pathelement path="${classes}" />
+					<pathelement path="${testsoutput}" />
+				</classpath>
+				<formatter type="plain" />
+					
+				<!-- Run unit tests -->
+				<batchtest fork="yes" todir="${reports}">
+					<fileset dir="${unit}" includes="**/*Test.java" />
+				</batchtest>
+			</junit>
+		</jacoco:coverage>
+		
+		<!-- Generate HTML report -->
+		<jacoco:report>
+			<executiondata>
+				<file file="${bin}/coverage/jacoco.exec"/>
+			</executiondata>
+			
+			<structure name="Renderer Project">
+				<classfiles>
+					<fileset dir="${classes}"/>
+				</classfiles>
+				<sourcefiles encoding="UTF-8">
+					<fileset dir="${java}"/>
+				</sourcefiles>
+			</structure>
+			
+			<html destdir="${bin}/coverage/report"/>
+			<xml destfile="${bin}/coverage/report.xml"/>
+			<csv destfile="${bin}/coverage/report.csv"/>
+		</jacoco:report>
+		
+		<echo message="Coverage report generated at: ${bin}/coverage/report/index.html"/>
+		
+		<!-- Fail the build if tests failed -->
+		<fail if="tests.failed" message="Some tests failed. Check the reports."/>
+	</target>
+
+</project>
