@@ -159,6 +159,10 @@ public class MenuPanel extends JPanel {
      */
     private final JCheckBox lightingCheckBox;
     /**
+     * The wireframe-on-solid option check box.
+     */
+    private final JCheckBox drawWireframeOnSolidCheckBox;
+    /**
      * The combine texture with color check box.
      */
     private final JCheckBox combineColorCheckBox;
@@ -298,6 +302,9 @@ public class MenuPanel extends JPanel {
 
         // check box to enable the lighting
         lightingCheckBox = new JCheckBox("Lighting");
+
+        // check box to draw the wireframe on top of solid
+        drawWireframeOnSolidCheckBox = new JCheckBox("\"Solid\" Wireframe");
 
         // check box to combine texture and origin color
         combineColorCheckBox = new JCheckBox("Combine color with texture");
@@ -595,6 +602,17 @@ public class MenuPanel extends JPanel {
         constraints.gridy++;
         add(lightingCheckBox, constraints);
 
+        drawWireframeOnSolidCheckBox.addItemListener(new ItemListener() {
+            public void itemStateChanged(final ItemEvent e) {
+                render.setSolidWiredRendered(drawWireframeOnSolidCheckBox.isSelected());
+                updateRender();
+            }
+        });
+
+        drawWireframeOnSolidCheckBox.setMargin(insetsCheckBox);
+        constraints.gridy++;
+        add(drawWireframeOnSolidCheckBox, constraints);
+
         combineColorCheckBox.addItemListener(e -> {
             render.setCombineWithBaseColor(combineColorCheckBox.isSelected());
             updateRender();
@@ -616,6 +634,7 @@ public class MenuPanel extends JPanel {
         shaderComboBox.setSelectedItem("SimpleShader");
         textureComboBox.setSelectedItem("brick.jpg");
         drawVertexRadio.setSelected(SELECTED);
+        drawWireframeOnSolidCheckBox.setSelected(!SELECTED);
     }
 
     /**

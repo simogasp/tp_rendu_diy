@@ -12,6 +12,8 @@ public class DepthBuffer {
      */
     private Matrix buffer;
 
+    private double epsilon = 0.1;
+
     /**
      * Constructs a DepthBuffer of size width x height.
      * The buffer is initially cleared.
@@ -51,8 +53,8 @@ public class DepthBuffer {
      */
     public boolean testFragment(Fragment f) {
         if (isWithinBounds(f)) {
-            return (buffer.get(f.getY(), f.getX()) > f.getDepth()); //++ // TODO
-            //++ return false;
+            return (buffer.get(f.getY(), f.getX()) >= f.getDepth()); //++ // TODO
+            //++ return true;
         } else {
             return false;
         }

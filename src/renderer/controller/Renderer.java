@@ -79,6 +79,9 @@ public final class Renderer {
     /** Whether the image contains faces. */
     private boolean solidRendered;
 
+    /** Whether to render the wireframe in solid or non-solid mode */
+    private boolean solidWiredRendered;
+
     /** Whether to use perspective-correct rasterization. */
     private boolean usePerspectiveCorrect;
 
@@ -290,13 +293,20 @@ public final class Renderer {
         }
 
         if (wiredRendered) {
-            // render edges if needed
-            renderWireframe();
-            renderVertices();
+            if(!solidWiredRendered) {
+                // render edges if needed
+                renderWireframe();
+                renderVertices();
+            } else {
+                renderSolid(true);
+                renderWireframe();
+                renderVertices();
+            }
         }
+
         if (solidRendered) {
             // render faces if needed
-            renderSolid();
+            renderSolid(false);
         }
 
         // render the normals if needed
@@ -342,6 +352,8 @@ public final class Renderer {
                 colors[3 * i + 1],
                 colors[3 * i + 2]
             );
+
+            fragments[i].setAttribute(Fragment.COLOR_ALPHA, 1.0);
         }
 
         return fragments;
@@ -373,6 +385,15 @@ public final class Renderer {
      */
     public void setWiredRendered(final boolean wiredRendered) {
         this.wiredRendered = wiredRendered;
+    }
+
+    /**
+     * Sets whether the wireframe should be rendered on top of solid.
+     *
+     * @param solidWiredRendered the new value
+     */
+    public void setSolidWiredRendered(final boolean solidWiredRendered) {
+        this.solidWiredRendered = solidWiredRendered;
     }
 
     /**
@@ -452,7 +473,7 @@ public final class Renderer {
      *
      * @throws SizeMismatchException if the size of the fragments do not match
      */
-    private void renderSolid()
+    private void renderSolid(boolean onlyDepth)
             throws SizeMismatchException {
         final Fragment[] fragments = projectVertices();
         final int[] faces = mesh.getFaces();
@@ -462,7 +483,7 @@ public final class Renderer {
             final Fragment v2 = fragments[faces[i + 1]];
             final Fragment v3 = fragments[faces[i + 2]];
 
-            rasterizer.rasterizeFace(v1, v2, v3);
+            rasterizer.rasterizeFace(v1, v2, v3, onlyDepth);
         }
     }
 

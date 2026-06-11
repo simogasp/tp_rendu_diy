@@ -26,7 +26,7 @@ public class Fragment {
     private int numAttributes;
 
     /** The number of attributes of the Fragment. */
-    private static final int NUM_ATTRIBUTES = 12;
+    private static final int NUM_ATTRIBUTES = 13;
 
     /**
      * attributes placement:
@@ -46,22 +46,24 @@ public class Fragment {
     public static final int COLOR_G = 2;
     /** the blue component of the color. */
     public static final int COLOR_B = 3;
+    /** the alpha component of the color */
+    public static final int COLOR_ALPHA = 4;
     /** the x component of the normal. */
-    public static final int NORMAL_X = 4;
+    public static final int NORMAL_X = 5;
     /** the y component of the normal. */
-    public static final int NORMAL_Y = 5;
+    public static final int NORMAL_Y = 6;
     /** the z component of the normal. */
-    public static final int NORMAL_Z = 6;
+    public static final int NORMAL_Z = 7;
     /** the u texture coordinate. */
-    public static final int TEXTURE_U = 7;
+    public static final int TEXTURE_U = 8;
     /** the v texture coordinate. */
-    public static final int TEXTURE_V = 8;
+    public static final int TEXTURE_V = 9;
     /** the world coordinate x. */
-    public static final int WORLD_X = 9;
+    public static final int WORLD_X = 10;
     /** the world coordinate y. */
-    public static final int WORLD_Y = 10;
+    public static final int WORLD_Y = 11;
     /** the world coordinate z. */
-    public static final int WORLD_Z = 11;
+    public static final int WORLD_Z = 12;
 
     /** maximum value for the color. */
     private static final double MAX_PIX_VAL = 255;
@@ -171,8 +173,8 @@ public class Fragment {
      */
     public Vector getNormal() {
         return new Vector(attributes[NORMAL_X],
-                            attributes[NORMAL_Y],
-                            attributes[NORMAL_Z]);
+                          attributes[NORMAL_Y],
+                          attributes[NORMAL_Z]);
     }
 
     /**

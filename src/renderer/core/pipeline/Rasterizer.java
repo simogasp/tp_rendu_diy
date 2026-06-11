@@ -151,7 +151,7 @@ public class Rasterizer {
      * @param v3 the third vertex of the triangle
      * @throws SizeMismatchException if the size of the Fragment is not correct.
      */
-    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3)
+    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3, boolean onlyDepth)
             throws SizeMismatchException {
 
         // early exit if the triangle is too small
@@ -184,19 +184,29 @@ public class Rasterizer {
                     continue;
                 }
                 fragment.setPosition(x, y);
-                for (int i = 0; i < numAttributes; i++) {
-                    // get the attributes in a vector
-                    final Vector vecAtt = new Vector(v1.getAttribute(i),
-                                                     v2.getAttribute(i),
-                                                     v3.getAttribute(i));
-                    // interpolate the attributes
-                    double interpolated = bar.dot(vecAtt);
-                    // for the color attribute (indices ranging from COLOR_R to COLOR_B)
-                    if (i >= Fragment.COLOR_R && i <= Fragment.COLOR_B) {
-                        // clamp the color between 0 and 1;
-                        interpolated = MathUtils.clamp(interpolated, 0, 1);
+                if(!onlyDepth) {
+                    for (int i = 0; i < numAttributes; i++) {
+                        // get the attributes in a vector
+                        final Vector vecAtt = new Vector(v1.getAttribute(i),
+                                                        v2.getAttribute(i),
+                                                        v3.getAttribute(i));
+                        // interpolate the attributes
+                        double interpolated = bar.dot(vecAtt);
+                        // for the color attribute (indices ranging from COLOR_R to COLOR_B)
+                        if (i >= Fragment.COLOR_R && i <= Fragment.COLOR_ALPHA) {
+                            // clamp the color between 0 and 1;
+                            interpolated = MathUtils.clamp(interpolated, 0, 1);
+                        }
+                        fragment.setAttribute(i, interpolated);
                     }
-                    fragment.setAttribute(i, interpolated);
+                } else {
+                    final double bias = 1.01;
+
+                    final Vector vecAtt = new Vector(v1.getAttribute(Fragment.DEPTH),
+                                                     v2.getAttribute(Fragment.DEPTH),
+                                                     v3.getAttribute(Fragment.DEPTH));
+                    double interpolated = bar.dot(vecAtt);
+                    fragment.setAttribute(Fragment.DEPTH, interpolated * bias);
                 }
                 consumer.consume(fragment.clone());
             }

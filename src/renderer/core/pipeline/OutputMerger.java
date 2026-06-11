@@ -52,10 +52,14 @@ public class OutputMerger {
         int y = fragment.getY();
 
         //++ // TODO: Test depth and write the fragment color to the screen only if it is visible
-        if (depth.testFragment(fragment)) { //!!
-            screen.setRGB(x, y, out.color().getRGB()); //++ screen.setRGB(x, y, out.color().getRGB());
-            depth.writeFragment(fragment); //!!
-        } //!!
+        //++ screen.setRGB(x, y, out.color().getRGB());
+        //<!!
+        if (depth.testFragment(fragment)) { 
+            if(fragment.getAttribute(Fragment.COLOR_ALPHA) > 0.0d) {
+                screen.setRGB(x, y, out.color().getRGB()); 
+            }
+            depth.writeFragment(fragment); 
+        } //>!!
     }
 
     /**
