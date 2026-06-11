@@ -293,13 +293,12 @@ public final class Renderer {
         }
 
         if (wiredRendered) {
+            // render edges if needed
+            renderWireframe(solidWiredRendered);
             if(!solidWiredRendered) {
-                // render edges if needed
-                renderWireframe();
-                renderVertices();
-            } else {
-                renderSolid(true);
-                renderWireframe();
+                // only render the vertices id the "Solid Wireframe" mode
+                // isn't active : if it is, the "right" vertices are rendered
+                // by the renderWireframe method
                 renderVertices();
             }
         }
@@ -445,15 +444,32 @@ public final class Renderer {
     /**
      * Renders the wireframe of the mesh.
      */
-    private void renderWireframe() {
+    private void renderWireframe(boolean solidWireframe) {
         final Fragment[] fragment = projectVertices();
         final int[] faces = mesh.getFaces();
 
         for (int i = 0; i < 3 * mesh.getNumFaces(); i += 3) {
+            if(solidWireframe) {
+                final Fragment v1 = fragment[faces[i]];
+                final Fragment v2 = fragment[faces[i + 1]];
+                final Fragment v3 = fragment[faces[i + 2]];
+
+                double area = Rasterizer.triangleArea(v1, v2, v3);
+                final double eps = 1e-6;
+
+                if(area >= -eps) {
+                    continue;
+                }
+            }
             for (int j = 0; j < 3; j++) {
                 final Fragment v1 = fragment[faces[i + j]];
                 final Fragment v2 = fragment[faces[i + ((j + 1) % 3)]];
                 rasterizer.rasterizeEdge(v1, v2);
+
+                if(solidWireframe) {
+                    rasterizer.rasterizeVertex(v1);
+                    rasterizer.rasterizeVertex(v2);
+                }
             }
         }
     }

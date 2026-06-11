@@ -102,7 +102,7 @@ public class Rasterizer {
      * @param v3 the third vertex of the triangle
      * @return the signed area of the triangle
      */
-    static double triangleArea(Fragment v1, Fragment v2, Fragment v3) {
+    public static double triangleArea(Fragment v1, Fragment v2, Fragment v3) {
         return (double) v2.getX() * v3.getY() - v2.getY() * v3.getX()
                 + v3.getX() * v1.getY() - v1.getX() * v3.getY()
                 + v1.getX() * v2.getY() - v2.getX() * v1.getY();
@@ -200,7 +200,7 @@ public class Rasterizer {
                         fragment.setAttribute(i, interpolated);
                     }
                 } else {
-                    final double bias = 1.01;
+                    final double bias = 1.5;
 
                     final Vector vecAtt = new Vector(v1.getAttribute(Fragment.DEPTH),
                                                      v2.getAttribute(Fragment.DEPTH),
