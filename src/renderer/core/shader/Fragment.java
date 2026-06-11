@@ -26,7 +26,7 @@ public class Fragment {
     private int numAttributes;
 
     /** The number of attributes of the Fragment. */
-    private static final int NUM_ATTRIBUTES = 9;
+    private static final int NUM_ATTRIBUTES = 12;
 
     /**
      * attributes placement:
@@ -56,6 +56,12 @@ public class Fragment {
     public static final int TEXTURE_U = 7;
     /** the v texture coordinate. */
     public static final int TEXTURE_V = 8;
+    /** the world coordinate x. */
+    public static final int WORLD_X = 9;
+    /** the world coordinate y. */
+    public static final int WORLD_Y = 10;
+    /** the world coordinate z. */
+    public static final int WORLD_Z = 11;
 
     /** maximum value for the color. */
     private static final double MAX_PIX_VAL = 255;
@@ -189,6 +195,28 @@ public class Fragment {
         attributes[NORMAL_X] = nx;
         attributes[NORMAL_Y] = ny;
         attributes[NORMAL_Z] = nz;
+    }
+
+    public Vector getWorldPosition() {
+        return new Vector(attributes[WORLD_X],
+                          attributes[WORLD_Y],
+                          attributes[WORLD_Z]);
+    }
+
+    public void setWorldPosition(double wx, double wy, double wz) {
+        attributes[WORLD_X] = wx;
+        attributes[WORLD_Y] = wy;
+        attributes[WORLD_Z] = wz;
+    }
+
+    public void setWorldPosition(Vector worldPos) {
+        if(worldPos.size() != 3) {
+            throw new RuntimeException("Wrong size of vector to set world position !");
+        }
+
+        attributes[WORLD_X] = worldPos.get(0);
+        attributes[WORLD_Y] = worldPos.get(1);
+        attributes[WORLD_Z] = worldPos.get(2);
     }
 
     /**

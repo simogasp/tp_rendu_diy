@@ -9,6 +9,7 @@ import renderer.algebra.Vector;
 import renderer.controller.ColorMapFactory.Maps;
 import renderer.core.shader.Fragment;
 import renderer.core.shader.FragmentShader;
+import renderer.core.shader.PhongShader;
 import renderer.core.shader.FragmentOutput;
 import renderer.core.camera.Transformation;
 import renderer.core.light.Lighting;
@@ -174,6 +175,14 @@ public final class Renderer {
      */
     public void setLightingEnabled(final boolean enabled) {
         lightingEnabled = enabled;
+
+        if(shader instanceof PhongShader) {
+            if(lightingEnabled) {
+                ((PhongShader)shader).enableLighting();
+            } else {
+                ((PhongShader)shader).disableLighting();
+            }
+        }
     }
 
     /**
@@ -320,6 +329,7 @@ public final class Renderer {
             fragments[i] = new Fragment(x, y);
             fragments[i].setDepth(pVertex.get(2));
             fragments[i].setNormal(pNormal);
+            fragments[i].setWorldPosition(vertices[i]);
 
             final double[] texCoords = mesh.getTextureCoordinates();
             if (texCoords != null) {
@@ -327,23 +337,11 @@ public final class Renderer {
                 fragments[i].setAttribute(8, texCoords[2 * i + 1]);
             }
 
-            if (!lightingEnabled) {
-                fragments[i].setColor(
-                        colors[3 * i],
-                        colors[3 * i + 1],
-                        colors[3 * i + 2]);
-            } else {
-                final double[] color = new double[3];
-                color[0] = colors[3 * i];
-                color[1] = colors[3 * i + 1];
-                color[2] = colors[3 * i + 2];
-                final double[] material = scene.getMaterial();
-                final double[] litColor = lighting.applyLights(
-                        vertices[i].getSubVector(0, 3), pNormal, color,
-                        scene.getCameraPosition(),
-                        material[0], material[1], material[2], material[3]);
-                fragments[i].setColor(litColor[0], litColor[1], litColor[2]);
-            }
+            fragments[i].setColor(
+                colors[3 * i],
+                colors[3 * i + 1],
+                colors[3 * i + 2]
+            );
         }
 
         return fragments;
@@ -480,6 +478,7 @@ public final class Renderer {
             final FragmentShader newShader = optionalShader.get();
             setShader(newShader);
             setTexture(texture);
+            initPhong();
             setCombineWithBaseColor(combineColorState);
             return true;
         } else {
@@ -514,6 +513,19 @@ public final class Renderer {
             return true;
         }
         return ((TextureShader) shader).setTexture(path);
+    }
+
+
+    /**
+     * Initialize the Phong Shader.
+     *
+     * @return whether the operation as been correctly made.
+     */
+    public boolean initPhong() {
+        if (!(shader instanceof PhongShader)) {
+            return true;
+        }
+        return ((PhongShader) shader).init(this.scene, this.lighting);
     }
 
     /**

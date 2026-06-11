@@ -47,4 +47,10 @@ public class Interpolation {
         }
     }
 
+    public static void interpolate3() {
+
+        
+
+    }
+
 }
