@@ -12,8 +12,6 @@ public class DepthBuffer {
      */
     private Matrix buffer;
 
-    private double epsilon = 0.1;
-
     /**
      * Constructs a DepthBuffer of size width x height.
      * The buffer is initially cleared.
