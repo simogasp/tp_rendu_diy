@@ -29,6 +29,7 @@ public class SimpleVertexShader implements VertexShader {
         out.normal = in.normal;
 
         out.color = in.color;
+        out.alpha = 1.0;
 
         out.u = in.u;
         out.v = in.v;
