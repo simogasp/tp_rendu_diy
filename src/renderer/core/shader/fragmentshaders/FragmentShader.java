@@ -1,4 +1,4 @@
-package renderer.core.shader;
+package renderer.core.shader.fragmentshaders;
 
 import renderer.controller.ColorMapFactory.Maps;
 

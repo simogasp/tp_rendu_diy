@@ -2,6 +2,7 @@ package renderer.core.shader;
 
 import renderer.algebra.MathUtils;
 import renderer.algebra.Matrix;
+import renderer.core.shader.fragmentshaders.Fragment;
 
 /**
  * The DepthBuffer class implements a DepthBuffer and its pass test.

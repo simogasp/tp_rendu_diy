@@ -4,10 +4,10 @@ import renderer.algebra.Vector;
 import renderer.core.pipeline.FragmentShaderStage;
 import renderer.core.pipeline.OutputMerger;
 import renderer.core.pipeline.Rasterizer;
-import renderer.core.pipeline.VertexOutput;
-import renderer.core.shader.Fragment;
-import renderer.core.shader.FragmentShader;
-import renderer.core.shader.FragmentOutput;
+import renderer.core.shader.vertexshaders.VertexOutput;
+import renderer.core.shader.fragmentshaders.Fragment;
+import renderer.core.shader.fragmentshaders.FragmentOutput;
+import renderer.core.shader.fragmentshaders.FragmentShader;
 import renderer.controller.ImageWrapper;
 
 /**

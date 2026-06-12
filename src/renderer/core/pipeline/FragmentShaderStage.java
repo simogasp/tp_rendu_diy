@@ -1,8 +1,8 @@
 package renderer.core.pipeline;
 
-import renderer.core.shader.Fragment;
-import renderer.core.shader.FragmentShader;
-import renderer.core.shader.FragmentOutput;
+import renderer.core.shader.fragmentshaders.Fragment;
+import renderer.core.shader.fragmentshaders.FragmentOutput;
+import renderer.core.shader.fragmentshaders.FragmentShader;
 
 public class FragmentShaderStage implements FragmentConsumer {
 

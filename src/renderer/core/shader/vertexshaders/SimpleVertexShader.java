@@ -1,10 +1,7 @@
-package renderer.core.shader;
+package renderer.core.shader.vertexshaders;
 
 import renderer.algebra.Vector;
 import renderer.core.camera.Transformation;
-import renderer.core.pipeline.VertexInput;
-import renderer.core.pipeline.VertexOutput;
-import renderer.core.pipeline.VertexShader;
 
 public class SimpleVertexShader implements VertexShader {
 

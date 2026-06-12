@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import renderer.controller.ImageWrapper;
 import renderer.core.mesh.Scene;
-import renderer.core.shader.Fragment;
+import renderer.core.shader.fragmentshaders.Fragment;
 
 /**
  * Exhaustive test suite for the ImageWrapper class.

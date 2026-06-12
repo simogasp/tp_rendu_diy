@@ -1,4 +1,4 @@
-package renderer.core.pipeline;
+package renderer.core.shader.vertexshaders;
 
 public interface VertexShader {
     

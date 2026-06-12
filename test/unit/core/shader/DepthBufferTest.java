@@ -9,7 +9,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import renderer.core.shader.DepthBuffer;
-import renderer.core.shader.Fragment;
+import renderer.core.shader.fragmentshaders.Fragment;
 
 /**
  * Unit tests for the DepthBuffer class.

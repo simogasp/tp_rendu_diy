@@ -6,11 +6,8 @@ import java.util.Optional;
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
 import renderer.controller.ColorMapFactory.Maps;
-import renderer.core.shader.Fragment;
-import renderer.core.shader.FragmentShader;
-import renderer.core.shader.PhongShader;
-import renderer.core.shader.SimpleVertexShader;
-import renderer.core.shader.FragmentOutput;
+import renderer.core.shader.fragmentshaders.PhongShader;
+import renderer.core.shader.vertexshaders.SimpleVertexShader;
 import renderer.core.camera.Transformation;
 import renderer.core.light.Lighting;
 import renderer.core.mesh.Mesh;
@@ -19,10 +16,13 @@ import renderer.core.pipeline.FragmentShaderStage;
 import renderer.core.pipeline.OutputMerger;
 import renderer.core.pipeline.PerspectiveCorrectRasterizer;
 import renderer.core.pipeline.Rasterizer;
-import renderer.core.pipeline.VertexInput;
-import renderer.core.pipeline.VertexOutput;
-import renderer.core.pipeline.VertexShader;
-import renderer.core.shader.TextureShader;
+import renderer.core.shader.vertexshaders.VertexInput;
+import renderer.core.shader.vertexshaders.VertexOutput;
+import renderer.core.shader.vertexshaders.VertexShader;
+import renderer.core.shader.fragmentshaders.TextureShader;
+import renderer.core.shader.fragmentshaders.Fragment;
+import renderer.core.shader.fragmentshaders.FragmentOutput;
+import renderer.core.shader.fragmentshaders.FragmentShader;
 
 /**
  * The Renderer class drives the rendering pipeline: read in a scene, projects

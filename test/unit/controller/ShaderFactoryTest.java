@@ -16,9 +16,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import renderer.controller.ShaderFactory;
-import renderer.core.shader.FragmentShader;
-import renderer.core.shader.SimpleShader;
-import renderer.core.shader.TextureShader;
+import renderer.core.shader.fragmentshaders.FragmentShader;
+import renderer.core.shader.fragmentshaders.SimpleShader;
+import renderer.core.shader.fragmentshaders.TextureShader;
 
 /**
  * Exhaustive test suite for the ShaderFactory class.

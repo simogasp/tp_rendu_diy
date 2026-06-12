@@ -2,8 +2,8 @@ package renderer.utils;
 
 import renderer.algebra.MathUtils;
 import renderer.algebra.Vector;
-import renderer.core.pipeline.VertexOutput;
-import renderer.core.shader.Fragment;
+import renderer.core.shader.vertexshaders.VertexOutput;
+import renderer.core.shader.fragmentshaders.Fragment;
 
 public class Interpolation {
     

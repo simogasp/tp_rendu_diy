@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import java.util.Arrays;
-import renderer.core.shader.FragmentShader;
+import renderer.core.shader.fragmentshaders.FragmentShader;
 
 @SuppressWarnings("unchecked")
 public final class ShaderFactory {

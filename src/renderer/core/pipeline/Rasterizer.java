@@ -2,9 +2,9 @@ package renderer.core.pipeline;
 
 import renderer.algebra.Matrix;
 import renderer.algebra.Vector;
-
+import renderer.core.shader.fragmentshaders.Fragment;
+import renderer.core.shader.vertexshaders.VertexOutput;
 import renderer.algebra.SizeMismatchException;
-import renderer.core.shader.Fragment;
 import renderer.utils.Interpolation;
 import renderer.utils.LinearInterpolator;
 import renderer.utils.AttributeInterpolator;
