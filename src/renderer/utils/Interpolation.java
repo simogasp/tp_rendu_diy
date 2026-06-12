@@ -72,6 +72,7 @@ public class Interpolation {
         double a1 = v1.alpha;
         double a2 = v2.alpha;
         interpolated = MathUtils.clamp((1.0 - alpha) * a1 + alpha * a2, 0, 1);
+        f.setAttribute(Fragment.COLOR_ALPHA, interpolated);
 
         // Interpolate the UV coordinates
         interpolated = (1.0 - alpha) * v1.u + alpha * v2.u;
