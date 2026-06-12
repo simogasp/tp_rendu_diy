@@ -3,9 +3,6 @@ package renderer.core.pipeline;
 import renderer.algebra.Matrix;
 import renderer.algebra.Vector;
 
-import javax.naming.directory.AttributeInUseException;
-
-import renderer.algebra.MathUtils;
 import renderer.algebra.SizeMismatchException;
 import renderer.core.shader.Fragment;
 import renderer.utils.Interpolation;
