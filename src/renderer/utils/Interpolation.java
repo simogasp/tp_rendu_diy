@@ -91,9 +91,57 @@ public class Interpolation {
      * @param v2 the third vertex of the triangle
      * @param f  the fragment to interpolate
      */
-    public static void interpolate3(VertexOutput v1, VertexOutput v2, VertexOutput v3, Fragment f) {
+    public static void interpolate3(VertexOutput v1, VertexOutput v2, VertexOutput v3, Fragment f, 
+                                    double w1, double w2, double w3, AttributeInterpolator interp) {
 
+        // Interpolate the depth of the fragment
+        setAttribute(f, Fragment.DEPTH, v1.depth, v2.depth, v3.depth, w1, w2, w3, interp);
         
+        // Interpolate the normals of the fragment
+        for (int i = 0; i < 3; i++) {
+            setAttribute(f, Fragment.NORMAL_X + i,
+                    v1.normal.get(i),
+                    v2.normal.get(i),
+                    v3.normal.get(i),
+                    w1, w2, w3, interp);
+        }
 
+        // Interpolate the color of the fragment
+        double[] c1 = v1.color;
+        double[] c2 = v2.color;
+        double[] c3 = v3.color;
+
+        for (int i = 0; i < 3; i++) {
+            double a1 = c1[i];
+            double a2 = c2[i];
+            double a3 = c3[i];
+
+            double value = interp.interpolate(a1, a2, a3, w1, w2, w3);
+            f.setAttribute(Fragment.COLOR_R + i,
+                    MathUtils.clamp(value, 0, 1));
+        }
+
+        // Interpolate the alpha value of the fragment
+        double a1 = v1.alpha;
+        double a2 = v2.alpha;
+        double a3 = v3.alpha;
+
+        double value = interp.interpolate(a1, a2, a3, w1, w2, w3);
+        f.setAttribute(Fragment.COLOR_ALPHA, MathUtils.clamp(value, 0, 1));
+    
+
+        // Interpolate the UV coordinates of the fragment
+        setAttribute(f, Fragment.TEXTURE_U, v1.u, v2.u, v3.u, w1, w2, w3, interp);
+        setAttribute(f, Fragment.TEXTURE_V, v1.v, v2.v, v3.v, w1, w2, w3, interp);
+    }
+
+    private static void setAttribute(Fragment f,
+                          int baseIndex,
+                          double a1, double a2, double a3,
+                          double w1, double w2, double w3,
+                          AttributeInterpolator interp) {
+
+        double value = interp.interpolate(a1, a2, a3, w1, w2, w3);
+        f.setAttribute(baseIndex, value);
     }
 }
