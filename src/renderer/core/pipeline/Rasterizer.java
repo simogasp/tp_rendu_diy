@@ -45,19 +45,43 @@ public class Rasterizer {
     /**
      * Rasterizes a vertex on the screen.
      *
-     * @param v the fragment drawn
+     * @param v the vertex drawn
      */
-    public void rasterizeVertex(final Fragment v) {
+    public void rasterizeVertex(final VertexOutput v) {
 
-        int x1 = v.getX();
-        int y1 = v.getY();
+        int x1 = v.x;
+        int y1 = v.y;
 
         // For now : just display the vertices
-        Fragment f = v.clone();;
-        final int size = 2;
-        for (int i = 0; i < v.getNumAttributes(); i++) {
-            f.setAttribute(i, v.getAttribute(i));
+        Fragment f = new Fragment(x1, y1);
+
+        // Set the depth of the fragment
+        f.setAttribute(Fragment.DEPTH, v.depth);
+
+        // Set the normal of the fragment
+        for(int i = 0 ; i < 3 ; i++) {
+            f.setAttribute(Fragment.NORMAL_X + i, v.normal.get(i));
         }
+
+        // Set the world position of the fragment
+        for(int i = 0 ; i < 3 ; i++) {
+            f.setAttribute(Fragment.WORLD_X + i, v.worldPosition.get(i));
+        }
+
+        // Set the color of the fragment
+        for(int i = 0 ; i < 3 ; i++) {
+            f.setAttribute(Fragment.COLOR_R + i, v.color[i]);
+        }
+
+        // Set the alpha value of the fragment
+        f.setAttribute(Fragment.COLOR_ALPHA, v.alpha);
+
+        // Set the UV coordinates of the fragment
+        f.setAttribute(Fragment.TEXTURE_U, v.u);
+        f.setAttribute(Fragment.TEXTURE_V, v.v);
+
+        // Draw a larger square (of size 'size')        
+        final int size = 2;
         for (int i = -size; i <= size; i++) {
             for (int j = -size; j <= size; j++) {
                 f.setPosition(x1 + i, y1 + j);
@@ -77,12 +101,12 @@ public class Rasterizer {
       * @param v1 the first vertex of the edge
       * @param v2 the second vertex of the edge
       */
-    public void rasterizeEdge(Fragment v1, Fragment v2) {
+    public void rasterizeEdge(VertexOutput v1, VertexOutput v2) {
         // This is basically Bresenham's algorithm
-        final int x1 = v1.getX();
-        final int y1 = v1.getY();
-        final int x2 = v2.getX();
-        final int y2 = v2.getY();
+        final int x1 = v1.x;
+        final int y1 = v1.y;
+        final int x2 = v2.x;
+        final int y2 = v2.y;
 
         Fragment fragment = new Fragment(0, 0);
         Bresenham.getLine(x1, y1, x2, y2, (x, y) -> {
@@ -102,10 +126,10 @@ public class Rasterizer {
      * @param v3 the third vertex of the triangle
      * @return the signed area of the triangle
      */
-    public static double triangleArea(Fragment v1, Fragment v2, Fragment v3) {
-        return (double) v2.getX() * v3.getY() - v2.getY() * v3.getX()
-                + v3.getX() * v1.getY() - v1.getX() * v3.getY()
-                + v1.getX() * v2.getY() - v2.getX() * v1.getY();
+    public static double triangleArea(VertexOutput v1, VertexOutput v2, VertexOutput v3) {
+        return (double) v2.x * v3.y - v2.y * v3.x
+                + v3.x * v1.y - v1.x * v3.y
+                + v1.x * v2.y - v2.x * v1.y;
     }
 
     /**
@@ -117,19 +141,19 @@ public class Rasterizer {
      * @param v3 the third vertex of the triangle
      * @return the barycentric coordinates matrix of the triangle
      */
-    protected static Matrix makeBarycentricCoordsMatrix(final Fragment v1,
-            final Fragment v2,
-            final Fragment v3) {
+    protected static Matrix makeBarycentricCoordsMatrix(final VertexOutput v1,
+                                                        final VertexOutput v2,
+                                                        final VertexOutput v3) {
         final int squareSize = 3;
         Matrix cMat = new Matrix(squareSize, squareSize);
 
         final double area = triangleArea(v1, v2, v3);
-        final int x1 = v1.getX();
-        final int y1 = v1.getY();
-        final int x2 = v2.getX();
-        final int y2 = v2.getY();
-        final int x3 = v3.getX();
-        final int y3 = v3.getY();
+        final int x1 = v1.x;
+        final int y1 = v1.y;
+        final int x2 = v2.x;
+        final int y2 = v2.y;
+        final int x3 = v3.x;
+        final int y3 = v3.y;
         cMat.set(0, 0, (x2 * y3 - x3 * y2) / area);
         cMat.set(0, 1, (y2 - y3) / area);
         cMat.set(0, 2, (x3 - x2) / area);
@@ -151,7 +175,7 @@ public class Rasterizer {
      * @param v3 the third vertex of the triangle
      * @throws SizeMismatchException if the size of the Fragment is not correct.
      */
-    public void rasterizeFace(Fragment v1, Fragment v2, Fragment v3, boolean onlyDepth)
+    public void rasterizeFace(VertexOutput v1, VertexOutput v2, VertexOutput v3, boolean onlyDepth)
             throws SizeMismatchException {
 
         // early exit if the triangle is too small
@@ -164,15 +188,14 @@ public class Rasterizer {
         // iterate over the triangle's bounding box
         //++ // TODO
         //<!!
-        final int xmin = Math.min(v1.getX(), Math.min(v2.getX(), v3.getX()));
-        final int ymin = Math.min(v1.getY(), Math.min(v2.getY(), v3.getY()));
-        final int xmax = Math.max(v1.getX(), Math.max(v2.getX(), v3.getX()));
-        final int ymax = Math.max(v1.getY(), Math.max(v2.getY(), v3.getY()));
+        final int xmin = Math.min(v1.x, Math.min(v2.x, v3.x));
+        final int ymin = Math.min(v1.y, Math.min(v2.y, v3.y));
+        final int xmax = Math.max(v1.x, Math.max(v2.x, v3.x));
+        final int ymax = Math.max(v1.y, Math.max(v2.y, v3.y));
 
         // small epsilon to avoid numerical issues on the edges
         final double eps = (new Vector(ymax - ymin, xmax - xmin)).norm() / 1e6;
         final Fragment fragment = new Fragment(0, 0);
-        final int numAttributes = fragment.getNumAttributes();
 
         for (int x = xmin; x <= xmax; x++) {
             for (int y = ymin; y <= ymax; y++) {
@@ -184,27 +207,64 @@ public class Rasterizer {
                     continue;
                 }
                 fragment.setPosition(x, y);
+                // We will new interpolate all the attributes of the vertices 
+                // to calculate those of the fragment
                 if(!onlyDepth) {
-                    for (int i = 0; i < numAttributes; i++) {
-                        // get the attributes in a vector
-                        final Vector vecAtt = new Vector(v1.getAttribute(i),
-                                                        v2.getAttribute(i),
-                                                        v3.getAttribute(i));
-                        // interpolate the attributes
-                        double interpolated = bar.dot(vecAtt);
-                        // for the color attribute (indices ranging from COLOR_R to COLOR_B)
-                        if (i >= Fragment.COLOR_R && i <= Fragment.COLOR_ALPHA) {
-                            // clamp the color between 0 and 1;
-                            interpolated = MathUtils.clamp(interpolated, 0, 1);
-                        }
-                        fragment.setAttribute(i, interpolated);
-                    }
-                } else {
-                    final double bias = 1.5;
+                    // Interpolate the depth
+                    Vector vecAtt = new Vector(v1.depth, v2.depth, v3.depth);
+                    double interpolated = bar.dot(vecAtt);
+                    fragment.setAttribute(Fragment.DEPTH, interpolated);
 
-                    final Vector vecAtt = new Vector(v1.getAttribute(Fragment.DEPTH),
-                                                     v2.getAttribute(Fragment.DEPTH),
-                                                     v3.getAttribute(Fragment.DEPTH));
+                    // Interpolate the normal
+                    Vector n1 = v1.normal;
+                    Vector n2 = v2.normal;
+                    Vector n3 = v3.normal;
+                    
+                    for(int i = 0 ; i < 3 ; i++) {
+                        vecAtt = new Vector(n1.get(i), n2.get(i), n3.get(i));
+                        interpolated = bar.dot(vecAtt);
+                        fragment.setAttribute(Fragment.NORMAL_X + i, interpolated);
+                    }
+
+                    // Interpolate the world position
+                    Vector wp1 = v1.worldPosition;
+                    Vector wp2 = v2.worldPosition;
+                    Vector wp3 = v3.worldPosition;
+                    
+                    for(int i = 0 ; i < 3 ; i++) {
+                        vecAtt = new Vector(wp1.get(i), wp2.get(i), wp3.get(i));
+                        interpolated = bar.dot(vecAtt);
+                        fragment.setAttribute(Fragment.WORLD_X + i, interpolated);
+                    }
+
+                    // Interpolate the color
+                    double[] c1 = v1.color;
+                    double[] c2 = v2.color;
+                    double[] c3 = v3.color;
+
+                    for(int i = 0 ; i < 3 ; i++) {
+                        vecAtt = new Vector(c1[i], c2[i], c3[i]);
+                        interpolated = MathUtils.clamp(bar.dot(vecAtt), 0, 1);
+                        fragment.setAttribute(Fragment.COLOR_R + i, interpolated);
+                    }
+
+                    // Interpolate the alpha value
+                    vecAtt = new Vector(v1.alpha, v2.alpha, v3.alpha);
+                    interpolated = MathUtils.clamp(bar.dot(vecAtt), 0, 1);
+                    fragment.setAttribute(Fragment.COLOR_ALPHA, interpolated);
+
+                    // Interpolate the UV coordinates
+                    vecAtt = new Vector(v1.u, v2.u, v3.u);
+                    interpolated = bar.dot(vecAtt);
+                    fragment.setAttribute(Fragment.TEXTURE_U, interpolated);
+                    vecAtt = new Vector(v1.v, v2.v, v3.v);
+                    interpolated = bar.dot(vecAtt);
+                    fragment.setAttribute(Fragment.TEXTURE_V, interpolated);
+                
+                } else {
+                    final double bias = 1.01;
+
+                    Vector vecAtt = new Vector(v1.depth, v2.depth, v3.depth);
                     double interpolated = bar.dot(vecAtt);
                     fragment.setAttribute(Fragment.DEPTH, interpolated * bias);
                 }

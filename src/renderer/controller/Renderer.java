@@ -148,12 +148,12 @@ public final class Renderer {
      */
     public void renderNormal() {
         final Vector[] vertices = mesh.getVertices();
-        final Fragment[] fragments = runVertexShader();
+        final VertexOutput[] outputs = runVertexShader();
 
         for (int i = 0; i < vertices.length; i++) {
             final Vector vertex = vertices[i];
-            final Fragment fragment = fragments[i];
-            final Vector normal = fragment.getNormal();
+            final VertexOutput output = outputs[i];
+            final Vector normal = output.normal;
 
             final Vector destVector = new Vector(
                     vertex.get(0) + normalLength * normal.get(0),
@@ -165,16 +165,20 @@ public final class Renderer {
             int x = (int) Math.round(destVectorPoint.get(0));
             int y = (int) Math.round(destVectorPoint.get(1));
 
-            final Fragment destFragment = new Fragment(x, y);
-            destFragment.setColor(Color.RED);
-            destFragment.setNormal(normal);
-            destFragment.setDepth(destVectorPoint.get(2));
+            double[] red = new double[3];
+            red[0] = 1.0;
+            red[1] = 0.0;
+            red[2] = 0.0;
 
-            final Fragment originFragment = fragment.clone();
-            originFragment.setColor(Color.RED);
+            final VertexOutput destFragment = new VertexOutput(x, y);
+            destFragment.color = red;
+            destFragment.normal = normal;
+            destFragment.depth = destVectorPoint.get(2);
+
+            final VertexOutput originFragment = output.clone();
+            originFragment.color = red;
 
             rasterizer.rasterizeEdge(originFragment, destFragment);
-
         }
     }
 
@@ -288,13 +292,34 @@ public final class Renderer {
         }
 
         // Compute scene depth range and inform shader (useful for DepthShader)
+        final VertexOutput[] allVertexOutputs = runVertexShader();
+
+        // Debug output to help locate invisible render issues
+        if (allVertexOutputs == null || allVertexOutputs.length == 0) {
+            System.out.println("Renderer.render: no vertex outputs produced by vertex shader");
+        } else {
+            int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
+            int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
+            for (VertexOutput vo : allVertexOutputs) {
+                if (vo == null) continue;
+                if (vo.x < minX) minX = vo.x;
+                if (vo.x > maxX) maxX = vo.x;
+                if (vo.y < minY) minY = vo.y;
+                if (vo.y > maxY) maxY = vo.y;
+            }
+            System.out.println("Renderer.render: produced " + allVertexOutputs.length + " vertices; x range=[" + minX + "," + maxX + "] y range=[" + minY + "," + maxY + "]");
+            for (int i = 0; i < Math.min(5, allVertexOutputs.length); i++) {
+                VertexOutput v = allVertexOutputs[i];
+                if (v != null) System.out.println("  v[" + i + "]=(" + v.x + "," + v.y + ") depth=" + v.depth);
+            }
+        }
+
         try {
-            final Fragment[] allFragments = runVertexShader();
-            if (allFragments != null && allFragments.length > 0) {
+            if (allVertexOutputs != null && allVertexOutputs.length > 0) {
                 double minDepth = Double.POSITIVE_INFINITY;
                 double maxDepth = Double.NEGATIVE_INFINITY;
-                for (Fragment f : allFragments) {
-                    final double d = f.getDepth();
+                for (VertexOutput f : allVertexOutputs) {
+                    final double d = f.depth;
                     if (d < minDepth) minDepth = d;
                     if (d > maxDepth) maxDepth = d;
                 }
@@ -336,9 +361,9 @@ public final class Renderer {
     /**
      * Projects the vertices of the mesh into the screen space.
      *
-     * @return an array of fragments
+     * @return an array of vertex outputs
      */
-    public Fragment[] runVertexShader() {
+    public VertexOutput[] runVertexShader() {
         if (vertexShader == null) {
             initVertexShader();
         }
@@ -350,6 +375,10 @@ public final class Renderer {
             outputs[i] = vertexShader.shade(inputs[i]);
         }
 
+        return outputs;
+    }
+/**
+ * 
         Fragment[] fragments = new Fragment[outputs.length];
 
         for (int i = 0; i < outputs.length; i++) {
@@ -374,9 +403,7 @@ public final class Renderer {
             fragments[i] = f;
         }
 
-        return fragments;
-    }
-
+ */
 
     private VertexInput[] buildInputsFromMesh() {
 
@@ -499,14 +526,14 @@ public final class Renderer {
      * Renders the wireframe of the mesh.
      */
     private void renderWireframe(boolean solidWireframe) {
-        final Fragment[] fragment = runVertexShader();
+        final VertexOutput[] outputs = runVertexShader();
         final int[] faces = mesh.getFaces();
 
         for (int i = 0; i < 3 * mesh.getNumFaces(); i += 3) {
             if(solidWireframe) {
-                final Fragment v1 = fragment[faces[i]];
-                final Fragment v2 = fragment[faces[i + 1]];
-                final Fragment v3 = fragment[faces[i + 2]];
+                final VertexOutput v1 = outputs[faces[i]];
+                final VertexOutput v2 = outputs[faces[i + 1]];
+                final VertexOutput v3 = outputs[faces[i + 2]];
 
                 double area = Rasterizer.triangleArea(v1, v2, v3);
                 final double eps = 1e-6;
@@ -516,8 +543,8 @@ public final class Renderer {
                 }
             }
             for (int j = 0; j < 3; j++) {
-                final Fragment v1 = fragment[faces[i + j]];
-                final Fragment v2 = fragment[faces[i + ((j + 1) % 3)]];
+                final VertexOutput v1 = outputs[faces[i + j]];
+                final VertexOutput v2 = outputs[faces[i + ((j + 1) % 3)]];
                 rasterizer.rasterizeEdge(v1, v2);
 
                 if(solidWireframe) {
@@ -532,8 +559,8 @@ public final class Renderer {
      * Renders the vertices of the mesh.
      */
     private void renderVertices() {
-        final Fragment[] fragment = runVertexShader();
-        for (Fragment vertex : fragment) {
+        final VertexOutput[] outputs = runVertexShader();
+        for (VertexOutput vertex : outputs) {
             rasterizer.rasterizeVertex(vertex);
         }
     }
@@ -545,13 +572,13 @@ public final class Renderer {
      */
     private void renderSolid(boolean onlyDepth)
             throws SizeMismatchException {
-        final Fragment[] fragments = runVertexShader();
+        final VertexOutput[] outputs = runVertexShader();
         final int[] faces = mesh.getFaces();
 
         for (int i = 0; i < 3 * mesh.getNumFaces(); i += 3) {
-            final Fragment v1 = fragments[faces[i]];
-            final Fragment v2 = fragments[faces[i + 1]];
-            final Fragment v3 = fragments[faces[i + 2]];
+            final VertexOutput v1 = outputs[faces[i]];
+            final VertexOutput v2 = outputs[faces[i + 1]];
+            final VertexOutput v3 = outputs[faces[i + 2]];
 
             rasterizer.rasterizeFace(v1, v2, v3, onlyDepth);
         }

@@ -1,8 +1,10 @@
 import org.junit.Test;
 
+import renderer.algebra.Vector;
 import renderer.core.pipeline.FragmentShaderStage;
 import renderer.core.pipeline.OutputMerger;
 import renderer.core.pipeline.Rasterizer;
+import renderer.core.pipeline.VertexOutput;
 import renderer.core.shader.Fragment;
 import renderer.core.shader.FragmentShader;
 import renderer.core.shader.FragmentOutput;
@@ -43,15 +45,32 @@ public class TestRasterizer {
 
         System.out.println("Rasterizing edge");
 
-        final int[] fragment1Coords = {0, 20};
-        final int[] fragment2Coords = {5, -35};
-        final float[] blackColor = {0, 0, 0};
-        final float[] greenColor = {50f / 255, 100f / 255, 0};
+        final int[] vertex1Coords = {0, 20};
+        final int[] vertex2Coords = {5, -35};
+        final double[] blackColor = {0.0, 0.0, 0.0};
+        final double[] greenColor = {50.0 / 255.0, 100.0 / 255.0, 0.0};
 
-        Fragment v1 = new Fragment(fragment1Coords[0], fragment1Coords[1]);
-        v1.setColor(blackColor[0], blackColor[1], blackColor[2]);
-        Fragment v2 = new Fragment(fragment2Coords[0], fragment2Coords[1]);
-        v2.setColor(greenColor[0], greenColor[1], greenColor[2]);
+        VertexOutput v1 = new VertexOutput();
+        v1.x = vertex1Coords[0];
+        v1.y = vertex1Coords[1];
+        v1.depth = 0.0;
+        v1.normal = new Vector(0, 0, 1);
+        v1.worldPosition = new Vector(0, 0, 0);
+        v1.color = blackColor;
+        v1.alpha = 1.0;
+        v1.u = 0.0;
+        v1.v = 0.0;
+
+        VertexOutput v2 = new VertexOutput();
+        v2.x = vertex2Coords[0];
+        v2.y = vertex2Coords[1];
+        v2.depth = 0.0;
+        v2.normal = new Vector(0, 0, 1);
+        v2.worldPosition = new Vector(0, 0, 0);
+        v2.color = greenColor;
+        v2.alpha = 1.0;
+        v2.u = 0.0;
+        v2.v = 0.0;
 
         rasterizer.rasterizeEdge(v1, v2);
     }
