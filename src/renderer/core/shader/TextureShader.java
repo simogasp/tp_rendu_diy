@@ -16,7 +16,7 @@ public class TextureShader implements FragmentShader {
     /**
      * The start index of the texture attribute.
      */
-    private static final int START_TEXTURE_ATTRIBUTE = 7;
+    private static final int START_TEXTURE_ATTRIBUTE = Fragment.TEXTURE_U;
 
     /**
      * The number of attribute about the texture.
