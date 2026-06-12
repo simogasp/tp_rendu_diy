@@ -10,6 +10,7 @@ import renderer.controller.ColorMapFactory.Maps;
 import renderer.core.shader.Fragment;
 import renderer.core.shader.FragmentShader;
 import renderer.core.shader.PhongShader;
+import renderer.core.shader.SimpleVertexShader;
 import renderer.core.shader.FragmentOutput;
 import renderer.core.camera.Transformation;
 import renderer.core.light.Lighting;
@@ -19,6 +20,9 @@ import renderer.core.pipeline.FragmentShaderStage;
 import renderer.core.pipeline.OutputMerger;
 import renderer.core.pipeline.PerspectiveCorrectRasterizer;
 import renderer.core.pipeline.Rasterizer;
+import renderer.core.pipeline.VertexInput;
+import renderer.core.pipeline.VertexOutput;
+import renderer.core.pipeline.VertexShader;
 import renderer.core.shader.TextureShader;
 
 /**
@@ -45,6 +49,9 @@ public final class Renderer {
 
     /** The mesh. */
     private Mesh mesh;
+
+    /** The Vertex shader */
+    private VertexShader vertexShader;
 
     /** The rasterizer. */
     private Rasterizer rasterizer;
@@ -141,7 +148,7 @@ public final class Renderer {
      */
     public void renderNormal() {
         final Vector[] vertices = mesh.getVertices();
-        final Fragment[] fragments = projectVertices();
+        final Fragment[] fragments = runVertexShader();
 
         for (int i = 0; i < vertices.length; i++) {
             final Vector vertex = vertices[i];
@@ -208,6 +215,9 @@ public final class Renderer {
                 scene.getScreenW(),
                 scene.getScreenH());
 
+        // instantiate vertex shader after the transformation is configured
+        initVertexShader();
+
         // add lights of the scene
         lighting.reset();
         lighting.addAmbientLight(scene.getAmbientI());
@@ -249,6 +259,13 @@ public final class Renderer {
     }
 
     /**
+     * Initialize the default vertex shader.
+     */
+    private void initVertexShader() {
+        this.vertexShader = new SimpleVertexShader(xform);
+    }
+
+    /**
      * Render an image from the current parameters.
      *
      * @return the rendered image.
@@ -272,7 +289,7 @@ public final class Renderer {
 
         // Compute scene depth range and inform shader (useful for DepthShader)
         try {
-            final Fragment[] allFragments = projectVertices();
+            final Fragment[] allFragments = runVertexShader();
             if (allFragments != null && allFragments.length > 0) {
                 double minDepth = Double.POSITIVE_INFINITY;
                 double maxDepth = Double.NEGATIVE_INFINITY;
@@ -321,41 +338,78 @@ public final class Renderer {
      *
      * @return an array of fragments
      */
-    public Fragment[] projectVertices() {
-        final Vector[] vertices = mesh.getVertices();
-        final Vector[] normals = mesh.getNormals();
-        final double[] colors = mesh.getColors();
+    public Fragment[] runVertexShader() {
+        if (vertexShader == null) {
+            initVertexShader();
+        }
 
-        final Fragment[] fragments = new Fragment[vertices.length];
+        VertexInput[] inputs = buildInputsFromMesh();
+        VertexOutput[] outputs = new VertexOutput[inputs.length];
 
-        for (int i = 0; i < vertices.length; i++) {
-            final Vector pVertex = xform.projectPoint(vertices[i]);
-            // Vector pNormal = xform.transformVector (normals[i]);
-            final Vector pNormal = normals[i];
+        for (int i = 0; i < inputs.length; i++) {
+            outputs[i] = vertexShader.shade(inputs[i]);
+        }
 
-            final int x = (int) Math.round(pVertex.get(0));
-            final int y = (int) Math.round(pVertex.get(1));
-            fragments[i] = new Fragment(x, y);
-            fragments[i].setDepth(pVertex.get(2));
-            fragments[i].setNormal(pNormal);
-            fragments[i].setWorldPosition(vertices[i]);
+        Fragment[] fragments = new Fragment[outputs.length];
 
-            final double[] texCoords = mesh.getTextureCoordinates();
-            if (texCoords != null) {
-                fragments[i].setAttribute(7, texCoords[2 * i]);
-                fragments[i].setAttribute(8, texCoords[2 * i + 1]);
+        for (int i = 0; i < outputs.length; i++) {
+
+            VertexOutput o = outputs[i];
+
+            Fragment f = new Fragment(o.x, o.y);
+            f.setDepth(o.depth);
+            f.setNormal(o.normal);
+            f.setWorldPosition(o.worldPosition);
+
+            if (o.color != null) {
+                f.setColor(o.color[0], o.color[1], o.color[2]);
+                f.setAttribute(Fragment.COLOR_ALPHA, o.color[3]);
             }
 
-            fragments[i].setColor(
-                colors[3 * i],
-                colors[3 * i + 1],
-                colors[3 * i + 2]
-            );
+            if (o.u != 0 || o.v != 0) {
+                f.setAttribute(7, o.u);
+                f.setAttribute(8, o.v);
+            }
 
-            fragments[i].setAttribute(Fragment.COLOR_ALPHA, 1.0);
+            fragments[i] = f;
         }
 
         return fragments;
+    }
+
+
+    private VertexInput[] buildInputsFromMesh() {
+
+        Vector[] vertices = mesh.getVertices();
+        Vector[] normals = mesh.getNormals();
+        double[] colors = mesh.getColors();
+        double[] texCoords = mesh.getTextureCoordinates();
+
+        VertexInput[] inputs = new VertexInput[vertices.length];
+
+        for (int i = 0; i < vertices.length; i++) {
+
+            VertexInput in = new VertexInput();
+
+            in.position = vertices[i];
+            in.normal = normals[i];
+
+            in.color = new double[] {
+                colors[3 * i],
+                colors[3 * i + 1],
+                colors[3 * i + 2],
+                1.0
+            };
+
+            if (texCoords != null) {
+                in.u = texCoords[2 * i];
+                in.v = texCoords[2 * i + 1];
+            }
+
+            inputs[i] = in;
+        }
+
+        return inputs;
     }
 
     /**
@@ -445,7 +499,7 @@ public final class Renderer {
      * Renders the wireframe of the mesh.
      */
     private void renderWireframe(boolean solidWireframe) {
-        final Fragment[] fragment = projectVertices();
+        final Fragment[] fragment = runVertexShader();
         final int[] faces = mesh.getFaces();
 
         for (int i = 0; i < 3 * mesh.getNumFaces(); i += 3) {
@@ -478,7 +532,7 @@ public final class Renderer {
      * Renders the vertices of the mesh.
      */
     private void renderVertices() {
-        final Fragment[] fragment = projectVertices();
+        final Fragment[] fragment = runVertexShader();
         for (Fragment vertex : fragment) {
             rasterizer.rasterizeVertex(vertex);
         }
@@ -491,7 +545,7 @@ public final class Renderer {
      */
     private void renderSolid(boolean onlyDepth)
             throws SizeMismatchException {
-        final Fragment[] fragments = projectVertices();
+        final Fragment[] fragments = runVertexShader();
         final int[] faces = mesh.getFaces();
 
         for (int i = 0; i < 3 * mesh.getNumFaces(); i += 3) {
