@@ -172,7 +172,11 @@ public final class Renderer {
             final VertexOutput destFragment = new VertexOutput(x, y);
             destFragment.color = red;
             destFragment.normal = normal;
+            destFragment.worldPosition = destVector;
             destFragment.depth = destVectorPoint.get(2);
+            destFragment.alpha = output.alpha;
+            destFragment.u = output.u;
+            destFragment.v = output.v;
 
             final VertexOutput originFragment = output.clone();
             originFragment.color = red;
