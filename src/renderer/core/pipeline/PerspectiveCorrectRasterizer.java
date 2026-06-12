@@ -1,6 +1,5 @@
 package renderer.core.pipeline;
 
-import renderer.algebra.MathUtils;
 import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
@@ -8,6 +7,7 @@ import renderer.core.shader.Fragment;
 import renderer.utils.AttributeInterpolator;
 import renderer.utils.Interpolation;
 import renderer.utils.LinearInterpolator;
+import renderer.utils.PerspectiveCorrectInterpolator;
 
 /**
  * The PerspectiveCorrectRasterizer class extends Rasterizer to perform
@@ -54,7 +54,7 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
 
         final Fragment fragment = new Fragment(0, 0);
         final double eps = (new Vector(ymax - ymin, xmax - xmin)).norm() / 1e6;
-        AttributeInterpolator interp = new LinearInterpolator();
+        AttributeInterpolator interp = new PerspectiveCorrectInterpolator();
 
         for (int x = xmin; x <= xmax; x++) {
             for (int y = ymin; y <= ymax; y++) {
@@ -72,12 +72,11 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
                 final double w1 = bar.get(0) / v1.depth;
                 final double w2 = bar.get(1) / v2.depth;
                 final double w3 = bar.get(2) / v3.depth;
-
-                // weighting factor for perspective correct interpolation
-                final double oneOverZ = w1 + w2 + w3;
+                
+                //!! // This would be where the oneOverZ would go
                 
                 if(!onlyDepth) {
-                    Interpolation.interpolate3(v1, v2, v3, fragment, bar.get(0), bar.get(1), bar.get(2), interp);
+                    Interpolation.interpolate3(v1, v2, v3, fragment, w1, w2, w3, interp);
                     // The backup code would be here //!!
                 } else {
                     final double bias = 1.01;

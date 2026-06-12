@@ -53,10 +53,18 @@
     interpolated = bar.dot(vecAtt);
     fragment.setAttribute(Fragment.TEXTURE_V, interpolated);
 
+#### These imports are necessary if the code is switched back :
+    import javax.naming.directory.AttributeInUseException;
+    import renderer.algebra.MathUtils;
 
 
 ### This was the code in PerspectiveCorrectRasterizer, instead of the call to interpolate3 :
 
+##### This would go BEFORE the if(!onlyDepth)
+    // weighting factor for perspective correct interpolation
+    final double oneOverZ = w1 + w2 + w3;
+
+##### This would go IN the if(!onlyDepth)
     // Interpolate the depth
     double a1 = v1.depth;
     double a2 = v2.depth;
@@ -133,4 +141,8 @@
     aOverZ = w1 * a1 + w2 * a2 + w3 * a3;
     interpolated = aOverZ / oneOverZ;
     fragment.setAttribute(Fragment.TEXTURE_V, interpolated);
+
+#### This import is necessary if the code is switched back :
+
+    import renderer.algebra.MathUtils;
 
