@@ -2,10 +2,15 @@ package renderer.core.pipeline;
 
 import renderer.algebra.Matrix;
 import renderer.algebra.Vector;
+
+import javax.naming.directory.AttributeInUseException;
+
 import renderer.algebra.MathUtils;
 import renderer.algebra.SizeMismatchException;
 import renderer.core.shader.Fragment;
 import renderer.utils.Interpolation;
+import renderer.utils.LinearInterpolator;
+import renderer.utils.AttributeInterpolator;
 import renderer.utils.Bresenham;
 
 /**
@@ -196,6 +201,7 @@ public class Rasterizer {
         // small epsilon to avoid numerical issues on the edges
         final double eps = (new Vector(ymax - ymin, xmax - xmin)).norm() / 1e6;
         final Fragment fragment = new Fragment(0, 0);
+        AttributeInterpolator interp = new LinearInterpolator();
 
         for (int x = xmin; x <= xmax; x++) {
             for (int y = ymin; y <= ymax; y++) {
@@ -210,57 +216,8 @@ public class Rasterizer {
                 // We will new interpolate all the attributes of the vertices 
                 // to calculate those of the fragment
                 if(!onlyDepth) {
-                    // Interpolate the depth
-                    Vector vecAtt = new Vector(v1.depth, v2.depth, v3.depth);
-                    double interpolated = bar.dot(vecAtt);
-                    fragment.setAttribute(Fragment.DEPTH, interpolated);
-
-                    // Interpolate the normal
-                    Vector n1 = v1.normal;
-                    Vector n2 = v2.normal;
-                    Vector n3 = v3.normal;
-                    
-                    for(int i = 0 ; i < 3 ; i++) {
-                        vecAtt = new Vector(n1.get(i), n2.get(i), n3.get(i));
-                        interpolated = bar.dot(vecAtt);
-                        fragment.setAttribute(Fragment.NORMAL_X + i, interpolated);
-                    }
-
-                    // Interpolate the world position
-                    Vector wp1 = v1.worldPosition;
-                    Vector wp2 = v2.worldPosition;
-                    Vector wp3 = v3.worldPosition;
-                    
-                    for(int i = 0 ; i < 3 ; i++) {
-                        vecAtt = new Vector(wp1.get(i), wp2.get(i), wp3.get(i));
-                        interpolated = bar.dot(vecAtt);
-                        fragment.setAttribute(Fragment.WORLD_X + i, interpolated);
-                    }
-
-                    // Interpolate the color
-                    double[] c1 = v1.color;
-                    double[] c2 = v2.color;
-                    double[] c3 = v3.color;
-
-                    for(int i = 0 ; i < 3 ; i++) {
-                        vecAtt = new Vector(c1[i], c2[i], c3[i]);
-                        interpolated = MathUtils.clamp(bar.dot(vecAtt), 0, 1);
-                        fragment.setAttribute(Fragment.COLOR_R + i, interpolated);
-                    }
-
-                    // Interpolate the alpha value
-                    vecAtt = new Vector(v1.alpha, v2.alpha, v3.alpha);
-                    interpolated = MathUtils.clamp(bar.dot(vecAtt), 0, 1);
-                    fragment.setAttribute(Fragment.COLOR_ALPHA, interpolated);
-
-                    // Interpolate the UV coordinates
-                    vecAtt = new Vector(v1.u, v2.u, v3.u);
-                    interpolated = bar.dot(vecAtt);
-                    fragment.setAttribute(Fragment.TEXTURE_U, interpolated);
-                    vecAtt = new Vector(v1.v, v2.v, v3.v);
-                    interpolated = bar.dot(vecAtt);
-                    fragment.setAttribute(Fragment.TEXTURE_V, interpolated);
-                
+                    Interpolation.interpolate3(v1, v2, v3, fragment, bar.get(0), bar.get(1), bar.get(2), interp);
+                    // The backup code would be here //!!
                 } else {
                     final double bias = 1.01;
 
