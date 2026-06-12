@@ -6,7 +6,6 @@ import renderer.algebra.Vector;
 import renderer.core.shader.Fragment;
 import renderer.utils.AttributeInterpolator;
 import renderer.utils.Interpolation;
-import renderer.utils.LinearInterpolator;
 import renderer.utils.PerspectiveCorrectInterpolator;
 
 /**
