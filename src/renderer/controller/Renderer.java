@@ -1,6 +1,5 @@
 package renderer.controller;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.util.Optional;
 
