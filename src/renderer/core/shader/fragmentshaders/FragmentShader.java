@@ -15,6 +15,9 @@ public interface FragmentShader {
 	/**
 	 * Whether this fragment shader supports a colormap.
 	 * Default: not supported.
+	 * 
+	 * @return true if the shader is compatible with a colormap, 
+	 * 		   or false if it isn't.
 	 */
 	default boolean supportsColorMap() {
 		return false;
@@ -34,6 +37,9 @@ public interface FragmentShader {
 	 * Provide a depth range [near, far] to the shader. Default no-op.
 	 * Some shaders (e.g. DepthShader) need the scene depth range to map
 	 * depths to colors.
+	 * 
+	 * @param near the lower bound of the depth range
+	 * @param far  the upper bound of the depth range 
 	 */
 	default void setDepthRange(double near, double far) {
 		// no-op

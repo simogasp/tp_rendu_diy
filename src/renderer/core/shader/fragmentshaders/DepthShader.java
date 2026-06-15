@@ -117,7 +117,7 @@ public class DepthShader implements FragmentShader {
     public void setColorMap(final Maps map) {
         this.colorMap = ColorMapFactory.create(map);
     }
-
+    
     @Override
     public void setDepthRange(double near, double far) {
         this.near = near;

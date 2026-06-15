@@ -39,7 +39,7 @@ public class PhongShader implements FragmentShader {
     /** 
      * Sets the scene's lighting.
      * 
-     * @param scene the (new) lighting of the scene 
+     * @param lighting the (new) lighting of the scene 
      */
     public void setLighting(Lighting lighting) { this.lighting = lighting; }
 
@@ -48,8 +48,8 @@ public class PhongShader implements FragmentShader {
      * Returns a boolean to indicate wether it is ready to function
      * or not.
      * 
-     * @param scene
-     * @param lighting
+     * @param scene the scene to use
+     * @param lighting the lighting of the scene
      * @return true if the shader is ready to function, false if not.
      */
     public boolean init(Scene scene, Lighting lighting) {

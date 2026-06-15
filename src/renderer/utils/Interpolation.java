@@ -92,7 +92,7 @@ public class Interpolation {
      *
      * @param v1 the first vertex of the triangle
      * @param v2 the second vertex of the triangle
-     * @param v2 the third vertex of the triangle
+     * @param v3 the third vertex of the triangle
      * @param f  the fragment to interpolate
      * @param w1 the barycentric coordinate of the first vertex
      * @param w2 the barycentric coordinate of the second vertex
