@@ -14,6 +14,8 @@ public class Interpolation {
      * @param v1 the first vertex of the edge
      * @param v2 the second vertex of the edge
      * @param f  the fragment to interpolate
+     * @param middle_double_value the value to use if the two vertices (v1 and v2) are
+     *                            in the same position (to avoid division by 0)
      */
     public static void interpolate2(VertexOutput v1, VertexOutput v2, Fragment f, double middle_double_value) {
         final int x1 = v1.x;
@@ -86,8 +88,8 @@ public class Interpolation {
      * Linear interpolation of a Fragment f on the triangle defined by 
      * Vertices v1, v2 and v3.
      * 
-     * This method uses an interpolator function (in AttributeInterpolator interp 
-     * -> interp.interpolate(...)) to calculate the interpolation of the attributes.
+     * This method uses an interpolator function (as AttributeInterpolator interp, 
+     * use interp.interpolate(...)) to calculate the interpolation of the attributes.
      * This allows different rasterizers to use different interpolation methods
      *
      * @param v1 the first vertex of the triangle
