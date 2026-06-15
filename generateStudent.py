@@ -307,8 +307,8 @@ def main(working_dir: str, studentify_dir: str, archive_name: str, skip_cleaning
         
     # remove Depth and Normal shader implementations
     files_to_remove = [
-        "src/renderer/core/shader/DepthShader.java",
-        "src/renderer/core/shader/NormalMapShader.java",
+        "src/renderer/core/shader/fragmentshaders/DepthShader.java",
+        "src/renderer/core/shader/fragmentshaders/NormalMapShader.java",
         "test/unit/core/shader/DepthBufferTest.java"
     ]
     for file in files_to_remove:
