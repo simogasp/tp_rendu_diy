@@ -85,7 +85,7 @@ public class Interpolation {
     /**
      * Linear interpolation of a Fragment f on the triangle defined by 
      * Vertices v1, v2 and v3.
-     *
+     * 
      * This method uses an interpolator function (in AttributeInterpolator interp 
      * -> interp.interpolate(...)) to calculate the interpolation of the attributes.
      * This allows different rasterizers to use different interpolation methods
@@ -102,15 +102,28 @@ public class Interpolation {
     public static void interpolate3(VertexOutput v1, VertexOutput v2, VertexOutput v3, Fragment f, 
                                     double w1, double w2, double w3, AttributeInterpolator interp) {
 
+
+        //<++
+        /** TODO: calculate the fragment's (f) attributes' values by interpolating the values of the
+            attributes of the 3 vertices composing the triangle it is in.
+
+            You may need to consult the methods of these classes in particular :
+                - Fragment
+                - VertexOutput
+            
+            You also need to implement the LinearInterpolator class for the rasterization to work !
+        */
+        //>++
+        //<!!
         // Interpolate the depth of the fragment
         f.setAttribute(Fragment.DEPTH, interp.interpolate(v1.depth, v2.depth, v3.depth, w1, w2, w3));
         
         // Interpolate the normals of the fragment
         for (int i = 0; i < 3; i++) {
             double value = interp.interpolate(
-                    v1.normal.get(i),
-                    v2.normal.get(i),
-                    v3.normal.get(i),
+                v1.normal.get(i), 
+                v2.normal.get(i), 
+                v3.normal.get(i), 
                 w1, w2, w3);
             f.setAttribute(Fragment.NORMAL_X + i, value);
         }

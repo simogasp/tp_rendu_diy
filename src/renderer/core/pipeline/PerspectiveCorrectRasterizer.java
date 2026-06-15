@@ -77,7 +77,7 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
                 
                 if(!onlyDepth) {
                     Interpolation.interpolate3(v1, v2, v3, fragment, w1, w2, w3, interp);
-                    // The backup code would be here //!!
+                    //!! // The backup code would be here
                 } else {
                     final double bias = 1.01;
 

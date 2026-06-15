@@ -214,7 +214,7 @@ public class Rasterizer {
                 // to calculate those of the fragment
                 if(!onlyDepth) {
                     Interpolation.interpolate3(v1, v2, v3, fragment, bar.get(0), bar.get(1), bar.get(2), interp);
-                    // The backup code would be here //!!
+                    // The backup code would be here
                 } else {
                     final double bias = 1.01;
 
