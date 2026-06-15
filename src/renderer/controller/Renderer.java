@@ -408,6 +408,12 @@ public final class Renderer {
 
  */
 
+    /**
+     * Creates an array of vertex inputs (for the 
+     * rasterization phase) from the mesh
+     *  
+     * @return an array of VertexInput
+     */
     private VertexInput[] buildInputsFromMesh() {
 
         Vector[] vertices = mesh.getVertices();
@@ -571,6 +577,8 @@ public final class Renderer {
     /**
      * Renders the solid of the mesh.
      *
+     * @param onlyDepth a boolean to know if we want to interpolate all of the
+     *                  fragment's attributes or only its depth
      * @throws SizeMismatchException if the size of the fragments do not match
      */
     private void renderSolid(boolean onlyDepth)

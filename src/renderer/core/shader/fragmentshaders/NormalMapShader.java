@@ -6,6 +6,13 @@ import renderer.algebra.Vector;
 
 public class NormalMapShader implements FragmentShader {
 
+    /**
+     * Shades a fragment according to its normal's orientation.
+     * 
+     * @param fragment the fragment to shade
+     * @return a FragmentOutput containing a color corresponding
+     *         to the fragment's normal's orientation.
+     */
     @Override
     public FragmentOutput shade(Fragment fragment) {
 

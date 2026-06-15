@@ -175,6 +175,8 @@ public class Rasterizer {
      * @param v1 the first vertex of the triangle
      * @param v2 the second vertex of the triangle
      * @param v3 the third vertex of the triangle
+     * @param onlyDepth a boolean to indicate if the rasterizer should calculate
+     *                  all the fragment's attributes or only its depth
      * @throws SizeMismatchException if the size of the Fragment is not correct.
      */
     public void rasterizeFace(VertexOutput v1, VertexOutput v2, VertexOutput v3, boolean onlyDepth)

@@ -33,6 +33,8 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
      * @param v1 the first vertex of the face
      * @param v2 the second vertex of the face
      * @param v3 the third vertex of the face
+     * @param onlyDepth a boolean to indicate if the rasterizer should calculate
+     *                  all the fragment's attributes or only its depth
      * @throws SizeMismatchException if the size of the fragments do not match
      */
     @Override

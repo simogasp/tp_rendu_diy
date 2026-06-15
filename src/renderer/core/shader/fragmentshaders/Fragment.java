@@ -199,18 +199,32 @@ public class Fragment {
         attributes[NORMAL_Z] = nz;
     }
 
+    /**
+     * Gets the world position of the Fragment.
+     * @return the world position of the Fragment
+     */
     public Vector getWorldPosition() {
         return new Vector(attributes[WORLD_X],
                           attributes[WORLD_Y],
                           attributes[WORLD_Z]);
     }
 
+    /**
+     * Sets the world position of the Fragment. 
+     * @param wx the world position X of the fragment
+     * @param wy the world position Y of the fragment
+     * @param wz the world position Z of the fragment
+     */
     public void setWorldPosition(double wx, double wy, double wz) {
         attributes[WORLD_X] = wx;
         attributes[WORLD_Y] = wy;
         attributes[WORLD_Z] = wz;
     }
 
+    /**
+     * Sets the world position of the Fragment. 
+     * @param worldPos the world position of the fragment
+     */
     public void setWorldPosition(Vector worldPos) {
         if(worldPos.size() != 3) {
             throw new RuntimeException("Wrong size of vector to set world position !");
@@ -302,6 +316,10 @@ public class Fragment {
         return "(" + x + "," + y + ")";
     }
 
+    /**
+     * Clones the fragment.
+     * @return a clone of the fragment
+     */
     @Override
     public Fragment clone() {
         final Fragment res = new Fragment(x, y);

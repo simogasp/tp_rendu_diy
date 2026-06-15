@@ -51,6 +51,13 @@ public class DepthShader implements FragmentShader {
         this.far = far;
     }
 
+    /**
+     * Shades a fragment according to its depth (from the camera).
+     * 
+     * @param fragment the fragment to shade
+     * @return a FragmentOutput with a color proportional 
+     *         to the depth of the fragment
+     */
     @Override
     public FragmentOutput shade(Fragment fragment) {
 

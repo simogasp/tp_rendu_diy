@@ -69,8 +69,12 @@ public class TextureShader implements FragmentShader {
 
     /**
      * Shade the fragment, taking the depth of the fragment into account.
+     * The color returned is sampled from the texture, using the fragment's UV
+     * coordinates.
      *
      * @param fragment the fragment to shade
+     * @return a FragmentOutput containing the color of the texture at the 
+     *         fragment's UV coordinates. 
      */
     @Override
     public FragmentOutput shade(Fragment fragment) {

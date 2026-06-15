@@ -3,6 +3,13 @@ package renderer.core.shader.fragmentshaders;
 import renderer.controller.ColorMapFactory.Maps;
 
 public interface FragmentShader {
+
+	/**
+	 * Shades the fragment given as parameter.
+	 * 
+	 * @param fragment the framgment to shade
+	 * @return a FragmentOutput with the 'shaded' values
+	 */
 	FragmentOutput shade(Fragment fragment);
 
 	/**
