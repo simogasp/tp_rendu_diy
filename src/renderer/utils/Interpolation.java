@@ -105,17 +105,17 @@ public class Interpolation {
                                     double w1, double w2, double w3, AttributeInterpolator interp) {
 
 
-        //<++
-        /** TODO: calculate the fragment's (f) attributes' values by interpolating the values of the
-            attributes of the 3 vertices composing the triangle it is in.
-
-            You may need to consult the methods of these classes in particular :
-                - Fragment
-                - VertexOutput
-            
-            You also need to implement the LinearInterpolator class for the rasterization to work !
-        */
+        //<++ 
+        //++  // TODO: calculate the fragment's (f) attributes' values by interpolating the values of the
+        //++  // attributes of the 3 vertices composing the triangle it is in.
+        //++
+        //++  // You may need to consult the methods of these classes in particular :
+        //++  //     - Fragment
+        //++  //     - VertexOutput
+        //++
+        //++  // You also need to implement the LinearInterpolator class for the rasterization to work !
         //>++
+        
         //<!!
         // Interpolate the depth of the fragment
         f.setAttribute(Fragment.DEPTH, interp.interpolate(v1.depth, v2.depth, v3.depth, w1, w2, w3));
@@ -152,7 +152,6 @@ public class Interpolation {
         // Interpolate the UV coordinates of the fragment
         f.setAttribute(Fragment.TEXTURE_U, interp.interpolate(v1.u, v2.u, v3.u, w1, w2, w3));
         f.setAttribute(Fragment.TEXTURE_V, interp.interpolate(v1.v, v2.v, v3.v, w1, w2, w3));
-        
         //>!!
     }
 }
