@@ -6,7 +6,7 @@ import java.util.Optional;
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
 import renderer.controller.ColorMapFactory.Maps;
-import renderer.core.shader.fragmentshaders.PhongShader;
+import renderer.core.shader.fragmentshaders.LightShader;
 import renderer.core.shader.vertexshaders.SinusVertexShader;
 import renderer.core.shader.vertexshaders.SimpleVertexShader;
 import renderer.core.camera.Transformation;
@@ -194,11 +194,11 @@ public final class Renderer {
     public void setLightingEnabled(final boolean enabled) {
         lightingEnabled = enabled;
 
-        if(shader instanceof PhongShader) {
+        if(shader instanceof LightShader) {
             if(lightingEnabled) {
-                ((PhongShader)shader).enableLighting();
+                ((LightShader)shader).enableLighting();
             } else {
-                ((PhongShader)shader).disableLighting();
+                ((LightShader)shader).disableLighting();
             }
         }
     }
@@ -652,10 +652,10 @@ public final class Renderer {
      * @return whether the operation as been correctly made.
      */
     public boolean initPhong() {
-        if (!(shader instanceof PhongShader)) {
+        if (!(shader instanceof LightShader)) {
             return true;
         }
-        return ((PhongShader) shader).init(this.scene, this.lighting);
+        return ((LightShader) shader).init(this.scene, this.lighting);
     }
 
     /**
