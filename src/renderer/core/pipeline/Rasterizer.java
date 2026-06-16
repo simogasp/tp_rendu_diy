@@ -224,7 +224,7 @@ public class Rasterizer {
                     double interpolated = bar.dot(vecAtt);
                     fragment.setAttribute(Fragment.DEPTH, interpolated * bias);
                 }
-                consumer.consume(fragment.clone());
+                consumer.consume(fragment);
             }
         }
         //>!!
