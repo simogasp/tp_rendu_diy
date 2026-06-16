@@ -6,7 +6,7 @@ import renderer.algebra.Vector;
 import renderer.core.light.Lighting;
 import renderer.core.mesh.Scene;
 
-public class PhongShader implements FragmentShader {
+public class LightShader implements FragmentShader {
     
     private Scene scene;
     private Lighting lighting;
@@ -19,7 +19,7 @@ public class PhongShader implements FragmentShader {
      * @param scene the scene the shader is running in
      * @param lighting the Lighting of the scene
      */
-    public PhongShader(Scene scene, Lighting lighting) {
+    public LightShader(Scene scene, Lighting lighting) {
         this.scene = scene;
         this.lighting = lighting;
     }
@@ -27,7 +27,7 @@ public class PhongShader implements FragmentShader {
     /**
      * Creates a PhongShader.
      */
-    public PhongShader() {}
+    public LightShader() {}
 
     /** 
      * Sets the shader's scene.
@@ -84,11 +84,8 @@ public class PhongShader implements FragmentShader {
      */
     public FragmentOutput shade(Fragment fragment) {
         if(this.activeLighting) {
-            //++ // TODO
-            //++ return new FragmentOutput(fragment.getColor());
-            //<!!
             Vector world_position = fragment.getWorldPosition();
-            Vector normal = fragment.getNormal();
+            Vector normal = fragment.getNormal().normalize();
             double[] color = fragment.getAttribute(Fragment.COLOR_R, Fragment.COLOR_B);
             double[] material = scene.getMaterial();
             
@@ -99,7 +96,6 @@ public class PhongShader implements FragmentShader {
             return new FragmentOutput(new Color((float)lightColor[0],
                                                 (float)lightColor[1],
                                                 (float)lightColor[2]));
-            //>!!
         } else {
             return new FragmentOutput(fragment.getColor());
         }
