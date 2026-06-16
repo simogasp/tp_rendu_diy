@@ -148,6 +148,15 @@ public class Interpolation {
             w1, w2, w3);
         f.setAttribute(Fragment.COLOR_ALPHA, MathUtils.clamp(value, 0, 1));
     
+        // Interpolate the world position of the fragment
+        for (int i = 0; i < 3; i++) {
+            value = interp.interpolate(
+                v1.worldPosition.get(i),
+                v2.worldPosition.get(i),
+                v3.worldPosition.get(i),
+                w1, w2, w3);
+            f.setAttribute(Fragment.WORLD_X + i, value);
+        }
 
         // Interpolate the UV coordinates of the fragment
         f.setAttribute(Fragment.TEXTURE_U, interp.interpolate(v1.u, v2.u, v3.u, w1, w2, w3));
