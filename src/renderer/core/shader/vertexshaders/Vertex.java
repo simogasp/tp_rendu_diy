@@ -2,7 +2,7 @@ package renderer.core.shader.vertexshaders;
 
 import renderer.algebra.Vector;
 
-public class VertexOutput {
+public class Vertex {
     
     /** The 2D (screen-space) coordinates of the (transformed) vertex */
     public int x, y;
@@ -22,35 +22,35 @@ public class VertexOutput {
     public double u, v;
 
     /**
-     * Creates a VertexOutput.
+     * Creates a Vertex.
      */
-    public VertexOutput() {}
+    public Vertex() {}
 
     /**
-     * Creates a VertexOutput.
+     * Creates a Vertex.
      * 
      * @param x the x coordinate of the vertex (in screen-space)
      * @param y the y coordinate of the vertex (in screen-space)
      */
-    public VertexOutput(int x, int y) {
+    public Vertex(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
     /**
-     * Creates a VertexOutput.
+     * Creates a Vertex.
      * 
      * @param x the x coordinate of the vertex (in screen-space)
      * @param y the y coordinate of the vertex (in screen-space)
      * @param depth the depth of the vertex
      */
-    public VertexOutput(int x, int y, double depth) {
+    public Vertex(int x, int y, double depth) {
         this(x, y);
         this.depth = depth;
     }
 
     /**
-     * Creates a VertexOutput.
+     * Creates a Vertex.
      * 
      * @param x the x coordinate of the vertex (in screen-space)
      * @param y the y coordinate of the vertex (in screen-space)
@@ -58,14 +58,14 @@ public class VertexOutput {
      * @param normal the normal of the vertex
      * @param worldPos the world position vector of the vertex
      */
-    public VertexOutput(int x, int y, double depth, Vector normal, Vector worldPos) {
+    public Vertex(int x, int y, double depth, Vector normal, Vector worldPos) {
         this(x, y, depth);
         this.normal = new Vector(normal);
         this.worldPosition = new Vector(worldPos);
     }
 
     /**
-     * Creates a VertexOutput.
+     * Creates a Vertex.
      * 
      * @param x the x coordinate of the vertex (in screen-space)
      * @param y the y coordinate of the vertex (in screen-space)
@@ -75,7 +75,7 @@ public class VertexOutput {
      * @param color the color (albedo) of the vertex
      * @param alpha the alpha value (transparency value) of the vertex
      */
-    public VertexOutput(int x, int y, double depth, 
+    public Vertex(int x, int y, double depth, 
                         Vector normal, Vector worldPos,
                         double[] color, double alpha) {
         this(x, y, depth, normal, worldPos);
@@ -86,7 +86,7 @@ public class VertexOutput {
     }
 
     /**
-     * Creates a VertexOutput.
+     * Creates a Vertex.
      * 
      * @param x the x coordinate of the vertex (in screen-space)
      * @param y the y coordinate of the vertex (in screen-space)
@@ -98,7 +98,7 @@ public class VertexOutput {
      * @param u the U coordinate (for texture mapping) of the vertex
      * @param v the V coordinate (for texture mapping) of the vertex
      */
-    public VertexOutput(int x, int y, double depth, 
+    public Vertex(int x, int y, double depth, 
                         Vector normal, Vector worldPos,
                         double[] color, double alpha,
                         double u, double v) {
@@ -112,9 +112,9 @@ public class VertexOutput {
      * 
      * @return a clone of the vertex
      */
-    public VertexOutput clone() {
-        VertexOutput clone = new VertexOutput(x, y, depth, normal, worldPosition, 
-                                              color, alpha, u, v);
+    public Vertex clone() {
+        Vertex clone = new Vertex(x, y, depth, normal, worldPosition, 
+                                  color, alpha, u, v);
         return clone;
     }
 }
