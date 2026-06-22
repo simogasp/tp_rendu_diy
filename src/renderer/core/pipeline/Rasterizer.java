@@ -3,7 +3,7 @@ package renderer.core.pipeline;
 import renderer.algebra.Matrix;
 import renderer.algebra.Vector;
 import renderer.core.shader.fragmentshaders.Fragment;
-import renderer.core.shader.vertexshaders.VertexOutput;
+import renderer.core.shader.vertexshaders.Vertex;
 import renderer.algebra.SizeMismatchException;
 import renderer.utils.Interpolation;
 import renderer.utils.LinearInterpolator;
@@ -49,7 +49,7 @@ public class Rasterizer {
      *
      * @param v the vertex drawn
      */
-    public void rasterizeVertex(final VertexOutput v) {
+    public void rasterizeVertex(final Vertex v) {
 
         int x1 = v.x;
         int y1 = v.y;
@@ -103,7 +103,7 @@ public class Rasterizer {
       * @param v1 the first vertex of the edge
       * @param v2 the second vertex of the edge
       */
-    public void rasterizeEdge(VertexOutput v1, VertexOutput v2) {
+    public void rasterizeEdge(Vertex v1, Vertex v2) {
         // This is basically Bresenham's algorithm
         final int x1 = v1.x;
         final int y1 = v1.y;
@@ -128,7 +128,7 @@ public class Rasterizer {
      * @param v3 the third vertex of the triangle
      * @return the signed area of the triangle
      */
-    public static double triangleArea(VertexOutput v1, VertexOutput v2, VertexOutput v3) {
+    public static double triangleArea(Vertex v1, Vertex v2, Vertex v3) {
         return (double) v2.x * v3.y - v2.y * v3.x
                 + v3.x * v1.y - v1.x * v3.y
                 + v1.x * v2.y - v2.x * v1.y;
@@ -143,9 +143,9 @@ public class Rasterizer {
      * @param v3 the third vertex of the triangle
      * @return the barycentric coordinates matrix of the triangle
      */
-    protected static Matrix makeBarycentricCoordsMatrix(final VertexOutput v1,
-                                                        final VertexOutput v2,
-                                                        final VertexOutput v3) {
+    protected static Matrix makeBarycentricCoordsMatrix(final Vertex v1,
+                                                        final Vertex v2,
+                                                        final Vertex v3) {
         final int squareSize = 3;
         Matrix cMat = new Matrix(squareSize, squareSize);
 
@@ -179,7 +179,7 @@ public class Rasterizer {
      *                  all the fragment's attributes or only its depth
      * @throws SizeMismatchException if the size of the Fragment is not correct.
      */
-    public void rasterizeFace(VertexOutput v1, VertexOutput v2, VertexOutput v3, boolean onlyDepth)
+    public void rasterizeFace(Vertex v1, Vertex v2, Vertex v3, boolean onlyDepth)
             throws SizeMismatchException {
 
         // early exit if the triangle is too small

@@ -4,7 +4,7 @@ import renderer.algebra.Matrix;
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
 import renderer.core.shader.fragmentshaders.Fragment;
-import renderer.core.shader.vertexshaders.VertexOutput;
+import renderer.core.shader.vertexshaders.Vertex;
 import renderer.utils.AttributeInterpolator;
 import renderer.utils.Interpolation;
 import renderer.utils.PerspectiveCorrectInterpolator;
@@ -38,7 +38,7 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
      * @throws SizeMismatchException if the size of the fragments do not match
      */
     @Override
-    public void rasterizeFace(VertexOutput v1, VertexOutput v2, VertexOutput v3, boolean onlyDepth)
+    public void rasterizeFace(Vertex v1, Vertex v2, Vertex v3, boolean onlyDepth)
             throws SizeMismatchException {
 
         // early exit if the triangle is too small

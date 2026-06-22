@@ -2,7 +2,7 @@ package renderer.utils;
 
 import renderer.algebra.MathUtils;
 import renderer.algebra.Vector;
-import renderer.core.shader.vertexshaders.VertexOutput;
+import renderer.core.shader.vertexshaders.Vertex;
 import renderer.core.shader.fragmentshaders.Fragment;
 
 public class Interpolation {
@@ -17,7 +17,7 @@ public class Interpolation {
      * @param middle_double_value the value to use if the two vertices (v1 and v2) are
      *                            in the same position (to avoid division by 0)
      */
-    public static void interpolate2(VertexOutput v1, VertexOutput v2, Fragment f, double middle_double_value) {
+    public static void interpolate2(Vertex v1, Vertex v2, Fragment f, double middle_double_value) {
         final int x1 = v1.x;
         final int y1 = v1.y;
         final int x2 = v2.x;
@@ -101,7 +101,7 @@ public class Interpolation {
      * @param w3 the barycentric coordinate of the third vertex
      * @param interp the interpolation function
      */
-    public static void interpolate3(VertexOutput v1, VertexOutput v2, VertexOutput v3, Fragment f, 
+    public static void interpolate3(Vertex v1, Vertex v2, Vertex v3, Fragment f, 
                                     double w1, double w2, double w3, AttributeInterpolator interp) {
 
 
