@@ -6,7 +6,7 @@ import renderer.algebra.Vector;
 import renderer.core.light.Lighting;
 import renderer.core.mesh.Scene;
 
-public class LightShader implements FragmentShader {
+public class PhongShader implements FragmentShader {
     
     private Scene scene;
     private Lighting lighting;
@@ -19,7 +19,7 @@ public class LightShader implements FragmentShader {
      * @param scene the scene the shader is running in
      * @param lighting the Lighting of the scene
      */
-    public LightShader(Scene scene, Lighting lighting) {
+    public PhongShader(Scene scene, Lighting lighting) {
         this.scene = scene;
         this.lighting = lighting;
     }
@@ -27,7 +27,7 @@ public class LightShader implements FragmentShader {
     /**
      * Creates a PhongShader.
      */
-    public LightShader() {}
+    public PhongShader() {}
 
     /** 
      * Sets the shader's scene.
