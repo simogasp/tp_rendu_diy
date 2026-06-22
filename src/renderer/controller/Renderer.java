@@ -6,7 +6,8 @@ import java.util.Optional;
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
 import renderer.controller.ColorMapFactory.Maps;
-import renderer.core.shader.fragmentshaders.LightShader;
+import renderer.core.shader.fragmentshaders.PhongShader;
+import renderer.core.shader.vertexshaders.GouraudShader;
 import renderer.core.shader.vertexshaders.SinusVertexShader;
 import renderer.core.shader.vertexshaders.SimpleVertexShader;
 import renderer.core.camera.Transformation;
@@ -17,8 +18,7 @@ import renderer.core.pipeline.FragmentShaderStage;
 import renderer.core.pipeline.OutputMerger;
 import renderer.core.pipeline.PerspectiveCorrectRasterizer;
 import renderer.core.pipeline.Rasterizer;
-import renderer.core.shader.vertexshaders.VertexInput;
-import renderer.core.shader.vertexshaders.VertexOutput;
+import renderer.core.shader.vertexshaders.Vertex;
 import renderer.core.shader.vertexshaders.VertexShader;
 import renderer.core.shader.fragmentshaders.TextureShader;
 import renderer.core.shader.fragmentshaders.Fragment;
@@ -148,11 +148,11 @@ public final class Renderer {
      */
     public void renderNormal() {
         final Vector[] vertices = mesh.getVertices();
-        final VertexOutput[] outputs = runVertexShader();
+        final Vertex[] outputs = runVertexShader();
 
         for (int i = 0; i < vertices.length; i++) {
             final Vector vertex = vertices[i];
-            final VertexOutput output = outputs[i];
+            final Vertex output = outputs[i];
             final Vector normal = output.normal;
 
             final Vector destVector = new Vector(
@@ -170,19 +170,19 @@ public final class Renderer {
             red[1] = 0.0;
             red[2] = 0.0;
 
-            final VertexOutput destFragment = new VertexOutput(x, y);
-            destFragment.color = red;
-            destFragment.normal = normal;
-            destFragment.worldPosition = destVector;
-            destFragment.depth = destVectorPoint.get(2);
-            destFragment.alpha = output.alpha;
-            destFragment.u = output.u;
-            destFragment.v = output.v;
+            final Vertex destVertex = new Vertex(x, y);
+            destVertex.color = red;
+            destVertex.normal = normal;
+            destVertex.worldPosition = destVector;
+            destVertex.depth = destVectorPoint.get(2);
+            destVertex.alpha = output.alpha;
+            destVertex.u = output.u;
+            destVertex.v = output.v;
 
-            final VertexOutput originFragment = output.clone();
-            originFragment.color = red;
+            final Vertex originVertex = output.clone();
+            originVertex.color = red;
 
-            rasterizer.rasterizeEdge(originFragment, destFragment);
+            rasterizer.rasterizeEdge(originVertex, destVertex);
         }
     }
 
@@ -193,12 +193,13 @@ public final class Renderer {
      */
     public void setLightingEnabled(final boolean enabled) {
         lightingEnabled = enabled;
+        initVertexShader();
 
-        if(shader instanceof LightShader) {
+        if(shader instanceof PhongShader) {
             if(lightingEnabled) {
-                ((LightShader)shader).enableLighting();
+                ((PhongShader)shader).enableLighting();
             } else {
-                ((LightShader)shader).disableLighting();
+                ((PhongShader)shader).disableLighting();
             }
         }
     }
@@ -260,6 +261,7 @@ public final class Renderer {
      */
     public void setShader(final FragmentShader shader) {
         this.shader = shader;
+        initVertexShader();
 
         this.fragmentShaderStage = new FragmentShaderStage(shader, merger);
 
@@ -270,7 +272,18 @@ public final class Renderer {
      * Initialize the default vertex shader.
      */
     private void initVertexShader() {
-        this.vertexShader = new SimpleVertexShader(xform);
+        final VertexShader projectionShader = new SimpleVertexShader(xform);
+
+        if (!lightingEnabled || shader instanceof PhongShader) {
+            this.vertexShader = projectionShader;
+            return;
+        }
+
+        final VertexShader gouraudShader = new GouraudShader(scene, lighting);
+        this.vertexShader = vertex -> {
+            projectionShader.shade(vertex);
+            gouraudShader.shade(vertex);
+        };
     }
 
     /**
@@ -296,7 +309,7 @@ public final class Renderer {
         }
 
         // Compute scene depth range and inform shader (useful for DepthShader)
-        final VertexOutput[] allVertexOutputs = runVertexShader();
+        final Vertex[] allVertexOutputs = runVertexShader();
 
         // Debug output to help locate invisible render issues
         if (allVertexOutputs == null || allVertexOutputs.length == 0) {
@@ -304,7 +317,7 @@ public final class Renderer {
         } else {
             int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
             int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
-            for (VertexOutput vo : allVertexOutputs) {
+            for (Vertex vo : allVertexOutputs) {
                 if (vo == null) continue;
                 if (vo.x < minX) minX = vo.x;
                 if (vo.x > maxX) maxX = vo.x;
@@ -313,7 +326,7 @@ public final class Renderer {
             }
             System.out.println("Renderer.render: produced " + allVertexOutputs.length + " vertices; x range=[" + minX + "," + maxX + "] y range=[" + minY + "," + maxY + "]");
             for (int i = 0; i < Math.min(5, allVertexOutputs.length); i++) {
-                VertexOutput v = allVertexOutputs[i];
+                Vertex v = allVertexOutputs[i];
                 if (v != null) System.out.println("  v[" + i + "]=(" + v.x + "," + v.y + ") depth=" + v.depth);
             }
         }
@@ -322,8 +335,8 @@ public final class Renderer {
             if (allVertexOutputs != null && allVertexOutputs.length > 0) {
                 double minDepth = Double.POSITIVE_INFINITY;
                 double maxDepth = Double.NEGATIVE_INFINITY;
-                for (VertexOutput f : allVertexOutputs) {
-                    final double d = f.depth;
+                for (Vertex v : allVertexOutputs) {
+                    final double d = v.depth;
                     if (d < minDepth) minDepth = d;
                     if (d > maxDepth) maxDepth = d;
                 }
@@ -367,47 +380,19 @@ public final class Renderer {
      *
      * @return an array of vertex outputs
      */
-    public VertexOutput[] runVertexShader() {
+    public Vertex[] runVertexShader() {
         if (vertexShader == null) {
             initVertexShader();
         }
 
-        VertexInput[] inputs = buildInputsFromMesh();
-        VertexOutput[] outputs = new VertexOutput[inputs.length];
+        Vertex[] vertices = buildInputsFromMesh();
 
-        for (int i = 0; i < inputs.length; i++) {
-            outputs[i] = vertexShader.shade(inputs[i]);
+        for (int i = 0; i < vertices.length; i++) {
+            vertexShader.shade(vertices[i]);
         }
 
-        return outputs;
+        return vertices;
     }
-/**
- * 
-        Fragment[] fragments = new Fragment[outputs.length];
-
-        for (int i = 0; i < outputs.length; i++) {
-
-            VertexOutput o = outputs[i];
-
-            Fragment f = new Fragment(o.x, o.y);
-            f.setDepth(o.depth);
-            f.setNormal(o.normal);
-            f.setWorldPosition(o.worldPosition);
-
-            if (o.color != null) {
-                f.setColor(o.color[0], o.color[1], o.color[2]);
-                f.setAttribute(Fragment.COLOR_ALPHA, o.color[3]);
-            }
-
-            if (o.u != 0 || o.v != 0) {
-                f.setAttribute(7, o.u);
-                f.setAttribute(8, o.v);
-            }
-
-            fragments[i] = f;
-        }
-
- */
 
     /**
      * Creates an array of vertex inputs (for the 
@@ -415,20 +400,20 @@ public final class Renderer {
      *  
      * @return an array of VertexInput
      */
-    private VertexInput[] buildInputsFromMesh() {
+    private Vertex[] buildInputsFromMesh() {
 
         Vector[] vertices = mesh.getVertices();
         Vector[] normals = mesh.getNormals();
         double[] colors = mesh.getColors();
         double[] texCoords = mesh.getTextureCoordinates();
 
-        VertexInput[] inputs = new VertexInput[vertices.length];
+        Vertex[] inputs = new Vertex[vertices.length];
 
         for (int i = 0; i < vertices.length; i++) {
 
-            VertexInput in = new VertexInput();
+            Vertex in = new Vertex();
 
-            in.position = vertices[i];
+            in.worldPosition = vertices[i];
             in.normal = normals[i];
 
             in.color = new double[] {
@@ -536,14 +521,14 @@ public final class Renderer {
      * Renders the wireframe of the mesh.
      */
     private void renderWireframe(boolean solidWireframe) {
-        final VertexOutput[] outputs = runVertexShader();
+        final Vertex[] outputs = runVertexShader();
         final int[] faces = mesh.getFaces();
 
         for (int i = 0; i < 3 * mesh.getNumFaces(); i += 3) {
             if(solidWireframe) {
-                final VertexOutput v1 = outputs[faces[i]];
-                final VertexOutput v2 = outputs[faces[i + 1]];
-                final VertexOutput v3 = outputs[faces[i + 2]];
+                final Vertex v1 = outputs[faces[i]];
+                final Vertex v2 = outputs[faces[i + 1]];
+                final Vertex v3 = outputs[faces[i + 2]];
 
                 double area = Rasterizer.triangleArea(v1, v2, v3);
                 final double eps = 1e-6;
@@ -553,8 +538,8 @@ public final class Renderer {
                 }
             }
             for (int j = 0; j < 3; j++) {
-                final VertexOutput v1 = outputs[faces[i + j]];
-                final VertexOutput v2 = outputs[faces[i + ((j + 1) % 3)]];
+                final Vertex v1 = outputs[faces[i + j]];
+                final Vertex v2 = outputs[faces[i + ((j + 1) % 3)]];
                 rasterizer.rasterizeEdge(v1, v2);
 
                 if(solidWireframe) {
@@ -569,8 +554,8 @@ public final class Renderer {
      * Renders the vertices of the mesh.
      */
     private void renderVertices() {
-        final VertexOutput[] outputs = runVertexShader();
-        for (VertexOutput vertex : outputs) {
+        final Vertex[] outputs = runVertexShader();
+        for (Vertex vertex : outputs) {
             rasterizer.rasterizeVertex(vertex);
         }
     }
@@ -584,13 +569,13 @@ public final class Renderer {
      */
     private void renderSolid(boolean onlyDepth)
             throws SizeMismatchException {
-        final VertexOutput[] outputs = runVertexShader();
+        final Vertex[] outputs = runVertexShader();
         final int[] faces = mesh.getFaces();
 
         for (int i = 0; i < 3 * mesh.getNumFaces(); i += 3) {
-            final VertexOutput v1 = outputs[faces[i]];
-            final VertexOutput v2 = outputs[faces[i + 1]];
-            final VertexOutput v3 = outputs[faces[i + 2]];
+            final Vertex v1 = outputs[faces[i]];
+            final Vertex v2 = outputs[faces[i + 1]];
+            final Vertex v3 = outputs[faces[i + 2]];
 
             rasterizer.rasterizeFace(v1, v2, v3, onlyDepth);
         }
@@ -609,6 +594,7 @@ public final class Renderer {
             setShader(newShader);
             setTexture(texture);
             initPhong();
+            setLightingEnabled(lightingEnabled);
             setCombineWithBaseColor(combineColorState);
             return true;
         } else {
@@ -652,10 +638,10 @@ public final class Renderer {
      * @return whether the operation as been correctly made.
      */
     public boolean initPhong() {
-        if (!(shader instanceof LightShader)) {
+        if (!(shader instanceof PhongShader)) {
             return true;
         }
-        return ((LightShader) shader).init(this.scene, this.lighting);
+        return ((PhongShader) shader).init(this.scene, this.lighting);
     }
 
     /**
