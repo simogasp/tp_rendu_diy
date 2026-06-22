@@ -24,17 +24,13 @@ public class SinusVertexShader implements VertexShader {
      * alpha value, UV coordinates...) is left unchanged.
      * 
      * @param in the vertex in 3D space
-     * @return a VertexOutput containing the transformed vertex's data 
-     *         (in 2D space)
      */
     @Override
-    public VertexOutput shade(VertexInput in) {
+    public void shade(Vertex in) {
 
-        VertexOutput out = new VertexOutput();
-
-        double x =  in.position.get(0);
-        double y =  in.position.get(1);
-        double z =  in.position.get(2);
+        double x =  in.worldPosition.get(0);
+        double y =  in.worldPosition.get(1);
+        double z =  in.worldPosition.get(2);
         
         // The amplitudes of distortion along each axis
         double x_amplitude = 0.02;
@@ -52,19 +48,10 @@ public class SinusVertexShader implements VertexShader {
             z + z_amplitude * Math.sin((x + y) * z_frequency));
         Vector pVertex = xform.projectPoint(sinPos);
 
-        out.x = (int) Math.round(pVertex.get(0));
-        out.y = (int) Math.round(pVertex.get(1));
-        out.depth = pVertex.get(2);
+        in.x = (int) Math.round(pVertex.get(0));
+        in.y = (int) Math.round(pVertex.get(1));
+        in.depth = pVertex.get(2);
 
-        out.worldPosition = in.position;
-        out.normal = in.normal;
-
-        out.color = in.color;
-        out.alpha = 1.0;
-
-        out.u = in.u;
-        out.v = in.v;
-
-        return out;
+        in.alpha = 1.0;
     }
 }
