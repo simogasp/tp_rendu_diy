@@ -34,15 +34,15 @@ public class PhongShader implements FragmentShader {
 
     /** 
      * Sets the shader's scene.
-     * 
-     * @param scene the (new) scene the shader will be running in 
+     *
+     * @param scene the (new) scene the shader will be running in
      */
     public void setScene(Scene scene) { this.scene = scene; }
 
-    /** 
+    /**
      * Sets the scene's lighting.
-     * 
-     * @param lighting the (new) lighting of the scene 
+     *
+     * @param lighting the (new) lighting of the scene
      */
     public void setLighting(Lighting lighting) { this.lighting = lighting; }
 
@@ -50,7 +50,7 @@ public class PhongShader implements FragmentShader {
      * Initializes the shader with a scene and a lighting.
      * Returns a boolean to indicate wether it is ready to function
      * or not.
-     * 
+     *
      * @param scene the scene to use
      * @param lighting the lighting of the scene
      * @return true if the shader is ready to function, false if not.
@@ -81,12 +81,12 @@ public class PhongShader implements FragmentShader {
 
     /**
      * Shades the fragment according to the scene's lighting.
-     * 
+     *
      * @param fragment the fragment to shade
      * @return a FragmentOutput containing the color of the shaded fragment.
      */
     public FragmentOutput shade(Fragment fragment) {
-        if(this.activeLighting) {
+        if (this.activeLighting) {
             //++ //TODO: Implement the Phong lighting solution
             //++ return new FragmentOutputput(fragment.getAttribute(Fragment.COLOR_R, Fragment.COLOR_B));
             //<!!
