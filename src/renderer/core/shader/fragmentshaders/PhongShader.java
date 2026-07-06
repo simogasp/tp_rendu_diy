@@ -37,14 +37,18 @@ public class PhongShader implements FragmentShader {
      *
      * @param scene the (new) scene the shader will be running in
      */
-    public void setScene(Scene scene) { this.scene = scene; }
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
 
     /**
      * Sets the scene's lighting.
      *
      * @param lighting the (new) lighting of the scene
      */
-    public void setLighting(Lighting lighting) { this.lighting = lighting; }
+    public void setLighting(Lighting lighting) {
+        this.lighting = lighting;
+    }
 
     /**
      * Initializes the shader with a scene and a lighting.
@@ -67,17 +71,23 @@ public class PhongShader implements FragmentShader {
     /**
      * Toggles ON the lighting.
      */
-    public void enableLighting() { this.activeLighting = true; }
+    public void enableLighting() {
+        this.activeLighting = true;
+    }
 
     /**
      * Toggles OFF the lighting.
      */
-    public void disableLighting() { this.activeLighting = false; }
+    public void disableLighting() {
+        this.activeLighting = false;
+    }
 
     /**
      * Toggles ON/OFF the lighting (inverse of what it used to be).
      */
-    public void toggleLighting() { this.activeLighting = !(activeLighting); }
+    public void toggleLighting() {
+        this.activeLighting = !(activeLighting);
+    }
 
     /**
      * Shades the fragment according to the scene's lighting.
