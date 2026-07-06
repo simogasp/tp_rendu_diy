@@ -7,15 +7,18 @@ import renderer.core.light.Lighting;
 import renderer.core.mesh.Scene;
 
 public class PhongShader implements FragmentShader {
-    
+
+    /** The Scene object containing the mesh and light(s). */
     private Scene scene;
+    /** The Lighting object containing the lights of the scene. */
     private Lighting lighting;
 
+    /** Indicates whether the lighting is active or not. */
     private boolean activeLighting = false;
 
     /**
      * Creates a PhongShader.
-     * 
+     *
      * @param scene the scene the shader is running in
      * @param lighting the Lighting of the scene
      */
