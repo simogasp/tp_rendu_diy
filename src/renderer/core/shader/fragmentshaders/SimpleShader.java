@@ -12,7 +12,7 @@ public class SimpleShader implements FragmentShader {
     /**
      * Shades the fragment by simply returning its raw color (albedo).
      * (no other operations)
-     * 
+     *
      * @param fragment the fragment to shade
      * @return a FragmentOutput containing the raw color of the fragment
      */
@@ -20,7 +20,7 @@ public class SimpleShader implements FragmentShader {
     public FragmentOutput shade(Fragment fragment) {
         Color black = new Color(0f, 0f, 0f);
 
-        if(fragment.getColor().equals(black)) {
+        if (fragment.getColor().equals(black)) {
             return new FragmentOutput(new Color(1.0f, 0.0f, 0.0f));
         }
 

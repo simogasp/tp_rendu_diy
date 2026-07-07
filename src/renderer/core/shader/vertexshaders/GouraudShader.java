@@ -13,8 +13,9 @@ public class GouraudShader implements VertexShader {
 
     /**
      * Creates a SimpleVertexShader.
-     * 
-     * @param xform the Transformation object to use
+     *
+     * @param scene the Scene object
+     * @param lighting the Lighting object
      */
     public GouraudShader(Scene scene, Lighting lighting) {
         this.scene = scene;
@@ -24,18 +25,18 @@ public class GouraudShader implements VertexShader {
     /**
      * The simplest form of Vertex Shader : only project the
      * vertex from 3D space (scene/mesh) to 2D space (the screen).
-     * All the other data (color/albedo, normal, world position, depth, 
+     * All the other data (color/albedo, normal, world position, depth,
      * alpha value, UV coordinates...) is left unchanged.
-     * 
+     *
      * @param in the vertex in 3D space
      */
     @Override
     public void shade(Vertex in) {
         double[] material = scene.getMaterial();
-        
+
         double[] lightColor = this.lighting.applyLights(in.worldPosition, in.normal,
-                                                        in.color, scene.getCameraPosition(),
-                                                        material[0], material[1], material[2], material[3]);
+                                    in.color, scene.getCameraPosition(),
+                                    material[0], material[1], material[2], material[3]);
 
         in.color = lightColor;
         in.alpha = 1.0;
