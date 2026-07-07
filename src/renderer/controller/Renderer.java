@@ -352,11 +352,15 @@ public final class Renderer {
         }
 
         if (wiredRendered) {
+            if(solidWiredRendered) {
+                // first rasterization pass to initialize the depthBuffer
+                renderSolid(true);
+            }
             // render edges if needed
             renderWireframe(solidWiredRendered);
             if(!solidWiredRendered) {
-                // only render the vertices id the "Solid Wireframe" mode
-                // isn't active : if it is, the "right" vertices are rendered
+                // only render the vertices if the "Solid Wireframe" mode
+                // isn't active : if it is, the "correct" vertices are rendered
                 // by the renderWireframe method
                 renderVertices();
             }

@@ -52,7 +52,7 @@ public class DepthBuffer {
      */
     public boolean testFragment(Fragment f) {
         if (isWithinBounds(f)) {
-            return (buffer.get(f.getY(), f.getX()) > f.getDepth()); //++ // TODO
+            return (buffer.get(f.getY(), f.getX()) >= f.getDepth()); //++ // TODO
             //++ return true;
         } else {
             return false;
