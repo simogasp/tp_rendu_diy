@@ -63,7 +63,7 @@ public class OutputMerger {
     }
 
     /**
-     * Common entry point to ree-initialize the output.
+     * Common entry point to re-initialize the output.
      */
     public void reset() {
         depth.clear();
