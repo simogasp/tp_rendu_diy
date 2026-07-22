@@ -2,7 +2,11 @@ package renderer.utils;
 
 import java.util.function.BiConsumer;
 
-public class Bresenham {
+public final class Bresenham {
+
+    private Bresenham() {
+        // Prevent instantiation
+    }
 
     /**
       * Rasterizes the edge between the projected points p0 and p1.
@@ -14,7 +18,8 @@ public class Bresenham {
       * @param y1 the y coordinate of the second point of the edge
       * @param callback callback invoked for each pixel (x, y)
       */
-    public static void getLine(int x0, int y0, int x1, int y1, BiConsumer<Integer, Integer> callback) {
+    public static void getLine(int x0, int y0, int x1, int y1,
+                               BiConsumer<Integer, Integer> callback) {
         // Easy case: the two points are the same
         if (x0 == x1 && y0 == y1) {
             callback.accept(x0, y0);
@@ -28,7 +33,8 @@ public class Bresenham {
         }
     }
 
-    private static void bresenhamLine(int x0, int y0, int x1, int y1, BiConsumer<Integer, Integer> cb) {
+    private static void bresenhamLine(int x0, int y0, int x1, int y1,
+                                      BiConsumer<Integer, Integer> cb) {
         int dx = x1 - x0;
         int dy = Math.abs(y1 - y0);
 
