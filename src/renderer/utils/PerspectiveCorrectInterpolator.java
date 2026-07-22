@@ -6,7 +6,7 @@ public class PerspectiveCorrectInterpolator implements AttributeInterpolator {
                               double w1, double w2, double w3) {
 
         //<++
-        //++ // TODO: interpolate the value of the attributes of the 3 vertices, 
+        //++ // TODO : interpolate the value of the attributes of the 3 vertices,
         //++ // but correct the error made by not correctly accounting for the
         //++ // depth.
         //>++

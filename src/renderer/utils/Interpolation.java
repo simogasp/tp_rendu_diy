@@ -5,8 +5,12 @@ import renderer.algebra.Vector;
 import renderer.core.shader.vertexshaders.Vertex;
 import renderer.core.shader.fragmentshaders.Fragment;
 
-public class Interpolation {
-    
+public final class Interpolation {
+
+    private Interpolation() {
+        // Prevent instantiation
+    }
+
     /**
      * Linear interpolation of a Fragment f on the edge defined by Fragment's v1 and
      * v2.
@@ -14,10 +18,11 @@ public class Interpolation {
      * @param v1 the first vertex of the edge
      * @param v2 the second vertex of the edge
      * @param f  the fragment to interpolate
-     * @param middle_double_value the value to use if the two vertices (v1 and v2) are
-     *                            in the same position (to avoid division by 0)
+     * @param middleDoubleValue the value to use if the two vertices (v1 and v2) are
+     *                          in the same position (to avoid division by 0)
      */
-    public static void interpolate2(Vertex v1, Vertex v2, Fragment f, double middle_double_value) {
+    public static void interpolate2(Vertex v1, Vertex v2,
+                                    Fragment f, double middleDoubleValue) {
         final int x1 = v1.x;
         final int y1 = v1.y;
         final int x2 = v2.x;
@@ -26,7 +31,7 @@ public class Interpolation {
         final int y = f.getY(); // was an x ?? maybe it was on purpose ??
 
         // corner case in which the two vertices are the same
-        double alpha = middle_double_value;
+        double alpha = middleDoubleValue;
         // if we have more pixel on the horizontal axis
         if (Math.abs(x2 - x1) >= Math.abs(y2 - y1)) {
             if (x2 != x1) {
@@ -46,8 +51,8 @@ public class Interpolation {
         // Interpolate the normal
         Vector n1 = v1.normal;
         Vector n2 = v2.normal;
-        
-        for(int i = 0 ; i < 3 ; i++) {
+
+        for (int i = 0; i < 3; i++) {
             interpolated = (1.0 - alpha) * n1.get(i) + alpha * n2.get(i);
             f.setAttribute(Fragment.NORMAL_X + i, interpolated);
         }
@@ -55,8 +60,8 @@ public class Interpolation {
         // Interpolate the world position
         Vector wp1 = v1.worldPosition;
         Vector wp2 = v2.worldPosition;
-        
-        for(int i = 0 ; i < 3 ; i++) {
+
+        for (int i = 0; i < 3; i++) {
             interpolated = (1.0 - alpha) * wp1.get(i) + alpha * wp2.get(i);
             f.setAttribute(Fragment.WORLD_X + i, interpolated);
         }
@@ -65,7 +70,7 @@ public class Interpolation {
         double[] c1 = v1.color;
         double[] c2 = v2.color;
 
-        for(int i = 0 ; i < 3 ; i++) {
+        for (int i = 0; i < 3; i++) {
             interpolated = MathUtils.clamp((1.0 - alpha) * c1[i] + alpha * c2[i], 0, 1);
             f.setAttribute(Fragment.COLOR_R + i, interpolated);
         }
@@ -85,10 +90,10 @@ public class Interpolation {
 
 
     /**
-     * Linear interpolation of a Fragment f on the triangle defined by 
+     * Linear interpolation of a Fragment f on the triangle defined by
      * Vertices v1, v2 and v3.
-     * 
-     * This method uses an interpolator function (as AttributeInterpolator interp, 
+     *
+     * This method uses an interpolator function (as AttributeInterpolator interp,
      * use interp.interpolate(...)) to calculate the interpolation of the attributes.
      * This allows different rasterizers to use different interpolation methods
      *
@@ -101,31 +106,36 @@ public class Interpolation {
      * @param w3 the barycentric coordinate of the third vertex
      * @param interp the interpolation function
      */
-    public static void interpolate3(Vertex v1, Vertex v2, Vertex v3, Fragment f, 
-                                    double w1, double w2, double w3, AttributeInterpolator interp) {
+    public static void interpolate3(Vertex v1, Vertex v2, Vertex v3, Fragment f,
+                                    double w1, double w2, double w3,
+                                    AttributeInterpolator interp) {
 
 
-        //<++ 
-        //++  // TODO: calculate the fragment's (f) attributes' values by interpolating the values of the
-        //++  // attributes of the 3 vertices composing the triangle it is in.
+        //<++
+        //++  // TODO : calculate the fragment's (f) attributes' values by
+        //++  // interpolating the values of the attributes of the 3 vertices
+        //++  // composing the triangle it's in.
         //++
         //++  // You may need to consult the methods of these classes in particular :
         //++  //     - Fragment
         //++  //     - VertexOutput
         //++
-        //++  // You also need to implement the LinearInterpolator class for the rasterization to work !
+        //++  // You also need to implement the LinearInterpolator class
+        //++  // for the rasterization to work !
         //>++
-        
+
         //<!!
         // Interpolate the depth of the fragment
-        f.setAttribute(Fragment.DEPTH, interp.interpolate(v1.depth, v2.depth, v3.depth, w1, w2, w3));
-        
+        f.setAttribute(Fragment.DEPTH, interp.interpolate(
+            v1.depth, v2.depth, v3.depth,
+            w1, w2, w3));
+
         // Interpolate the normals of the fragment
         for (int i = 0; i < 3; i++) {
             double value = interp.interpolate(
-                v1.normal.get(i), 
-                v2.normal.get(i), 
-                v3.normal.get(i), 
+                v1.normal.get(i),
+                v2.normal.get(i),
+                v3.normal.get(i),
                 w1, w2, w3);
             f.setAttribute(Fragment.NORMAL_X + i, value);
         }
@@ -133,21 +143,21 @@ public class Interpolation {
         // Interpolate the color of the fragment
         for (int i = 0; i < 3; i++) {
             double value = interp.interpolate(
-                v1.color[i], 
-                v2.color[i], 
-                v3.color[i],  
+                v1.color[i],
+                v2.color[i],
+                v3.color[i],
                 w1, w2, w3);
             f.setAttribute(Fragment.COLOR_R + i, MathUtils.clamp(value, 0, 1));
         }
 
         // Interpolate the alpha value of the fragment
         double value = interp.interpolate(
-            v1.alpha, 
+            v1.alpha,
             v2.alpha,
             v3.alpha,
             w1, w2, w3);
         f.setAttribute(Fragment.COLOR_ALPHA, MathUtils.clamp(value, 0, 1));
-    
+
         // Interpolate the world position of the fragment
         for (int i = 0; i < 3; i++) {
             value = interp.interpolate(
@@ -159,8 +169,10 @@ public class Interpolation {
         }
 
         // Interpolate the UV coordinates of the fragment
-        f.setAttribute(Fragment.TEXTURE_U, interp.interpolate(v1.u, v2.u, v3.u, w1, w2, w3));
-        f.setAttribute(Fragment.TEXTURE_V, interp.interpolate(v1.v, v2.v, v3.v, w1, w2, w3));
+        f.setAttribute(Fragment.TEXTURE_U, interp.interpolate(v1.u, v2.u, v3.u,
+                                                              w1, w2, w3));
+        f.setAttribute(Fragment.TEXTURE_V, interp.interpolate(v1.v, v2.v, v3.v,
+                                                              w1, w2, w3));
         //>!!
     }
 }
