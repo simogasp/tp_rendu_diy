@@ -10,7 +10,7 @@ public class SimpleVertexShader implements VertexShader {
 
     /**
      * Creates a SimpleVertexShader.
-     * 
+     *
      * @param xform the Transformation object to use
      */
     public SimpleVertexShader(Transformation xform) {
@@ -20,9 +20,9 @@ public class SimpleVertexShader implements VertexShader {
     /**
      * The simplest form of Vertex Shader : only project the
      * vertex from 3D space (scene/mesh) to 2D space (the screen).
-     * All the other data (color/albedo, normal, world position, depth, 
+     * All the other data (color/albedo, normal, world position, depth,
      * alpha value, UV coordinates...) is left unchanged.
-     * 
+     *
      * @param in the vertex in 3D space
      */
     @Override
