@@ -36,13 +36,17 @@ public class DepthShader implements FragmentShader {
      * Creates a DepthShader.
      */
     public DepthShader() {
-        this(ColorMapFactory.create(ColorMapFactory.Maps.VERIDIS), Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+        this(ColorMapFactory.create(ColorMapFactory.Maps.VERIDIS),
+             Double.POSITIVE_INFINITY,
+             Double.NEGATIVE_INFINITY);
     }
 
     /**
      * Creates a DepthShader with the given colorMap.
      *
      * @param initColorMap the init color map
+     * @param near the 'near' distance of the depth buffer
+     * @param far the 'far' distance of the depth buffer
      */
     public DepthShader(final ColorMap initColorMap, double near, double far) {
         super();
@@ -53,9 +57,9 @@ public class DepthShader implements FragmentShader {
 
     /**
      * Shades a fragment according to its depth (from the camera).
-     * 
+     *
      * @param fragment the fragment to shade
-     * @return a FragmentOutput with a color proportional 
+     * @return a FragmentOutput with a color proportional
      *         to the depth of the fragment
      */
     @Override
@@ -117,10 +121,10 @@ public class DepthShader implements FragmentShader {
     public void setColorMap(final Maps map) {
         this.colorMap = ColorMapFactory.create(map);
     }
-    
+
     @Override
-    public void setDepthRange(double near, double far) {
-        this.near = near;
-        this.far = far;
+    public void setDepthRange(double newNear, double newFar) {
+        this.near = newNear;
+        this.far = newFar;
     }
 }

@@ -73,8 +73,8 @@ public class TextureShader implements FragmentShader {
      * coordinates.
      *
      * @param fragment the fragment to shade
-     * @return a FragmentOutput containing the color of the texture at the 
-     *         fragment's UV coordinates. 
+     * @return a FragmentOutput containing the color of the texture at the
+     *         fragment's UV coordinates.
      */
     @Override
     public FragmentOutput shade(Fragment fragment) {

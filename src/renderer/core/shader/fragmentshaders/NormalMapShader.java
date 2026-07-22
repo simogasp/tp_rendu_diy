@@ -8,7 +8,7 @@ public class NormalMapShader implements FragmentShader {
 
     /**
      * Shades a fragment according to its normal's orientation.
-     * 
+     *
      * @param fragment the fragment to shade
      * @return a FragmentOutput containing a color corresponding
      *         to the fragment's normal's orientation.
@@ -17,7 +17,7 @@ public class NormalMapShader implements FragmentShader {
     public FragmentOutput shade(Fragment fragment) {
 
         Vector n = fragment.getNormal().normalize();
-        
+
         if (Double.isNaN(n.getX()) || Double.isNaN(n.getY()) || Double.isNaN(n.getZ())) {
             return new FragmentOutput(Color.BLACK);
         }

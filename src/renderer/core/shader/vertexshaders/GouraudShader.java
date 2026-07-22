@@ -41,5 +41,4 @@ public class GouraudShader implements VertexShader {
         in.color = lightColor;
         in.alpha = 1.0;
     }
-
 }
