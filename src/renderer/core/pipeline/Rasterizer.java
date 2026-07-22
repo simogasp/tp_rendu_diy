@@ -12,9 +12,9 @@ import renderer.utils.Bresenham;
 
 /**
  * The Rasterizer class is responsible for the discretization of geometric
- * primitives (edges and faces) over the screen pixel grid and generates Fragment 
- * (pixels with interpolated attributes). 
- * 
+ * primitives (edges and faces) over the screen pixel grid and generates Fragment
+ * (pixels with interpolated attributes).
+ *
  * Those Fragment are then passed to a FragmentConsumer object,
  * which will produce the final color of the fragment.
  *
@@ -27,7 +27,7 @@ public class Rasterizer {
      */
     private static final double MIDDLE_DOUBLE_VALUE = .5;
 
-    /** The FragmentConsumer to use */
+    /** The FragmentConsumer to use. */
     protected FragmentConsumer consumer;
 
     /**
@@ -39,6 +39,11 @@ public class Rasterizer {
         this.consumer = consumer;
     }
 
+    /**
+     * Set the consumer.
+     *
+     * @param consumer
+     */
     public void setConsumer(FragmentConsumer consumer) {
         this.consumer = consumer;
     }
@@ -61,18 +66,18 @@ public class Rasterizer {
         f.setAttribute(Fragment.DEPTH, v.depth);
 
         // Set the normal of the fragment
-        for(int i = 0 ; i < 3 ; i++) {
-            f.setAttribute(Fragment.NORMAL_X + i, v.normal.get(i));
+        for (int i = Fragment.NORMAL_X; i < Fragment.NORMAL_Z; i++) {
+            f.setAttribute(i, v.normal.get(i));
         }
 
         // Set the world position of the fragment
-        for(int i = 0 ; i < 3 ; i++) {
-            f.setAttribute(Fragment.WORLD_X + i, v.worldPosition.get(i));
+        for (int i = Fragment.WORLD_X; i < Fragment.WORLD_Z; i++) {
+            f.setAttribute(i, v.worldPosition.get(i));
         }
 
         // Set the color of the fragment
-        for(int i = 0 ; i < 3 ; i++) {
-            f.setAttribute(Fragment.COLOR_R + i, v.color[i]);
+        for (int i = Fragment.COLOR_R; i < Fragment.COLOR_B; i++) {
+            f.setAttribute(i, v.color[i]);
         }
 
         // Set the alpha value of the fragment
@@ -82,7 +87,7 @@ public class Rasterizer {
         f.setAttribute(Fragment.TEXTURE_U, v.u);
         f.setAttribute(Fragment.TEXTURE_V, v.v);
 
-        // Draw a larger square (of size 'size')        
+        // Draw a larger square (of size 'size')
         final int size = 2;
         for (int i = -size; i <= size; i++) {
             for (int j = -size; j <= size; j++) {
@@ -212,10 +217,12 @@ public class Rasterizer {
                     continue;
                 }
                 fragment.setPosition(x, y);
-                // We will new interpolate all the attributes of the vertices 
+                // We will new interpolate all the attributes of the vertices
                 // to calculate those of the fragment
-                if(!onlyDepth) {
-                    Interpolation.interpolate3(v1, v2, v3, fragment, bar.get(0), bar.get(1), bar.get(2), interp);
+                if (!onlyDepth) {
+                    Interpolation.interpolate3(v1, v2, v3, fragment,
+                                               bar.get(0), bar.get(1), bar.get(2),
+                                               interp);
                     // The backup code would be here
                 } else {
                     final double bias = 1.01;
