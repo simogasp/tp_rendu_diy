@@ -74,10 +74,10 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
                 final double w1 = bar.get(0) / v1.depth;
                 final double w2 = bar.get(1) / v2.depth;
                 final double w3 = bar.get(2) / v3.depth;
-                
+
                 //!! // This would be where the oneOverZ would go
-                
-                if(!onlyDepth) {
+
+                if (!onlyDepth) {
                     Interpolation.interpolate3(v1, v2, v3, fragment, w1, w2, w3, interp);
                     //!! // The backup code would be here
                 } else {
