@@ -50,7 +50,7 @@ public final class Renderer {
     /** The mesh. */
     private Mesh mesh;
 
-    /** The Vertex shader */
+    /** The Vertex shader. */
     private VertexShader vertexShader;
 
     /** The rasterizer. */
@@ -59,7 +59,7 @@ public final class Renderer {
     /** The output merger. */
     private OutputMerger merger;
 
-    /** The fragmentShaderStage */
+    /** The fragmentShaderStage. */
     private FragmentShaderStage fragmentShaderStage;
 
     /** The shader. */
@@ -86,7 +86,7 @@ public final class Renderer {
     /** Whether the image contains faces. */
     private boolean solidRendered;
 
-    /** Whether to render the wireframe in solid or non-solid mode */
+    /** Whether to render the wireframe in solid or non-solid mode. */
     private boolean solidWiredRendered;
 
     /** Whether to use perspective-correct rasterization. */
@@ -195,11 +195,11 @@ public final class Renderer {
         lightingEnabled = enabled;
         initVertexShader();
 
-        if(shader instanceof PhongShader) {
-            if(lightingEnabled) {
-                ((PhongShader)shader).enableLighting();
+        if (shader instanceof PhongShader) {
+            if (lightingEnabled) {
+                ((PhongShader) shader).enableLighting();
             } else {
-                ((PhongShader)shader).disableLighting();
+                ((PhongShader) shader).disableLighting();
             }
         }
     }
@@ -352,13 +352,13 @@ public final class Renderer {
         }
 
         if (wiredRendered) {
-            if(solidWiredRendered) {
+            if (solidWiredRendered) {
                 // first rasterization pass to initialize the depthBuffer
                 renderSolid(true);
             }
             // render edges if needed
             renderWireframe(solidWiredRendered);
-            if(!solidWiredRendered) {
+            if (!solidWiredRendered) {
                 // only render the vertices if the "Solid Wireframe" mode
                 // isn't active : if it is, the "correct" vertices are rendered
                 // by the renderWireframe method
@@ -399,9 +399,9 @@ public final class Renderer {
     }
 
     /**
-     * Creates an array of vertex inputs (for the 
-     * rasterization phase) from the mesh
-     *  
+     * Creates an array of vertex inputs (for the
+     * rasterization phase) from the mesh.
+     *
      * @return an array of VertexInput
      */
     private Vertex[] buildInputsFromMesh() {
@@ -523,30 +523,35 @@ public final class Renderer {
 
     /**
      * Renders the wireframe of the mesh.
+     *
+     * @param solidWireframe a boolean to toggle solid wireframe mode
      */
     private void renderWireframe(boolean solidWireframe) {
         final Vertex[] outputs = runVertexShader();
         final int[] faces = mesh.getFaces();
 
         for (int i = 0; i < 3 * mesh.getNumFaces(); i += 3) {
-            if(solidWireframe) {
-                final Vertex v1 = outputs[faces[i]];
-                final Vertex v2 = outputs[faces[i + 1]];
-                final Vertex v3 = outputs[faces[i + 2]];
+            //
+            // BACKFACE CULLING
+            //
+            //if(solidWireframe) {
+            //    final Vertex v1 = outputs[faces[i]];
+            //    final Vertex v2 = outputs[faces[i + 1]];
+            //    final Vertex v3 = outputs[faces[i + 2]];
 
-                double area = Rasterizer.triangleArea(v1, v2, v3);
-                final double eps = 1e-6;
+            //    double area = Rasterizer.triangleArea(v1, v2, v3);
+            //    final double eps = 1e-6;
 
-                if(area >= -eps) {
-                    continue;
-                }
-            }
+            //    if(area >= -eps) {
+            //        continue;
+            //    }
+            //}
             for (int j = 0; j < 3; j++) {
                 final Vertex v1 = outputs[faces[i + j]];
                 final Vertex v2 = outputs[faces[i + ((j + 1) % 3)]];
                 rasterizer.rasterizeEdge(v1, v2);
 
-                if(solidWireframe) {
+                if (solidWireframe) {
                     rasterizer.rasterizeVertex(v1);
                     rasterizer.rasterizeVertex(v2);
                 }
