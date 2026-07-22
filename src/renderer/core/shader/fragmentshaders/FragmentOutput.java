@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public final class FragmentOutput {
 
-    /** The final color of the fragment to output on screen */
+    /** The final color of the fragment to output on screen. */
     private final Color color;
 
     /**

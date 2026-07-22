@@ -46,7 +46,7 @@ public class Fragment {
     public static final int COLOR_G = 2;
     /** the blue component of the color. */
     public static final int COLOR_B = 3;
-    /** the alpha component of the color */
+    /** the alpha component of the color. */
     public static final int COLOR_ALPHA = 4;
     /** the x component of the normal. */
     public static final int NORMAL_X = 5;
@@ -210,7 +210,7 @@ public class Fragment {
     }
 
     /**
-     * Sets the world position of the Fragment. 
+     * Sets the world position of the Fragment.
      * @param wx the world position X of the fragment
      * @param wy the world position Y of the fragment
      * @param wz the world position Z of the fragment
@@ -222,11 +222,11 @@ public class Fragment {
     }
 
     /**
-     * Sets the world position of the Fragment. 
+     * Sets the world position of the Fragment.
      * @param worldPos the world position of the fragment
      */
     public void setWorldPosition(Vector worldPos) {
-        if(worldPos.size() != 3) {
+        if (worldPos.size() != 3) {
             throw new RuntimeException("Wrong size of vector to set world position !");
         }
 
