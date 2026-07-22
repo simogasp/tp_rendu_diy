@@ -56,36 +56,37 @@ public class Rasterizer {
      */
     public void rasterizeVertex(final Vertex v) {
 
-        int x1 = v.x;
-        int y1 = v.y;
+        int x1 = v.getX();
+        int y1 = v.getY();
 
         // For now : just display the vertices
         Fragment f = new Fragment(x1, y1);
 
         // Set the depth of the fragment
-        f.setAttribute(Fragment.DEPTH, v.depth);
+        f.setAttribute(Fragment.DEPTH, v.getDepth());
 
         // Set the normal of the fragment
         for (int i = Fragment.NORMAL_X; i < Fragment.NORMAL_Z; i++) {
-            f.setAttribute(i, v.normal.get(i));
+            f.setAttribute(i, v.getNormal().get(i));
         }
 
         // Set the world position of the fragment
         for (int i = Fragment.WORLD_X; i < Fragment.WORLD_Z; i++) {
-            f.setAttribute(i, v.worldPosition.get(i));
+            f.setAttribute(i, v.getWorldPosition().get(i));
         }
 
         // Set the color of the fragment
+        double[] color = v.getColor();
         for (int i = Fragment.COLOR_R; i < Fragment.COLOR_B; i++) {
-            f.setAttribute(i, v.color[i]);
+            f.setAttribute(i, color[i]);
         }
 
         // Set the alpha value of the fragment
-        f.setAttribute(Fragment.COLOR_ALPHA, v.alpha);
+        f.setAttribute(Fragment.COLOR_ALPHA, v.getAlpha());
 
         // Set the UV coordinates of the fragment
-        f.setAttribute(Fragment.TEXTURE_U, v.u);
-        f.setAttribute(Fragment.TEXTURE_V, v.v);
+        f.setAttribute(Fragment.TEXTURE_U, v.getU());
+        f.setAttribute(Fragment.TEXTURE_V, v.getV());
 
         // Draw a larger square (of size 'size')
         final int size = 2;
@@ -110,10 +111,10 @@ public class Rasterizer {
       */
     public void rasterizeEdge(Vertex v1, Vertex v2) {
         // This is basically Bresenham's algorithm
-        final int x1 = v1.x;
-        final int y1 = v1.y;
-        final int x2 = v2.x;
-        final int y2 = v2.y;
+        final int x1 = v1.getX();
+        final int y1 = v1.getY();
+        final int x2 = v2.getX();
+        final int y2 = v2.getY();
 
         Fragment fragment = new Fragment(0, 0);
         Bresenham.getLine(x1, y1, x2, y2, (x, y) -> {
@@ -134,9 +135,9 @@ public class Rasterizer {
      * @return the signed area of the triangle
      */
     public static double triangleArea(Vertex v1, Vertex v2, Vertex v3) {
-        return (double) v2.x * v3.y - v2.y * v3.x
-                + v3.x * v1.y - v1.x * v3.y
-                + v1.x * v2.y - v2.x * v1.y;
+        return (double) v2.getX() * v3.getY() - v2.getY() * v3.getX()
+                + v3.getX() * v1.getY() - v1.getX() * v3.getY()
+                + v1.getX() * v2.getY() - v2.getX() * v1.getY();
     }
 
     /**
@@ -155,12 +156,12 @@ public class Rasterizer {
         Matrix cMat = new Matrix(squareSize, squareSize);
 
         final double area = triangleArea(v1, v2, v3);
-        final int x1 = v1.x;
-        final int y1 = v1.y;
-        final int x2 = v2.x;
-        final int y2 = v2.y;
-        final int x3 = v3.x;
-        final int y3 = v3.y;
+        final int x1 = v1.getX();
+        final int y1 = v1.getY();
+        final int x2 = v2.getX();
+        final int y2 = v2.getY();
+        final int x3 = v3.getX();
+        final int y3 = v3.getY();
         cMat.set(0, 0, (x2 * y3 - x3 * y2) / area);
         cMat.set(0, 1, (y2 - y3) / area);
         cMat.set(0, 2, (x3 - x2) / area);
@@ -197,10 +198,10 @@ public class Rasterizer {
         // iterate over the triangle's bounding box
         //++ // TODO
         //<!!
-        final int xmin = Math.min(v1.x, Math.min(v2.x, v3.x));
-        final int ymin = Math.min(v1.y, Math.min(v2.y, v3.y));
-        final int xmax = Math.max(v1.x, Math.max(v2.x, v3.x));
-        final int ymax = Math.max(v1.y, Math.max(v2.y, v3.y));
+        final int xmin = Math.min(v1.getX(), Math.min(v2.getX(), v3.getX()));
+        final int ymin = Math.min(v1.getY(), Math.min(v2.getY(), v3.getY()));
+        final int xmax = Math.max(v1.getX(), Math.max(v2.getX(), v3.getX()));
+        final int ymax = Math.max(v1.getY(), Math.max(v2.getY(), v3.getY()));
 
         // small epsilon to avoid numerical issues on the edges
         final double eps = (new Vector(ymax - ymin, xmax - xmin)).norm() / 1e6;
@@ -227,7 +228,7 @@ public class Rasterizer {
                 } else {
                     final double bias = 1.01;
 
-                    Vector vecAtt = new Vector(v1.depth, v2.depth, v3.depth);
+                    Vector vecAtt = new Vector(v1.getDepth(), v2.getDepth(), v3.getDepth());
                     double interpolated = bar.dot(vecAtt);
                     fragment.setAttribute(Fragment.DEPTH, interpolated * bias);
                 }

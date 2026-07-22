@@ -153,7 +153,7 @@ public final class Renderer {
         for (int i = 0; i < vertices.length; i++) {
             final Vector vertex = vertices[i];
             final Vertex output = outputs[i];
-            final Vector normal = output.normal;
+            final Vector normal = output.getNormal();
 
             final Vector destVector = new Vector(
                     vertex.get(0) + normalLength * normal.get(0),
@@ -171,16 +171,16 @@ public final class Renderer {
             red[2] = 0.0;
 
             final Vertex destVertex = new Vertex(x, y);
-            destVertex.color = red;
-            destVertex.normal = normal;
-            destVertex.worldPosition = destVector;
-            destVertex.depth = destVectorPoint.get(2);
-            destVertex.alpha = output.alpha;
-            destVertex.u = output.u;
-            destVertex.v = output.v;
+            destVertex.setColor(red);
+            destVertex.setNormal(normal);
+            destVertex.setWorldPosition(destVector);
+            destVertex.setDepth(destVectorPoint.get(2));
+            destVertex.setAlpha(output.getAlpha());
+            destVertex.setU(output.getU());
+            destVertex.setV(output.getV());
 
             final Vertex originVertex = output.clone();
-            originVertex.color = red;
+            originVertex.setColor(red);
 
             rasterizer.rasterizeEdge(originVertex, destVertex);
         }
@@ -319,15 +319,15 @@ public final class Renderer {
             int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
             for (Vertex vo : allVertexOutputs) {
                 if (vo == null) continue;
-                if (vo.x < minX) minX = vo.x;
-                if (vo.x > maxX) maxX = vo.x;
-                if (vo.y < minY) minY = vo.y;
-                if (vo.y > maxY) maxY = vo.y;
+                if (vo.getX() < minX) minX = vo.getX();
+                if (vo.getX() > maxX) maxX = vo.getX();
+                if (vo.getY() < minY) minY = vo.getY();
+                if (vo.getY() > maxY) maxY = vo.getY();
             }
             System.out.println("Renderer.render: produced " + allVertexOutputs.length + " vertices; x range=[" + minX + "," + maxX + "] y range=[" + minY + "," + maxY + "]");
             for (int i = 0; i < Math.min(5, allVertexOutputs.length); i++) {
                 Vertex v = allVertexOutputs[i];
-                if (v != null) System.out.println("  v[" + i + "]=(" + v.x + "," + v.y + ") depth=" + v.depth);
+                if (v != null) System.out.println("  v[" + i + "]=(" + v.getX() + "," + v.getY() + ") depth=" + v.getDepth());
             }
         }
 
@@ -336,7 +336,7 @@ public final class Renderer {
                 double minDepth = Double.POSITIVE_INFINITY;
                 double maxDepth = Double.NEGATIVE_INFINITY;
                 for (Vertex v : allVertexOutputs) {
-                    final double d = v.depth;
+                    final double d = v.getDepth();
                     if (d < minDepth) minDepth = d;
                     if (d > maxDepth) maxDepth = d;
                 }
@@ -417,19 +417,19 @@ public final class Renderer {
 
             Vertex in = new Vertex();
 
-            in.worldPosition = vertices[i];
-            in.normal = normals[i];
+            in.setWorldPosition(vertices[i]);
+            in.setNormal(normals[i]);
 
-            in.color = new double[] {
+            in.setColor(new double[] {
                 colors[3 * i],
                 colors[3 * i + 1],
                 colors[3 * i + 2],
                 1.0
-            };
+            });
 
             if (texCoords != null) {
-                in.u = texCoords[2 * i];
-                in.v = texCoords[2 * i + 1];
+                in.setU(texCoords[2 * i]);
+                in.setV(texCoords[2 * i + 1]);
             }
 
             inputs[i] = in;

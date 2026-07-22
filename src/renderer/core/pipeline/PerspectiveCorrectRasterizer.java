@@ -49,10 +49,10 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
         final Matrix cMat = makeBarycentricCoordsMatrix(v1, v2, v3);
 
         // iterate over the triangle's bounding box
-        final int xmin = Math.min(v1.x, Math.min(v2.x, v3.x));
-        final int ymin = Math.min(v1.y, Math.min(v2.y, v3.y));
-        final int xmax = Math.max(v1.x, Math.max(v2.x, v3.x));
-        final int ymax = Math.max(v1.y, Math.max(v2.y, v3.y));
+        final int xmin = Math.min(v1.getX(), Math.min(v2.getX(), v3.getX()));
+        final int ymin = Math.min(v1.getY(), Math.min(v2.getY(), v3.getY()));
+        final int xmax = Math.max(v1.getX(), Math.max(v2.getX(), v3.getX()));
+        final int ymax = Math.max(v1.getY(), Math.max(v2.getY(), v3.getY()));
 
         final Fragment fragment = new Fragment(0, 0);
         final double eps = (new Vector(ymax - ymin, xmax - xmin)).norm() / 1e6;
@@ -71,9 +71,9 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
                 }
 
                 // perspective correction factor
-                final double w1 = bar.get(0) / v1.depth;
-                final double w2 = bar.get(1) / v2.depth;
-                final double w3 = bar.get(2) / v3.depth;
+                final double w1 = bar.get(0) / v1.getDepth();
+                final double w2 = bar.get(1) / v2.getDepth();
+                final double w3 = bar.get(2) / v3.getDepth();
 
                 //!! // This would be where the oneOverZ would go
 
@@ -83,7 +83,7 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
                 } else {
                     final double bias = 1.01;
 
-                    Vector vecAtt = new Vector(v1.depth, v2.depth, v3.depth);
+                    Vector vecAtt = new Vector(v1.getDepth(), v2.getDepth(), v3.getDepth());
                     double interpolated = bar.dot(vecAtt);
                     fragment.setAttribute(Fragment.DEPTH, interpolated * bias);
                 }

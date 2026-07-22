@@ -34,11 +34,11 @@ public class GouraudShader implements VertexShader {
     public void shade(Vertex in) {
         double[] material = scene.getMaterial();
 
-        double[] lightColor = this.lighting.applyLights(in.worldPosition, in.normal,
-                                    in.color, scene.getCameraPosition(),
+        double[] lightColor = this.lighting.applyLights(in.getWorldPosition(), in.getNormal(),
+                                    in.getColor(), scene.getCameraPosition(),
                                     material[0], material[1], material[2], material[3]);
 
-        in.color = lightColor;
-        in.alpha = 1.0;
+        in.setColor(lightColor);
+        in.setAlpha(1.0);
     }
 }

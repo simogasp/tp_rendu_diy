@@ -28,9 +28,11 @@ public class SinusVertexShader implements VertexShader {
     @Override
     public void shade(Vertex in) {
 
-        double x =  in.worldPosition.get(0);
-        double y =  in.worldPosition.get(1);
-        double z =  in.worldPosition.get(2);
+        Vector wp = in.getWorldPosition();
+
+        double x =  wp.get(0);
+        double y =  wp.get(1);
+        double z =  wp.get(2);
 
         // The amplitudes of distortion along each axis
         double xAmplitude = 0.02;
@@ -48,10 +50,10 @@ public class SinusVertexShader implements VertexShader {
             z + zAmplitude * Math.sin((x + y) * zFrequency));
         Vector pVertex = xform.projectPoint(sinPos);
 
-        in.x = (int) Math.round(pVertex.get(0));
-        in.y = (int) Math.round(pVertex.get(1));
-        in.depth = pVertex.get(2);
+        in.setX((int) Math.round(pVertex.get(0)));
+        in.setY((int) Math.round(pVertex.get(1)));
+        in.setDepth(pVertex.get(2));
 
-        in.alpha = 1.0;
+        in.setAlpha(1.0);
     }
 }

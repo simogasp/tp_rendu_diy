@@ -28,12 +28,12 @@ public class SimpleVertexShader implements VertexShader {
     @Override
     public void shade(Vertex in) {
 
-        Vector pVertex = xform.projectPoint(in.worldPosition);
+        Vector pVertex = xform.projectPoint(in.getWorldPosition());
 
-        in.x = (int) Math.round(pVertex.get(0));
-        in.y = (int) Math.round(pVertex.get(1));
-        in.depth = pVertex.get(2);
+        in.setX((int) Math.round(pVertex.get(0)));
+        in.setY((int) Math.round(pVertex.get(1)));
+        in.setDepth(pVertex.get(2));
 
-        in.alpha = 1.0;
+        in.setAlpha(1.0);
     }
 }

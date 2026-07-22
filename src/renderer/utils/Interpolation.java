@@ -23,10 +23,10 @@ public final class Interpolation {
      */
     public static void interpolate2(Vertex v1, Vertex v2,
                                     Fragment f, double middleDoubleValue) {
-        final int x1 = v1.x;
-        final int y1 = v1.y;
-        final int x2 = v2.x;
-        final int y2 = v2.y;
+        final int x1 = v1.getX();
+        final int y1 = v1.getY();
+        final int x2 = v2.getX();
+        final int y2 = v2.getY();
         final int x = f.getX();
         final int y = f.getY(); // was an x ?? maybe it was on purpose ??
 
@@ -45,12 +45,12 @@ public final class Interpolation {
         }
 
         // Interpolate the depth
-        double interpolated = (1.0 - alpha) * v1.depth + alpha * v2.depth;
+        double interpolated = (1.0 - alpha) * v1.getDepth() + alpha * v2.getDepth();
         f.setAttribute(Fragment.DEPTH, interpolated);
 
         // Interpolate the normal
-        Vector n1 = v1.normal;
-        Vector n2 = v2.normal;
+        Vector n1 = v1.getNormal();
+        Vector n2 = v2.getNormal();
 
         for (int i = 0; i < 3; i++) {
             interpolated = (1.0 - alpha) * n1.get(i) + alpha * n2.get(i);
@@ -58,8 +58,8 @@ public final class Interpolation {
         }
 
         // Interpolate the world position
-        Vector wp1 = v1.worldPosition;
-        Vector wp2 = v2.worldPosition;
+        Vector wp1 = v1.getWorldPosition();
+        Vector wp2 = v2.getWorldPosition();
 
         for (int i = 0; i < 3; i++) {
             interpolated = (1.0 - alpha) * wp1.get(i) + alpha * wp2.get(i);
@@ -67,8 +67,8 @@ public final class Interpolation {
         }
 
         // Interpolate the color
-        double[] c1 = v1.color;
-        double[] c2 = v2.color;
+        double[] c1 = v1.getColor();
+        double[] c2 = v2.getColor();
 
         for (int i = 0; i < 3; i++) {
             interpolated = MathUtils.clamp((1.0 - alpha) * c1[i] + alpha * c2[i], 0, 1);
@@ -76,15 +76,15 @@ public final class Interpolation {
         }
 
         // Interpolate the alpha value
-        double a1 = v1.alpha;
-        double a2 = v2.alpha;
+        double a1 = v1.getAlpha();
+        double a2 = v2.getAlpha();
         interpolated = MathUtils.clamp((1.0 - alpha) * a1 + alpha * a2, 0, 1);
         f.setAttribute(Fragment.COLOR_ALPHA, interpolated);
 
         // Interpolate the UV coordinates
-        interpolated = (1.0 - alpha) * v1.u + alpha * v2.u;
+        interpolated = (1.0 - alpha) * v1.getU() + alpha * v2.getU();
         f.setAttribute(Fragment.TEXTURE_U, interpolated);
-        interpolated = (1.0 - alpha) * v1.v + alpha * v2.v;
+        interpolated = (1.0 - alpha) * v1.getV() + alpha * v2.getV();
         f.setAttribute(Fragment.TEXTURE_V, interpolated);
     }
 
@@ -127,52 +127,63 @@ public final class Interpolation {
         //<!!
         // Interpolate the depth of the fragment
         f.setAttribute(Fragment.DEPTH, interp.interpolate(
-            v1.depth, v2.depth, v3.depth,
+            v1.getDepth(), v2.getDepth(), v3.getDepth(),
             w1, w2, w3));
 
         // Interpolate the normals of the fragment
+        Vector n1 = v1.getNormal();
+        Vector n2 = v2.getNormal();
+        Vector n3 = v3.getNormal();
         for (int i = 0; i < 3; i++) {
             double value = interp.interpolate(
-                v1.normal.get(i),
-                v2.normal.get(i),
-                v3.normal.get(i),
+                n1.get(i),
+                n2.get(i),
+                n3.get(i),
                 w1, w2, w3);
             f.setAttribute(Fragment.NORMAL_X + i, value);
         }
 
         // Interpolate the color of the fragment
+        double[] c1 = v1.getColor();
+        double[] c2 = v2.getColor();
+        double[] c3 = v3.getColor();
         for (int i = 0; i < 3; i++) {
             double value = interp.interpolate(
-                v1.color[i],
-                v2.color[i],
-                v3.color[i],
+                c1[i],
+                c2[i],
+                c3[i],
                 w1, w2, w3);
             f.setAttribute(Fragment.COLOR_R + i, MathUtils.clamp(value, 0, 1));
         }
 
         // Interpolate the alpha value of the fragment
         double value = interp.interpolate(
-            v1.alpha,
-            v2.alpha,
-            v3.alpha,
+            v1.getAlpha(),
+            v2.getAlpha(),
+            v3.getAlpha(),
             w1, w2, w3);
         f.setAttribute(Fragment.COLOR_ALPHA, MathUtils.clamp(value, 0, 1));
 
         // Interpolate the world position of the fragment
+        Vector wp1 = v1.getWorldPosition();
+        Vector wp2 = v2.getWorldPosition();
+        Vector wp3 = v3.getWorldPosition();
         for (int i = 0; i < 3; i++) {
             value = interp.interpolate(
-                v1.worldPosition.get(i),
-                v2.worldPosition.get(i),
-                v3.worldPosition.get(i),
+                wp1.get(i),
+                wp2.get(i),
+                wp3.get(i),
                 w1, w2, w3);
             f.setAttribute(Fragment.WORLD_X + i, value);
         }
 
         // Interpolate the UV coordinates of the fragment
-        f.setAttribute(Fragment.TEXTURE_U, interp.interpolate(v1.u, v2.u, v3.u,
-                                                              w1, w2, w3));
-        f.setAttribute(Fragment.TEXTURE_V, interp.interpolate(v1.v, v2.v, v3.v,
-                                                              w1, w2, w3));
+        f.setAttribute(Fragment.TEXTURE_U, interp.interpolate(
+            v1.getU(), v2.getU(), v3.getU(),
+            w1, w2, w3));
+        f.setAttribute(Fragment.TEXTURE_V, interp.interpolate(
+            v1.getV(), v2.getV(), v3.getV(),
+            w1, w2, w3));
         //>!!
     }
 }
