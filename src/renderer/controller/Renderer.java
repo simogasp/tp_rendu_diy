@@ -107,8 +107,6 @@ public final class Renderer {
      */
     private static final class DefaultShader implements FragmentShader {
 
-        private DefaultShader() {}
-
         @Override
         public FragmentOutput shade(final Fragment fragment) {
             throw new IllegalArgumentException("Any Shader has been set.");
