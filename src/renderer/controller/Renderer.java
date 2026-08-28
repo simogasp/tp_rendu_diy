@@ -7,7 +7,6 @@ import renderer.algebra.Vector;
 import renderer.controller.ColorMapFactory.Maps;
 import renderer.core.shader.fragmentshaders.PhongShader;
 import renderer.core.shader.vertexshaders.GouraudShader;
-import renderer.core.shader.vertexshaders.SinusVertexShader;
 import renderer.core.shader.vertexshaders.SimpleVertexShader;
 import renderer.core.camera.Transformation;
 import renderer.core.light.Lighting;
