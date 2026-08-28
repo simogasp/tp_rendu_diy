@@ -309,21 +309,41 @@ public final class Renderer {
 
         // Debug output to help locate invisible render issues
         if (allVertexOutputs == null || allVertexOutputs.length == 0) {
-            System.out.println("Renderer.render: no vertex outputs produced by vertex shader");
+            System.out.println(
+                "Renderer.render: no vertex outputs produced by vertex shader");
         } else {
-            int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
-            int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
+            int minX = Integer.MAX_VALUE;
+            int minY = Integer.MAX_VALUE;
+            int maxX = Integer.MIN_VALUE;
+            int maxY = Integer.MIN_VALUE;
             for (Vertex vo : allVertexOutputs) {
-                if (vo == null) continue;
-                if (vo.getX() < minX) minX = vo.getX();
-                if (vo.getX() > maxX) maxX = vo.getX();
-                if (vo.getY() < minY) minY = vo.getY();
-                if (vo.getY() > maxY) maxY = vo.getY();
+                if (vo == null) {
+                    continue;
+                }
+                if (vo.getX() < minX) {
+                    minX = vo.getX();
+                }
+                if (vo.getX() > maxX) {
+                    maxX = vo.getX();
+                }
+                if (vo.getY() < minY) {
+                    minY = vo.getY();
+                }
+                if (vo.getY() > maxY) {
+                    maxY = vo.getY();
+                }
             }
-            System.out.println("Renderer.render: produced " + allVertexOutputs.length + " vertices; x range=[" + minX + "," + maxX + "] y range=[" + minY + "," + maxY + "]");
+            System.out.println(
+                "Renderer.render: produced " + allVertexOutputs.length
+                    + " vertices; x range=[" + minX + "," + maxX
+                    + "] y range=[" + minY + "," + maxY + "]");
             for (int i = 0; i < Math.min(5, allVertexOutputs.length); i++) {
                 Vertex v = allVertexOutputs[i];
-                if (v != null) System.out.println("  v[" + i + "]=(" + v.getX() + "," + v.getY() + ") depth=" + v.getDepth());
+                if (v != null) {
+                    System.out.println(
+                        "  v[" + i + "]=(" + v.getX() + "," + v.getY()
+                            + ") depth=" + v.getDepth());
+                }
             }
         }
 
@@ -333,8 +353,12 @@ public final class Renderer {
                 double maxDepth = Double.NEGATIVE_INFINITY;
                 for (Vertex v : allVertexOutputs) {
                     final double d = v.getDepth();
-                    if (d < minDepth) minDepth = d;
-                    if (d > maxDepth) maxDepth = d;
+                    if (d < minDepth) {
+                        minDepth = d;
+                    }
+                    if (d > maxDepth) {
+                        maxDepth = d;
+                    }
                 }
                 shader.setDepthRange(minDepth, maxDepth);
             }
@@ -514,7 +538,9 @@ public final class Renderer {
 
         // The length of the normal is approximately equal to 1/100 of the diagonal
         // length of the bounding box
-        normalLength = (new Vector(maxX - minX, maxY - minY, maxZ - minZ)).norm() / DIVIDER;
+        normalLength = (new Vector(maxX - minX,
+                                    maxY - minY,
+                                    maxZ - minZ)).norm() / DIVIDER;
     }
 
     /**
