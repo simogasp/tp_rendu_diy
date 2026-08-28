@@ -1,7 +1,6 @@
 package renderer.controller;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import renderer.algebra.SizeMismatchException;
 import renderer.algebra.Vector;
@@ -595,7 +594,7 @@ public final class Renderer {
      * @return whether the operation is successful
      */
     public boolean setShader(final String shaderSelected) {
-        final Optional<FragmentShader> optionalShader = ShaderFactory.create(shaderSelected);
+        final var optionalShader = ShaderFactory.create(shaderSelected);
         if (optionalShader.isPresent()) {
             final FragmentShader newShader = optionalShader.get();
             setShader(newShader);
