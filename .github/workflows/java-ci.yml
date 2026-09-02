@@ -30,7 +30,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v6.0.0
         with:
-          distribution: 'adopt' # Specify the distribution
+          distribution: 'oracle' # Specify the distribution
           java-version: '11' # Specify the Java version
 
       - name: Build with Makefile
