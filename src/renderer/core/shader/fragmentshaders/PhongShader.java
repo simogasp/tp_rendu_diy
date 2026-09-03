@@ -98,7 +98,7 @@ public class PhongShader implements FragmentShader {
     public FragmentOutput shade(Fragment fragment) {
         if (this.activeLighting) {
             //++ // TODO : Implement the Phong lighting solution
-            //++ // return new FragmentOutput(fragment.getColor());
+            //++ return new FragmentOutput(fragment.getColor());
             //<!!
             Vector worldPosition = fragment.getWorldPosition();
             Vector normal = fragment.getNormal().normalize();
