@@ -16,10 +16,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import renderer.controller.ShaderFactory;
-import renderer.core.shader.PainterShader;
-import renderer.core.shader.Shader;
-import renderer.core.shader.SimpleShader;
-import renderer.core.shader.TextureShader;
+import renderer.core.shader.fragmentshaders.FragmentShader;
+import renderer.core.shader.fragmentshaders.SimpleShader;
+import renderer.core.shader.fragmentshaders.TextureShader;
 
 /**
  * Exhaustive test suite for the ShaderFactory class.
@@ -45,7 +44,7 @@ public class ShaderFactoryTest {
      * for variations.
      */
     private static final int MIN_EXPECTED_SHADERS =
-            EXPECT_OPTIONAL_SHADERS ? 3 : 2;
+            EXPECT_OPTIONAL_SHADERS ? 2 : 1;
 
     /** Number of threads for concurrency test. */
     private static final int NUM_THREADS = 10;
@@ -72,13 +71,13 @@ public class ShaderFactoryTest {
         /** The shader name to test. */
         private final String shaderName;
         /** The expected shader class. */
-        private final Class<? extends Shader> expectedClass;
+        private final Class<? extends FragmentShader> expectedClass;
         /** Whether the shader should be found. */
         private final boolean shouldExist;
         /** Description of the test case. */
         private final String description;
 
-        ShaderTestCase(String shaderName, Class<? extends Shader> expectedClass,
+        ShaderTestCase(String shaderName, Class<? extends FragmentShader> expectedClass,
                 boolean shouldExist, String description) {
             this.shaderName = shaderName;
             this.expectedClass = expectedClass;
@@ -98,7 +97,7 @@ public class ShaderFactoryTest {
          * Gets the expected shader class.
          * @return the expected shader class
          */
-        public Class<? extends Shader> getExpectedClass() {
+                public Class<? extends FragmentShader> getExpectedClass() {
             return expectedClass;
         }
 
@@ -126,17 +125,17 @@ public class ShaderFactoryTest {
         /** The simple name of the shader class. */
         private final String simpleName;
         /** The full class object. */
-        private final Class<? extends Shader> shaderClass;
+        private final Class<? extends FragmentShader> shaderClass;
         /** Whether this shader is optional (may not be present). */
         private final boolean optional;
 
-        ExpectedShader(String simpleName,
-                Class<? extends Shader> shaderClass) {
-            this(simpleName, shaderClass, false);
+                ExpectedShader(String simpleName,
+                                Class<? extends FragmentShader> shaderClass) {
+                        this(simpleName, shaderClass, false);
         }
 
         ExpectedShader(String simpleName,
-                Class<? extends Shader> shaderClass, boolean optional) {
+                Class<? extends FragmentShader> shaderClass, boolean optional) {
             this.simpleName = simpleName;
             this.shaderClass = shaderClass;
             this.optional = optional;
@@ -154,7 +153,7 @@ public class ShaderFactoryTest {
          * Gets the shader class.
          * @return the shader class
          */
-        public Class<? extends Shader> getShaderClass() {
+                public Class<? extends FragmentShader> getShaderClass() {
             return shaderClass;
         }
 
@@ -179,17 +178,15 @@ public class ShaderFactoryTest {
         // Required shaders
         shaders.add(new ExpectedShader("SimpleShader",
                 SimpleShader.class));
-        shaders.add(new ExpectedShader("PainterShader",
-                PainterShader.class));
         shaders.add(new ExpectedShader("TextureShader",
                 TextureShader.class));
 
         // Optional shaders - only add if expected and available
         if (EXPECT_OPTIONAL_SHADERS) {
             try {
-                final Class<? extends Shader> depthShaderClass =
+                final Class<? extends FragmentShader> depthShaderClass =
                         Class.forName("renderer.core.shader.DepthShader")
-                        .asSubclass(Shader.class);
+                        .asSubclass(FragmentShader.class);
                 shaders.add(new ExpectedShader("DepthShader",
                         depthShaderClass, true));
             } catch (ClassNotFoundException | NoClassDefFoundError e) {
@@ -198,10 +195,10 @@ public class ShaderFactoryTest {
             }
 
             try {
-                final Class<? extends Shader> normalMapShaderClass =
+                final Class<? extends FragmentShader> normalMapShaderClass =
                         Class.forName(
                                 "renderer.core.shader.NormalMapShader")
-                        .asSubclass(Shader.class);
+                        .asSubclass(FragmentShader.class);
                 shaders.add(new ExpectedShader("NormalMapShader",
                         normalMapShaderClass, true));
             } catch (ClassNotFoundException | NoClassDefFoundError e) {
@@ -225,9 +222,6 @@ public class ShaderFactoryTest {
         // Required shaders
         testCases.add(new ShaderTestCase("SimpleShader",
                 SimpleShader.class, true, "Valid SimpleShader creation"));
-        testCases.add(new ShaderTestCase("PainterShader",
-                PainterShader.class, true,
-                "Valid PainterShader creation"));
         testCases.add(new ShaderTestCase("TextureShader",
                 TextureShader.class, true,
                 "Valid TextureShader creation"));
@@ -235,23 +229,23 @@ public class ShaderFactoryTest {
         // Optional shaders - only add if expected and available
         if (EXPECT_OPTIONAL_SHADERS) {
             try {
-                final Class<? extends Shader> depthShaderClass =
-                        Class.forName("renderer.core.shader.DepthShader")
-                        .asSubclass(Shader.class);
-                if (isShaderAvailable("DepthShader")) {
-                    testCases.add(new ShaderTestCase("DepthShader",
-                            depthShaderClass, true,
-                            "Valid DepthShader creation"));
-                }
+                        final Class<? extends FragmentShader> depthShaderClass =
+                                Class.forName("renderer.core.shader.DepthShader")
+                                .asSubclass(FragmentShader.class);
+                        if (isShaderAvailable("DepthShader")) {
+                            testCases.add(new ShaderTestCase("DepthShader",
+                                    depthShaderClass, true,
+                                    "Valid DepthShader creation"));
+                        }
             } catch (ClassNotFoundException | NoClassDefFoundError e) {
                 // DepthShader not available, skip
             }
 
             try {
-                final Class<? extends Shader> normalMapShaderClass =
+                final Class<? extends FragmentShader> normalMapShaderClass =
                         Class.forName(
                                 "renderer.core.shader.NormalMapShader")
-                        .asSubclass(Shader.class);
+                        .asSubclass(FragmentShader.class);
                 if (isShaderAvailable("NormalMapShader")) {
                     testCases.add(new ShaderTestCase("NormalMapShader",
                             normalMapShaderClass, true,
@@ -287,16 +281,16 @@ public class ShaderFactoryTest {
      * @param shaderName the simple name of the shader
      * @return true if available, false otherwise
      */
-    private static boolean isShaderAvailable(String shaderName) {
-        final Set<Class<? extends Shader>> shaderSet =
-                ShaderFactory.getShaderSet();
-        for (Class<? extends Shader> shader : shaderSet) {
-            if (shader.getSimpleName().equals(shaderName)) {
-                return true;
-            }
+        private static boolean isShaderAvailable(String shaderName) {
+                final Set<Class<? extends FragmentShader>> shaderSet =
+                                ShaderFactory.getShaderSet();
+                for (Class<? extends FragmentShader> shader : shaderSet) {
+                        if (shader.getSimpleName().equals(shaderName)) {
+                                return true;
+                        }
+                }
+                return false;
         }
-        return false;
-    }
 
     // ==================== Setup ====================
 
@@ -327,7 +321,7 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testInitDiscoversShaders() {
-        Set<Class<? extends Shader>> shaderSet = ShaderFactory.getShaderSet();
+                Set<Class<? extends FragmentShader>> shaderSet = ShaderFactory.getShaderSet();
 
         final String message = "ShaderFactory should discover at least "
                 + MIN_EXPECTED_SHADERS + " shaders";
@@ -343,12 +337,12 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testAllExpectedShadersDiscovered() {
-        Set<Class<? extends Shader>> shaderSet = ShaderFactory.getShaderSet();
-        Set<String> discoveredNames = new HashSet<>();
+                Set<Class<? extends FragmentShader>> shaderSet = ShaderFactory.getShaderSet();
+                Set<String> discoveredNames = new HashSet<>();
 
-        for (Class<? extends Shader> shader : shaderSet) {
-            discoveredNames.add(shader.getSimpleName());
-        }
+                for (Class<? extends FragmentShader> shader : shaderSet) {
+                        discoveredNames.add(shader.getSimpleName());
+                }
 
         for (ExpectedShader expected : EXPECTED_SHADERS) {
             final boolean isDiscovered = discoveredNames.contains(
@@ -380,13 +374,13 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testAbstractShaderNotIncluded() {
-        Set<Class<? extends Shader>> shaderSet = ShaderFactory.getShaderSet();
+                Set<Class<? extends FragmentShader>> shaderSet = ShaderFactory.getShaderSet();
 
-        for (Class<? extends Shader> shader : shaderSet) {
-            final String msg = "Abstract Shader base class should not be "
-                    + "in shader set";
-            assertFalse(msg, shader.getSimpleName().equals("Shader"));
-        }
+                for (Class<? extends FragmentShader> shader : shaderSet) {
+                        final String msg = "Abstract Shader base class should not be "
+                                        + "in shader set";
+                        assertFalse(msg, shader.getSimpleName().equals("Shader"));
+                }
     }
 
     /**
@@ -394,12 +388,12 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testOnlyShaderSubclassesIncluded() {
-        Set<Class<? extends Shader>> shaderSet = ShaderFactory.getShaderSet();
+                Set<Class<? extends FragmentShader>> shaderSet = ShaderFactory.getShaderSet();
 
-        for (Class<? extends Shader> shader : shaderSet) {
-            assertEquals("All discovered classes should extend Shader",
-                    Shader.class, shader.getSuperclass());
-        }
+                for (Class<? extends FragmentShader> shader : shaderSet) {
+                        assertTrue("All discovered classes should implement FragmentShader",
+                                        FragmentShader.class.isAssignableFrom(shader));
+                }
     }
 
     /**
@@ -407,14 +401,14 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testMultipleInitCalls() {
-        final Set<Class<? extends Shader>> initialSet =
+        final Set<Class<? extends FragmentShader>> initialSet =
                 new HashSet<>(ShaderFactory.getShaderSet());
         int initialSize = initialSet.size();
 
         // Call init again
         ShaderFactory.init();
 
-        Set<Class<? extends Shader>> afterSet = ShaderFactory.getShaderSet();
+        Set<Class<? extends FragmentShader>> afterSet = ShaderFactory.getShaderSet();
         int afterSize = afterSet.size();
 
         assertTrue("Shader set should not be empty after re-init",
@@ -433,7 +427,7 @@ public class ShaderFactoryTest {
     public void testShaderCreationWithTestCases() {
         final ShaderTestCase[] testCases = getCreationTestCases();
         for (ShaderTestCase testCase : testCases) {
-            Optional<Shader> result = ShaderFactory.create(
+            Optional<FragmentShader> result = ShaderFactory.create(
                     testCase.getShaderName());
 
             if (testCase.getShouldExist()) {
@@ -460,7 +454,7 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testCreatedShadersAreInitialized() {
-        Optional<Shader> simpleShader = ShaderFactory.create("SimpleShader");
+        Optional<FragmentShader> simpleShader = ShaderFactory.create("SimpleShader");
 
         assertTrue("SimpleShader should be created successfully",
                 simpleShader.isPresent());
@@ -475,8 +469,8 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testMultipleCreationsReturnDifferentInstances() {
-        Optional<Shader> shader1 = ShaderFactory.create("SimpleShader");
-        Optional<Shader> shader2 = ShaderFactory.create("SimpleShader");
+        Optional<FragmentShader> shader1 = ShaderFactory.create("SimpleShader");
+        Optional<FragmentShader> shader2 = ShaderFactory.create("SimpleShader");
 
         assertTrue("First creation should succeed", shader1.isPresent());
         assertTrue("Second creation should succeed", shader2.isPresent());
@@ -490,7 +484,7 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testCreateWithNullName() {
-        Optional<Shader> result = ShaderFactory.create(null);
+        Optional<FragmentShader> result = ShaderFactory.create(null);
 
         final String msg = "Creating with null name should return empty "
                 + "Optional";
@@ -503,7 +497,7 @@ public class ShaderFactoryTest {
     @Test
     public void testCreateWithInvalidNames() {
         for (String invalidName : INVALID_SHADER_NAMES) {
-            Optional<Shader> result = ShaderFactory.create(invalidName);
+            Optional<FragmentShader> result = ShaderFactory.create(invalidName);
 
             final String msg = "Creating with invalid name '" + invalidName
                     + "' should return empty Optional";
@@ -520,7 +514,7 @@ public class ShaderFactoryTest {
                 "Texture", "Normal"};
 
         for (String partialName : partialNames) {
-            Optional<Shader> result = ShaderFactory.create(partialName);
+            Optional<FragmentShader> result = ShaderFactory.create(partialName);
 
             final String msg = "Creating with partial name '" + partialName
                     + "' should return empty Optional";
@@ -535,9 +529,9 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testGetShaderSetNotNull() {
-        Set<Class<? extends Shader>> shaderSet = ShaderFactory.getShaderSet();
+                Set<Class<? extends FragmentShader>> shaderSet = ShaderFactory.getShaderSet();
 
-        assertNotNull("getShaderSet() should not return null", shaderSet);
+                assertNotNull("getShaderSet() should not return null", shaderSet);
     }
 
     /**
@@ -545,7 +539,7 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testGetShaderSetNotEmpty() {
-        Set<Class<? extends Shader>> shaderSet = ShaderFactory.getShaderSet();
+        Set<Class<? extends FragmentShader>> shaderSet = ShaderFactory.getShaderSet();
 
         final String msg1 = "getShaderSet() should return non-empty set "
                 + "after init";
@@ -560,8 +554,8 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testGetShaderSetConsistency() {
-        Set<Class<? extends Shader>> set1 = ShaderFactory.getShaderSet();
-        Set<Class<? extends Shader>> set2 = ShaderFactory.getShaderSet();
+        Set<Class<? extends FragmentShader>> set1 = ShaderFactory.getShaderSet();
+        Set<Class<? extends FragmentShader>> set2 = ShaderFactory.getShaderSet();
 
         assertEquals("getShaderSet() should return same reference",
                 set1, set2);
@@ -574,12 +568,12 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testGetShaderSetContainsOnlyValidShaders() {
-        Set<Class<? extends Shader>> shaderSet = ShaderFactory.getShaderSet();
+        Set<Class<? extends FragmentShader>> shaderSet = ShaderFactory.getShaderSet();
 
-        for (Class<? extends Shader> shaderClass : shaderSet) {
+        for (Class<? extends FragmentShader> shaderClass : shaderSet) {
             assertNotNull("Shader class should not be null", shaderClass);
-            assertTrue("Shader class should be assignable from Shader",
-                    Shader.class.isAssignableFrom(shaderClass));
+            assertTrue("Shader class should be assignable from FragmentShader",
+                    FragmentShader.class.isAssignableFrom(shaderClass));
             final String msg = "Shader class should not be abstract";
             assertFalse(msg, java.lang.reflect.Modifier.isAbstract(
                     shaderClass.getModifiers()));
@@ -606,7 +600,7 @@ public class ShaderFactoryTest {
     @Test
     public void testGetShaderSetAsStringArraySize() {
         String[] shaderNames = ShaderFactory.getShaderSetAsStringArray();
-        Set<Class<? extends Shader>> shaderSet = ShaderFactory.getShaderSet();
+        Set<Class<? extends FragmentShader>> shaderSet = ShaderFactory.getShaderSet();
 
         assertEquals("Array size should match shader set size",
                 shaderSet.size(), shaderNames.length);
@@ -618,13 +612,13 @@ public class ShaderFactoryTest {
     @Test
     public void testGetShaderSetAsStringArrayContents() {
         String[] shaderNames = ShaderFactory.getShaderSetAsStringArray();
-        Set<Class<? extends Shader>> shaderSet = ShaderFactory.getShaderSet();
+                Set<Class<? extends FragmentShader>> shaderSet = ShaderFactory.getShaderSet();
 
-        // Collect expected names from shader set
-        Set<String> expectedNames = new HashSet<>();
-        for (Class<? extends Shader> shader : shaderSet) {
-            expectedNames.add(shader.getSimpleName());
-        }
+                // Collect expected names from shader set
+                Set<String> expectedNames = new HashSet<>();
+                for (Class<? extends FragmentShader> shader : shaderSet) {
+                        expectedNames.add(shader.getSimpleName());
+                }
 
         // Verify all names in array are in expected set
         for (String name : shaderNames) {
@@ -704,7 +698,7 @@ public class ShaderFactoryTest {
         String[] shaderNames = ShaderFactory.getShaderSetAsStringArray();
 
         for (String name : shaderNames) {
-            Optional<Shader> shader = ShaderFactory.create(name);
+                        Optional<FragmentShader> shader = ShaderFactory.create(name);
 
             final String msg = "Shader name '" + name
                     + "' from array should be creatable";
@@ -727,7 +721,7 @@ public class ShaderFactoryTest {
 
         // Try to create each discovered shader
         for (String name : shaderNames) {
-            Optional<Shader> shader = ShaderFactory.create(name);
+            Optional<FragmentShader> shader = ShaderFactory.create(name);
 
             assertTrue("Should be able to create shader '" + name + "'",
                     shader.isPresent());
@@ -745,11 +739,11 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testAllDiscoveredShadersAreInstantiable() {
-        Set<Class<? extends Shader>> shaderSet = ShaderFactory.getShaderSet();
+        Set<Class<? extends FragmentShader>> shaderSet = ShaderFactory.getShaderSet();
 
-        for (Class<? extends Shader> shaderClass : shaderSet) {
+        for (Class<? extends FragmentShader> shaderClass : shaderSet) {
             String simpleName = shaderClass.getSimpleName();
-            Optional<Shader> shader = ShaderFactory.create(simpleName);
+            Optional<FragmentShader> shader = ShaderFactory.create(simpleName);
 
             final String msg1 = "Discovered shader '" + simpleName
                     + "' should be creatable";
@@ -772,7 +766,7 @@ public class ShaderFactoryTest {
             final int index = i;
             threads[i] = new Thread(() -> {
                 try {
-                    Optional<Shader> shader = ShaderFactory.create("SimpleShader");
+                    Optional<FragmentShader> shader = ShaderFactory.create("SimpleShader");
                     results[index] = shader.isPresent();
                 } catch (Exception e) {
                     results[index] = false;
@@ -798,7 +792,7 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testShaderSetImmutabilityAfterCreation() {
-        final Set<Class<? extends Shader>> beforeSet =
+        final Set<Class<? extends FragmentShader>> beforeSet =
                 new HashSet<>(ShaderFactory.getShaderSet());
         int beforeSize = beforeSet.size();
 
@@ -807,7 +801,7 @@ public class ShaderFactoryTest {
         ShaderFactory.create("PainterShader");
         ShaderFactory.create("NonExistent");
 
-        Set<Class<? extends Shader>> afterSet = ShaderFactory.getShaderSet();
+        Set<Class<? extends FragmentShader>> afterSet = ShaderFactory.getShaderSet();
         int afterSize = afterSet.size();
 
         final String msg1 = "Shader set size should not change after "
@@ -823,10 +817,10 @@ public class ShaderFactoryTest {
      */
     @Test
     public void testCaseSensitivity() {
-        Optional<Shader> correct = ShaderFactory.create("SimpleShader");
-        Optional<Shader> lowercase = ShaderFactory.create("simpleshader");
-        Optional<Shader> uppercase = ShaderFactory.create("SIMPLESHADER");
-        Optional<Shader> mixedCase = ShaderFactory.create("sImPlEsHaDeR");
+        Optional<FragmentShader> correct = ShaderFactory.create("SimpleShader");
+        Optional<FragmentShader> lowercase = ShaderFactory.create("simpleshader");
+        Optional<FragmentShader> uppercase = ShaderFactory.create("SIMPLESHADER");
+        Optional<FragmentShader> mixedCase = ShaderFactory.create("sImPlEsHaDeR");
 
         assertTrue("Correct case should succeed", correct.isPresent());
         assertFalse("Lowercase should fail", lowercase.isPresent());
@@ -840,7 +834,7 @@ public class ShaderFactoryTest {
     @Test
     public void testExpectedShaderTypesAreUsable() {
         for (ExpectedShader expected : EXPECTED_SHADERS) {
-            Optional<Shader> shader = ShaderFactory.create(
+            Optional<FragmentShader> shader = ShaderFactory.create(
                     expected.getSimpleName());
 
             if (expected.isOptional() && !shader.isPresent()) {

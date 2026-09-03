@@ -1,4 +1,4 @@
-package renderer.core.shader;
+package renderer.core.shader.fragmentshaders;
 
 import java.awt.Color;
 
@@ -26,7 +26,7 @@ public class Fragment {
     private int numAttributes;
 
     /** The number of attributes of the Fragment. */
-    private static final int NUM_ATTRIBUTES = 9;
+    private static final int NUM_ATTRIBUTES = 13;
 
     /**
      * attributes placement:
@@ -46,16 +46,24 @@ public class Fragment {
     public static final int COLOR_G = 2;
     /** the blue component of the color. */
     public static final int COLOR_B = 3;
+    /** the alpha component of the color. */
+    public static final int COLOR_ALPHA = 4;
     /** the x component of the normal. */
-    public static final int NORMAL_X = 4;
+    public static final int NORMAL_X = 5;
     /** the y component of the normal. */
-    public static final int NORMAL_Y = 5;
+    public static final int NORMAL_Y = 6;
     /** the z component of the normal. */
-    public static final int NORMAL_Z = 6;
+    public static final int NORMAL_Z = 7;
     /** the u texture coordinate. */
-    public static final int TEXTURE_U = 7;
+    public static final int TEXTURE_U = 8;
     /** the v texture coordinate. */
-    public static final int TEXTURE_V = 8;
+    public static final int TEXTURE_V = 9;
+    /** the world coordinate x. */
+    public static final int WORLD_X = 10;
+    /** the world coordinate y. */
+    public static final int WORLD_Y = 11;
+    /** the world coordinate z. */
+    public static final int WORLD_Z = 12;
 
     /** maximum value for the color. */
     private static final double MAX_PIX_VAL = 255;
@@ -165,8 +173,8 @@ public class Fragment {
      */
     public Vector getNormal() {
         return new Vector(attributes[NORMAL_X],
-                            attributes[NORMAL_Y],
-                            attributes[NORMAL_Z]);
+                          attributes[NORMAL_Y],
+                          attributes[NORMAL_Z]);
     }
 
     /**
@@ -189,6 +197,42 @@ public class Fragment {
         attributes[NORMAL_X] = nx;
         attributes[NORMAL_Y] = ny;
         attributes[NORMAL_Z] = nz;
+    }
+
+    /**
+     * Gets the world position of the Fragment.
+     * @return the world position of the Fragment
+     */
+    public Vector getWorldPosition() {
+        return new Vector(attributes[WORLD_X],
+                          attributes[WORLD_Y],
+                          attributes[WORLD_Z]);
+    }
+
+    /**
+     * Sets the world position of the Fragment.
+     * @param wx the world position X of the fragment
+     * @param wy the world position Y of the fragment
+     * @param wz the world position Z of the fragment
+     */
+    public void setWorldPosition(double wx, double wy, double wz) {
+        attributes[WORLD_X] = wx;
+        attributes[WORLD_Y] = wy;
+        attributes[WORLD_Z] = wz;
+    }
+
+    /**
+     * Sets the world position of the Fragment.
+     * @param worldPos the world position of the fragment
+     */
+    public void setWorldPosition(Vector worldPos) {
+        if (worldPos.size() != 3) {
+            throw new RuntimeException("Wrong size of vector to set world position !");
+        }
+
+        attributes[WORLD_X] = worldPos.get(0);
+        attributes[WORLD_Y] = worldPos.get(1);
+        attributes[WORLD_Z] = worldPos.get(2);
     }
 
     /**
@@ -272,6 +316,10 @@ public class Fragment {
         return "(" + x + "," + y + ")";
     }
 
+    /**
+     * Clones the fragment.
+     * @return a clone of the fragment
+     */
     @Override
     public Fragment clone() {
         final Fragment res = new Fragment(x, y);

@@ -2,6 +2,7 @@ package renderer.core.shader;
 
 import renderer.algebra.MathUtils;
 import renderer.algebra.Matrix;
+import renderer.core.shader.fragmentshaders.Fragment;
 
 /**
  * The DepthBuffer class implements a DepthBuffer and its pass test.
@@ -51,8 +52,8 @@ public class DepthBuffer {
      */
     public boolean testFragment(Fragment f) {
         if (isWithinBounds(f)) {
-            return (buffer.get(f.getY(), f.getX()) > f.getDepth()); //++ // TODO
-            //++ return false;
+            return (buffer.get(f.getY(), f.getX()) >= f.getDepth()); //++ // TODO
+            //++ return true;
         } else {
             return false;
         }
@@ -96,6 +97,16 @@ public class DepthBuffer {
      */
     public int height() {
         return buffer.getNRows();
+    }
+
+    /**
+     * Get the depth value at the specified pixel coordinates.
+     * @param x the x-coordinate of the pixel
+     * @param y the y-coordinate of the pixel
+     * @return the depth value at the specified pixel coordinates
+     */
+    public double getDepth(int x, int y) {
+        return buffer.get(y, x);
     }
 
 }

@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import renderer.core.shader.Shader;
+import java.util.Arrays;
+import renderer.core.shader.fragmentshaders.FragmentShader;
 
 @SuppressWarnings("unchecked")
 public final class ShaderFactory {
@@ -22,7 +23,7 @@ public final class ShaderFactory {
     /**
      * The set of Class in Shader Package that implements Shader abstract class.
      */
-    private static final Set<Class<? extends Shader>> SHADER_SET = new HashSet<>();
+    private static final Set<Class<? extends FragmentShader>> SHADER_SET = new HashSet<>();
 
     private ShaderFactory() {
     }
@@ -35,62 +36,67 @@ public final class ShaderFactory {
     public static void init() {
         // Get the classloader
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        // the package name in which the ShadeFactory is
-        final String packageName = Shader.class.getPackage().getName();
-        final String path = packageName.replace('.', '/');
+        // scan both the pipeline package and the legacy shader package where
+        // FragmentShader implementations may live
+        final List<String> packageNames = Arrays.asList(
+                FragmentShader.class.getPackage().getName(),
+                "renderer.core.shader");
 
-        // get all resources with that path --> it should be just one directory
-        Enumeration<URL> resources = null;
-        try {
-            resources = classLoader.getResources(path);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        // some annoying boilerplate code
-        List<File> dirs = new ArrayList<>();
-
-        while (resources.hasMoreElements()) {
-            URL resource = resources.nextElement();
+        for (String packageName : packageNames) {
+            final String path = packageName.replace('.', '/');
+            Enumeration<URL> resources = null;
             try {
-                final URI uri = resource.toURI();
-                final File dir = new File(uri);
-                dirs.add(dir);
-                System.out.println("Path: " + dir.getAbsolutePath());
-            } catch (URISyntaxException e) {
-                // If we can't convert the URL to URI, something is fundamentally wrong
-                // Wrap in RuntimeException to fail fast
-                throw new RuntimeException(
-                    "Failed to convert shader resource URL to URI: " + resource, e);
-            }
-        }
-        // dirs now should contain a single directory (even if it is a list) where the
-        // .class for Shader are
-
-        System.out.println("Scanning " + packageName + " for Shader implementations...");
-        final String[] files = dirs.get(0).list();
-        for (String file : files) {
-            // System.out.println("Found file: " + file);
-            Class<? extends Shader> shader;
-            if (!file.endsWith(".class")) {
-                System.out.println("Skipping non .class file: " + file);
+                resources = classLoader.getResources(path);
+            } catch (IOException e) {
+                e.printStackTrace();
                 continue;
             }
-            String classname = file.substring(0, file.lastIndexOf("."));
-            try {
-                final String shaderPackageName = Shader.class.getPackage().getName();
-                final String fullClassName = shaderPackageName + "." + classname;
-                shader = (Class<Shader>) Class.forName(fullClassName);
-                if (shader.getSuperclass() == Shader.class) {
-                    SHADER_SET.add(shader);
-                    System.out.println("Found Shader implementation: " + classname);
-                } else {
-                    System.out.println("Class " + classname + " does not extend Shader");
+
+            List<File> dirs = new ArrayList<>();
+            while (resources.hasMoreElements()) {
+                URL resource = resources.nextElement();
+                try {
+                    final URI uri = resource.toURI();
+                    final File dir = new File(uri);
+                    dirs.add(dir);
+                    System.out.println("Path: " + dir.getAbsolutePath());
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(
+                        "Failed to convert shader resource URL to URI: " + resource, e);
                 }
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                shader = null;
+            }
+
+            for (File dir : dirs) {
+                if (dir == null || !dir.isDirectory()) continue;
+                System.out.println("Scanning " + packageName + " for FragmentShader implementations...");
+                final String[] files = dir.list();
+                if (files == null) continue;
+                for (String file : files) {
+                    if (file == null || !file.endsWith(".class")) {
+                        continue;
+                    }
+                    final String classname = file.substring(0, file.lastIndexOf('.'));
+                    try {
+                        final String fullClassName = packageName + "." + classname;
+                        final Class<?> loaded = Class.forName(fullClassName);
+                        if (FragmentShader.class.isAssignableFrom(loaded)) {
+                            // Skip interfaces and abstract classes (including the FragmentShader interface itself)
+                            final int mods = loaded.getModifiers();
+                            if (!loaded.isInterface()
+                                    && !java.lang.reflect.Modifier.isAbstract(mods)
+                                    && !loaded.equals(FragmentShader.class)) {
+                                @SuppressWarnings("unchecked")
+                                final Class<? extends FragmentShader> shaderClass = (Class<? extends FragmentShader>) loaded;
+                                SHADER_SET.add(shaderClass);
+                                System.out.println("Found FragmentShader implementation: " + classname);
+                            } else {
+                                System.out.println("Skipping abstract/interface or base FragmentShader: " + classname);
+                            }
+                        }
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
@@ -101,7 +107,7 @@ public final class ShaderFactory {
      *
      * @return a set
      */
-    public static Set<Class<? extends Shader>> getShaderSet() {
+    public static Set<Class<? extends FragmentShader>> getShaderSet() {
         return SHADER_SET;
     }
 
@@ -112,8 +118,8 @@ public final class ShaderFactory {
      * @param shaderName the name of the shader we want to instantiate.
      * @return a optional of Shader
      */
-    public static Optional<Shader> create(String shaderName) {
-        for (Class<? extends Shader> class1 : SHADER_SET) {
+    public static Optional<FragmentShader> create(String shaderName) {
+        for (Class<? extends FragmentShader> class1 : SHADER_SET) {
             if (class1.getSimpleName().equals(shaderName)) {
                 try {
                     return Optional.of(class1.getConstructor().newInstance());
@@ -135,7 +141,7 @@ public final class ShaderFactory {
     public static String[] getShaderSetAsStringArray() {
         final String[] res = new String[SHADER_SET.size()];
         int i = 0;
-        Iterator<Class<? extends Shader>> iterator = SHADER_SET.iterator();
+        Iterator<Class<? extends FragmentShader>> iterator = SHADER_SET.iterator();
         while (iterator.hasNext()) {
             res[i++] = iterator.next().getSimpleName();
         }

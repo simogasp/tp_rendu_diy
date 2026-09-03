@@ -1,10 +1,8 @@
-package renderer.core.shader;
+package renderer.core.shader.fragmentshaders;
 
 import java.awt.Color;
 
 import renderer.algebra.MathUtils;
-import renderer.controller.ImageWrapper;
-import renderer.controller.Renderer;
 import renderer.core.mesh.Texture;
 
 /**
@@ -13,20 +11,18 @@ import renderer.core.mesh.Texture;
  *
  * @author cdehais
  */
-public class TextureShader extends Shader {
+public class TextureShader implements FragmentShader {
 
     /**
      * The start index of the texture attribute.
      */
-    private static final int START_TEXTURE_ATTRIBUTE = 7;
+    private static final int START_TEXTURE_ATTRIBUTE = Fragment.TEXTURE_U;
 
     /**
      * The number of attribute about the texture.
      */
     private static final int NUMBER_TEXTURE_ATTRIBUTE = 2;
 
-    /** The depth buffer. */
-    private DepthBuffer depth;
     /** The texture to apply. */
     private Texture texture;
     /**
@@ -73,17 +69,19 @@ public class TextureShader extends Shader {
 
     /**
      * Shade the fragment, taking the depth of the fragment into account.
+     * The color returned is sampled from the texture, using the fragment's UV
+     * coordinates.
      *
      * @param fragment the fragment to shade
+     * @return a FragmentOutput containing the color of the texture at the
+     *         fragment's UV coordinates.
      */
     @Override
-    public void shade(Fragment fragment) {
-        if (!depth.testFragment(fragment)) {
-            return;
-        }
+    public FragmentOutput shade(Fragment fragment) {
         // The Fragment may not have texture coordinates
         try {
-            //++ // TODO
+            //++ // TODO : change the return statement to return the right color
+            //++ return new FragmentOutput(Color.BLACK);
             final double[] uv = fragment.getAttribute(START_TEXTURE_ATTRIBUTE, //<!!
                     NUMBER_TEXTURE_ATTRIBUTE);
             Color texColor;
@@ -104,21 +102,11 @@ public class TextureShader extends Shader {
             } else {
                 finalColor = texColor;
             }
-            screen.setPixel(fragment.getX(), fragment.getY(), finalColor); //>!!
+            return new FragmentOutput(finalColor); //>!!
         } catch (ArrayIndexOutOfBoundsException e) {
-            screen.setPixel(fragment.getX(), fragment.getY(), fragment.getColor());
+            return new FragmentOutput(fragment.getColor());
         }
-        depth.writeFragment(fragment);
     }
-
-    /**
-     * Reset the shader.
-     */
-    @Override
-    public void reset() {
-        depth.clear();
-    }
-
 
     /**
      * Gets whether the color has to be combined with the base color.
@@ -126,15 +114,5 @@ public class TextureShader extends Shader {
      */
     public boolean getCombineWithBaseColor() {
         return combineWithBaseColor;
-    }
-
-    @Override
-    public void init(final Renderer renderer, final ImageWrapper screen) {
-        super.init(renderer, screen);
-        if (depth == null) {
-            depth = new DepthBuffer(screen.getWidth(), screen.getHeight());
-        } else {
-            depth.resize(screen.getWidth(), screen.getHeight());
-        }
     }
 }
