@@ -99,4 +99,14 @@ public class DepthBuffer {
         return buffer.getNRows();
     }
 
+    /**
+     * Get the depth value at the specified pixel coordinates.
+     * @param x the x-coordinate of the pixel
+     * @param y the y-coordinate of the pixel
+     * @return the depth value at the specified pixel coordinates
+     */
+    public double getDepth(int x, int y) {
+        return buffer.get(y, x);
+    }
+
 }
