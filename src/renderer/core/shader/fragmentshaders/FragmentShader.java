@@ -7,7 +7,7 @@ public interface FragmentShader {
 	/**
 	 * Shades the fragment given as parameter.
 	 *
-	 * @param fragment the framgment to shade
+	 * @param fragment the fragment to shade
 	 * @return a FragmentOutput with the 'shaded' values
 	 */
 	FragmentOutput shade(Fragment fragment);
