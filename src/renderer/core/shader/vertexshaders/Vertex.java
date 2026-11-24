@@ -17,7 +17,7 @@ public class Vertex {
     private Vector worldPosition;
 
     /** The color (albedo) of the (transformed) vertex. */
-    private double[] color = new double[3];
+    private double[] color = new double[COLORSIZE];
     /** The alpha value of the (transformed) vertex. */
     private double alpha;
 
