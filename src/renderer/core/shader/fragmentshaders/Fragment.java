@@ -191,7 +191,7 @@ public class Fragment {
      */
     public void setNormal(Vector normal) {
         if (normal.size() != SIZE_NORMAL) {
-            throw new RuntimeException("Wrong size of vector to set normal !");
+            throw new IllegalArgumentException("normal must have length " + SIZE_NORMAL);
         }
         setNormal(normal.get(0), normal.get(1), normal.get(2));
     }
@@ -236,7 +236,7 @@ public class Fragment {
      */
     public void setWorldPosition(Vector worldPos) {
         if (worldPos.size() != SIZE_POINT) {
-            throw new RuntimeException("Wrong size of vector to set world position !");
+            throw new IllegalArgumentException("worldPos must have length " + SIZE_POINT);
         }
         setWorldPosition(worldPos.get(0), worldPos.get(1), worldPos.get(2));
     }
