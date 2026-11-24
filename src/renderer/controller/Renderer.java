@@ -443,8 +443,7 @@ public final class Renderer {
             in.setColor(new double[] {
                 colors[3 * i],
                 colors[3 * i + 1],
-                colors[3 * i + 2],
-                1.0
+                colors[3 * i + 2]
             });
 
             if (texCoords != null) {

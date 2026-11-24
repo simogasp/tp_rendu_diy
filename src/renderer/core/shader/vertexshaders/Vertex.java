@@ -26,10 +26,13 @@ public class Vertex {
     /** The UV 'v' coordinate of the (transformed) vertex. */
     private double v;
 
+    /** The size of the color array (RGB). */
+    private static final int COLORSIZE = 3;
+
     /**
      * Creates a Vertex.
      */
-    public Vertex() {}
+    public Vertex() { }
 
     /**
      * Creates a Vertex.
@@ -65,8 +68,8 @@ public class Vertex {
      */
     public Vertex(int x, int y, double depth, Vector normal, Vector worldPos) {
         this(x, y, depth);
-        this.normal = new Vector(normal);
-        this.worldPosition = new Vector(worldPos);
+        this.normal = normal == null ? null : new Vector(normal);
+        this.worldPosition = worldPos == null ? null : new Vector(worldPos);
     }
 
     /**
@@ -205,6 +208,11 @@ public class Vertex {
      * @param color the new color array of the vertex
      */
     public void setColor(double[] color) {
+        if (color.length != COLORSIZE) {
+            throw new IllegalArgumentException("Color array must have length " + COLORSIZE
+                + " provided one has length " + color.length
+            );
+        }
         this.color = color;
     }
 

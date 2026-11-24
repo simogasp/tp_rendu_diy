@@ -68,6 +68,12 @@ public class Fragment {
     /** maximum value for the color. */
     private static final double MAX_PIX_VAL = 255;
 
+    /** the world coordinates of the Fragment as a 3D vector. */
+    private static final int SIZE_POINT = 3;
+
+    /** the number of components in the color attribute. */
+    private static final int SIZE_COLOR = 3;
+
     /**
      * Creates a Fragment at pixel coordinates (x, y).
      * @param x the x pixel coordinate of the Fragment
@@ -226,7 +232,7 @@ public class Fragment {
      * @param worldPos the world position of the fragment
      */
     public void setWorldPosition(Vector worldPos) {
-        if (worldPos.size() != 3) {
+        if (worldPos.size() != SIZE_POINT) {
             throw new RuntimeException("Wrong size of vector to set world position !");
         }
 
@@ -275,9 +281,23 @@ public class Fragment {
      * @param color the color of the Fragment
      */
     public void setColor(Color color) {
-        attributes[COLOR_R] = colorToFloat(color.getRed());
-        attributes[COLOR_G] = colorToFloat(color.getGreen());
-        attributes[COLOR_B] = colorToFloat(color.getBlue());
+        final var r = colorToFloat(color.getRed());
+        final var g = colorToFloat(color.getGreen());
+        final var b = colorToFloat(color.getBlue());
+        setColor(r, g, b);
+    }
+
+    /**
+     * Sets the color of the Fragment using an array of three doubles.
+     * @param color the color array containing the red, green, and blue in [0, 1]
+     */
+    public void setColor(double[] color) {
+        if (color.length != SIZE_COLOR) {
+            throw new IllegalArgumentException("Color array must have length 3"
+                + "\nprovided one has length " + color.length
+            );
+        }
+        setColor(color[0], color[1], color[2]);
     }
 
     /**
@@ -295,6 +315,27 @@ public class Fragment {
         attributes[COLOR_R] = r;
         attributes[COLOR_G] = g;
         attributes[COLOR_B] = b;
+    }
+
+    /**
+     * Sets the alpha value of the Fragment.
+     * @param alpha the alpha value in [0, 1]
+     */
+    public void setAlpha(double alpha) {
+        if (!inRange(alpha, 0, 1)) {
+            throw new IllegalArgumentException("Alpha value must be between 0 and 1");
+        }
+        attributes[COLOR_ALPHA] = alpha;
+    }
+
+    /**
+     * Sets the texture coordinates of the Fragment.
+     * @param u the U coordinate
+     * @param v the V coordinate
+     */
+    public void setTextureCoordinates(double u, double v) {
+        attributes[TEXTURE_U] = u;
+        attributes[TEXTURE_V] = v;
     }
 
     /**

@@ -66,27 +66,19 @@ public class Rasterizer {
         f.setAttribute(Fragment.DEPTH, v.getDepth());
 
         // Set the normal of the fragment
-        for (int i = Fragment.NORMAL_X; i < Fragment.NORMAL_Z; i++) {
-            f.setAttribute(i, v.getNormal().get(i));
-        }
+        f.setNormal(v.getNormal());
 
         // Set the world position of the fragment
-        for (int i = Fragment.WORLD_X; i < Fragment.WORLD_Z; i++) {
-            f.setAttribute(i, v.getWorldPosition().get(i));
-        }
+        f.setWorldPosition(v.getWorldPosition());
 
         // Set the color of the fragment
-        double[] color = v.getColor();
-        for (int i = Fragment.COLOR_R; i < Fragment.COLOR_B; i++) {
-            f.setAttribute(i, color[i]);
-        }
+        f.setColor(v.getColor());
 
         // Set the alpha value of the fragment
-        f.setAttribute(Fragment.COLOR_ALPHA, v.getAlpha());
+        f.setAlpha(v.getAlpha());
 
         // Set the UV coordinates of the fragment
-        f.setAttribute(Fragment.TEXTURE_U, v.getU());
-        f.setAttribute(Fragment.TEXTURE_V, v.getV());
+        f.setTextureCoordinates(v.getU(), v.getV());
 
         // Draw a larger square (of size 'size')
         final int size = 2;
