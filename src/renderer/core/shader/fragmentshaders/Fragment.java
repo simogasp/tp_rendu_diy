@@ -73,6 +73,8 @@ public class Fragment {
 
     /** the number of components in the color attribute. */
     private static final int SIZE_COLOR = 3;
+    /** the number of components in the normal attribute. */
+    private static final int SIZE_NORMAL = 3;
 
     /**
      * Creates a Fragment at pixel coordinates (x, y).
@@ -188,9 +190,10 @@ public class Fragment {
      * @param normal the normal of the Fragment
      */
     public void setNormal(Vector normal) {
-        attributes[NORMAL_X] = normal.get(0);
-        attributes[NORMAL_Y] = normal.get(1);
-        attributes[NORMAL_Z] = normal.get(2);
+        if (normal.size() != SIZE_NORMAL) {
+            throw new RuntimeException("Wrong size of vector to set normal !");
+        }
+        setNormal(normal.get(0), normal.get(1), normal.get(2));
     }
 
     /**
@@ -235,10 +238,7 @@ public class Fragment {
         if (worldPos.size() != SIZE_POINT) {
             throw new RuntimeException("Wrong size of vector to set world position !");
         }
-
-        attributes[WORLD_X] = worldPos.get(0);
-        attributes[WORLD_Y] = worldPos.get(1);
-        attributes[WORLD_Z] = worldPos.get(2);
+        setWorldPosition(worldPos.get(0), worldPos.get(1), worldPos.get(2));
     }
 
     /**
