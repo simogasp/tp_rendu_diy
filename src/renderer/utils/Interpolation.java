@@ -5,6 +5,9 @@ import renderer.algebra.Vector;
 import renderer.core.shader.vertexshaders.Vertex;
 import renderer.core.shader.fragmentshaders.Fragment;
 
+/**
+ * Provides utility methods for interpolating attributes of fragments between vertices.
+ */
 public final class Interpolation {
 
     private Interpolation() {

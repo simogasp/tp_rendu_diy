@@ -1,5 +1,10 @@
 package renderer.utils;
 
+/**
+ * Interface for interpolating attribute values between three vertices using
+ * barycentric coordinates.
+ * AttributeInterpolator
+ */
 public interface AttributeInterpolator {
 
     /**

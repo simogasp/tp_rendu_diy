@@ -3,6 +3,10 @@ package renderer.core.shader.vertexshaders;
 import renderer.algebra.Vector;
 import renderer.core.camera.Transformation;
 
+/**
+ * A vertex shader that applies a sinusoidal distortion to 3D vertices before
+ * projecting them into 2D screen space.
+ */
 public class SinusVertexShader implements VertexShader {
 
     /** The Transformation object containg all the 3D transformation methods. */

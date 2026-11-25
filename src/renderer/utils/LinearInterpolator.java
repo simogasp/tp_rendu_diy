@@ -1,5 +1,9 @@
 package renderer.utils;
 
+/**
+ * Provides a linear interpolation implementation for attributes based
+ * on barycentric coordinates.
+ */
 public class LinearInterpolator implements AttributeInterpolator {
 
     @Override

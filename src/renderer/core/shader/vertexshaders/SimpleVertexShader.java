@@ -3,6 +3,10 @@ package renderer.core.shader.vertexshaders;
 import renderer.algebra.Vector;
 import renderer.core.camera.Transformation;
 
+/**
+ * A simple implementation of a vertex shader that projects 3D vertices into
+ * 2D screen space.
+ */
 public class SimpleVertexShader implements VertexShader {
 
     /** The Transformation object containg all the 3D transformation methods. */

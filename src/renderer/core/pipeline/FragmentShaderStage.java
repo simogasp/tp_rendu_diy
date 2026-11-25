@@ -4,6 +4,10 @@ import renderer.core.shader.fragmentshaders.Fragment;
 import renderer.core.shader.fragmentshaders.FragmentOutput;
 import renderer.core.shader.fragmentshaders.FragmentShader;
 
+/**
+ * Represents a stage in the rendering pipeline that applies a fragment shader
+ * to incoming fragments and passes the results to an output merger.
+ */
 public class FragmentShaderStage implements FragmentConsumer {
 
     /** The fragment shader to be used in this stage. */

@@ -42,7 +42,7 @@ public class Rasterizer {
     /**
      * Set the consumer.
      *
-     * @param consumer
+     * @param consumer the fragment consumer to set
      */
     public void setConsumer(FragmentConsumer consumer) {
         this.consumer = consumer;

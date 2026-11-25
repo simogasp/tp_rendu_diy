@@ -4,6 +4,10 @@ import java.awt.Color;
 
 import renderer.algebra.Vector;
 
+/**
+ * Shades fragments based on their normal vectors.
+ * Each fragment's color is determined by the orientation of its normal.
+ */
 public class NormalMapShader implements FragmentShader {
 
     /**

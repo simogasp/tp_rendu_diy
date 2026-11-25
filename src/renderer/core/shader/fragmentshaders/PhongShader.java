@@ -6,6 +6,10 @@ import renderer.algebra.Vector;
 import renderer.core.light.Lighting;
 import renderer.core.mesh.Scene;
 
+/**
+ * The PhongShader class implements the FragmentShader interface and provides
+ * Phong shading for fragments based on the scene's lighting and material properties.
+ */
 public class PhongShader implements FragmentShader {
 
     /** The Scene object containing the mesh and light(s). */

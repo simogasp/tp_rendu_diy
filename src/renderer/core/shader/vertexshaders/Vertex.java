@@ -2,6 +2,10 @@ package renderer.core.shader.vertexshaders;
 
 import renderer.algebra.Vector;
 
+/**
+ * Represents a vertex in 3D space and its projection onto 2D screen space.
+ * Contains information such as position, normal, color, depth, and texture coordinates.
+ */
 public class Vertex {
 
     /** The 2D (screen-space) x coordinate of the (transformed) vertex. */

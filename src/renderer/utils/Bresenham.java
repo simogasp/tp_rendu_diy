@@ -2,6 +2,10 @@ package renderer.utils;
 
 import java.util.function.BiConsumer;
 
+/**
+ * Implements the Bresenham line algorithm for rasterizing lines.
+ * Provides a method to iterate over each pixel on a line between two points.
+ */
 public final class Bresenham {
 
     private Bresenham() {

@@ -3,6 +3,9 @@ package renderer.core.shader.vertexshaders;
 import renderer.core.light.Lighting;
 import renderer.core.mesh.Scene;
 
+/**
+ * Implements the Gouraud shading technique for vertex shading.
+ */
 public class GouraudShader implements VertexShader {
 
     /** The Scene object containing the mesh and light(s). */
@@ -12,7 +15,7 @@ public class GouraudShader implements VertexShader {
     private final Lighting lighting;
 
     /**
-     * Creates a SimpleVertexShader.
+     * Creates a GouraudShader.
      *
      * @param scene the Scene object
      * @param lighting the Lighting object
@@ -34,9 +37,14 @@ public class GouraudShader implements VertexShader {
     public void shade(Vertex in) {
         double[] material = scene.getMaterial();
 
-        double[] lightColor = this.lighting.applyLights(in.getWorldPosition(), in.getNormal(),
-                                    in.getColor(), scene.getCameraPosition(),
-                                    material[0], material[1], material[2], material[3]);
+        double[] lightColor = this.lighting.applyLights(in.getWorldPosition(),
+                                                        in.getNormal(),
+                                                        in.getColor(),
+                                                        scene.getCameraPosition(),
+                                                        material[0],
+                                                        material[1],
+                                                        material[2],
+                                                        material[3]);
 
         in.setColor(lightColor);
         in.setAlpha(1.0);

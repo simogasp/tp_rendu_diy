@@ -25,6 +25,10 @@ import renderer.controller.ColorMapFactory;
 import renderer.controller.Renderer;
 import renderer.controller.ShaderFactory;
 
+/**
+ * The menu panel of the rendering application.
+ * It contains controls for selecting meshes, shaders, render modes, and other options.
+ */
 public class MenuPanel extends JPanel {
 
     /**

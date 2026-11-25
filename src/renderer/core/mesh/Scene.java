@@ -48,7 +48,7 @@ public class Scene {
      * The ambient light intensity.
      */
     private double ambientI;
-    /** The intensity of the ponctual source. */
+    /** The intensity of the punctual source. */
     private double sourceI;
     /**
      * The point of the source of light.

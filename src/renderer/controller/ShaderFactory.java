@@ -16,7 +16,11 @@ import java.util.Set;
 
 import java.util.Arrays;
 import renderer.core.shader.fragmentshaders.FragmentShader;
-
+/**
+ * The ShaderFactory class is responsible for discovering and managing all FragmentShader
+ * implementations available in the shader packages. It provides methods to initialize the
+ * factory and retrieve the set of shaders.
+ */
 @SuppressWarnings("unchecked")
 public final class ShaderFactory {
 
@@ -25,6 +29,9 @@ public final class ShaderFactory {
      */
     private static final Set<Class<? extends FragmentShader>> SHADER_SET = new HashSet<>();
 
+    /**
+     * Private constructor to prevent instantiation of the ShaderFactory class.
+     */
     private ShaderFactory() {
     }
 
@@ -67,10 +74,15 @@ public final class ShaderFactory {
             }
 
             for (File dir : dirs) {
-                if (dir == null || !dir.isDirectory()) continue;
-                System.out.println("Scanning " + packageName + " for FragmentShader implementations...");
+                if (dir == null || !dir.isDirectory()) {
+                    continue;
+                }
+                System.out.println("Scanning " + packageName
+                                    + " for FragmentShader implementations...");
                 final String[] files = dir.list();
-                if (files == null) continue;
+                if (files == null) {
+                    continue;
+                }
                 for (String file : files) {
                     if (file == null || !file.endsWith(".class")) {
                         continue;
@@ -80,17 +92,21 @@ public final class ShaderFactory {
                         final String fullClassName = packageName + "." + classname;
                         final Class<?> loaded = Class.forName(fullClassName);
                         if (FragmentShader.class.isAssignableFrom(loaded)) {
-                            // Skip interfaces and abstract classes (including the FragmentShader interface itself)
+                            // Skip interfaces and abstract classes (including the
+                            // FragmentShader interface itself)
                             final int mods = loaded.getModifiers();
                             if (!loaded.isInterface()
                                     && !java.lang.reflect.Modifier.isAbstract(mods)
                                     && !loaded.equals(FragmentShader.class)) {
                                 @SuppressWarnings("unchecked")
-                                final Class<? extends FragmentShader> shaderClass = (Class<? extends FragmentShader>) loaded;
+                                final Class<? extends FragmentShader> shaderClass = 
+                                            (Class<? extends FragmentShader>) loaded;
                                 SHADER_SET.add(shaderClass);
-                                System.out.println("Found FragmentShader implementation: " + classname);
+                                System.out.println("Found FragmentShader implementation: "
+                                                    + classname);
                             } else {
-                                System.out.println("Skipping abstract/interface or base FragmentShader: " + classname);
+                                System.out.println("Skipping abstract/interface or base "
+                                                    + "FragmentShader: " + classname);
                             }
                         }
                     } catch (ClassNotFoundException e) {

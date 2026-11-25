@@ -2,6 +2,12 @@ package renderer.core.shader.fragmentshaders;
 
 import java.awt.Color;
 
+/**
+ * Represents the output of a fragment shader, containing the final color
+ * of the fragment to be rendered on screen.
+ *
+ * FragmentOutput
+ */
 public final class FragmentOutput {
 
     /** The final color of the fragment to output on screen. */

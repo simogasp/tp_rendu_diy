@@ -1,5 +1,11 @@
 package renderer.utils;
 
+/**
+ * Provides a perspective-correct interpolation for attributes based on barycentric
+ * coordinates.
+ * This class implements the AttributeInterpolator interface and corrects for
+ * perspective distortion when interpolating vertex attributes.
+ */
 public class PerspectiveCorrectInterpolator implements AttributeInterpolator {
     @Override
     public double interpolate(double a1, double a2, double a3,

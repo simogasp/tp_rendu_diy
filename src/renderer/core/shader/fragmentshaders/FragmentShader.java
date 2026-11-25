@@ -2,6 +2,11 @@ package renderer.core.shader.fragmentshaders;
 
 import renderer.controller.ColorMapFactory.Maps;
 
+/**
+ * Interface for fragment shaders in the rendering pipeline.
+ * Provides methods for shading fragments and optionally supporting colormaps
+ * and depth ranges.
+ */
 public interface FragmentShader {
 
 	/**
