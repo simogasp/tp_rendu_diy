@@ -42,8 +42,6 @@ public class VertexTest {
     private static final int X_INDEX = 0;
     /** The Y component index in vectors and arrays. */
     private static final int Y_INDEX = 1;
-    /** The Z component index in vectors. */
-    private static final int Z_INDEX = 2;
     /** The default X and Y coordinate. */
     private static final int DEFAULT_COORDINATE = 0;
     /** A new X coordinate used for setter tests. */
