@@ -3,9 +3,15 @@ package renderer.controller;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import renderer.core.shader.Fragment;
 import renderer.core.mesh.Scene;
+import renderer.core.shader.fragmentshaders.Fragment;
 
+/**
+ * A wrapper class for BufferedImage that provides additional functionality
+ * such as setting pixels with Color objects and checking if fragments are clipped.
+ *
+ * ImageWrapper
+ */
 public class ImageWrapper extends BufferedImage {
 
     /**

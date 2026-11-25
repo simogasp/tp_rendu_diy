@@ -9,7 +9,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import renderer.core.shader.DepthBuffer;
-import renderer.core.shader.Fragment;
+import renderer.core.shader.fragmentshaders.Fragment;
 
 /**
  * Unit tests for the DepthBuffer class.
@@ -40,6 +40,8 @@ public class DepthBufferTest {
     private static final double DEPTH_SLIGHTLY_LARGER = 2e-10;
     /** Negative depth value. */
     private static final double DEPTH_NEGATIVE = -0.5;
+    /** The epsilon for double comparison. */
+    private static final double EPSILON = 1e-10;
 
     /** The depth buffer instance used for testing. */
     private DepthBuffer depthBuffer;
@@ -103,8 +105,9 @@ public class DepthBufferTest {
         // Write a fragment
         depthBuffer.writeFragment(fragment);
 
-        // Same fragment should not pass test (equal depth)
-        assertFalse(depthBuffer.testFragment(fragment));
+        assertEquals(DEPTH_MID, depthBuffer.getDepth(X_COORD, Y_COORD), EPSILON);
+        // Same fragment should pass test (equal depth)
+        assertTrue(depthBuffer.testFragment(fragment));
 
         // Clear the buffer
         depthBuffer.clear();
@@ -164,7 +167,7 @@ public class DepthBufferTest {
 
         final Fragment fragment2 = new Fragment(X_COORD, Y_COORD);
         fragment2.setDepth(DEPTH_MID);
-        assertFalse(depthBuffer.testFragment(fragment2));
+        assertTrue(depthBuffer.testFragment(fragment2));
     }
 
     /**
@@ -190,7 +193,7 @@ public class DepthBufferTest {
         fragment.setDepth(DEPTH_MID);
         assertTrue(depthBuffer.testFragment(fragment));
         depthBuffer.writeFragment(fragment);
-        assertFalse(depthBuffer.testFragment(fragment));
+        assertEquals(depthBuffer.getDepth(0, 0), DEPTH_MID, EPSILON);
     }
 
     /**
@@ -198,12 +201,14 @@ public class DepthBufferTest {
      */
     @Test
     public void testFragmentAtMaximumPosition() {
+        final int maxX = BUFFER_WIDTH - 1;
+        final int maxY = BUFFER_HEIGHT - 1;
         final Fragment fragment =
-            new Fragment(BUFFER_WIDTH - 1, BUFFER_HEIGHT - 1);
+            new Fragment(maxX, maxY);
         fragment.setDepth(DEPTH_MID);
         assertTrue(depthBuffer.testFragment(fragment));
         depthBuffer.writeFragment(fragment);
-        assertFalse(depthBuffer.testFragment(fragment));
+        assertEquals(depthBuffer.getDepth(maxX, maxY), DEPTH_MID, EPSILON);
     }
 
     // ==================== Out of Bounds Tests ====================
@@ -274,8 +279,10 @@ public class DepthBufferTest {
         // Write the fragment
         depthBuffer.writeFragment(fragment);
 
-        // Fragment no longer passes (equal depth)
-        assertFalse(depthBuffer.testFragment(fragment));
+        assertEquals(DEPTH_MID, depthBuffer.getDepth(X_COORD, Y_COORD), EPSILON);
+
+        // Fragment passes (equal depth)
+        assertTrue(depthBuffer.testFragment(fragment));
     }
 
     /**
@@ -469,10 +476,11 @@ public class DepthBufferTest {
     @Test
     public void testFragmentWithDepthZero() {
         final Fragment fragment = new Fragment(X_COORD, Y_COORD);
-        fragment.setDepth(0.0);
+        final double depthZero = 0.0;
+        fragment.setDepth(depthZero);
         assertTrue(depthBuffer.testFragment(fragment));
         depthBuffer.writeFragment(fragment);
-        assertFalse(depthBuffer.testFragment(fragment));
+        assertEquals(depthZero, depthBuffer.getDepth(X_COORD, Y_COORD), EPSILON);
     }
 
     /**
@@ -481,10 +489,11 @@ public class DepthBufferTest {
     @Test
     public void testFragmentWithDepthOne() {
         final Fragment fragment = new Fragment(X_COORD, Y_COORD);
-        fragment.setDepth(1.0);
+        double depthOne = 1.0;
+        fragment.setDepth(depthOne);
         assertTrue(depthBuffer.testFragment(fragment));
         depthBuffer.writeFragment(fragment);
-        assertFalse(depthBuffer.testFragment(fragment));
+        assertEquals(depthOne, depthBuffer.getDepth(X_COORD, Y_COORD), EPSILON);
     }
 
     /**
@@ -511,7 +520,7 @@ public class DepthBufferTest {
         fragment.setDepth(DEPTH_NEGATIVE);
         assertTrue(depthBuffer.testFragment(fragment));
         depthBuffer.writeFragment(fragment);
-        assertFalse(depthBuffer.testFragment(fragment));
+        assertEquals(DEPTH_NEGATIVE, depthBuffer.getDepth(X_COORD, Y_COORD), EPSILON);
     }
 
     // ==================== Sequential Operations Tests ====================
@@ -521,43 +530,43 @@ public class DepthBufferTest {
      */
     @Test
     public void testSequentialWriteAndTestOperations() {
-        final Fragment frag1 = new Fragment(X_COORD, Y_COORD);
-        frag1.setDepth(DEPTH_FAR);
+        final Fragment fragFAR = new Fragment(X_COORD, Y_COORD);
+        fragFAR.setDepth(DEPTH_FAR);
 
-        final Fragment frag2 = new Fragment(X_COORD, Y_COORD);
-        frag2.setDepth(DEPTH_MID);
+        final Fragment fragMID = new Fragment(X_COORD, Y_COORD);
+        fragMID.setDepth(DEPTH_MID);
 
-        final Fragment frag3 = new Fragment(X_COORD, Y_COORD);
-        frag3.setDepth(DEPTH_CLOSE);
+        final Fragment fragCLOSE = new Fragment(X_COORD, Y_COORD);
+        fragCLOSE.setDepth(DEPTH_CLOSE);
 
         // All should pass initially
-        assertTrue(depthBuffer.testFragment(frag1));
-        assertTrue(depthBuffer.testFragment(frag2));
-        assertTrue(depthBuffer.testFragment(frag3));
+        assertTrue(depthBuffer.testFragment(fragFAR));
+        assertTrue(depthBuffer.testFragment(fragMID));
+        assertTrue(depthBuffer.testFragment(fragCLOSE));
 
         // Write far fragment
-        depthBuffer.writeFragment(frag1);
+        depthBuffer.writeFragment(fragFAR);
 
         // Mid and close should pass, far should fail
-        assertTrue(depthBuffer.testFragment(frag2));
-        assertTrue(depthBuffer.testFragment(frag3));
-        assertFalse(depthBuffer.testFragment(frag1));
+        assertTrue(depthBuffer.testFragment(fragMID));
+        assertTrue(depthBuffer.testFragment(fragCLOSE));
+        assertTrue(depthBuffer.testFragment(fragFAR));
 
         // Write mid fragment
-        depthBuffer.writeFragment(frag2);
+        depthBuffer.writeFragment(fragMID);
 
         // Only close should pass
-        assertTrue(depthBuffer.testFragment(frag3));
-        assertFalse(depthBuffer.testFragment(frag1));
-        assertFalse(depthBuffer.testFragment(frag2));
+        assertTrue(depthBuffer.testFragment(fragCLOSE));
+        assertTrue(depthBuffer.testFragment(fragMID));
+        assertFalse(depthBuffer.testFragment(fragFAR));
 
         // Write close fragment
-        depthBuffer.writeFragment(frag3);
+        depthBuffer.writeFragment(fragCLOSE);
 
         // None should pass
-        assertFalse(depthBuffer.testFragment(frag1));
-        assertFalse(depthBuffer.testFragment(frag2));
-        assertFalse(depthBuffer.testFragment(frag3));
+        assertFalse(depthBuffer.testFragment(fragFAR));
+        assertFalse(depthBuffer.testFragment(fragMID));
+        assertTrue(depthBuffer.testFragment(fragCLOSE));
     }
 
     /**
@@ -572,7 +581,7 @@ public class DepthBufferTest {
                 fragment.setDepth(DEPTH_MID);
                 assertTrue(depthBuffer.testFragment(fragment));
                 depthBuffer.writeFragment(fragment);
-                assertFalse(depthBuffer.testFragment(fragment));
+                assertEquals(DEPTH_MID, depthBuffer.getDepth(x, y), EPSILON);
             }
         }
     }

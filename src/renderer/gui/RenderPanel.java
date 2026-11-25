@@ -10,6 +10,10 @@ import javax.swing.JPanel;
 
 import renderer.controller.ImageWrapper;
 
+/**
+ * The RenderPanel class represents a panel in the GUI that displays the rendered image.
+ * It manages the dimensions, pixel size, and updates the displayed image.
+ */
 public class RenderPanel extends JPanel {
 
     /**

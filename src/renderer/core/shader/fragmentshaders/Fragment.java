@@ -1,4 +1,4 @@
-package renderer.core.shader;
+package renderer.core.shader.fragmentshaders;
 
 import java.awt.Color;
 
@@ -26,7 +26,7 @@ public class Fragment {
     private int numAttributes;
 
     /** The number of attributes of the Fragment. */
-    private static final int NUM_ATTRIBUTES = 9;
+    private static final int NUM_ATTRIBUTES = 13;
 
     /**
      * attributes placement:
@@ -46,19 +46,35 @@ public class Fragment {
     public static final int COLOR_G = 2;
     /** the blue component of the color. */
     public static final int COLOR_B = 3;
+    /** the alpha component of the color. */
+    public static final int COLOR_ALPHA = 4;
     /** the x component of the normal. */
-    public static final int NORMAL_X = 4;
+    public static final int NORMAL_X = 5;
     /** the y component of the normal. */
-    public static final int NORMAL_Y = 5;
+    public static final int NORMAL_Y = 6;
     /** the z component of the normal. */
-    public static final int NORMAL_Z = 6;
+    public static final int NORMAL_Z = 7;
     /** the u texture coordinate. */
-    public static final int TEXTURE_U = 7;
+    public static final int TEXTURE_U = 8;
     /** the v texture coordinate. */
-    public static final int TEXTURE_V = 8;
+    public static final int TEXTURE_V = 9;
+    /** the world coordinate x. */
+    public static final int WORLD_X = 10;
+    /** the world coordinate y. */
+    public static final int WORLD_Y = 11;
+    /** the world coordinate z. */
+    public static final int WORLD_Z = 12;
 
     /** maximum value for the color. */
     private static final double MAX_PIX_VAL = 255;
+
+    /** the world coordinates of the Fragment as a 3D vector. */
+    private static final int SIZE_POINT = 3;
+
+    /** the number of components in the color attribute. */
+    private static final int SIZE_COLOR = 3;
+    /** the number of components in the normal attribute. */
+    private static final int SIZE_NORMAL = 3;
 
     /**
      * Creates a Fragment at pixel coordinates (x, y).
@@ -81,31 +97,11 @@ public class Fragment {
     }
 
     /**
-     * Gets a scalar attribute at index.
-     * @param index the index of the attribute to get
-     * @return the value of the attribute at index
-     */
-    public double getAttribute(int index) {
-        return attributes[index];
-    }
-
-    /**
-     * Gets a vector attribute at the given starting location and with the given
-     * dimension.
-     * @param index the starting index of the attribute
-     * @param dimension the dimension of the attribute
-     * @return the attribute as a double array
-     */
-    public double[] getAttribute(int index, int dimension) {
-        return java.util.Arrays.copyOfRange(attributes, index, index + dimension);
-    }
-
-    /**
      * Sets a scalar attribute at index.
      * @param index the index of the attribute to set
      * @param value the value to set the attribute to
      */
-    public void setAttribute(int index, double value) {
+    private void setAttribute(int index, double value) {
         attributes[index] = value;
     }
 
@@ -165,8 +161,8 @@ public class Fragment {
      */
     public Vector getNormal() {
         return new Vector(attributes[NORMAL_X],
-                            attributes[NORMAL_Y],
-                            attributes[NORMAL_Z]);
+                          attributes[NORMAL_Y],
+                          attributes[NORMAL_Z]);
     }
 
     /**
@@ -174,9 +170,10 @@ public class Fragment {
      * @param normal the normal of the Fragment
      */
     public void setNormal(Vector normal) {
-        attributes[NORMAL_X] = normal.get(0);
-        attributes[NORMAL_Y] = normal.get(1);
-        attributes[NORMAL_Z] = normal.get(2);
+        if (normal.size() != SIZE_NORMAL) {
+            throw new IllegalArgumentException("normal must have length " + SIZE_NORMAL);
+        }
+        setNormal(normal.get(0), normal.get(1), normal.get(2));
     }
 
     /**
@@ -189,6 +186,39 @@ public class Fragment {
         attributes[NORMAL_X] = nx;
         attributes[NORMAL_Y] = ny;
         attributes[NORMAL_Z] = nz;
+    }
+
+    /**
+     * Gets the world position of the Fragment.
+     * @return the world position of the Fragment
+     */
+    public Vector getWorldPosition() {
+        return new Vector(attributes[WORLD_X],
+                          attributes[WORLD_Y],
+                          attributes[WORLD_Z]);
+    }
+
+    /**
+     * Sets the world position of the Fragment.
+     * @param wx the world position X of the fragment
+     * @param wy the world position Y of the fragment
+     * @param wz the world position Z of the fragment
+     */
+    public void setWorldPosition(double wx, double wy, double wz) {
+        attributes[WORLD_X] = wx;
+        attributes[WORLD_Y] = wy;
+        attributes[WORLD_Z] = wz;
+    }
+
+    /**
+     * Sets the world position of the Fragment.
+     * @param worldPos the world position of the fragment
+     */
+    public void setWorldPosition(Vector worldPos) {
+        if (worldPos.size() != SIZE_POINT) {
+            throw new IllegalArgumentException("worldPos must have length " + SIZE_POINT);
+        }
+        setWorldPosition(worldPos.get(0), worldPos.get(1), worldPos.get(2));
     }
 
     /**
@@ -227,13 +257,47 @@ public class Fragment {
     }
 
     /**
+     * Gets the raw color values of the Fragment as an array of doubles in [0, 1].
+     * @return an array containing the RGB components of the color in [0, 1]
+     */
+    public double[] getColorRaw() {
+        return new double[] {
+            attributes[COLOR_R],
+            attributes[COLOR_G],
+            attributes[COLOR_B]
+        };
+    }
+
+    /**
+     * Gets the alpha value of the Fragment.
+     * @return the alpha value in [0, 1]
+     */
+    public double getAlpha() {
+        return attributes[COLOR_ALPHA];
+    }
+
+    /**
      * Sets the color of the Fragment.
      * @param color the color of the Fragment
      */
     public void setColor(Color color) {
-        attributes[COLOR_R] = colorToFloat(color.getRed());
-        attributes[COLOR_G] = colorToFloat(color.getGreen());
-        attributes[COLOR_B] = colorToFloat(color.getBlue());
+        final var r = colorToFloat(color.getRed());
+        final var g = colorToFloat(color.getGreen());
+        final var b = colorToFloat(color.getBlue());
+        setColor(r, g, b);
+    }
+
+    /**
+     * Sets the color of the Fragment using an array of three doubles.
+     * @param color the color array containing the red, green, and blue in [0, 1]
+     */
+    public void setColor(double[] color) {
+        if (color.length != SIZE_COLOR) {
+            throw new IllegalArgumentException("Color array must have length 3"
+                + "\nprovided one has length " + color.length
+            );
+        }
+        setColor(color[0], color[1], color[2]);
     }
 
     /**
@@ -251,6 +315,27 @@ public class Fragment {
         attributes[COLOR_R] = r;
         attributes[COLOR_G] = g;
         attributes[COLOR_B] = b;
+    }
+
+    /**
+     * Sets the alpha value of the Fragment.
+     * @param alpha the alpha value in [0, 1]
+     */
+    public void setAlpha(double alpha) {
+        if (!inRange(alpha, 0, 1)) {
+            throw new IllegalArgumentException("Alpha value must be between 0 and 1");
+        }
+        attributes[COLOR_ALPHA] = alpha;
+    }
+
+    /**
+     * Sets the texture coordinates of the Fragment.
+     * @param u the U coordinate
+     * @param v the V coordinate
+     */
+    public void setTextureCoordinates(double u, double v) {
+        attributes[TEXTURE_U] = u;
+        attributes[TEXTURE_V] = v;
     }
 
     /**
@@ -272,11 +357,23 @@ public class Fragment {
         return "(" + x + "," + y + ")";
     }
 
+    /**
+     * Clones the fragment.
+     * @return a clone of the fragment
+     */
     @Override
     public Fragment clone() {
         final Fragment res = new Fragment(x, y);
         System.arraycopy(attributes, 0, res.attributes, 0, attributes.length);
         return res;
+    }
+
+    /**
+     * Gets the texture coordinates of the Fragment.
+     * @return an array containing the U and V texture coordinates
+     */
+    public double[] getTextureCoordinates() {
+        return new double[] { attributes[TEXTURE_U], attributes[TEXTURE_V] };
     }
 
 }

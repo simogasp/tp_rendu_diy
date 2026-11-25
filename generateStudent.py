@@ -274,10 +274,17 @@ def main(working_dir: str, studentify_dir: str, archive_name: str, skip_cleaning
                            "src/renderer/core/light/PointLight.java",
                            "src/renderer/core/mesh/Mesh.java",
                            "src/renderer/core/mesh/Texture.java",
-                           "src/renderer/core/rasterizer/Rasterizer.java",
+                           "src/renderer/core/pipeline/Rasterizer.java",
+                           "src/renderer/core/pipeline/PerspectiveCorrectRasterizer.java",
+                           "src/renderer/core/pipeline/OutputMerger.java",
                            "src/renderer/core/shader/DepthBuffer.java",
-                           "src/renderer/core/shader/TextureShader.java",
+                           "src/renderer/core/shader/fragmentshaders/TextureShader.java",
+                           "src/renderer/core/shader/fragmentshaders/PhongShader.java",
                            "src/renderer/core/camera/Transformation.java",
+                           "src/renderer/core/camera/Transformation.java",
+                           "src/renderer/utils/Interpolation.java",
+                           "src/renderer/utils/LinearInterpolator.java",
+                           "src/renderer/utils/PerspectiveCorrectInterpolator.java",
                            # this is not a file the student needs to change
                            # it contains a switch to disable some tests for the student version for the shaders we do not provide
                            "test/unit/controller/ShaderFactoryTest.java"]
@@ -300,8 +307,8 @@ def main(working_dir: str, studentify_dir: str, archive_name: str, skip_cleaning
         
     # remove Depth and Normal shader implementations
     files_to_remove = [
-        "src/renderer/core/shader/DepthShader.java",
-        "src/renderer/core/shader/NormalMapShader.java",
+        "src/renderer/core/shader/fragmentshaders/DepthShader.java",
+        "src/renderer/core/shader/fragmentshaders/NormalMapShader.java",
         "test/unit/core/shader/DepthBufferTest.java"
     ]
     for file in files_to_remove:

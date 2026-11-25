@@ -2,6 +2,11 @@ package renderer.core.light;
 
 import renderer.algebra.Vector;
 
+/**
+ * The PointLight class represents a point light source in the scene.
+ * It extends the Light class and provides the contribution of the light
+ * based on its position and intensity.
+ */
 public class PointLight extends Light {
 
     /**

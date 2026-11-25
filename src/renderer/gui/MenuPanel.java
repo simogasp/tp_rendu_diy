@@ -25,6 +25,10 @@ import renderer.controller.ColorMapFactory;
 import renderer.controller.Renderer;
 import renderer.controller.ShaderFactory;
 
+/**
+ * The menu panel of the rendering application.
+ * It contains controls for selecting meshes, shaders, render modes, and other options.
+ */
 public class MenuPanel extends JPanel {
 
     /**
@@ -158,6 +162,10 @@ public class MenuPanel extends JPanel {
      * The lighting option check box.
      */
     private final JCheckBox lightingCheckBox;
+    /**
+     * The wireframe-on-solid option check box.
+     */
+    private final JCheckBox drawWireframeOnSolidCheckBox;
     /**
      * The combine texture with color check box.
      */
@@ -298,6 +306,9 @@ public class MenuPanel extends JPanel {
 
         // check box to enable the lighting
         lightingCheckBox = new JCheckBox("Lighting");
+
+        // check box to draw the wireframe on top of solid
+        drawWireframeOnSolidCheckBox = new JCheckBox("\"Solid\" Wireframe");
 
         // check box to combine texture and origin color
         combineColorCheckBox = new JCheckBox("Combine color with texture");
@@ -595,6 +606,17 @@ public class MenuPanel extends JPanel {
         constraints.gridy++;
         add(lightingCheckBox, constraints);
 
+        drawWireframeOnSolidCheckBox.addItemListener(new ItemListener() {
+            public void itemStateChanged(final ItemEvent e) {
+                render.setSolidWiredRendered(drawWireframeOnSolidCheckBox.isSelected());
+                updateRender();
+            }
+        });
+
+        drawWireframeOnSolidCheckBox.setMargin(insetsCheckBox);
+        constraints.gridy++;
+        add(drawWireframeOnSolidCheckBox, constraints);
+
         combineColorCheckBox.addItemListener(e -> {
             render.setCombineWithBaseColor(combineColorCheckBox.isSelected());
             updateRender();
@@ -616,6 +638,7 @@ public class MenuPanel extends JPanel {
         shaderComboBox.setSelectedItem("SimpleShader");
         textureComboBox.setSelectedItem("brick.jpg");
         drawVertexRadio.setSelected(SELECTED);
+        drawWireframeOnSolidCheckBox.setSelected(!SELECTED);
     }
 
     /**

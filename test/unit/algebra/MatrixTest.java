@@ -11,7 +11,7 @@ import static org.junit.Assert.assertThrows;
 import org.junit.Test;
 
 
-public class TestMatrix {
+public class MatrixTest {
 
     /**
      * The epsilon for double comparison.
