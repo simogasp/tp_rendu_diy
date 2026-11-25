@@ -11,7 +11,7 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 
-public class TestVector {
+public class VectorTest {
 
     // Constants
     /**

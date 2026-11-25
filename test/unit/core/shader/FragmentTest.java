@@ -14,7 +14,7 @@ import renderer.core.shader.fragmentshaders.Fragment;
 /**
  * Unit tests for the Fragment class.
  */
-public class TestFragment {
+public class FragmentTest {
 
     /** The X coordinate used for testing. */
     private static final int X_COORD = 10;
@@ -25,7 +25,7 @@ public class TestFragment {
     /** The new Y coordinate used for testing. */
     private static final int NEW_Y_COORD = 40;
     /** The number of attributes in a Fragment. */
-    private static final int NUM_ATTRIBUTES = 9;
+    private static final int NUM_ATTRIBUTES = 13;
     /** The depth value used for testing. */
     private static final double DEPTH_VALUE = 0.5;
     /** The X component of the normal vector used for testing. */
@@ -47,7 +47,7 @@ public class TestFragment {
     /** The blue component of the color used for testing as an integer. */
     private static final int COLOR_B_INT = 32;
     /** An invalid attribute index used for testing. */
-    private static final int INVALID_INDEX = 9;
+    private static final int INVALID_INDEX = 19;
     /** The dimension used for testing. */
     private static final int DIMENSION = 3;
     /** The epsilon used for testing. */
