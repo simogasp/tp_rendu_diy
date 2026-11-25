@@ -116,7 +116,7 @@ run: compile
 # Generate Javadoc
 doc: clean-doc
 	mkdir -p ${DOC_DIR}
-	javadoc -d ${DOC_DIR} -sourcepath ${SRC_DIR} ${SRC_FILES}
+	javadoc -d ${DOC_DIR} -sourcepath ${SRC_DIR} ${SRC_FILES} -Werror 
 
 # clean the doc directory
 clean-doc:
