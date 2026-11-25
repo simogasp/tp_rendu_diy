@@ -63,7 +63,7 @@ public class Rasterizer {
         Fragment f = new Fragment(x1, y1);
 
         // Set the depth of the fragment
-        f.setAttribute(Fragment.DEPTH, v.getDepth());
+        f.setDepth(v.getDepth());
 
         // Set the normal of the fragment
         f.setNormal(v.getNormal());
@@ -220,9 +220,9 @@ public class Rasterizer {
                 } else {
                     final double bias = 1.01;
 
-                    Vector vecAtt = new Vector(v1.getDepth(), v2.getDepth(), v3.getDepth());
+                    var vecAtt = new Vector(v1.getDepth(), v2.getDepth(), v3.getDepth());
                     double interpolated = bar.dot(vecAtt);
-                    fragment.setAttribute(Fragment.DEPTH, interpolated * bias);
+                    fragment.setDepth(interpolated * bias);
                 }
                 consumer.consume(fragment);
             }

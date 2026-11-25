@@ -83,9 +83,9 @@ public class PerspectiveCorrectRasterizer extends Rasterizer {
                 } else {
                     final double bias = 1.01;
 
-                    Vector vecAtt = new Vector(v1.getDepth(), v2.getDepth(), v3.getDepth());
+                    var vecAtt = new Vector(v1.getDepth(), v2.getDepth(), v3.getDepth());
                     double interpolated = bar.dot(vecAtt);
-                    fragment.setAttribute(Fragment.DEPTH, interpolated * bias);
+                    fragment.setDepth(interpolated * bias);
                 }
                 consumer.consume(fragment.clone());
             }

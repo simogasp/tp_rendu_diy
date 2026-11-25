@@ -96,7 +96,26 @@ public class FragmentTest {
     }
 
     private static double[] attributes(Fragment fragment) {
-        return fragment.getAttribute(FIRST, fragment.getNumAttributes());
+        final double[] result = new double[ATTRIBUTE_COUNT];
+        final double[] color = fragment.getColorRaw();
+        final double[] textureCoordinates = fragment.getTextureCoordinates();
+        final Vector normal = fragment.getNormal();
+        final Vector worldPosition = fragment.getWorldPosition();
+
+        result[Fragment.DEPTH] = fragment.getDepth();
+        result[Fragment.COLOR_R] = color[FIRST];
+        result[Fragment.COLOR_G] = color[SECOND];
+        result[Fragment.COLOR_B] = color[LAST_COMPONENT];
+        result[Fragment.COLOR_ALPHA] = fragment.getAlpha();
+        result[Fragment.NORMAL_X] = normal.get(FIRST);
+        result[Fragment.NORMAL_Y] = normal.get(SECOND);
+        result[Fragment.NORMAL_Z] = normal.get(LAST_COMPONENT);
+        result[Fragment.TEXTURE_U] = textureCoordinates[FIRST];
+        result[Fragment.TEXTURE_V] = textureCoordinates[SECOND];
+        result[Fragment.WORLD_X] = worldPosition.get(FIRST);
+        result[Fragment.WORLD_Y] = worldPosition.get(SECOND);
+        result[Fragment.WORLD_Z] = worldPosition.get(LAST_COMPONENT);
+        return result;
     }
 
     private static double[] vectorValues(Vector vector) {
@@ -143,80 +162,6 @@ public class FragmentTest {
         fragment.setPosition(NEW_X, NEW_Y);
 
         assertArrayEquals(new int[]{NEW_X, NEW_Y}, fragment.getPosition());
-        assertArrayEquals(before, attributes(fragment), EPSILON);
-    }
-
-    /** Checks that attribute slices are independent copies. */
-    @Test
-    public void getAttributeValidRangeReturnsIndependentCopy() {
-        Fragment fragment = newFragment();
-        fragment.setColor(RED, GREEN, BLUE);
-        double[] before = attributes(fragment);
-
-        double[] color = fragment.getAttribute(Fragment.COLOR_R, RGB_SIZE);
-        assertArrayEquals(new double[]{RED, GREEN, BLUE}, color, EPSILON);
-        color[FIRST] = ONE;
-        assertArrayEquals(before, attributes(fragment), EPSILON);
-    }
-
-    /** Checks slice padding and empty ranges at the end. */
-    @Test
-    public void getAttributeRangeBeyondEndPadsWithZeros() {
-        Fragment fragment = newFragment();
-        fragment.setAttribute(Fragment.WORLD_Z, VECTOR_Z);
-
-        assertArrayEquals(new double[]{VECTOR_Z, ZERO, ZERO},
-                fragment.getAttribute(Fragment.WORLD_Z, RGB_SIZE), EPSILON);
-        assertArrayEquals(new double[PADDING],
-                fragment.getAttribute(ATTRIBUTE_COUNT, PADDING), EPSILON);
-        assertArrayEquals(new double[FIRST],
-                fragment.getAttribute(ATTRIBUTE_COUNT, FIRST), EPSILON);
-    }
-
-    /** Checks invalid scalar and slice indices. */
-    @Test
-    public void getAttributeInvalidIndicesThrowsAndLeavesFragmentUnchanged() {
-        Fragment fragment = newFragment();
-        double[] before = attributes(fragment);
-
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> fragment.getAttribute(BYTE_BELOW));
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> fragment.getAttribute(ATTRIBUTE_COUNT));
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> fragment.getAttribute(BYTE_BELOW, RGB_SIZE));
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> fragment.getAttribute(ATTRIBUTE_COUNT + SECOND, FIRST));
-        assertThrows(IllegalArgumentException.class,
-                () -> fragment.getAttribute(FIRST, BYTE_BELOW));
-        assertArrayEquals(before, attributes(fragment), EPSILON);
-    }
-
-    /** Checks writes to the first and last attributes. */
-    @Test
-    public void setAttributeValidIndicesUpdatesOnlySelectedAttribute() {
-        Fragment fragment = newFragment();
-        fragment.setAttribute(Fragment.DEPTH, DEPTH);
-        fragment.setAttribute(Fragment.WORLD_Z, VECTOR_Z);
-
-        double[] expected = new double[ATTRIBUTE_COUNT];
-        expected[Fragment.DEPTH] = DEPTH;
-        expected[Fragment.WORLD_Z] = VECTOR_Z;
-        assertArrayEquals(expected, attributes(fragment), EPSILON);
-        assertEquals(DEPTH, fragment.getAttribute(Fragment.DEPTH), EPSILON);
-        assertEquals(VECTOR_Z, fragment.getAttribute(Fragment.WORLD_Z), EPSILON);
-    }
-
-    /** Checks that invalid attribute writes preserve state. */
-    @Test
-    public void setAttributeInvalidIndicesThrowsAndLeavesFragmentUnchanged() {
-        Fragment fragment = newFragment();
-        double[] before = attributes(fragment);
-
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> fragment.setAttribute(BYTE_BELOW, ONE));
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> fragment.setAttribute(ATTRIBUTE_COUNT, ONE));
         assertArrayEquals(before, attributes(fragment), EPSILON);
     }
 
@@ -398,6 +343,23 @@ public class FragmentTest {
         assertEquals(new Color(RED_BYTE, GREEN_BYTE, BLUE_BYTE), fragment.getColor());
     }
 
+    /** Checks that raw RGB values are returned in a new array. */
+    @Test
+    public void getColorRawValidColorReturnsIndependentRgbValues() {
+        Fragment fragment = newFragment();
+        fragment.setColor(RED, GREEN, BLUE);
+
+        double[] rawColor = fragment.getColorRaw();
+
+        assertArrayEquals(new double[]{RED, GREEN, BLUE}, rawColor, EPSILON);
+        assertEquals(RGB_SIZE, rawColor.length);
+        assertNotSame(rawColor, fragment.getColorRaw());
+
+        rawColor[FIRST] = ONE;
+        assertArrayEquals(new double[]{RED, GREEN, BLUE},
+                fragment.getColorRaw(), EPSILON);
+    }
+
     /** Checks inclusive RGB boundaries. */
     @Test
     public void setColorComponentsBoundaryValuesAccepted() {
@@ -417,7 +379,7 @@ public class FragmentTest {
         fragment.setColor(below, above, HALF);
 
         assertArrayEquals(new double[]{below, above, HALF},
-                fragment.getAttribute(Fragment.COLOR_R, RGB_SIZE), EPSILON);
+                fragment.getColorRaw(), EPSILON);
         assertEquals(new Color(FIRST, BYTE_MAX, BYTE_MIDDLE), fragment.getColor());
     }
 
@@ -450,7 +412,7 @@ public class FragmentTest {
         source[FIRST] = ONE;
 
         assertArrayEquals(new double[]{RED, GREEN, BLUE},
-                fragment.getAttribute(Fragment.COLOR_R, RGB_SIZE), EPSILON);
+                fragment.getColorRaw(), EPSILON);
     }
 
     /** Checks invalid RGB arrays preserve state. */
@@ -482,7 +444,7 @@ public class FragmentTest {
         fragment.setColor(color);
 
         assertEquals(new Color(RED_BYTE, GREEN_BYTE, BLUE_BYTE), fragment.getColor());
-        assertEquals(ALPHA, fragment.getAttribute(Fragment.COLOR_ALPHA), EPSILON);
+        assertEquals(ALPHA, fragment.getAlpha(), EPSILON);
     }
 
     /** Checks null Color handling preserves state. */
@@ -496,17 +458,6 @@ public class FragmentTest {
         assertArrayEquals(before, attributes(fragment), EPSILON);
     }
 
-    /** Checks invalid stored color attributes are rejected. */
-    @Test
-    public void getColorInvalidAttributeThrowsAndLeavesFragmentUnchanged() {
-        Fragment fragment = newFragment();
-        fragment.setAttribute(Fragment.COLOR_G, ABOVE_RANGE);
-        double[] before = attributes(fragment);
-
-        assertThrows(IllegalArgumentException.class, fragment::getColor);
-        assertArrayEquals(before, attributes(fragment), EPSILON);
-    }
-
     /** Checks alpha values and boundaries. */
     @Test
     public void setAlphaValidValuesUpdatesOnlyAlpha() {
@@ -515,8 +466,15 @@ public class FragmentTest {
             fragment.setAlpha(alpha);
             double[] expected = new double[ATTRIBUTE_COUNT];
             expected[Fragment.COLOR_ALPHA] = alpha;
+            assertEquals(alpha, fragment.getAlpha(), EPSILON);
             assertArrayEquals(expected, attributes(fragment), EPSILON);
         }
+    }
+
+    /** Checks that alpha defaults to zero. */
+    @Test
+    public void getAlphaUninitializedFragmentReturnsZero() {
+        assertEquals(ZERO, newFragment().getAlpha(), EPSILON);
     }
 
     /** Checks that the shared tolerance also applies to alpha setters. */
@@ -527,9 +485,9 @@ public class FragmentTest {
         double above = ONE + MathUtils.DOUBLE_EPSILON;
 
         fragment.setAlpha(below);
-        assertEquals(below, fragment.getAttribute(Fragment.COLOR_ALPHA), EPSILON);
+        assertEquals(below, fragment.getAlpha(), EPSILON);
         fragment.setAlpha(above);
-        assertEquals(above, fragment.getAttribute(Fragment.COLOR_ALPHA), EPSILON);
+        assertEquals(above, fragment.getAlpha(), EPSILON);
     }
 
     /** Checks invalid alpha values preserve state. */
@@ -555,6 +513,24 @@ public class FragmentTest {
         expected[Fragment.TEXTURE_V] = V;
 
         assertArrayEquals(expected, attributes(fragment), EPSILON);
+        assertArrayEquals(new double[]{U, V},
+                fragment.getTextureCoordinates(), EPSILON);
+    }
+
+    /** Checks that texture coordinates are returned in a defensive copy. */
+    @Test
+    public void getTextureCoordinatesReturnedArrayMutatedFragmentUnchanged() {
+        Fragment fragment = newFragment();
+        fragment.setTextureCoordinates(U, V);
+
+        double[] coordinates = fragment.getTextureCoordinates();
+
+        assertArrayEquals(new double[]{U, V}, coordinates, EPSILON);
+        assertNotSame(coordinates, fragment.getTextureCoordinates());
+        coordinates[FIRST] = REPLACEMENT;
+
+        assertArrayEquals(new double[]{U, V},
+                fragment.getTextureCoordinates(), EPSILON);
     }
 
     /** Checks coordinate formatting and purity. */
@@ -573,9 +549,12 @@ public class FragmentTest {
     @Test
     public void clonePopulatedFragmentCopiesAllStateAndIsIndependent() {
         Fragment original = newFragment();
-        for (int i = FIRST; i < original.getNumAttributes(); i++) {
-            original.setAttribute(i, i + ALPHA);
-        }
+        original.setDepth(DEPTH);
+        original.setColor(RED, GREEN, BLUE);
+        original.setAlpha(ALPHA);
+        original.setNormal(VECTOR_X, VECTOR_Y, VECTOR_Z);
+        original.setTextureCoordinates(U, V);
+        original.setWorldPosition(VECTOR_X, VECTOR_Y, VECTOR_Z);
         double[] before = attributes(original);
 
         Fragment clone = original.clone();
@@ -586,13 +565,16 @@ public class FragmentTest {
         assertArrayEquals(before, attributes(original), EPSILON);
 
         clone.setPosition(NEW_X, NEW_Y);
-        for (int i = FIRST; i < clone.getNumAttributes(); i++) {
-            clone.setAttribute(i, REPLACEMENT);
-        }
+        clone.setDepth(REPLACEMENT);
+        clone.setColor(ONE, ZERO, HALF);
+        clone.setAlpha(ZERO);
+        clone.setNormal(REPLACEMENT, ZERO, ZERO);
+        clone.setTextureCoordinates(REPLACEMENT, ZERO);
+        clone.setWorldPosition(REPLACEMENT, ZERO, ZERO);
         assertArrayEquals(new int[]{X, Y}, original.getPosition());
         assertArrayEquals(before, attributes(original), EPSILON);
 
-        original.setAttribute(Fragment.DEPTH, DEPTH);
+        original.setDepth(ZERO);
         assertEquals(REPLACEMENT, clone.getDepth(), EPSILON);
     }
 }

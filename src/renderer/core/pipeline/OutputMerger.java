@@ -68,7 +68,7 @@ public class OutputMerger {
         //++ screen.setRGB(x, y, out.color().getRGB());
         //<!!
         if (depth.testFragment(fragment)) {
-            if (fragment.getAttribute(Fragment.COLOR_ALPHA) > 0.0d) {
+            if (fragment.getAlpha() > 0.0d) {
                 screen.setRGB(x, y, out.color().getRGB());
             }
             depth.writeFragment(fragment);

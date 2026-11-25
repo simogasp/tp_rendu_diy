@@ -82,8 +82,7 @@ public class TextureShader implements FragmentShader {
         try {
             //++ // TODO : change the return statement to return the right color
             //++ return new FragmentOutput(Color.BLACK);
-            final double[] uv = fragment.getAttribute(START_TEXTURE_ATTRIBUTE, //<!!
-                    NUMBER_TEXTURE_ATTRIBUTE);
+            final double[] uv = fragment.getTextureCoordinates(); //<!!
             Color texColor;
             if (texture == null) {
                 texColor = Color.BLACK;

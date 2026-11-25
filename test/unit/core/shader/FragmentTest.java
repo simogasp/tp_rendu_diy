@@ -46,10 +46,6 @@ public class FragmentTest {
     private static final int COLOR_G_INT = 64;
     /** The blue component of the color used for testing as an integer. */
     private static final int COLOR_B_INT = 32;
-    /** An invalid attribute index used for testing. */
-    private static final int INVALID_INDEX = 19;
-    /** The dimension used for testing. */
-    private static final int DIMENSION = 3;
     /** The epsilon used for testing. */
     private static final double EPSILON = 1e-2;
 
@@ -63,30 +59,6 @@ public class FragmentTest {
         assertEquals(X_COORD, fragment.getX());
         assertEquals(Y_COORD, fragment.getY());
         assertEquals(NUM_ATTRIBUTES, fragment.getNumAttributes());
-    }
-
-    /**
-     * Test setting and getting scalar attributes.
-     */
-    @Test
-    public void testSetAndGetAttributes() {
-        final Fragment fragment = new Fragment(X_COORD, Y_COORD);
-        fragment.setAttribute(Fragment.DEPTH, DEPTH_VALUE);
-        fragment.setAttribute(Fragment.COLOR_R, COLOR_R);
-        fragment.setAttribute(Fragment.COLOR_G, COLOR_G);
-        fragment.setAttribute(Fragment.COLOR_B, COLOR_B);
-        fragment.setAttribute(Fragment.NORMAL_X, NORMAL_X);
-        fragment.setAttribute(Fragment.NORMAL_Y, NORMAL_Y);
-        fragment.setAttribute(Fragment.NORMAL_Z, NORMAL_Z);
-
-
-        assertEquals(DEPTH_VALUE, fragment.getAttribute(Fragment.DEPTH), EPSILON);
-        assertEquals(COLOR_R, fragment.getAttribute(Fragment.COLOR_R), EPSILON);
-        assertEquals(COLOR_G, fragment.getAttribute(Fragment.COLOR_G), EPSILON);
-        assertEquals(COLOR_B, fragment.getAttribute(Fragment.COLOR_B), EPSILON);
-        assertEquals(NORMAL_X, fragment.getAttribute(Fragment.NORMAL_X), EPSILON);
-        assertEquals(NORMAL_Y, fragment.getAttribute(Fragment.NORMAL_Y), EPSILON);
-        assertEquals(NORMAL_Z, fragment.getAttribute(Fragment.NORMAL_Z), EPSILON);
     }
 
     /**
@@ -221,36 +193,4 @@ public class FragmentTest {
         assertEquals("(" + X_COORD + "," + Y_COORD + ")", fragment.toString());
     }
 
-    /**
-     * Test setting an invalid attribute index.
-     */
-    @Test(expected = ArrayIndexOutOfBoundsException.class)
-    public void testSetInvalidAttribute() {
-        Fragment fragment = new Fragment(X_COORD, Y_COORD);
-        fragment.setAttribute(INVALID_INDEX, DEPTH_VALUE); // Invalid index
-    }
-
-    /**
-     * Test getting an invalid attribute index.
-     */
-    @Test(expected = ArrayIndexOutOfBoundsException.class)
-    public void testGetInvalidAttribute() {
-        Fragment fragment = new Fragment(X_COORD, Y_COORD);
-        fragment.getAttribute(INVALID_INDEX); // Invalid index
-    }
-
-    /**
-     * Test getting an attribute with a specified dimension.
-     */
-    @Test
-    public void testGetAttributeWithDimension() {
-        Fragment fragment = new Fragment(X_COORD, Y_COORD);
-        fragment.setAttribute(Fragment.NORMAL_X, NORMAL_X);
-        fragment.setAttribute(Fragment.NORMAL_Y, NORMAL_Y);
-        fragment.setAttribute(Fragment.NORMAL_Z, NORMAL_Z);
-        double[] normal = fragment.getAttribute(Fragment.NORMAL_X, DIMENSION);
-        assertEquals(NORMAL_X, normal[0], EPSILON);
-        assertEquals(NORMAL_Y, normal[1], EPSILON);
-        assertEquals(NORMAL_Z, normal[2], EPSILON);
-    }
 }

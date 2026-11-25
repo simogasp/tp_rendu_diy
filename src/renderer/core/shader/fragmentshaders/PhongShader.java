@@ -106,7 +106,7 @@ public class PhongShader implements FragmentShader {
             //<!!
             Vector worldPosition = fragment.getWorldPosition();
             Vector normal = fragment.getNormal().normalize();
-            double[] color = fragment.getAttribute(Fragment.COLOR_R, Fragment.COLOR_B);
+            double[] color = fragment.getColorRaw();
             double[] material = scene.getMaterial();
 
             double[] lightColor = this.lighting.applyLights(worldPosition, normal,

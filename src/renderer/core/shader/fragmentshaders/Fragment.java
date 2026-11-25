@@ -97,31 +97,11 @@ public class Fragment {
     }
 
     /**
-     * Gets a scalar attribute at index.
-     * @param index the index of the attribute to get
-     * @return the value of the attribute at index
-     */
-    public double getAttribute(int index) {
-        return attributes[index];
-    }
-
-    /**
-     * Gets a vector attribute at the given starting location and with the given
-     * dimension.
-     * @param index the starting index of the attribute
-     * @param dimension the dimension of the attribute
-     * @return the attribute as a double array
-     */
-    public double[] getAttribute(int index, int dimension) {
-        return java.util.Arrays.copyOfRange(attributes, index, index + dimension);
-    }
-
-    /**
      * Sets a scalar attribute at index.
      * @param index the index of the attribute to set
      * @param value the value to set the attribute to
      */
-    public void setAttribute(int index, double value) {
+    private void setAttribute(int index, double value) {
         attributes[index] = value;
     }
 
@@ -277,6 +257,26 @@ public class Fragment {
     }
 
     /**
+     * Gets the raw color values of the Fragment as an array of doubles in [0, 1].
+     * @return an array containing the RGB components of the color in [0, 1]
+     */
+    public double[] getColorRaw() {
+        return new double[] {
+            attributes[COLOR_R],
+            attributes[COLOR_G],
+            attributes[COLOR_B]
+        };
+    }
+
+    /**
+     * Gets the alpha value of the Fragment.
+     * @return the alpha value in [0, 1]
+     */
+    public double getAlpha() {
+        return attributes[COLOR_ALPHA];
+    }
+
+    /**
      * Sets the color of the Fragment.
      * @param color the color of the Fragment
      */
@@ -366,6 +366,14 @@ public class Fragment {
         final Fragment res = new Fragment(x, y);
         System.arraycopy(attributes, 0, res.attributes, 0, attributes.length);
         return res;
+    }
+
+    /**
+     * Gets the texture coordinates of the Fragment.
+     * @return an array containing the U and V texture coordinates
+     */
+    public double[] getTextureCoordinates() {
+        return new double[] { attributes[TEXTURE_U], attributes[TEXTURE_V] };
     }
 
 }
